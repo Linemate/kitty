@@ -6,5 +6,5 @@ cd /home/ec2-user/kitten
 export NVM_DIR="/home/ec2-user/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-nohup npm run start > /dev/null 2>&1 & echo $! > kitten.pid
+nohup npm run start > /dev/null 2>&1 & echo $! >> kitten.pid
 echo "[${DATESTAMP}] application started"
