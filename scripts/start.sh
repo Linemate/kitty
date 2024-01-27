@@ -3,6 +3,6 @@ DATESTAMP="$(date +%FT%H:%m)"
 chmod 775 *
 cd ../
 npm install
-npm build
-npm start
+npm run build
+npm run start
 echo "[${DATESTAMP}] application started"
