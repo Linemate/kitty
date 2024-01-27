@@ -19,9 +19,8 @@ jobs:
 
 
       - name: archive linemate
-#        run: tar cvfz ./kitten.tar.gz *
         run: tar cvfz kitten.tar.gz --exclude='node_modules' --exclude='.github' .
-          
+
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
