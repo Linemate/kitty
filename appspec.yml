@@ -13,10 +13,10 @@ hooks:
   #    - location: scripts/install_dependencies.sh
   #      timeout: 300
   #      runas: ec2-user
-  #  AfterInstall:
-  #    - location: scripts/start_fastapi.sh
-  #      timeout: 300
-  #      runas: ec2-user
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+      runas: ec2-user
   #  ApplicationStop:
   #    - location: scripts/stop_fastapi.sh
   #      timeout: 300
