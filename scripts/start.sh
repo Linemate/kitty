@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 DATESTAMP="$(date +%FT%H:%m)"
-chmod 775 *
-cd ../
+cd /home/ec2-user
+#chmod 775 *
 
 npm run start
 echo "[${DATESTAMP}] application started"
