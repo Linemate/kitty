@@ -18,10 +18,10 @@ hooks:
     - location: scripts/after_install.sh
       timeout: 300
       runas: ec2-user
-  #  ApplicationStop:
-  #    - location: scripts/stop_fastapi.sh
-  #      timeout: 300
-  #      runas: ec2-user
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 300
+      runas: ec2-user
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 500
