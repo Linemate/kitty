@@ -11,7 +11,7 @@ const Nav = () => {
                 {
                     navData.map((el, i) => el.navName === 'Linecare' ? <li key={i}><Tooltip title="Soon" arrow>
                     <Link to={el.link}>{el.navName}</Link>
-                  </Tooltip></li> : <li><Link to={el.link}>{el.navName}</Link></li>)
+                  </Tooltip></li> : <li key={i}><Link to={el.link}>{el.navName}</Link></li>)
                 }
             </ul>
         </StyledNav>

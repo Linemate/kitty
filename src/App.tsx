@@ -64,8 +64,13 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 900;
   }
   body {
-    font-family:'NotoSans';
     box-sizing:border-box;
+  }
+  body, h1, h2, h3, h4, h5, h6, input, textarea, div, span, i, section, article, aside, p, header, nav, footer {
+    font-family:'NotoSans';
+  }
+  .ml10 {
+    margin-left:10px;
   }
 `;
 
