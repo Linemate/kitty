@@ -16,6 +16,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta charSet="utf-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=yes"/>
+        <meta name="robots" content="index,follow"/>
+        <meta name="theme-color" content="#000000"/>
+        <link rel="shortcut icon" href="/favicon.ico"/>
+        <link href="/loading.css" rel="stylesheet"/>
+        <title>LINEMATE</title>
+        <meta name="description" content=""/>
+        <meta property="og:url" content=""/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="LINEMATE"/>
+        <meta property="og:description" content=""/>
+        <meta property="og:image" content=""/>
+        <meta name="twitter:card" content="summary"/>
+        <meta name="twitter:title" content="LINEMATE"/>
+        <meta name="twitter:description" content=""/>
+        <meta name="twitter:image" content=""/>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
