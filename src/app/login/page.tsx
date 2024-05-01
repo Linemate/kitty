@@ -1,9 +1,14 @@
+'use client'
 import React from 'react';
 import StyledLogin from './StyledLogin';
 import Header from 'components/Header/Header';
-import { Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
+    const router = useRouter();
+    const viewPage = (link:string) => {
+        router.push(`/${link}`);
+    }
     return (
         <StyledLogin>
             <div className='wrapper'>
@@ -11,7 +16,7 @@ const Login = () => {
                 <div className='contents'>
                     <div className='text_area'>
                         <h2>Welcome!</h2>
-                        <p>New to Linemate? <Link to={'/register'}>Register</Link></p>
+                        <p>New to Linemate? <div onClick={() => viewPage('/register')}>Register</div></p>
                     </div>
                     <div className='btn_area'>
                         <button type="button">BUDDY</button>

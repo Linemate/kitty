@@ -1,3 +1,4 @@
+'use client'
 import React, { useMemo } from 'react';
 import Slider, { Settings } from 'react-slick';
 import StyledSlideWrap from './StyledSlideWrap';

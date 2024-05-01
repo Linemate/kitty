@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import StyledKeyVisual from './StyledKeyVisual';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';

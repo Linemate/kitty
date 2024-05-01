@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import StyledHeader from './StyledHeader';
 import Nav from 'components/Nav/Nav';

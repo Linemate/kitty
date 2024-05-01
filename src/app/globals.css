@@ -43,15 +43,48 @@
   src: url('/assets/fonts/NotoSansKR-Black.ttf') format('truetype');
   font-weight: 900;
 }
+*, html, body, div, p , input, button, a, span, header, footer, aside {margin:0; padding:0;}
 body {
   box-sizing:border-box;
 }
 body, h1, h2, h3, h4, h5, h6, input, textarea, div, span, i, section, article, aside, p, header, nav, footer {
   font-family:'NotoSans';
 }
+ul li {list-style:none;}
 a {text-decoration:none;}
 button {background:none; border:none; cursor:pointer;}
 
+/* margin */
 .ml10 {
   margin-left:10px;
+}
+.mr10 {
+  margin-right:10px;
+}
+.mt10 {
+  margin-top:10px;
+}
+.mb10 {
+  margin-bottom:10px;
+}
+/* padding */
+.pl10 {
+  padding-left:10px;
+}
+.pr10 {
+  padding-right:10px;
+}
+.pt10 {
+  padding-top:10px;
+}
+.pb10 {
+  padding-bottom:10px;
+}
+
+
+/* page */
+.wrapper {
+  max-width:1280px;
+  width:100%;
+  margin:0 auto;
 }

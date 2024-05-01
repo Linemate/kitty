@@ -1,3 +1,4 @@
+'use client'
 import styled from 'styled-components';
 import theme from 'theme/theme';
 
@@ -21,15 +22,18 @@ const StyledFooter = styled.div`
                 line-height:0;
                 background:url('/assets/images/logo.png') no-repeat -10px -34px; background-size:100%;
             }
-            .address {
-                color:#666;
-            }
-            .number {
-                color:#666;
-                margin-bottom:20px;
-            }
-            .ceo {
-                color:#666;
+            .txt {
+                padding-left:6px;
+                .address {
+                    color:#666;
+                }
+                .number {
+                    color:#666;
+                    margin-bottom:20px;
+                }
+                .ceo {
+                    color:#666;
+                }
             }
         }
         .right {

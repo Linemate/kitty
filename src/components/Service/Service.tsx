@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import VerifiedIcon from '@mui/icons-material/Verified';
