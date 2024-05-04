@@ -24,7 +24,7 @@ export default function RootLayout({
         <meta name="robots" content="index,follow"/>
         <meta name="theme-color" content="#000000"/>
         <link rel="shortcut icon" href="/favicon.ico"/>
-        {/*<link href="/loading.css" rel="stylesheet"/>*/}
+        <link href="/loading.css" rel="stylesheet"/>
         <meta property="og:url" content=""/>
         <meta property="og:type" content="website"/>
         <meta property="og:title" content="LINEMATE"/>
