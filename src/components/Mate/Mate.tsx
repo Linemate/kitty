@@ -41,7 +41,7 @@ const Mate = (props:MateProps) => {
                     </div>
                 </div>
                 <div className='desc_area'>
-                    <div className='blue_text'>Linemate's Mate</div>
+                    <div className='blue_text'>Linemate&apos;s Mate</div>
                     <div className='name'>
                         {props.mateName}
                     </div>

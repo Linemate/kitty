@@ -34,7 +34,7 @@ const SlideWrap = ({
           autoplay: Boolean(autoplay),
           autoplaySpeed: typeof autoplay === 'boolean' ? 3000 : autoplay,
         }),
-        [autoplay, loop, speed],
+        [autoplay, loop, slidesToShow, speed],
     );
     return (
         <StyledSlideWrap>
