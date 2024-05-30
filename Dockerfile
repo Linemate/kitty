@@ -64,4 +64,4 @@ ENV PORT 3000
 
 # server.js is created by next build from the output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD HOSTNAME="0.0.0.0" yarn start
