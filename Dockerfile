@@ -6,9 +6,6 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install npm and yarn globally
-RUN npm install -g npm@latest yarn
-
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
@@ -67,4 +64,4 @@ ENV PORT 3000
 
 # server.js is created by next build from the output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" yarn start
+CMD HOSTNAME="0.0.0.0" pnpm start
