@@ -1,0 +1,207 @@
+:root {
+  --color-blue:#2E86FF;
+  --color-lightblue:#7EB2FF;
+  --color-white:#fff;
+  --color-lightblack:#333;
+  --color-black:#000;
+  --color-pink:#FC52FF;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-Thin.woff') format('woff');
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-ExtraLight.woff') format('woff');
+  font-weight: 200;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-Light.woff') format('woff');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-Medium.woff') format('woff');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-SemiBold.woff') format('woff');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-Bold.woff') format('woff');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-ExtraBold.woff') format('woff');
+  font-weight: 800;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/assets/fonts/Pretendard-Black.woff') format('woff');
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-Thin.woff') format('woff');
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-ExtraLight.woff') format('woff');
+  font-weight: 200;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-Light.woff') format('woff');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-Regular.woff') format('woff');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-Medium.woff') format('woff');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-SemiBold.woff') format('woff');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-Bold.woff') format('woff');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-ExtraBold.woff') format('woff');
+  font-weight: 800;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-Black.woff') format('woff');
+  font-weight: 900;
+}
+*, html, body, div, p , input, button, a, span, header, footer, aside {margin:0; padding:0;}
+body {
+  box-sizing:border-box;
+}
+body, h1, h2, h3, h4, h5, h6, input, textarea, div, span, i, section, article, aside, p, header, nav, footer {
+  font-family:'Pretendard';
+}
+ul li {list-style:none;}
+a {text-decoration:none;}
+button {background:none; border:none; cursor:pointer;}
+
+/* margin */
+.ml10 {
+  margin-left:10px;
+}
+.mr10 {
+  margin-right:10px;
+}
+.mt10 {
+  margin-top:10px;
+}
+.mb10 {
+  margin-bottom:10px;
+}
+/* padding */
+.pl10 {
+  padding-left:10px;
+}
+.pr10 {
+  padding-right:10px;
+}
+.pt10 {
+  padding-top:10px;
+}
+.pb10 {
+  padding-bottom:10px;
+}
+
+
+/* page */
+.wrapper {
+  width:100%;
+  margin:0 auto;
+}
+
+.ico {
+  font-size:16px;
+  position:relative;
+  padding-right:32px;
+  &::before {
+      content:'';
+      display:block;
+      width:32px;
+      height:32px;
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:100%;
+      position:absolute;
+      right:0;
+      top:0;
+  }
+
+  &.all {
+      &::before {
+          background-image:url('/assets/images/icon/ico_right_circle_arrow.png');
+      }
+  }
+  &.thumb {
+      &::before {
+          background-image:url('/assets/images/icon/ico_thumb.png');
+      }
+  }
+  &.gift_heart {
+      &::before {
+          background-image:url('/assets/images/icon/ico_gift_heart.png');
+      }
+  }
+  &.starring {
+      &::before {
+          background-image:url('/assets/images/icon/ico_starring.png');
+      }
+  }
+  &.trophy {
+    &::before {
+      background-image:url('/assets/images/icon/ico_trophy.png');
+    }
+  }
+  &.protection {
+    &::before {
+      background-image:url('/assets/images/icon/ico_protection.png');
+    }
+  }
+  &.memories {
+    &::before {
+      background-image:url('/assets/images/icon/ico_memories.png');
+    }
+  }
+  &.support {
+    &::before {
+      background-image:url('/assets/images/icon/ico_support.png');
+    }
+  }
+  &.user {
+    &::before {
+      background-image:url('/assets/images/icon/ico_user.png');
+    }
+  }
+}

@@ -1,0 +1,48 @@
+.service {
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+    margin-bottom:120px;
+    .inner {
+        max-width:1140px;
+        margin:0 auto;
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+    }
+    .item {
+        height:240px;
+        margin-right:60px;
+        flex:1;   
+        display:flex;
+        flex-direction:column;
+        justify-content: center;
+        align-items:center;
+        text-align:center;
+        &:last-child {
+            margin-right:0;
+        }
+        .ico {
+            width:41px;
+            height:32px;
+            padding-right:0;
+            margin-bottom:20px;
+            &.trophy {
+                width:37px;
+                height:32px;
+            }
+        }
+        .title {
+            font-family: 'Montserrat';
+            font-weight:700;
+            font-size:20px;
+            line-height:30px;
+            margin-bottom:10px;
+        }
+        p {
+            font-weight:500;
+            font-size:14px;
+            line-height:21px;
+            color:#888;
+        }
+    }
+}

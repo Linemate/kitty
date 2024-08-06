@@ -1,0 +1,91 @@
+.btn {
+    &.text {
+        position: relative;
+        &::after {
+            content:'';
+            display:block;
+            background-repeat:no-repeat;
+            background-size:100%;
+        }
+        &.right {
+            padding-right:24px;
+            &::after {
+                position:absolute;
+                right:0;
+                top:0;
+            }
+        }
+        &.more {
+            line-height:24px;
+            padding:14px 52px 14px 24px;
+            background-color:var(--color-blue);
+            color:#fff;
+            border-radius:100px;
+            &::after {
+                width:24px;
+                height:24px;
+                font-size:16px;
+                background-image:url('/assets/images/icon/ico_right_arrow.png');
+                right:24px;
+                top:14px;
+            }
+        }
+    }
+    &.img {
+        width:24px;
+        height:24px;
+        background-repeat:no-repeat;
+        background-size:100%;
+        line-height:0;
+        font-size:0;
+        text-indent:-9999px;
+        &.like {
+            background-image:url('/assets/images/btn/btn_like.png');
+        }
+        &.heart {
+            width:32px;
+            height:32px;
+            background-image:url('/assets/images/btn/btn_heart.png');
+        }
+        &.heart.filled {
+            width:32px;
+            height:32px;
+            background-image:url('/assets/images/btn/btn_heart_filled.png');
+        }
+        &.my {
+            background-image:url('/assets/images/btn/btn_my.png');
+        }
+        &.login {
+            width:81px;
+            height:44px;
+            background-image:url('/assets/images/btn/btn_login.png');
+        }
+        &.contact {
+            width:32px;
+            height:32px;
+            &.sms {
+                background-image:url('/assets/images/btn/btn_sms.png');
+            }
+            &.instagram {
+                background-image:url('/assets/images/btn/btn_instagram.png');
+            }
+            &.facebook {
+                background-image:url('/assets/images/btn/btn_facebook.png');
+            }
+            &.line {
+                background-image:url('/assets/images/btn/btn_line.png');
+            }
+        }
+        &.ko, &.en {
+            width:50px;
+            height:24px;
+            &.ko {
+                background-image:url('/assets/images/btn/btn_ko.png');
+            }
+            &.en {
+                background-image:url('/assets/images/btn/btn_en.png');
+            }
+        }
+    }
+    
+}

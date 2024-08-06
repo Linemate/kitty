@@ -1,9 +1,9 @@
 'use client'
 import React from 'react';
-import StyledNav from './StyledNav';
 import { navData } from 'assets/data/data';
 import { Tooltip } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import 'styles/nav.scss';
 
 const Nav = () => {
     const router = useRouter();
@@ -11,7 +11,7 @@ const Nav = () => {
         router.push(`/${link}`);
     }
     return (
-        <StyledNav>
+        <div className='nav'>
             <ul>
                 {
                     navData.map((el, i) => el.navName === 'Linecare' ? <li key={i}><Tooltip title="Soon" arrow>
@@ -19,7 +19,7 @@ const Nav = () => {
                   </Tooltip></li> : <li key={i}><div onClick={() => viewPage(el.link)}>{el.navName}</div></li>)
                 }
             </ul>
-        </StyledNav>
+        </div>
     );
 };
 

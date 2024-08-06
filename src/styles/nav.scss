@@ -1,0 +1,13 @@
+.nav {
+    ul {
+        display:flex; flex-direction:row;
+        li {
+            margin-right:30px;
+            a {
+                color:#111;
+                font-size:18px;
+                line-height:27px;
+            }
+        }
+    }
+}

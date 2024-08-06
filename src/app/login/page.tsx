@@ -1,8 +1,8 @@
 'use client'
 import React from 'react';
-import StyledLogin from './StyledLogin';
 import Header from 'components/Header/Header';
 import { useRouter } from 'next/navigation';
+import 'styles/login.scss'
 
 const Login = () => {
     const router = useRouter();
@@ -10,9 +10,9 @@ const Login = () => {
         router.push(`/${link}`);
     }
     return (
-        <StyledLogin>
+        <>
             <div className='wrapper'>
-                <Header title={'라인메이트 로그인'} />
+                <Header title={'라인메이트 로그인'} lang={'ko'} />
                 <div className='contents'>
                     <div className='text_area'>
                         <h2>Welcome!</h2>
@@ -24,7 +24,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </StyledLogin>
+        </>
     );
 };
 

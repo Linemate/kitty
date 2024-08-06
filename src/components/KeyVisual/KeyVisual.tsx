@@ -1,26 +1,31 @@
 'use client'
-import React from 'react';
-import StyledKeyVisual from './StyledKeyVisual';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Button } from '@mui/material';
+import React, { ReactElement } from 'react';
+import 'styles/keyVisual.scss'
+import { TextButtonWithIcon } from 'components/common/Button';
+import { useRouter } from 'next/navigation';
 
 export type KeyVisualProps = {
     onlyBg?: boolean;
     src?: string;
+    children: ReactElement;
 }
 
 const KeyVisual = (props:KeyVisualProps) => {
+    const router = useRouter();
+    const viewMorePage = () => {
+        router.push('');
+    }
     return (
-        <StyledKeyVisual>
+        <>
             {
                 props.onlyBg ? 
                 <img src={props.src} alt='key visual' /> : <div className='bg'>
-                    <Button variant="outlined" endIcon={<ArrowForwardIcon />}>
-                    More
-                    </Button>
+                    <div className='inner'>
+                        {props.children}
+                    </div>
                 </div>
             }
-        </StyledKeyVisual>
+        </>
     );
 };
 

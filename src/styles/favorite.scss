@@ -1,0 +1,19 @@
+.favorite_wrap {
+    .favorite_area {
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        .amount {
+            color:#666;
+            font-size:13px;
+            text-align:center;
+        }
+    }
+    &.mate {
+        .favorite_area {
+            .amount {
+                line-height:40px;
+            }
+        }
+    }
+}

@@ -1,0 +1,446 @@
+.program {
+    .img_area {
+        width:360px; 
+        height:200px;
+        background-color:#333;
+        border-radius:16px;
+        overflow:hidden;
+        margin-bottom:16px;
+        position:relative;
+        .favorite_area {
+            position:absolute;
+            right:8px;
+            top:8px;
+        }
+    }
+    .desc_area {
+        width:360px;
+        .txt_area {
+            padding-right:20px;
+            h4 {
+                color:#111;
+                margin-bottom:12px;
+                & > span {
+                    display:inline-block;
+                    cursor:pointer;
+                }
+            }
+            p {
+                color:#787878;
+                font-size:14px;
+                line-height:20px;
+                & > span {
+                    display:inline-block;
+                    cursor:pointer;
+                }
+            }
+            .where {
+                cursor:pointer;
+                color:#666;
+                font-size:14px;
+                margin-bottom:12px;
+            }
+        }
+    }
+    .bottom_area {
+        width:360px;
+        border-top:1px solid #ddd;
+        margin-top:16px;
+        padding-top:16px;
+        .badge_where_area {
+            display:flex;
+            flex-direction:row;
+            justify-content:space-between;
+        }
+        .badge {
+            display:inline-block;
+            padding:5px 8px;
+            background-color:#f4f4f4;
+            color:#fff;
+            border-radius:8px;
+            margin-right:5px;
+            font-size:13px;
+            font-weight:700;
+            &.outgoing {
+                color:#444;
+            }
+            &.best {
+                color:var(--color-pink);
+            }
+            &.like {
+                color:var(--color-blue);
+            }
+        }
+        .price_area {
+            font-size:18px;
+            line-height:27px;
+            margin-bottom:16px;
+            font-weight:700;
+            color:#666;
+            .unit {
+                margin-right:5px;
+            }
+        }
+    }
+    
+    &.details {
+        max-width:744px;
+        margin:0 auto;
+        margin-bottom:50px;
+        position:relative;
+        .img_area {
+            width:100%;
+            height:400px;
+            margin-bottom:32px;
+        }
+        .desc_area {
+            width:100%;
+            justify-content: space-between;
+            .txt_area {
+                padding-right:0;
+                margin-bottom:24px;
+                h4 {
+                    & > span {
+                        font-size:28px;
+                        font-weight:700;
+                        font-family:'Montserrat';
+                        color:#111;
+                        cursor:default;
+                    }
+                }
+                p {
+                    & > span {
+                        font-size:16px;
+                        line-height:24px;
+                        color:#666;
+                        cursor:default;
+                    }
+                }
+            }
+            .where_price_area {
+                display:flex;
+                flex-direction: row;
+                justify-content: space-between;
+                .where_area {
+                    padding-left:22px;
+                    line-height:20px;
+                    position:relative;
+                    font-size:14px;
+                    font-weight:500;
+                    color:#888;
+                    &::before {
+                        content:'';
+                        display:block;
+                        width:16px;
+                        height:16px;
+                        background-image:url('/assets/images/icon/ico_location.png');
+                        background-repeat:no-repeat;
+                        background-size:100%;
+                        position:absolute;
+                        left:0;
+                        top:0;
+                    }
+                }
+                .price_area {
+                    padding-top:0;
+                    font-size:20px;
+                    font-weight:700;
+                    .unit {
+                        margin-right:4px;
+                    }
+                }
+            }
+        }
+        .bottom_area {
+            width:100%;
+            .badge_where_area {
+                position:absolute;
+                left:24px;
+                top:24px;
+            }
+        }
+        .price_area {
+            padding-top:38px;
+        }
+        .favorite_share_area {
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-end;
+            .favorite_area {
+                margin-right:14px;
+                .btn.img.heart {
+                    width:24px;
+                    height:24px;
+                    background-image:url('/assets/images/btn/btn_heart_gray_line.png');
+                }
+            }
+        }
+    }
+}
+
+
+.mate_area {
+    margin-bottom:30px;
+}
+.schedule_area {
+    margin-bottom:50px;
+    .title {
+        font-family:'Montserrat';
+        font-size:28px;
+        font-weight:700;
+        margin-bottom:24px;
+    }
+    .datepicker_area {
+        display:flex;
+        flex-direction:row;
+        background-color:#fff;
+        box-shadow: 0px 0px 20px 0px #88888826;
+        border-radius:16px;
+        & > div {
+            flex:1;
+            &:first-child {
+                border-right:1px solid #ddd;
+                padding:32px;
+                // custom 
+                .react-datepicker {
+                    width:100%;
+                    border:none;
+                    .react-datepicker__header {
+                        background:none;
+                        border-bottom:none;
+                        .react-datepicker__current-month {
+                            font-family:'Pretendard';
+                            font-weight:700;
+                            font-size:20px;
+                            line-height:24px;
+                            margin-bottom:24px;
+                        }
+                        .react-datepicker__day-name {
+                            font-family:'Pretendard';
+                            font-weight:500;
+                            font-size:16px;
+                            color:#888;
+                        }
+                    }
+                    .react-datepicker__month-container {
+                        float:none;
+                    }
+                    .react-datepicker__navigation-icon--next::before, .react-datepicker__navigation-icon--previous::before {
+                        border:none;
+                        width:16px;
+                        height:16px;
+                        border:none;
+                        transform:none;
+                        background-image:url('/assets/images/icon/ico_arrow_right.png');
+                        background-size:100%;
+                        background-repeat:no-repeat;
+                    }
+                    .react-datepicker__navigation-icon--previous::before {
+                        background-image:url('/assets/images/icon/ico_arrow_left.png');
+                    }
+                    .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {
+                        width:calc(100% / 7);
+                        line-height:50px;
+                        margin:0;
+                    }
+                    .react-datepicker__day--keyboard-selected {
+                        background-color:var(--color-blue);
+                        color:#fff;
+                    }
+                }
+            }
+            &:last-child {
+                display:flex;
+                flex-direction: column;
+                justify-content: space-between;
+                .top {
+                    flex:1;
+                }
+                .btn_reservation {
+                    width:100%;
+                    padding:15px 0;
+                    font-size:18px;
+                    background-color:var(--color-blue);
+                    color:#fff;
+                }
+            }
+        }
+    }
+}
+
+.notice {
+    padding-top:37px;
+    padding-left:20px;
+    .desc {
+        padding:0 30px;
+        position:relative;
+        color:#666;
+        font-size:14px;
+        line-height:21px;
+        margin-bottom:15px;
+        &::before {
+            content:'';
+            display:block;
+            width:24px;
+            height:24px;
+            background-image:url('/assets/images/icon/ico_star.png');
+            background-repeat: no-repeat;
+            background-size:100%;
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    }
+}
+.choose_time {
+    height:287px;
+    overflow-y:auto;
+    .btn_time {
+        padding:15px 24px;
+        background-color:#fff;
+        margin-bottom:5px;
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        line-height:30px;
+        color:#111;
+        &.selected {
+            border:1px solid var(--color-blue);
+            background-color:#E3F2FF;
+            color:#333;
+        }
+        &.soldout {
+            background-color:#F4F4F4;
+            color:#E6E6E6;
+            .time_area, .price, .max_users {
+                color:#666;
+            }
+            .ico.user {
+                opacity:0.6;
+            }
+        }
+        .time_area {
+            width:85px;
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+        }
+        .price_area {
+            width:104px;
+            border-right:1px solid #ddd;
+            margin-right:20px;
+            display:flex;
+            flex-direction:row;
+            position:relative;
+            .price {
+                font-weight:500;
+                font-size:14px;
+            }
+        }
+        .ico.user {
+            padding-left:17px;
+            padding-right:0;
+            margin-right:8px;
+            position:relative;
+            &::before {
+                content:'';
+                display:block;
+                width:16px;
+                height:16px;
+                position:absolute;
+                left:0;
+                top:7px;
+            }
+        }
+        .ico.hot, .ico.soldout {
+            display:inline-block;
+            height:24px;
+            line-height:16px;
+            box-sizing: border-box;
+            border-radius:8px;
+            padding:4px;
+            background-color:var(--color-pink);
+            color:#fff;
+            font-size:13px;
+            font-weight:500;
+        }
+        .ico.soldout {
+            background-color:#ddd;
+            color:#666;
+        }
+    }
+}
+.tabs_area {
+    .tab {
+        border-bottom:1px solid #ddd;
+        ul {
+            display:flex;
+            flex-direction:row;
+            li {
+                width:116px;
+                box-sizing: border-box;
+                text-align: center;
+                font-size:18px;
+                line-height:33px;
+                color:#111;
+                &.selected {
+                    font-weight:700;
+                    position:relative;
+                    &::before {
+                        content:'';
+                        width:100%;
+                        height:3px;
+                        background-color:var(--color-blue);
+                        position:absolute;
+                        left:0;
+                        bottom:0;
+                    }
+                }
+            }
+        }
+    }
+    .tab_body {
+        padding-top:48px;
+        padding-bottom:64px;
+        border-bottom:1px solid #ddd;
+        &:last-child {
+            border-bottom:0;
+        }
+        .title {
+            font-family: 'Montserrat';
+            font-size:28px;
+            line-height:34px;
+            font-weight:700;
+            color:#111;
+            padding-bottom:24px;
+            &.materials {
+                padding-top:96px;
+            }
+        }
+        .contents {
+            color:#333;
+            font-size:16px;
+            line-height:24px;
+            .dots {
+                li {
+                    margin-bottom:16px;
+                    position:relative;
+                    padding-left:15px;
+                    &::before {
+                        content:'';
+                        display: block;
+                        width:2px;
+                        height:2px;
+                        border-radius:50%;
+                        background-color:#333;
+                        position:absolute;
+                        left:0;
+                        top:50%;
+                        transform:translateY(-50%);
+                    }
+                }
+            }
+        }
+    }
+
+}

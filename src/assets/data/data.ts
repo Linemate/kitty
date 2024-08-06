@@ -1,32 +1,40 @@
 export const navData = [
     {
-        navName : 'About',
-        link: '/about'
+        navName : 'Event',
+        link: '/evnet'
     },
     {
-        navName : 'Program',
-        link: '/program'
+        navName : 'Mate',
+        link: '/mate'
     },
     {
-        navName : 'Linecare',
-        link: 'linecare'
-    }
+        navName : 'Brand Story',
+        link: '/brand'
+    },
+    // {
+    //     navName : 'Linecare',
+    //     link: 'linecare'
+    // }
 ]
 export const categoryData = [
     {
         enName : 'PARTIES',
-        krName : '파티'
+        krName : '파티',
+        value: 'parties'
     },
     {
         enName : 'TOUR/ACTIVITIES',
-        krName : '투어/액티비티'
+        krName : '투어/액티비티',
+        value: 'tour'
     },
     {
         enName : 'CULTURE',
-        krName : '소개팅'
+        krName : '소개팅',
+        value: 'culture'
     },
     {
         enName : 'ONEDAY',
-        krName : '원데이클래스'
+        krName : '원데이클래스',
+        value : 'oneday'
     }
 ]

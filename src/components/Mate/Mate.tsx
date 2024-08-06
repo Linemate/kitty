@@ -1,11 +1,11 @@
 'use client'
 import React from 'react';
-import StyledMate from './StyledMate';
 import Image from 'next/image';
 import Favorite from 'components/Favorite/Favorite';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import 'styles/mate.scss'
 
 export type MateProps = {
     isSummary? : boolean;
@@ -25,7 +25,7 @@ export type MateProps = {
 
 const Mate = (props:MateProps) => {
     return (
-        <StyledMate>
+        <>
             {/* 컨텐츠 상세일 경우 정보 / 메이트 소개 페이지에 들어갈 정보 */}
             <div className={`${props.isSummary ? 'summary' : 'detail'}`}>
                 <div className='img_area'>
@@ -41,7 +41,9 @@ const Mate = (props:MateProps) => {
                     </div>
                 </div>
                 <div className='desc_area'>
-                    <div className='blue_text'>Linemate&apos;s Mate</div>
+                    <div className='gray'>
+                        Mate
+                    </div>
                     <div className='name'>
                         {props.mateName}
                     </div>
@@ -91,7 +93,7 @@ const Mate = (props:MateProps) => {
                     </>
                 }
             </div>
-        </StyledMate>
+        </>
     );
 };
 

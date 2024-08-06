@@ -1,8 +1,8 @@
 'use client'
 import Title from 'components/Title/Title';
 import React from 'react';
-import StyledReview from './StyledReview';
 import RoomIcon from '@mui/icons-material/Room';
+import 'styles/review.scss'
 
 export type ReviewItemProps = {
     program: string;
@@ -41,10 +41,10 @@ const Review = () => {
         contents: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget duis mi nunc bibendum. Tellus elementum nec lorem eget dictumst. Risus in gravida eu, enim lorem. Sed consequat ut suspendisse eros. Nunc nunc accumsan, viverra enim. Mi.'
     }
     return (
-        <StyledReview>
+        <>
             <Title title={'REVIEW'} />
             <ReviewItem program={fakedata.program} username={fakedata.username} date={fakedata.date} star={fakedata.star} contents={fakedata.contents}  />
-        </StyledReview>
+        </>
     );
 };
 

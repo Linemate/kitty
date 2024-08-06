@@ -1,7 +1,7 @@
 'use client'
 import React, { useMemo } from 'react';
 import Slider, { Settings } from 'react-slick';
-import StyledSlideWrap from './StyledSlideWrap';
+import 'styles/slideWrap.scss'
 interface sliderProps {
     /** 슬라이더 아이템 요소 */
     children: React.ReactNode;
@@ -15,6 +15,10 @@ interface sliderProps {
     speed?: number;
     /** 반복 여부 */
     loop?: boolean;
+
+    variableWidth?: boolean;
+    centerMode?:boolean;
+    centerPadding?:string;
 }
 
 const SlideWrap = ({
@@ -24,24 +28,28 @@ const SlideWrap = ({
     autoplay = true,
     speed = 300,
     loop = true,
+    variableWidth, centerMode = false
   }: sliderProps) => {
     const settings = useMemo<Settings>(
         () => ({
           dots: false,
-          infinite: loop,
+          infinite: false,
           speed: speed,
           slidesToShow: slidesToShow,
           autoplay: Boolean(autoplay),
           autoplaySpeed: typeof autoplay === 'boolean' ? 3000 : autoplay,
+          arrows: false,
+          variableWidth,
+          centerMode,
         }),
         [autoplay, loop, slidesToShow, speed],
     );
     return (
-        <StyledSlideWrap>
+        <>
             <Slider {...settings}>
                 {children}
             </Slider>
-        </StyledSlideWrap>
+        </>
     );
 };
 

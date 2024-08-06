@@ -1,0 +1,84 @@
+.home {
+    .section {
+        &.category {
+            max-width: 900px;
+            margin:0 auto;
+        }
+    }
+    .cate {
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        margin: 30px 0;
+        .cate_item {
+            flex:1;
+            text-align:center;
+            margin: 30px 0;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            border-radius:30px;
+            .img_area {
+                width:104px; 
+                height:104px; 
+                display:block;
+                background-repeat:no-repeat;
+                background-size:100%;
+                margin-bottom:16px;
+            }
+            &.parties {
+                .img_area {
+                    background-image:url('/assets/images/icon/ico_menu_parties.png');
+                }
+            }
+            &.tour {
+                .img_area {
+                    background-image:url('/assets/images/icon/ico_menu_tour.png');
+                }
+            }
+            &.culture {
+                .img_area {
+                    background-image:url('/assets/images/icon/ico_menu_culture.png');
+                }
+            }
+            &.oneday {
+                .img_area {
+                    background-image:url('/assets/images/icon/ico_menu_oneday.png');
+                }
+            }
+            .txt_area {
+                font-size:18px;
+                line-height:27px;
+                font-weight:700;
+            }
+        }
+    }
+    .intro {
+        max-width:1280px;
+        margin:0 auto 20px;
+        display:flex; flex-direction:row;
+        justify-content:space-between;
+        align-items: flex-end;
+
+        .btn.all {
+            color:#888;
+            font-size:16px;
+            font-weight:500;
+            line-height:32px;
+        }
+    }
+    .slide_wrap {
+        margin-bottom:96px;
+        .slide_area {
+            max-width:1280px;
+            margin:0 auto 30px;
+            .slick-slide {
+                margin-right:20px;
+                .slide {
+                    width:360px;
+                }
+            }
+        }
+    }
+}

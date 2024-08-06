@@ -1,0 +1,37 @@
+.title {
+    h3 {
+        font-size:28px; 
+        line-height:40px;
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        font-family: 'Montserrat';
+        font-weight:700;
+        margin-bottom:10px;
+        &.ico {
+            position:relative;
+            padding-left:30px;
+            padding-right:0;
+            &::before {
+                width:24px;
+                height:24px;
+                right:auto;
+                left:0;
+                top:50%;
+                transform:translateY(-50%)
+            }
+        }
+    }
+    p {
+        color:#888;
+        font-weight:500;
+        font-size:16px;
+    }
+    &.main {
+        
+    }
+    &.sub {
+        
+    }
+
+}

@@ -1,21 +1,21 @@
 'use client'
 import React from 'react';
-import TagFacesIcon from '@mui/icons-material/TagFaces';
-import StyledTitle from './StyledTitle';
+import 'styles/title.scss'
 
 export type TitleProps = {
     title: string;
     description?: string;
+    icon?:string;
 }
 
 const Title = (props:TitleProps) => {
     return (
-        <StyledTitle>
-            <h3><TagFacesIcon />{props.title}</h3>
+        <div className='title'>
+            <h3 className={props.icon ? `ico ${props.icon}` : ''}>{props.title}</h3>
             <p>
                 {props.description}
             </p>
-        </StyledTitle>
+        </div>
     );
 };
 
