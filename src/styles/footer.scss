@@ -3,7 +3,7 @@
     height:450px;
     box-sizing: border-box;
     margin:0 auto; 
-    background-color:#111;
+    background-color: var(--color-neutral-100);
     .inner {
         width:100%;
         height:100%;
@@ -48,16 +48,16 @@
                     }
                 }
                 .address {
-                    color:#fff;
+                    color: var(--color-neutral-900);
                 }
                 .number {
-                    color:#fff;
+                    color: var(--color-neutral-900);
                 }
                 .ceo {
-                    color:#fff;
+                    color: var(--color-neutral-900);
                 }
                 .bottom {
-                    color:#fff;
+                    color: var(--color-neutral-900);
                 }
             }
         }
@@ -78,14 +78,14 @@
                 .subtitle {
                     font-family: 'Montserrat';
                     font-size:20px;
-                    color:#fff;
+                    color: var(--color-neutral-900);
                     line-height:27px;
                     margin-bottom:40px;
                     font-weight:700;
                 }
                 ul li {
                     cursor:pointer;
-                    color:#fff;
+                    color: var(--color-neutral-900);
                     font-size:16px;
                     line-height:24px;
                     margin-bottom:30px;

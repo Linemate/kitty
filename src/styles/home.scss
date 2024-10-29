@@ -50,7 +50,7 @@
             .txt_area {
                 font-size:18px;
                 line-height:27px;
-                font-weight:700;
+                font-weight:500;
             }
         }
     }
@@ -62,7 +62,7 @@
         align-items: flex-end;
 
         .btn.all {
-            color:#888;
+            color: var(--color-neutral-400);
             font-size:16px;
             font-weight:500;
             line-height:32px;

@@ -34,10 +34,11 @@ export default function RootLayout({
         <meta name="twitter:description" content=""/>
         <meta name="twitter:image" content=""/>
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-
-        <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_CLIENT_ID"></script>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <div id="portal"></div>
+      </body>
     </html>
   );
 }

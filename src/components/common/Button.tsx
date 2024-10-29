@@ -3,7 +3,7 @@ import 'styles/button.scss';
 export type buttonProps = {
     text:string;
     classnames:string;
-    type:string;
+    type:string;     // text / img
     onclick:Function;
 }
 export const Button = (props:buttonProps) => {

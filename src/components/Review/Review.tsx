@@ -1,10 +1,11 @@
 'use client'
 import Title from 'components/Title/Title';
+import { Button } from 'components/common/Button';
 import React from 'react';
-import RoomIcon from '@mui/icons-material/Room';
 import 'styles/review.scss'
 
 export type ReviewItemProps = {
+    id: number;
     program: string;
     username: string;
     date: string;
@@ -12,38 +13,49 @@ export type ReviewItemProps = {
     contents: string;
 }
 
+export type ReviewProps = {
+    reviews: ReviewItemProps[];
+}
+
 const ReviewItem = (props:ReviewItemProps) => {
     return (
-        <div>
-            <div className='review_title'>
-                <div>
-                    <RoomIcon />
-                    {props.program}
+        <div className='review_item'>
+            <div className={`star img_${props.star}`}></div>
+            <div className='txt'>
+                <div className='title'>
+                    <div>
+                        <span className='username'>{props.username}</span>
+                        <span className='date'>{props.date}</span>
+                    </div>
                 </div>
-                <div>
-                    <span className='username'>{props.username}</span>
-                    <span className='date'>{props.date}</span>
+                <div className='desc'>
+                    <div className='contents'>
+                        {props.contents}
+                    </div>
+                    <div className='program'>
+                        {props.program}
+                    </div>
                 </div>
-            </div>
-            <div className='review_desc'>
-                {props.contents}
+
             </div>
         </div>
     );
 };
 
-const Review = () => {
-    const fakedata = {
-        program: 'Make a traditional food',
-        username: 'travelholic21',
-        date: '2024. 02. 21',
-        star: 4,
-        contents: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget duis mi nunc bibendum. Tellus elementum nec lorem eget dictumst. Risus in gravida eu, enim lorem. Sed consequat ut suspendisse eros. Nunc nunc accumsan, viverra enim. Mi.'
+const Review = (props:ReviewProps) => {
+    const { reviews } = props;
+
+    const moreList = () => {
+        console.log('더보기');
     }
     return (
         <>
-            <Title title={'REVIEW'} />
-            <ReviewItem program={fakedata.program} username={fakedata.username} date={fakedata.date} star={fakedata.star} contents={fakedata.contents}  />
+            <div className='review'>
+                {
+                    reviews.map((el:ReviewItemProps) => <ReviewItem key={el.id} program={el.program} username={el.username} date={el.date} star={el.star} contents={el.contents} id={el.id}  />)
+                }
+                <Button classnames={'wide border lightgray'} type={'text'} text={`12개 리뷰 더보기`} onclick={moreList} />
+            </div>
         </>
     );
 };

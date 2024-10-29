@@ -1,0 +1,98 @@
+.qna_area {
+    .btn_area {
+        margin-bottom:24px;
+    }
+    .qna {
+        &.pointer {
+            cursor:pointer;
+        }
+        padding:20px 0;
+        border-bottom:1px solid var(--color-neutral-600);
+        &:first-child {
+            border-top:1px solid var(--color-neutral-600);
+        }
+        .qna_header {
+            display:flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom:12px;
+            span {
+                display:block;
+                padding-right:16px;
+                position:relative;
+                &::after {
+                    content:'';
+                    display:block;
+                    width:1px;
+                    height:19px;
+                    background-color: var(--color-neutral-600);
+                    position:absolute;
+                    right:8px;
+                    top:2px;
+                }
+                &:last-child::after {
+                    display:none;
+                }
+            }
+            .is_reply  {
+                font-family: 'Pretendard';
+                font-size:16px;
+                &.reply {
+                    color: var(--color-neutral-300);
+                }
+                &.no_reply {
+                    color:#377BFF;
+                }
+            }
+            .username {
+                font-weight:600;
+                font-family:'Pretendard';
+                font-size:16px;
+                line-height:20px;
+                color: var(--color-neutral-100);
+            }
+            .date {
+                color: var(--color-neutral-400);
+                font-family:'Pretendard';
+                font-weight:400;
+                font-size:14px;
+            }
+        }
+        .qna_body {
+            .ico.lock {
+                display:inline-block;
+                font-family:'Pretendard';
+                color: var(--color-neutral-300);
+                font-size:16px;
+                line-height:24px;
+                padding-right:28px;
+                &::before {
+                    width:24px;
+                    height:24px;
+                }
+            }
+            .contents {
+                font-family:'Pretendard';
+                color: var(--color-neutral-200);
+                font-size:16px;
+                line-height:24px;
+            }
+            .reply {
+                margin-top:12px;
+                border-radius:16px;
+                padding:20px;
+                background-color: var(--color-neutral-800);
+            }
+            .reply_contents, .reply_date {
+                font-family:'Pretendard';
+                font-weight:400;
+                font-size:16px;
+                line-height:24px;
+                &.reply_date {
+                    color: var(--color-neutral-400);
+                    font-size:14px;
+                }
+            }
+        }
+    }
+}

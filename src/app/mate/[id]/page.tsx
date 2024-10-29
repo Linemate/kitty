@@ -14,6 +14,50 @@ import Program from 'components/Program/Program';
 import Review from 'components/Review/Review';
 import 'styles/mate';
 
+const reviews = [{
+    id: 0,
+    program: 'Make a traditional food',
+    username: 'travelholic21',
+    date: '2024. 02. 21',
+    star: 5,
+    contents: 'Lorem ipsum dolor sit amet, '
+}, {
+    id:1,
+    program: 'Make a traditional food',
+    username: 'travelholic21',
+    date: '2024. 02. 21',
+    star: 4,
+    contents: 'Lorem ipsum dolor sit amet, '
+}, {
+    id:2,
+    program: 'Make a traditional food',
+    username: 'travelholic21',
+    date: '2024. 02. 21',
+    star: 3,
+    contents: 'Lorem ipsum dolor sit amet, '
+}, {
+    id:3,
+    program: 'Make a traditional food',
+    username: 'travelholic21',
+    date: '2024. 02. 21',
+    star: 2,
+    contents: 'Lorem ipsum dolor sit amet, '
+}, {
+    id:4,
+    program: 'Make a traditional food',
+    username: 'travelholic21',
+    date: '2024. 02. 21',
+    star: 1,
+    contents: 'Lorem ipsum dolor sit amet, '
+}, {
+    id:5,
+    program: 'Make a traditional food',
+    username: 'travelholic21',
+    date: '2024. 02. 21',
+    star: 0,
+    contents: 'Lorem ipsum dolor sit amet, '
+}];
+
 const MateDetails = () => {
     const [tempImg, setTempImg] = useState('');
     const router = useRouter();
@@ -43,7 +87,8 @@ const MateDetails = () => {
                     </div>
 
                     <div className='section'>
-                        <Review />
+                        <Title title={'REVIEW'} />
+                        <Review reviews={reviews} />
                     </div>
 
                 </div>

@@ -1,6 +1,7 @@
 .btn {
     &.text {
         position: relative;
+        color: var(--color-neutral-200);
         &::after {
             content:'';
             display:block;
@@ -18,8 +19,8 @@
         &.more {
             line-height:24px;
             padding:14px 52px 14px 24px;
-            background-color:var(--color-blue);
-            color:#fff;
+            background-color:var(--color-primary-400);
+            color: var(--color-neutral-900);
             border-radius:100px;
             &::after {
                 width:24px;
@@ -30,6 +31,36 @@
                 top:14px;
             }
         }
+        &.border {
+            line-height:24px;
+            font-family:'Pretendard';
+            font-size:16px;
+            font-weight:700;
+            border-radius:8px;
+            &.lightgray {
+                border:1px solid var(--color-neutral-600);
+            }
+            &.gray {
+                border:1px solid var(--color-neutral-500);
+            }
+            &.wide {
+                width:100%;
+                padding:12px 0;
+                box-sizing: border-box;
+            }
+            &.fit {
+                display:inline-block;
+                padding:8px 24px;
+                box-sizing: border-box;
+            }
+        }
+        &.bg_blue {
+            background-color:var(--color-primary-500);
+            color: var(--color-neutral-900);
+        }
+        &.radius_none {
+            border-radius: 0px;
+        }
     }
     &.img {
         width:24px;
@@ -39,6 +70,9 @@
         line-height:0;
         font-size:0;
         text-indent:-9999px;
+        &.close {
+            background-image:url('/assets/images/btn/btn_close.png');
+        }
         &.like {
             background-image:url('/assets/images/btn/btn_like.png');
         }

@@ -20,16 +20,22 @@ const Header = (props:HeaderProps) => {
             router.push('/ko');
         }
     }
+    // 홈으로
+    const viewHomePage = () => {
+        router.push('/');
+    }
+    // like 페이지로
     const viewLikeList = () => {
         router.push('/like/list');
     }
+    // 로그인 화면으로
     const viewLoginPage = () => {
         router.push('/login');
     }
     return (
         <div className='header'>
             <div className='header_left'>
-                <h1>LINEMATE</h1>
+                <h1 onClick={viewHomePage}>LINEMATE</h1>
                 <Nav />
             </div>
             <div className='header_right'>
