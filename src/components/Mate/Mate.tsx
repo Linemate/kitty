@@ -41,9 +41,6 @@ const Mate = (props:MateProps) => {
                     </div>
                 </div>
                 <div className='desc_area'>
-                    <div className='gray'>
-                        Mate
-                    </div>
                     <div className='name'>
                         {props.mateName}
                     </div>

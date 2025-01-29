@@ -1,13 +1,20 @@
 .header {
-    max-width:1440px;
     width:100%;
-    margin:0 auto; 
-    padding:45px 80px 15px;
-    box-sizing: border-box;
-    display:flex;
-    flex-direction:row;
-    justify-content:space-between;
-    align-items:center;
+    background-color:#fff;
+    .header_inner {
+        max-width:1440px;
+        width:100%;
+        margin:0 auto; 
+        padding:45px 80px 15px;
+        box-sizing: border-box;
+        display:flex;
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+        &.depth {
+            padding:20px 4px;
+        }
+    }
     .header_left {
         display:flex;
         flex-direction:row;

@@ -16,7 +16,7 @@
 
   --color-neutral-000: #000000;
   --color-neutral-100: #111111;
-  --color-neutral-200: #333333;
+  --color-neutral-200: #424242;
   --color-neutral-300: #666666;
   --color-neutral-400: #888888;
   --color-neutral-500: #A5A5A5;
@@ -26,6 +26,7 @@
   --color-neutral-900: #FFFFFF;
   
   --color-red: #F34949;
+  --color-red2: #E82222;
 }
 @font-face {
   font-family: 'Pretendard';
@@ -161,6 +162,19 @@ button {background:none; border:none; cursor:pointer;}
 .wrapper {
   width:100%;
   margin:0 auto;
+  padding-top:104px;
+}
+
+.ellipsis {
+  display: block;
+  width:100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow:hidden;
+}
+
+.text_red2 {
+  color: var(--color-red2);
 }
 
 .ico {
@@ -233,6 +247,235 @@ button {background:none; border:none; cursor:pointer;}
   &.lock {
     &::before {
       background-image:url('/assets/images/icon/ico_lock.png');
+    }
+  }
+  &.location.gray {
+    &::before {
+      background-image:url('/assets/images/icon/ico_location_gray.png');
+    }
+  }
+  &.arrow_right.blue {
+    &::before {
+      width:8px;
+      height:16px;
+      top:2px;
+      background-image:url('/assets/images/icon/ico_arrow_right_blue.png');
+    }
+  }
+  &.arrow_bottom.gray {
+    &::before {
+      width:24px;
+      height:24px;
+      background-image:url('/assets/images/icon/ico_arrow_bottom_gray.png');
+    }
+  }
+  &.info {
+    padding-right:0;
+    padding-left:24px;
+    &::before {
+      width:20px;
+      height:20px;
+      background-image:url('/assets/images/icon/ico_info.png');
+      right:auto;
+      left:0;
+    }
+  }
+  &.check {
+    padding-right:0;
+    padding-left:32px;
+    &.default::before {
+      width:24px;
+      height:24px;
+      background-image:url('/assets/images/icon/ico_check_default.png');
+      right:auto;
+      left:0;
+    }
+    &.checked::before {
+      width:24px;
+      height:24px;
+      background-image:url('/assets/images/icon/ico_check_checked.png');
+      right:auto;
+      left:0;
+    }
+  }
+}
+
+// badge
+.approve_status {
+  display:inline-block;
+  font-family:'Pretendard';
+  padding:4px 8px;
+  border-radius:8px;
+  font-size:14px;
+  line-height:20px;
+  text-align:center;
+  font-weight:500;
+  &.waiting, &.ask {
+      background-color:#FFFBFB;
+      color:#EF7777;
+  }
+  &.upcoming {
+      background-color:#F4FFF9;
+      color:#57B88C;
+  }
+  &.attended, &.completed {
+      background-color:#F1F9FF;
+      color:var(--color-primary-400);
+  }
+  &.canceled {
+      background-color:var(--color-neutral-700);
+      color:var(--color-neutral-400);
+  }
+}
+
+// tab
+.tab {
+  ul {
+    display:flex;
+    flex-direction: row;
+    li {
+      box-sizing: border-box;
+      font-family:'Pretendard';
+      &.selected {
+        font-weight:700;
+      }
+    }
+  }
+  // tab - 까만 원형
+  &.rounded {
+    ul {
+        li {
+            padding: 8px 16px;
+            border: 1px solid var(--color-neutral-600);
+            font-weight:400;
+            font-size:16px;
+            line-height:24px;
+            border-radius:100px;
+            margin-right:12px;
+            color:var(--color-neutral-200);
+            cursor:pointer;
+            &.selected {
+              background-color:var(--color-neutral-200);
+              color:#fff;
+            }
+        }
+    }
+  }
+
+  // tab - 아래 파란 바
+  &.bar {
+    border-bottom:1px solid var(--color-neutral-600);
+    ul {
+        li {
+            text-align: center;
+            font-size:18px;
+            line-height:27px;
+            padding:0 16px;
+            color: var(--color-neutral-100);
+            cursor:pointer;
+            &:first-child {
+                width:100px;
+                text-align:left;
+                padding-left:0;
+            }
+            &.selected {
+                .tab_sort {
+                    position:relative;
+                    padding-bottom:8px;
+                    &::before {
+                        content:'';
+                        width:100%;
+                        height:3px;
+                        background-color:var(--color-primary-500);
+                        position:absolute;
+                        left:0;
+                        bottom:0;
+                    }
+                }
+            }
+        }
+    }
+  }
+
+}
+
+.paging {
+  ul {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    li {
+      width:42px;
+      text-align:center;
+      font-family: 'Pretendard';
+      font-weight:700;
+      line-height:20px;
+      padding:10px 0;
+      &.selected {
+        color:var(--color-primary-400);
+      }
+      &:first-child, &:last-child {
+        button {
+          margin-top:2px;
+          vertical-align:top;
+          cursor:pointer;
+        }
+        &.disabled {
+          opacity:0.2;
+          cursor:default;
+        }
+      }
+      &:first-child {
+        margin-right:8px;
+      }
+      &:last-child {
+        margin-left:8px;
+      }
+    }
+  }
+}
+.select_wrap {
+  border:1px solid #ddd;
+  border-radius:8px;
+  position:relative;
+  .select_text_wrap {
+    line-height:24px;
+    padding: 12px 12px 12px 16px;
+    font-size:14px;
+    cursor:pointer;
+    .ico.arrow_bottom {
+      font-size:100%;
+      &.default {
+        color:var(--color-neutral-500);
+      }
+      &.selected {
+        color:var(--color-neutral-200);
+      }
+    }
+  }
+  .select_options {
+    width:100%;
+    box-sizing: border-box;
+    background-color:#fff;
+    border-radius:16px;
+    box-shadow: 0px 0px 20px 0px #B7B7B726;
+    padding:12px;
+    position:absolute;
+    left:0;
+    top:56px;
+    z-index:10;
+    ul {
+      display:flex;
+      flex-direction: column;
+      li {
+        flex:1;
+        cursor:pointer;
+        color:#333;
+        font-size:14px;
+        line-height:22px;
+        padding:8px;
+      }
     }
   }
 }

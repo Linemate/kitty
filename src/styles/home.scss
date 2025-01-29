@@ -1,4 +1,9 @@
 .home {
+    .header {
+        position:absolute;
+        left:0;
+        top:0;
+    }
     .section {
         &.category {
             max-width: 900px;

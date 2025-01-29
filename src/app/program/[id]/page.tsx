@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react';
-import Header from 'components/Header/Header';
 import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
 import ReactDatePicker from "react-datepicker";
@@ -13,6 +12,8 @@ import useResize from 'hooks/useResize';
 import { Button } from 'components/common/Button';
 import Qna from 'components/QnA/Qna';
 import Map from 'components/Map/Map';
+import Header from 'components/Header/Header';
+import Footer from 'components/Footer/Footer';
 
 const tabsData = [
     {
@@ -154,6 +155,7 @@ const ProgramDetails = () => {
             <div className='wrapper'>
                 {/* Header & Key visual */}
                 <Header title={'라인메이트 메인'} lang={'ko'} />
+                {/* Key visual */}
                 <div className='inner'>
                     <Program programName={'Follow me! go to Gyeongbokgung'} programInfo={'If you looking for fun, please click here. Follow me!'} numberOfLike={1267} where={'GangNam'} amount={50000} isDetails={true} id={id} />
                     <div className='mate_area'>
@@ -253,7 +255,7 @@ const ProgramDetails = () => {
                         </div>
                     </div>
                     <div className='tabs_area'>
-                        <div className='tab'>
+                        <div className='tab bar'>
                             <ul>
                                 {
                                     tabsData.map((el:any) => <li key={el.id} className={selectedTab === el.name ? 'selected' : ''} onClick={() => handleTab(el.name)}><div className='tab_sort'>{el.name}</div></li>)
@@ -454,6 +456,8 @@ const ProgramDetails = () => {
                         </div>
                     </div>
                 </div>
+                {/* Footer */}
+                <Footer />
             </div>
         </div>
     );

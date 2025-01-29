@@ -1,6 +1,5 @@
 'use client'
 import React from 'react';
-import Header from 'components/Header/Header';
 import { useRouter } from 'next/navigation';
 import 'styles/login.scss'
 
@@ -12,7 +11,6 @@ const Login = () => {
     return (
         <>
             <div className='wrapper'>
-                <Header title={'라인메이트 로그인'} lang={'ko'} />
                 <div className='contents'>
                     <div className='text_area'>
                         <h2>Welcome!</h2>

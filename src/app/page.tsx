@@ -1,16 +1,16 @@
 'use client'
-import Header from 'components/Header/Header';
 import React from 'react';
 import KeyVisual from 'components/KeyVisual/KeyVisual';
 import { categoryData } from 'assets/data/data';
 import Service from 'components/Service/Service';
-import Footer from 'components/Footer/Footer';
 import SlideWrap from 'components/SlideWrap/SlideWrap';
 import { useRouter } from 'next/navigation';
 import Title from 'components/Title/Title';
 import Program from 'components/Program/Program';
 import 'styles/home.scss'
 import { TextButtonWithIcon } from 'components/common/Button';
+import Footer from 'components/Footer/Footer';
+import Header from 'components/Header/Header';
 
 const Main = () => {
     // querystring - lang=ko 붙으면 한국어로
@@ -21,8 +21,9 @@ const Main = () => {
     return (
         <div className='home'>
             <div className='wrapper'>
-                {/* Header & Key visual */}
-                <Header title={'Linemate'} lang={'en'} />
+                {/* Header */}
+                <Header title={'라인메이트 메인'} lang={'ko'} />
+                {/* Key visual */}
                 <KeyVisual>
                     <div className='txt_area'>
                         <div className='title'>

@@ -1,6 +1,11 @@
 
 
 .program {
+    .header {
+        position:absolute;
+        left:0;
+        top:0;
+    }
     .wrapper {
         .inner {
             max-width:744px;
@@ -113,15 +118,16 @@
             }
         }
         .mate_area {
-            margin-bottom:64px;
+            margin-bottom:40px;
         }
         .schedule_area {
             margin-bottom:20px;
             .title {
                 font-family:'Montserrat';
-                font-size:28px;
+                font-size:18px;
                 font-weight:700;
-                margin-bottom:24px;
+                margin-bottom:16px;
+                color:var(--color-neutral-100);
             }
             .datepicker_area {
                 display:flex;
@@ -383,6 +389,7 @@
                     padding-right:0;
                     margin-right:8px;
                     position:relative;
+                    color:var(--color-neutral-300);
                     &::before {
                         content:'';
                         display:block;
@@ -399,9 +406,9 @@
                     line-height:16px;
                     box-sizing: border-box;
                     border-radius:8px;
-                    padding:4px;
-                    background-color: var(--color-secondary-400);
-                    color: var(--color-neutral-900);
+                    padding:4px 6px;
+                    background-color: var(--color-neutral-200);
+                    color: #fff;
                     font-size:13px;
                     font-weight:500;
                 }

@@ -3,6 +3,7 @@ import React from 'react';
 import { IconButton } from '@mui/material';
 import 'styles/favorite.scss';
 import 'styles/button.scss';
+import { Button } from 'components/common/Button';
 
 export type FavoriteProps = {
     isMate?: boolean;
@@ -24,9 +25,7 @@ const Favorite = (props:FavoriteProps) => {
         <div className={`favorite_wrap ${props.isMate ? 'mate' : 'program'}`}>
             <div className='favorite_area'>
                 <div className='ico_favorite'>
-                    <IconButton onClick={(e:React.MouseEvent<HTMLButtonElement>)=> handleClick(e)}>
-                        <span className={`btn img heart ${props.isMate ? 'mate' : ''} ${props.isLiked ? 'filled' : ''}`}></span>
-                    </IconButton>
+                    <Button type="img" classnames={`btn img heart ${props.isMate ? 'mate' : ''} ${props.isLiked ? 'filled' : ''}`} text="Heart" onclick={(e:React.MouseEvent<HTMLButtonElement>)=> handleClick(e)} />
                 </div>
                 {
                     props.numberOfLike &&

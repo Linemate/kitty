@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import Program from 'components/Program/Program';
 import Review from 'components/Review/Review';
 import 'styles/mate';
+import Footer from 'components/Footer/Footer';
 
 const reviews = [{
     id: 0,
@@ -69,6 +70,7 @@ const MateDetails = () => {
             <div className='wrapper'>
                 {/* Header & Key visual */}
                 <Header title={'라인메이트 메인'} lang={'ko'} />
+                {/* Key visual */}
                 <Mate isSummary={false} mateName={'Rabbbbbit'} introduce={"Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet"} />
 
                 {/* contents */}
@@ -93,6 +95,8 @@ const MateDetails = () => {
 
                 </div>
             </div>
+            {/* Footer */}
+            <Footer />
         </>
     );
 };

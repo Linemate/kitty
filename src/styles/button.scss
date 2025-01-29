@@ -37,6 +37,9 @@
             font-size:16px;
             font-weight:700;
             border-radius:8px;
+            &.blue {
+                border:1px solid var(--color-primary-400);
+            }
             &.lightgray {
                 border:1px solid var(--color-neutral-600);
             }
@@ -57,6 +60,10 @@
         &.bg_blue {
             background-color:var(--color-primary-500);
             color: var(--color-neutral-900);
+        }
+        &.bg_gray {
+            background-color:var(--color-neutral-600);
+            color:#fff;
         }
         &.radius_none {
             border-radius: 0px;
@@ -80,6 +87,11 @@
             width:32px;
             height:32px;
             background-image:url('/assets/images/btn/btn_heart.png');
+        }
+        &.share {
+            width:24px;
+            height:24px;
+            background-image:url('/assets/images/btn/btn_share.png');
         }
         &.heart.filled {
             width:32px;
@@ -110,6 +122,14 @@
                 background-image:url('/assets/images/btn/btn_line.png');
             }
         }
+        &.prev, &.next {
+            width:16px;
+            height:16px;
+            background-image:url('/assets/images/btn/btn_arrow_black_right.png');
+        }
+        &.prev {
+            transform:rotate(180deg);
+        }
         &.ko, &.en {
             width:50px;
             height:24px;
@@ -119,6 +139,32 @@
             &.en {
                 background-image:url('/assets/images/btn/btn_en.png');
             }
+        }
+    }
+    &.ico {
+        &.top {
+            padding-top:39px;
+            padding-right:0;
+            position:relative;
+            &::before {
+                position:absolute;
+                top:0;
+                left:50%;
+                transform:translateX(-50%);
+                background-size:32px;
+            }
+        }
+        &.reservations::before {
+            background-image:url('/assets/images/icon/ico_reservation.png');
+        }
+        &.review::before {
+            background-image:url('/assets/images/icon/ico_review.png');
+        }
+        &.like::before {
+            background-image:url('/assets/images/icon/ico_heart.png');
+        }
+        &.qna::before {
+            background-image:url('/assets/images/icon/ico_qna.png');
         }
     }
     

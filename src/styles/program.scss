@@ -46,9 +46,6 @@
     }
     .bottom_area {
         width:360px;
-        border-top:1px solid var(--color-neutral-600);
-        margin-top:16px;
-        padding-top:16px;
         .badge_where_area {
             display:flex;
             flex-direction:row;
@@ -88,7 +85,7 @@
     &.details {
         max-width:744px;
         margin:0 auto;
-        margin-bottom:50px;
+        margin-bottom:24px;
         position:relative;
         .img_area {
             width:100%;
@@ -100,10 +97,10 @@
             justify-content: space-between;
             .txt_area {
                 padding-right:0;
-                margin-bottom:24px;
+                margin-bottom:12px;
                 h4 {
                     & > span {
-                        font-size:28px;
+                        font-size:24px;
                         font-weight:700;
                         font-family:'Montserrat';
                         color: var(--color-neutral-100);
@@ -119,13 +116,22 @@
                     }
                 }
             }
-            .where_price_area {
+            .price_area {
+                padding-top:0;
+                font-size:18px;
+                font-weight:600;
+                margin-bottom:12px;
+                .unit {
+                    margin-right:4px;
+                }
+            }
+            .where_favorite_area {
                 display:flex;
                 flex-direction: row;
                 justify-content: space-between;
                 .where_area {
-                    padding-left:22px;
-                    line-height:20px;
+                    padding-left:26px;
+                    line-height:24px;
                     position:relative;
                     font-size:14px;
                     font-weight:500;
@@ -133,22 +139,29 @@
                     &::before {
                         content:'';
                         display:block;
-                        width:16px;
-                        height:16px;
-                        background-image:url('/assets/images/icon/ico_location.png');
+                        width:20px;
+                        height:20px;
+                        background-image:url('/assets/images/icon/ico_location_gray.png');
                         background-repeat:no-repeat;
                         background-size:100%;
                         position:absolute;
                         left:0;
-                        top:0;
+                        top:50%;
+                        transform:translateY(-50%);
                     }
                 }
-                .price_area {
-                    padding-top:0;
-                    font-size:20px;
-                    font-weight:700;
-                    .unit {
-                        margin-right:4px;
+                .favorite_share_area {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:flex-end;
+                    align-items: center;
+                    .favorite_area {
+                        margin-right:24px;
+                        .btn.img.heart {
+                            width:24px;
+                            height:24px;
+                            background-image:url('/assets/images/btn/btn_heart_gray_line.png');
+                        }
                     }
                 }
             }
@@ -164,18 +177,106 @@
         .price_area {
             padding-top:38px;
         }
-        .favorite_share_area {
-            display:flex;
-            flex-direction:row;
-            justify-content:flex-end;
-            .favorite_area {
-                margin-right:14px;
-                .btn.img.heart {
-                    width:24px;
-                    height:24px;
-                    background-image:url('/assets/images/btn/btn_heart_gray_line.png');
-                }
+    }
+}
+
+.item {
+    padding:24px;
+    border-radius:16px;
+    margin-bottom:16px;
+    background-color:#fff;
+    border:1px solid var(--color-neutral-700);
+    box-shadow: 0px 0px 8px 0px #55555514;
+    box-shadow: 0px 0px 24px 0px #C2C2C214;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .item_desc_area {
+        flex:1;
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .img_area {
+        width:130px;
+        height:102px;
+        background-color:#ddd;
+        border-radius:12px;
+        margin-right:16px;
+    }
+    .program_state {
+        margin-bottom:8px;
+        .approve_status {
+            margin-right:4px;
+            &::first-letter {
+                text-transform: uppercase;
+              }
+        }
+        .date {
+            font-family:'Pretendard';
+            font-weight:400;
+            font-size:13px;
+            line-height:20px;
+            color:var(--color-neutral-500);
+        }
+    }
+    .program_name {
+        width:394px;
+        margin-bottom:4px;
+        font-family:'Pretendard';
+        font-weight:600;
+        font-size:18px;
+        line-height:24px;
+        color:var(--color-neutral-100);
+    }
+    .program_date {
+        font-family:'Pretendard';
+        font-weight:500;
+        font-size:14px;
+        line-height:20px;
+        margin-bottom:8px;
+        color:var(--color-neutral-400);
+    }
+    .program_place {
+        .ico.location {
+            padding-left:16px;
+            font-family:'Pretendard';
+            font-weight:500;
+            font-size:14px;
+            line-height:16px;
+            color:var(--color-neutral-300);
+            &::before {
+                width:12px;
+                height:16px;
+                right:auto;
+                left:0;
             }
+        }
+    }
+    .btn_area {
+        .btn.blue {
+            margin-right:48px;
+            font-family:'Pretendard';
+            font-size:14px;
+            line-height:20px;
+            color:var(--color-primary-600);
+            padding-right:12px;
+            &.review {
+                font-size:16px;
+                line-height:22px;
+                margin-right:0;
+                padding:10px 30px;
+                color:var(--color-primary-500);
+                font-weight:500;
+            }
+        }
+        .btn.cancel {
+            width:160px;
+            box-sizing: border-box;
+            font-weight:500;
+            padding:10px 10px;
+            color:var(--color-neutral-200);
         }
     }
 }

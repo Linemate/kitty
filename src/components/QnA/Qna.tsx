@@ -101,7 +101,7 @@ const Qna = () => {
             {
                 modal &&
                 <Portal>
-                    <ModalPortal title={'문의 작성하기'} closePortal={closePortal}>
+                    <ModalPortal type={'qna'} title={'문의 작성하기'} closePortal={closePortal}>
                         <div>
                             <div className={`input_textarea`} contentEditable></div>
                             <div className='input_checkbox'>
