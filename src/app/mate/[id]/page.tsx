@@ -12,7 +12,7 @@ import Title from 'components/Title/Title';
 import { useRouter } from 'next/navigation';
 import Program from 'components/Program/Program';
 import Review from 'components/Review/Review';
-import 'styles/mate';
+import 'styles/mate.scss';
 import Footer from 'components/Footer/Footer';
 
 const reviews = [{
