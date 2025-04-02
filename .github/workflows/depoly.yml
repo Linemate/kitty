@@ -1,6 +1,7 @@
 on:
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 name: AWS ECR push
 
@@ -36,3 +37,15 @@ jobs:
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      # Update ECS Service to Deploy New Image
+      - name: Deploy to ECS (Force New Deployment)
+        run: |
+          aws ecs update-service \
+            --cluster ${{ secrets.ECS_CLUSTER_NAME }} \
+            --service ${{ secrets.ECS_SERVICE_NAME }} \
+            --force-new-deployment
+
+      - name: Remove Github Actions IP From Security Group
+        run: |
+          aws ec2 revoke-security-group-ingress --group-name ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 3306 --cidr ${{ steps.ip.outputs.ipv4 }}/32
