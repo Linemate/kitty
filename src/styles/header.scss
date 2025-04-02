@@ -36,4 +36,15 @@
             margin-left:20px;
         }
     }
+    &.mobile {
+        .header_inner {
+            max-width:none;
+            &.depth {
+                padding:12px 20px;
+            }
+        }
+        &.desc {
+            
+        }
+    }
 }

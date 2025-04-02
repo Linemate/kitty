@@ -6,10 +6,12 @@ import 'styles/button.scss';
 import { Button } from 'components/common/Button';
 
 export type FavoriteProps = {
+    size: string;       // lg, md, sm
     isMate?: boolean;
     isLiked?:boolean;
     numberOfLike?: number;
     onclick?: Function;
+    isFilledHeart?:boolean;
 }
 
 
@@ -22,10 +24,10 @@ const Favorite = (props:FavoriteProps) => {
         }
     }
     return (
-        <div className={`favorite_wrap ${props.isMate ? 'mate' : 'program'}`}>
+        <div className={`favorite_wrap ${props.size} ${props.isMate ? 'mate' : 'program'}`}>
             <div className='favorite_area'>
                 <div className='ico_favorite'>
-                    <Button type="img" classnames={`btn img heart ${props.isMate ? 'mate' : ''} ${props.isLiked ? 'filled' : ''}`} text="Heart" onclick={(e:React.MouseEvent<HTMLButtonElement>)=> handleClick(e)} />
+                    <Button type="img" classnames={`img heart ${props.isFilledHeart ? 'filled' : ''} ${props.isMate ? 'mate' : ''} ${props.isLiked ? 'filled' : ''}`} text="Heart" onclick={(e:React.MouseEvent<HTMLButtonElement>)=> handleClick(e)} />
                 </div>
                 {
                     props.numberOfLike &&

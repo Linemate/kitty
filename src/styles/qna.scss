@@ -1,7 +1,4 @@
 .qna_area {
-    .btn_area {
-        margin-bottom:24px;
-    }
     .qna {
         &.pointer {
             cursor:pointer;
@@ -9,56 +6,65 @@
         padding:20px 0;
         border-bottom:1px solid var(--color-neutral-600);
         &:first-child {
-            border-top:1px solid var(--color-neutral-600);
+            border-top:none;
         }
         .qna_header {
             display:flex;
             flex-direction: row;
             align-items: center;
+            justify-content: space-between;
             margin-bottom:12px;
-            span {
-                display:block;
-                padding-right:16px;
-                position:relative;
-                &::after {
-                    content:'';
+            .left {
+                display:flex;
+                flex-direction: row;
+                align-items: center;
+                span {
                     display:block;
-                    width:1px;
-                    height:19px;
-                    background-color: var(--color-neutral-600);
-                    position:absolute;
-                    right:8px;
-                    top:2px;
+                    padding-right:16px;
+                    position:relative;
+                    &::after {
+                        content:'';
+                        display:block;
+                        width:1px;
+                        height:19px;
+                        background-color: var(--color-neutral-600);
+                        position:absolute;
+                        right:8px;
+                        top:2px;
+                    }
+                    &:last-child::after {
+                        display:none;
+                    }
                 }
-                &:last-child::after {
-                    display:none;
+                .is_reply  {
+                    font-family: 'Pretendard';
+                    font-size:16px;
+                    &.reply {
+                        color: var(--color-neutral-300);
+                    }
+                    &.no_reply {
+                        color:#377BFF;
+                    }
                 }
-            }
-            .is_reply  {
-                font-family: 'Pretendard';
-                font-size:16px;
-                &.reply {
-                    color: var(--color-neutral-300);
+                .username {
+                    font-weight:600;
+                    font-family:'Pretendard';
+                    font-size:16px;
+                    line-height:20px;
+                    color: var(--color-neutral-100);
                 }
-                &.no_reply {
-                    color:#377BFF;
+                .date {
+                    color: var(--color-neutral-400);
+                    font-family:'Pretendard';
+                    font-weight:400;
+                    font-size:14px;
                 }
-            }
-            .username {
-                font-weight:600;
-                font-family:'Pretendard';
-                font-size:16px;
-                line-height:20px;
-                color: var(--color-neutral-100);
-            }
-            .date {
-                color: var(--color-neutral-400);
-                font-family:'Pretendard';
-                font-weight:400;
-                font-size:14px;
             }
         }
         .qna_body {
+            .ico.checkbox {
+                padding-left:24px;
+            }
             .ico.lock {
                 display:inline-block;
                 font-family:'Pretendard';
@@ -76,9 +82,12 @@
                 color: var(--color-neutral-200);
                 font-size:16px;
                 line-height:24px;
+                .see_more_wrap {
+                    margin-top:12px;
+                }
             }
             .reply {
-                margin-top:12px;
+                margin-top:13px;
                 border-radius:16px;
                 padding:20px;
                 background-color: var(--color-neutral-800);
@@ -91,6 +100,7 @@
                 &.reply_date {
                     color: var(--color-neutral-400);
                     font-size:14px;
+                    margin-top:8px;
                 }
             }
         }

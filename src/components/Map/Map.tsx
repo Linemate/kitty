@@ -8,6 +8,7 @@ const Map = () => {
           const mapOptions = {
             center: new naver.maps.LatLng(37.556670, 126.923735),
             zoom: 18,
+            scrollWheel: false
           };
     
           new naver.maps.Map('map', mapOptions);

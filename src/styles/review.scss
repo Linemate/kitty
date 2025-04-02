@@ -63,21 +63,36 @@
         }
         .txt {
             flex:1;
-            .title {
+            .desc_intro {
+                display:flex;
+                flex-direction: row;
+                justify-content: flex-start;
                 padding-bottom:0;
                 margin-bottom:8px;
                 .username {
                     font-family: 'Pretendard';
                     font-weight:600;
-                    font-size:16px;
-                    line-height:19px;
-                    margin-right:12px;
+                    font-size:14px;
+                    line-height:20px;
                     vertical-align: middle;
+                    position:relative;
+                    padding-right:16px;
+                    &::before {
+                        content:'';
+                        display:block;
+                        width:1px;
+                        height:16px;
+                        background-color:var(--color-neutral-600);
+                        position:absolute;
+                        right:8px;
+                        top:2p;
+                    }
                 }
                 .date {
                     font-family: 'Pretendard';
                     font-weight:400;
-                    font-size:14px;
+                    font-size:12px;
+                    line-height:20px;
                     color: var(--color-neutral-400);
                     vertical-align: middle;
                 }

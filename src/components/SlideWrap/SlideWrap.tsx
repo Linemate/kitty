@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Slider, { Settings } from 'react-slick';
 import 'styles/slideWrap.scss'
 interface sliderProps {
@@ -13,6 +13,7 @@ interface sliderProps {
     dots?: boolean;
     /** 한번에 보여줄 슬라이드 개수  */
     slidesToShow?: number;
+    slidesToScroll?: number;
     /** 자동재생 (속도 설정시 number 타입으로) */
     autoplay?: boolean | number;
     /** 슬라이더 속도 */
@@ -23,6 +24,7 @@ interface sliderProps {
     variableWidth?: boolean;
     centerMode?:boolean;
     centerPadding?:string;
+    afterChange?: Function;
 }
 
 const SlideWrap = ({
@@ -30,33 +32,34 @@ const SlideWrap = ({
     children,
     className,
     slidesToShow = 1,
+    slidesToScroll = 1,
     autoplay = true,
     speed = 300,
     dots = false,
     loop = true,
     variableWidth, centerMode = false,
   }: sliderProps) => {
+    const sliderRef = useRef<Slider | null>(null);
     const [currentIdx, setCurrentIdx] = useState<number>(0);
+
     const settings = useMemo<Settings>(
         () => ({
-          dots: dots,
-          infinite: false,
-          speed: speed,
-          slidesToShow: slidesToShow,
-          autoplay: Boolean(autoplay),
-          autoplaySpeed: typeof autoplay === 'boolean' ? 3000 : autoplay,
-          arrows: arrows,
-          variableWidth,
-          centerMode,
-          beforeChange: (_, newIndex) => {
-			setCurrentIdx(newIndex);
-		},
+            dots: dots,
+            infinite: false,
+            speed: speed,
+            slidesToShow: slidesToShow,
+            slidesToScroll: slidesToScroll,
+            autoplay: Boolean(autoplay),
+            autoplaySpeed: typeof autoplay === 'boolean' ? 3000 : autoplay,
+            arrows: arrows,
+            variableWidth,
+            centerMode
         }),
         [autoplay, loop, slidesToShow, speed],
     );
     return (
         <>
-            <Slider {...settings}>
+            <Slider ref={sliderRef} {...settings} key={currentIdx}>
                 {children}
             </Slider>
         </>

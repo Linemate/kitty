@@ -22,11 +22,9 @@ const ReviewItem = (props:ReviewItemProps) => {
         <div className='review_item'>
             <div className={`star img_${props.star}`}></div>
             <div className='txt'>
-                <div className='title'>
-                    <div>
-                        <span className='username'>{props.username}</span>
-                        <span className='date'>{props.date}</span>
-                    </div>
+                <div className='desc_intro'>
+                    <span className='username'>{props.username}</span>
+                    <span className='date'>{props.date}</span>
                 </div>
                 <div className='desc'>
                     <div className='contents'>

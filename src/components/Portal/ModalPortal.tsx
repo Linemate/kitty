@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
-import Portal from './Portal';
+import Modal from './Modal';
 import 'styles/modal.scss';
 import { Button } from 'components/common/Button';
 
 export type modalProps = {
-    title:string;
+    title?:string;
     children:any;
     type:string;
     closePortal: Function;
@@ -18,7 +18,7 @@ const ModalPortal = (props:modalProps) => {
         closePortal();
     }
     return (
-        <Portal>
+        <Modal>
             <div className={`modal_wrapper ${type}`}>
                 <div className='bg' onClick={handleClose}></div>
                 <div className='contents'>
@@ -26,14 +26,14 @@ const ModalPortal = (props:modalProps) => {
                         <div className='title'>
                             {title}
                         </div>
-                        <Button type="img" classnames='close' onclick={closePortal} text={'닫기'}  />
+                        <Button type="img" classnames='close big' onclick={closePortal} text={'닫기'}  />
                     </div>
                     <div className='modal_body'>
                         {children}
                     </div>
                 </div>
             </div>
-        </Portal>
+        </Modal>
     );
 };
 

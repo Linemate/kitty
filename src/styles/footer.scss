@@ -99,4 +99,29 @@
             }
         }
     }
+    &.mobile {
+        height:auto;
+        .inner {
+            padding:24px 20px;
+            flex-direction: column-reverse;
+            .right {
+                .col {
+                    text-align:left;
+                    .subtitle {
+                        line-height:24px;
+                        font-size:18px;
+                        margin-bottom:12px;
+                    }
+                    ul {
+                        display:block;
+                        li {
+                            line-height:20px;
+                            font-size:12px;
+                            margin-bottom:8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

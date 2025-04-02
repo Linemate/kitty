@@ -6,6 +6,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import 'styles/mate.scss'
+import useMobile from 'hooks/useMobile';
 
 export type MateProps = {
     isSummary? : boolean;
@@ -24,10 +25,11 @@ export type MateProps = {
 }
 
 const Mate = (props:MateProps) => {
+    const isMobile = useMobile();
     return (
         <>
             {/* 컨텐츠 상세일 경우 정보 / 메이트 소개 페이지에 들어갈 정보 */}
-            <div className={`${props.isSummary ? 'summary' : 'detail'}`}>
+            <div className={`${props.isSummary ? 'summary' : 'detail'} ${isMobile ? 'mobile' : ''}`}>
                 <div className='img_area'>
                     <div className='profile'>
                         {
@@ -36,7 +38,7 @@ const Mate = (props:MateProps) => {
                         }
                         {
                             !props.isSummary &&
-                            <Favorite isMate={true} numberOfLike={1267} />
+                            <Favorite isMate={true} numberOfLike={1267} size={'md'} />
                         }
                     </div>
                 </div>

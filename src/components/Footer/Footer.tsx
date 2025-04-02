@@ -8,6 +8,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from 'next/navigation';
 import 'styles/footer.scss';
 import { Button } from 'components/common/Button';
+import useMobile from 'hooks/useMobile';
 
 type contactProps = {
     id:number;
@@ -17,6 +18,7 @@ type contactProps = {
 }
 
 const Footer = () => {
+    const isMobile = useMobile();
     const contactList:contactProps[] = [
         {
             id : 0,
@@ -53,7 +55,7 @@ const Footer = () => {
         location.href = link;
     }
     return (
-        <div className='footer'>
+        <div className={`footer ${isMobile ? 'mobile' : ''}`}>
             <div className='inner'>
                 <div className='left'>
                     <div className='logo'>LINEMATE</div>
@@ -99,16 +101,19 @@ const Footer = () => {
                             <li><div onClick={() => viewPage('/help/privacy')}>Privacy Polices</div> </li>
                         </ul>
                     </div>
-                    <div className='col'>
-                        <div className='subtitle'>Contact</div>
-                        <ul>
-                            {
-                                contactList.map((el:contactProps) => <li key={el.id}>
-                                    <Button type={'img'} text={el.name} classnames={`contact ${el.value}`} onclick={() => handleContact(el.link)} />
-                                </li>)
-                            }
-                        </ul>
-                    </div>
+                    {
+                        !isMobile &&
+                        <div className='col'>
+                            <div className='subtitle'>Contact</div>
+                            <ul>
+                                {
+                                    contactList.map((el:contactProps) => <li key={el.id}>
+                                        <Button type={'img'} text={el.name} classnames={`contact ${el.value}`} onclick={() => handleContact(el.link)} />
+                                    </li>)
+                                }
+                            </ul>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

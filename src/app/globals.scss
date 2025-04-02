@@ -123,7 +123,7 @@
 body {
   box-sizing:border-box;
 }
-body, h1, h2, h3, h4, h5, h6, input, textarea, div, span, i, section, article, aside, p, header, nav, footer {
+body, h1, h2, h3, h4, h5, h6, input, textarea, div, span, i, section, article, aside, p, header, nav, footer, button {
   font-family:'Pretendard';
 }
 ul li {list-style:none;}
@@ -196,6 +196,8 @@ button {background:none; border:none; cursor:pointer;}
 
   &.all {
       &::before {
+        width:24px;
+        height:24px;
           background-image:url('/assets/images/icon/ico_right_circle_arrow.png');
       }
   }
@@ -280,7 +282,7 @@ button {background:none; border:none; cursor:pointer;}
       left:0;
     }
   }
-  &.check {
+  &.checkbox {
     padding-right:0;
     padding-left:32px;
     &.default::before {
@@ -297,6 +299,47 @@ button {background:none; border:none; cursor:pointer;}
       right:auto;
       left:0;
     }
+    &.square {
+      &.default::before {
+        background-image:url('/assets/images/icon/ico_check_default_square.png');
+      }
+      &.checked::before {
+        background-image:url('/assets/images/icon/ico_check_checked_square.png');
+      }
+    }
+  }
+  &.calendar {
+    padding-left:28px;
+    padding-right:0;
+    &::before {
+      width:20px;
+      height:20px;
+      background-image:url('/assets/images/icon/ico_calendar.png');
+      left:0;
+      top:0;
+      right:auto;
+    }
+  }
+  &.kakao, &.facebook, &.copylink {
+    padding-right:0;
+    padding-top:48px;
+    text-align: center;
+    &::before {
+      width:40px;
+      height:40px;
+      right:auto;
+      left:50%;
+      transform:translateX(-50%);
+    }
+  }
+  &.kakao::before {
+    background-image:url('/assets/images/icon/ico_kakao.png');
+  }
+  &.facebook::before {
+    background-image:url('/assets/images/icon/ico_facebook.png');
+  }
+  &.copylink::before {
+    background-image:url('/assets/images/icon/ico_copylink.png');
   }
 }
 
@@ -477,5 +520,36 @@ button {background:none; border:none; cursor:pointer;}
         padding:8px;
       }
     }
+  }
+}
+.input_textbox {
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:16px;
+  &:focus {
+    border-color:var(--color-primary-500);
+    outline: 1px solid var(--color-primary-500);
+  }
+}
+.input_checkbox {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  input {
+    width:0;
+    height:0;
+    display:none;
+    overflow:hidden;
+  }
+  .ico.checkbox {
+    &::before {
+      width:20px;
+      height:20px;
+    }
+  }
+  .text {
+    display:inline-block;
+    line-height:24px;
+    color:var(--color-neutral-300);
   }
 }

@@ -5,7 +5,8 @@
         align-items:center;
         .amount {
             color: var(--color-neutral-300);
-            font-size:13px;
+            font-size:11px;
+            line-height:14px;
             text-align:center;
             margin-left:4px;
         }
@@ -15,6 +16,21 @@
             .amount {
                 line-height:40px;
             }
+        }
+    }
+    .btn.img.heart {
+        vertical-align: 5px;
+    }
+    &.md {
+        .btn.img.heart {
+            width:32px;
+            height:32px;
+        }
+    }
+    &.sm {
+        .btn.img.heart {
+            width:12px;
+            height:12px;
         }
     }
 }

@@ -204,7 +204,7 @@ const Cancel = () => {
                         </div>
                     </div>
                     <div className='section check_wrap'>
-                        <div className={`ico check ${isChecked ? 'checked' : 'default'}`} onClick={handleChecked}>
+                        <div className={`ico checkbox ${isChecked ? 'checked' : 'default'}`} onClick={handleChecked}>
                         환불 규정을 확인했으며, 이에 동의합니다.
                         </div>
                     </div>

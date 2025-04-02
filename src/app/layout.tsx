@@ -39,7 +39,8 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         {children}
-        <div id="portal"></div>
+        <div id="modal"></div>
+        <div id="popup"></div>
       </body>
     </html>
   );

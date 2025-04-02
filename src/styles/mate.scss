@@ -75,12 +75,12 @@
                 display:block;
                 width:16px;
                 height:16px;
-                background-image:url('/assets/images/icon/ico_arrow_black.png');
+                background-image:url('/assets/images/btn/btn_arrow_gray_right.png');
                 background-repeat:no-repeat;
                 background-size:100%;
                 position: absolute;
                 right:0;
-                top:7px;
+                top:4px;
             }
         }
         .info {
@@ -88,6 +88,31 @@
             font-size:16px;
             line-height:24px;
             color:#595959;
+        }
+    }
+    &.mobile {
+        padding:16px 20px;
+        margin-bottom:32px;
+        border-radius:0;
+        .img_area {
+            margin-right:16px;
+            .profile {
+                .profile_default {
+                    width:56px;
+                    height:56px;
+                }
+            }
+        }
+        .desc_area {
+            .name {
+                font-size:18px;
+                line-height:24px;
+                margin-bottom:4px;
+            }
+            .info {
+                font-size:13px;
+                line-height:20px;
+            }
         }
     }
 }
