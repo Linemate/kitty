@@ -5,6 +5,7 @@ import React, { useRef, useState } from 'react';
 import 'styles/qna.scss';
 import PopupPortal, { initPopup, popupProps } from 'components/Portal/PopupPortal';
 import Popup from 'components/Portal/Popup';
+import useMobile from 'hooks/useMobile';
 
 type qnaProps = {
     qna:qnaItemProps;
@@ -87,9 +88,9 @@ const QnaItem = (props:qnaProps) => {
             <div className='qna_body'>
                 {
                     isSecret ? 
-                    <div className='ico lock'>Private post.</div>
+                    <div className='ico lock qna_contents'>Private post.</div>
                     :
-                    <div className='contents'>
+                    <div className='qna_contents'>
                         {
                             seeMore ? contents?.substring(0, 200) : contents
                         }
@@ -131,6 +132,7 @@ const Qna = () => {
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
 
     const inputRef = useRef<HTMLDivElement>(null);
+    const isMobile = useMobile();
     const viewAsk = () => {
         setModal(true);
     }
@@ -178,7 +180,7 @@ const Qna = () => {
         });
     }
     return (
-        <div className='qna_area'>
+        <div className={`qna_area ${isMobile ? 'mobile' : ''}`}>
             <div className='btn_area'>
                 <Button classnames='fit border lightgray' text={'Ask a question'} type='text' onclick={viewAsk} />
             </div>

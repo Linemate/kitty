@@ -1,6 +1,7 @@
 'use client'
 import Title from 'components/Title/Title';
 import { Button } from 'components/common/Button';
+import useMobile from 'hooks/useMobile';
 import React from 'react';
 import 'styles/review.scss'
 
@@ -30,9 +31,6 @@ const ReviewItem = (props:ReviewItemProps) => {
                     <div className='contents'>
                         {props.contents}
                     </div>
-                    <div className='program'>
-                        {props.program}
-                    </div>
                 </div>
 
             </div>
@@ -42,13 +40,14 @@ const ReviewItem = (props:ReviewItemProps) => {
 
 const Review = (props:ReviewProps) => {
     const { reviews } = props;
+    const isMobile = useMobile();
 
     const moreList = () => {
         console.log('더보기');
     }
     return (
         <>
-            <div className='review'>
+            <div className={`review ${isMobile ? 'mobile' : ''}`}>
                 {
                     reviews.map((el:ReviewItemProps) => <ReviewItem key={el.id} program={el.program} username={el.username} date={el.date} star={el.star} contents={el.contents} id={el.id}  />)
                 }

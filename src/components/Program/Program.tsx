@@ -44,7 +44,7 @@ const Program = (props:ProgramProps) => {
         console.log(str)
     }
     return (
-        <div className={`program_comp ${props.isDetails ? 'details' : 'element'}`}>
+        <div className={`program_comp ${props.isDetails ? 'details' : 'element'} ${isMobile ? 'mobile' : ''}`}>
             <div className='img_area' onClick={viewDetails}>
                 {
                     !props.isDetails && 

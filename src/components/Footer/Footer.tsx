@@ -34,14 +34,14 @@ const Footer = () => {
         },
         {
             id : 2,
-            name: 'Facebook',
-            value: 'facebook',
+            name: 'LINE',
+            value: 'line',
             link: ''
         },
         {
             id : 3,
-            name: 'LINE',
-            value:'line',
+            name: 'Whatsapp',
+            value:'whatsapp',
             link: ''
         }
     ]
@@ -61,50 +61,25 @@ const Footer = () => {
                     <div className='logo'>LINEMATE</div>
                     <div className='txt'>
                         <div className='top'>
-                            <div className='ceo'>
-                                <div className='tit'>CEO</div><div className='cont'>장원준</div>
-                            </div>
-                            <div className='address'>
-                                <div className='tit'>ADDRESS</div>
-                                <div className='cont'>
-                                    Room B02 on the 1st floor, 12 An-gil,<br/>Sinchon-ro, Mapo-gu, Seoul
-                                </div>
-                            </div>
-                            <div className='number'>
-                                <div className='tit'>
-                                    TEL
-                                </div>
-                                <div className='cont'>
-                                0507-1357-6997
-                                </div>
-                            </div>
+                            <div className='row'>대표 : 장원준</div>
+                            <div className='row'>주소 : Room B02 on the 1st floor, 12 An-gil, Sinchon-ro, Mapo-gu, Seoul</div>
+                            <div className='row'>사업자등록번호 : 000-00-00000</div>
+                            <div className='row'>통신판매업신고번호 : 0000-0000-00000</div>
                         </div>
-                        <div className='bottom'>
-                            Copyright 2024 LINEMATE. All rights reverved
-                        </div>
+                        {
+                            !isMobile &&
+                            <div className='bottom'>
+                                <div onClick={() => viewPage('term')}>이용약관</div>
+                                <div onClick={() => viewPage('privacy')}>개인정보 처리방침</div>
+                            </div>
+                        }
                     </div>
                 </div>
-                <div className='right'>
-                    <div className='col'>
-                        <div className='subtitle'>LINK</div>
-                        <ul>
-                            <li><div onClick={() => viewPage('/about')}>About US</div> </li>
-                            <li><div onClick={() => viewPage('/home')}>Home</div> </li>
-                            <li><div onClick={() => viewPage('/shop')}>Shop</div> </li>
-                        </ul>
-                    </div>
-                    <div className='col'>
-                        <div className='subtitle'>HELP</div>
-                        <ul>
-                            <li><div onClick={() => viewPage('/help/announcement')}>Announcement</div> </li>
-                            <li><div onClick={() => viewPage('/help/returns')}>Returns</div> </li>
-                            <li><div onClick={() => viewPage('/help/privacy')}>Privacy Polices</div> </li>
-                        </ul>
-                    </div>
-                    {
-                        !isMobile &&
+                {
+                    !isMobile &&
+                    <div className='right'>
+                        <div className='subtitle'>FOLLOW US</div>
                         <div className='col'>
-                            <div className='subtitle'>Contact</div>
                             <ul>
                                 {
                                     contactList.map((el:contactProps) => <li key={el.id}>
@@ -113,8 +88,8 @@ const Footer = () => {
                                 }
                             </ul>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         </div>
     );

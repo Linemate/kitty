@@ -344,8 +344,8 @@ const ProgramDetails = () => {
                                 <div className='title'>Place</div>
                                 <div className='contents'>
                                     <div className='slide_wrap'>
-                                        <SlideWrap arrows={true} dots={true} autoplay={false} slidesToShow={1} 
-                                        slidesToScroll={1}>
+                                        <SlideWrap arrows={!isMobile} dots={true} autoplay={false} slidesToShow={1} 
+                                        slidesToScroll={1} length={3} indicator={true}>
                                             <div className='slide'>
                                                 <div className='img_area'>1</div>
                                             </div>
@@ -419,30 +419,57 @@ const ProgramDetails = () => {
                             <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={viewMorePage} />
                         </div>
                         {/* 슬라이드로 넣어야 함 */}
-                        <div className='slide_area'>
-                          <SlideWrap autoplay={false} variableWidth={true} >
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} />
+                        {
+                            isMobile ?
+                            <div className='four_area'>
+                                <div className='slide'>
+                                    <div className='slide_item'>
+                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} />
+                                    </div>
+                                </div>
+                                <div className='slide'>
+                                    <div className='slide_item'>
+                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} />
+                                    </div>
+                                </div>
+                                <div className='slide'>
+                                    <div className='slide_item'>
+                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} />
+                                    </div>
+                                </div>
+                                <div className='slide'>
+                                    <div className='slide_item'>
+                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} />
+                                    </div>
+                                </div>
+                            </div>
+                            :
+                            <div className='slide_area'>
+                              <SlideWrap autoplay={false} variableWidth={true} >
+                                  <div className='slide'>
+                                      <div className='slide_item'>
+                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} />
+                                      </div>
                                   </div>
-                              </div>
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} />
+                                  <div className='slide'>
+                                      <div className='slide_item'>
+                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} />
+                                      </div>
                                   </div>
-                              </div>
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} />
+                                  <div className='slide'>
+                                      <div className='slide_item'>
+                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} />
+                                      </div>
                                   </div>
-                              </div>
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} />
+                                  <div className='slide'>
+                                      <div className='slide_item'>
+                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} />
+                                      </div>
                                   </div>
-                              </div>
-                          </SlideWrap>
-                      </div>
+                              </SlideWrap>
+                            </div>
+
+                        }
                     </div>
                 </div>
                 <div className={`fixed_bottom ${isFixedBottom ? 'on' : ''} ${isMobile ? 'mobile' : ''}`}>

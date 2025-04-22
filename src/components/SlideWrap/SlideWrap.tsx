@@ -25,6 +25,12 @@ interface sliderProps {
     centerMode?:boolean;
     centerPadding?:string;
     afterChange?: Function;
+
+    /** 슬라이드 몇인지 인디케이터 */
+    indicator?: boolean;
+
+    /** 슬라이드 총 몇 개 */
+    length?: number;
 }
 
 const SlideWrap = ({
@@ -38,6 +44,8 @@ const SlideWrap = ({
     dots = false,
     loop = true,
     variableWidth, centerMode = false,
+    indicator = false,
+    length
   }: sliderProps) => {
     const sliderRef = useRef<Slider | null>(null);
     const [currentIdx, setCurrentIdx] = useState<number>(0);
@@ -53,7 +61,9 @@ const SlideWrap = ({
             autoplaySpeed: typeof autoplay === 'boolean' ? 3000 : autoplay,
             arrows: arrows,
             variableWidth,
-            centerMode
+            centerMode,
+            indicator,
+            length
         }),
         [autoplay, loop, slidesToShow, speed],
     );
@@ -61,6 +71,10 @@ const SlideWrap = ({
         <>
             <Slider ref={sliderRef} {...settings} key={currentIdx}>
                 {children}
+                {
+                    indicator &&
+                    <span className='indicator'><span className='current'>{currentIdx + 1}</span> / {length}</span>
+                }
             </Slider>
         </>
     );

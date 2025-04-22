@@ -18,3 +18,19 @@
         display:none;
     }
 }
+
+.indicator {
+    width:auto;
+    display:inline-block;
+    background-color:#00000099;
+    padding:6px 8px;
+    border-radius:100px;
+    color:var(--color-neutral-600);
+    position:absolute;
+    right:16px;
+    bottom:16px;
+    .current {
+        font-weight:700;
+        color:#fff;
+    }
+}

@@ -4,7 +4,7 @@
             cursor:pointer;
         }
         padding:20px 0;
-        border-bottom:1px solid var(--color-neutral-600);
+        border-bottom:1px solid var(--color-neutral-700);
         &:first-child {
             border-top:none;
         }
@@ -77,7 +77,7 @@
                     height:24px;
                 }
             }
-            .contents {
+            .qna_contents {
                 font-family:'Pretendard';
                 color: var(--color-neutral-200);
                 font-size:16px;
@@ -101,6 +101,52 @@
                     color: var(--color-neutral-400);
                     font-size:14px;
                     margin-top:8px;
+                }
+            }
+        }
+    }
+    &.mobile {
+        .qna {
+            &:last-child {
+                border-bottom:0;    
+            }
+            .qna_header {
+                .left {
+                    .is_reply, .username {
+                        font-size:14px;
+                        line-height:22px;
+                    }
+                    .date {
+                        font-size:12px;
+                    }
+                    span {
+                        &::after {
+                            height:12px;
+                            top:6px;
+                        }
+                    }
+                }
+                .right {
+                    .btn {
+                        font-size:13px;
+                    }
+                }
+            }
+            .qna_body {
+                .reply {
+                    padding:12px 16px;
+                }
+                .reply_contents {
+                    font-size:14px;
+                    line-height:22px;
+                }
+                .qna_contents {
+                    font-size:14px;
+                    line-height:22px;
+                }
+                .reply_date {
+                    font-size:12px;
+                    line-height:20px;
                 }
             }
         }
