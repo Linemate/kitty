@@ -5,29 +5,28 @@ import { Button } from 'components/common/Button';
 import { useRouter } from 'next/navigation';
 import 'styles/header.scss';
 import useMobile from 'hooks/useMobile';
+import { headerProps } from 'types/types';
+import { useAuthStore, useLanguage } from 'utils/stores';
 
-export type HeaderProps = {
-    title?: string;
-    isDepth? : boolean;
-    lang:string;
-    isMobileDesc?: boolean;
-    btns?: ReactNode;
-}
-
-const Header = (props:HeaderProps) => {
+const Header = (props:headerProps) => {
     const { title, isDepth, lang, isMobileDesc, btns } = props;
+    const [openLanguage, setOpenLanguage] = useState<boolean>(false);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     const isMobile = useMobile();
     const router = useRouter();
-    const changeLang = () => {
-        if(props.lang === 'ko') {
-            router.push('/en');
-        } else {
-            router.push('/ko');
-        }
+    const language = useLanguage((state) => state.language);
+    const setLanguage = useLanguage((state) => state.setLanguage);
+    const isLogin = useAuthStore.getState();
+    const changeLang = (lang:string) => {
+        console.log('dddd');
     }
     // 홈으로
     const viewHomePage = () => {
         router.push('/');
+    }
+    // 햄버거 버튼
+    const viewMenu = () => {
+        
     }
     // like 페이지로
     const viewLikeList = () => {
@@ -41,7 +40,6 @@ const Header = (props:HeaderProps) => {
     const handleBack = () => {
         router.back();
     }
-    
     
     // isMobile이 null이면 SSR에서는 기본 값을 사용
     if (isMobile === null) return null;
@@ -68,9 +66,26 @@ const Header = (props:HeaderProps) => {
                         <Nav />
                     </div>
                     <div className='header_right'>
-                        <Button type={'img'} classnames={props.lang === 'ko' ? 'en' : 'ko'} text={props.lang === 'ko' ? '영어로 변경' : '한국어로 변경'} onclick={changeLang} />
+                        <Button type={'img text left'} classnames={`language`} text={props.lang === 'kr' ? 'KR' : 'EN'} onclick={() => setOpenLanguage(!openLanguage)} />
                         <Button type={'img'} classnames={'like'} text={'찜한 목록으로'} onclick={viewLikeList} />
-                        <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />
+                        {
+                            isMobile ?
+
+                            <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={viewMenu} />
+                            : 
+                            isLogin ?
+                            <span className='logined'>Hi Buddy!</span> : 
+                            <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />
+                        }
+                        {
+                            openLanguage ? 
+                            <>
+                                <div className='options'>
+                                    <div onClick={() => changeLang('EN')}>EN</div>
+                                    <div onClick={() => changeLang('KR')}>KR</div>
+                                </div> 
+                            </>: ''
+                        }
                     </div>
                 </div>
             }

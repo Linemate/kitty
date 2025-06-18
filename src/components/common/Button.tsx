@@ -1,11 +1,7 @@
 import React from 'react';
 import 'styles/button.scss';
-export type buttonProps = {
-    text:string;
-    classnames:string;
-    type:string;     // text / img
-    onclick:Function;
-}
+import { buttonProps } from 'types/types';
+
 export const Button = (props:buttonProps) => {
     return (
         <>

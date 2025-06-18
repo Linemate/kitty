@@ -1,8 +1,6 @@
 'use client'
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import KeyVisual from 'components/KeyVisual/KeyVisual';
-import { categoryData } from 'assets/data/data';
-import Service from 'components/Service/Service';
 import SlideWrap from 'components/SlideWrap/SlideWrap';
 import { useRouter } from 'next/navigation';
 import Title from 'components/Title/Title';
@@ -11,16 +9,54 @@ import 'styles/home.scss'
 import { TextButtonWithIcon } from 'components/common/Button';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
+import { getCategories, getCollectionDetails, getCollections } from 'api';
+import { categoryProps, collectionsProps, programSummaryProps } from 'types/types';
+import SimpleProgram from 'components/Program/SimpleProgram';
+import useMobile from 'hooks/useMobile';
 
 const Main = () => {
+    // 카테고리
+    const [categories, setCategories] = useState<categoryProps[]>([]);
+    const [list, setList] = useState<collectionsProps[]>([]);
+    const isMobile = useMobile();
     // querystring - lang=ko 붙으면 한국어로
     const router = useRouter();
     const viewMorePage = () => {
         router.push(`/more`);
     }
+
+    // 카테고리 조회
+    const loadAllCategories = useCallback(async() => {
+        try {
+            const data = await getCategories();
+            const list = data.data;
+            setCategories(list);
+        } catch(err) {
+            console.log(err);
+        }
+    }, []);
+
+    // 컬렉션 전체 조회
+    const loadAllCollections  = useCallback(async() => {
+        try {
+            const data = await getCollections();
+            const list = data.data;
+            setList(list);
+        } catch(err) {
+            console.log(err);
+        }
+    }, []);
+    
+    useEffect(() => {
+        loadAllCollections();
+    }, [loadAllCollections]);
+
+    useEffect(() => {
+        loadAllCategories();
+    }, [loadAllCategories]);
     return (
         <div className='home'>
-            <div className='wrapper'>
+            <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header */}
                 <Header title={'라인메이트 메인'} lang={'ko'} />
                 {/* Key visual */}
@@ -43,53 +79,59 @@ const Main = () => {
                   <div className='section category'>
                       <div className='cate'>
                           {
-                              categoryData.map((el, i) => <div className={`cate_item ${el.value}`} key={i}>
-                                  <div className='img_area'></div>
+                              categories.map((el:categoryProps) => <div className={`cate_item`} key={el.id}>
+                                  <div className='img_area'><span className='img_icon' style={{backgroundImage: `url(${el.image.image.url})`}}></span></div>
                                   <div className='txt_area'>
-                                  {el.enName}
+                                  {el.language.title}
                                   </div>
                               </div>)
 
                           }
                       </div>
-                  </div>
-                  {/* section 2. first slide wrap */}
-                  <div className='section slide_wrap'>
-                      <div className='intro'>
-                          <div>
-                              <Title title={'Best Events'} icon={'thumb'} description={'If you looking for fun, please click here.'} />
-                          </div>
-                          <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={viewMorePage} />
-                      </div>
-                      {/* 슬라이드로 넣어야 함 */}
-                      <div className='slide_area'>
-                          <SlideWrap autoplay={false} variableWidth={true} >
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} />
-                                  </div>
-                              </div>
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} />
-                                  </div>
-                              </div>
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} />
-                                  </div>
-                              </div>
-                              <div className='slide'>
-                                  <div className='slide_item'>
-                                      <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} />
-                                  </div>
-                              </div>
-                          </SlideWrap>
-                      </div>
-                  </div>
-                  {/* Service */}
-                  <Service />
-
+                </div>
+                {/* section 2. first slide wrap */}
+                {
+                    list.map((el:collectionsProps) => 
+                        
+                        <div className='section slide_wrap' key={el.id}>
+                            <div className='intro'>
+                                <div>
+                                    <Title title={el.language.title} icon={'thumb'} />
+                                </div>
+                                <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={viewMorePage} />
+                            </div>
+                            {/* 슬라이드로 넣어야 함 */}
+                            <div className='slide_area'>
+                                <SlideWrap autoplay={false} variableWidth={true} >
+                                    {
+                                        el.programs.map((program:programSummaryProps) => 
+                                        <div key={program.id} className='slide'>
+                                            <div className='slide_item'>
+                                                <SimpleProgram program={program} />
+                                            </div>
+                                        </div>
+                                        )
+                                    }
+                                    <div className='slide'>
+                                        <div className='slide_item'>
+                                            {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} /> */}
+                                        </div>
+                                    </div>
+                                    <div className='slide'>
+                                        <div className='slide_item'>
+                                            {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} /> */}
+                                        </div>
+                                    </div>
+                                    <div className='slide'>
+                                        <div className='slide_item'>
+                                            {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} /> */}
+                                        </div>
+                                    </div>
+                                </SlideWrap>
+                            </div>
+                        </div>
+                    )
+                }
                 </div>
                 {/* Footer */}
                 <Footer />

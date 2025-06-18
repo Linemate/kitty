@@ -1,14 +1,9 @@
 'use client'
 import React from 'react';
 import 'styles/title.scss'
+import { titleProps } from 'types/types';
 
-export type TitleProps = {
-    title: string;
-    description?: string;
-    icon?:string;
-}
-
-const Title = (props:TitleProps) => {
+const Title = (props:titleProps) => {
     return (
         <div className='title'>
             <h3 className={props.icon ? `ico ${props.icon}` : ''}>{props.title}</h3>

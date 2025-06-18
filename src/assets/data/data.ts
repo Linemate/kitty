@@ -1,15 +1,7 @@
 export const navData = [
     {
-        navName : 'Event',
-        link: '/evnet'
-    },
-    {
-        navName : 'Mate',
-        link: '/mate'
-    },
-    {
-        navName : 'Brand Story',
-        link: '/brand'
+        navName : 'Experience',
+        link: '/experience'
     },
     // {
     //     navName : 'Linecare',

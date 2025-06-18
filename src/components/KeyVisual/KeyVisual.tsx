@@ -3,14 +3,9 @@ import React, { ReactElement } from 'react';
 import 'styles/keyVisual.scss'
 import { TextButtonWithIcon } from 'components/common/Button';
 import { useRouter } from 'next/navigation';
+import { keyVisualProps } from 'types/types';
 
-export type KeyVisualProps = {
-    onlyBg?: boolean;
-    src?: string;
-    children: ReactElement;
-}
-
-const KeyVisual = (props:KeyVisualProps) => {
+const KeyVisual = (props:keyVisualProps) => {
     const router = useRouter();
     const viewMorePage = () => {
         router.push('');

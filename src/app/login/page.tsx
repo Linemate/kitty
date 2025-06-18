@@ -1,28 +1,99 @@
 'use client'
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import 'styles/login.scss'
+import 'styles/loginPage.scss'
+import { useAuthStore, useLanguage } from 'utils/stores';
+import Input from 'components/Input/Input';
+import { Button } from 'components/common/Button';
+import { getLogin } from 'api';
+import useMobile from 'hooks/useMobile';
+import Header from 'components/Header/Header';
 
 const Login = () => {
+    const initValues = {
+        email:'',
+        password:''
+    };
+    const [values, setValues] = useState(initValues);
+    const language = useLanguage((state) => state.language);
     const router = useRouter();
+    const isMobile = useMobile();
     const viewPage = (link:string) => {
         router.push(`/${link}`);
     }
+
+    // input change
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setValues({
+            ...values,
+            [name]: value
+        });
+        console.log(value);
+    }
+
+    // login
+    const handleLogin = useCallback(async () => {
+        try {
+            const res = await getLogin(values);
+            const token = res.data.token;
+            if (token) {
+                useAuthStore.setState(token);
+                router.push('/');
+            }
+        } catch(err) {console.log(err) }
+    }, [values]);
+
+    useEffect(() => {
+        return () => {
+            setValues(initValues);
+        }
+    }, []);
+
     return (
-        <>
-            <div className='wrapper'>
+        <div className='login'>
+            {
+                isMobile &&
+                <>
+                    {/* Header & Key visual */}
+                    <Header title={'라인메이트 메인'} lang={'ko'} />
+                </>
+            }
+            <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className='contents'>
+                    {
+                        !isMobile &&
+                        <div className={`img_area ${language}`}></div>
+                    }
                     <div className='text_area'>
-                        <h2>Welcome!</h2>
-                        <p>New to Linemate? <div onClick={() => viewPage('/register')}>Register</div></p>
-                    </div>
-                    <div className='btn_area'>
-                        <button type="button">BUDDY</button>
-                        <button type="button">MATE</button>
+                        <div className='main'>
+                            <h2 className='logo'>Linemate</h2>
+                            <p className='intro'>
+                                Welcome Buddy!
+                            </p>
+                            <div className='input_area'>
+                                <div className='email_area'>
+                                    <Input type='text' name={'email'} value={values.email} handleChange={handleChange} placeholder='Email' />
+                                </div>
+                                <div className='pw_area'>
+                                    <Input type='password' name={'password'} value={values.password} handleChange={handleChange} placeholder='Password' />
+                                </div>
+                            </div>
+                            <div className='gray500'>Forgot Password?</div>
+                            <div className='btn_area'>
+                                <Button type='text' onclick={handleLogin} classnames='bg_blue wide radius_8' text={'Login'} />
+                            </div>
+                            {/* <div className='mate_mode'>Switch Mate Mode</div>
+
+                            <div className='gray400'>Don't have an account?<span className='link' onClick={() => viewPage('/register')}>Register</span></div> */}
+
+                            {/* <div className='horizon'><span className='or'>Or</span></div> */}
+                        </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

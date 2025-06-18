@@ -3,18 +3,7 @@ import React from 'react';
 import 'styles/modal.scss';
 import { Button } from 'components/common/Button';
 import Popup from './Popup';
-
-export type popupProps = {
-    show?: boolean;
-    title?:string;
-    children:any;
-    type:string;
-    yesFunction?:Function;
-    yesText?:string;
-    noFucntion?:Function;
-    noText?:string;
-    closePortal: Function;
-}
+import { popupProps } from 'types/types';
 
 export const initPopup = {
     show: false,

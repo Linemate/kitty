@@ -1,35 +1,24 @@
 'use client'
+import { getProgramReview } from 'api';
 import Title from 'components/Title/Title';
 import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/review.scss'
+import { reviewItemProps, reviewProps } from 'types/types';
 
-export type ReviewItemProps = {
-    id: number;
-    program: string;
-    username: string;
-    date: string;
-    star: number;
-    contents: string;
-}
-
-export type ReviewProps = {
-    reviews: ReviewItemProps[];
-}
-
-const ReviewItem = (props:ReviewItemProps) => {
+const ReviewItem = (props:reviewItemProps) => {
     return (
         <div className='review_item'>
-            <div className={`star img_${props.star}`}></div>
+            <div className={`star img_${props.score}`}></div>
             <div className='txt'>
                 <div className='desc_intro'>
-                    <span className='username'>{props.username}</span>
-                    <span className='date'>{props.date}</span>
+                    <span className='username'>{props.name}</span>
+                    {/* <span className='date'>{props.date}</span> */}
                 </div>
                 <div className='desc'>
                     <div className='contents'>
-                        {props.contents}
+                        {props.content}
                     </div>
                 </div>
 
@@ -38,18 +27,33 @@ const ReviewItem = (props:ReviewItemProps) => {
     );
 };
 
-const Review = (props:ReviewProps) => {
-    const { reviews } = props;
+const Review = ({ id } : {id : string}) => {
+    const [reviews, setReviews] = useState<reviewItemProps[]>([]);
+    const [pageNum, setPageNum] = useState<number>(1);
     const isMobile = useMobile();
 
     const moreList = () => {
         console.log('더보기');
     }
+
+    // 리뷰 조회
+    const loadProgramReviews = useCallback(async () => {
+        try {
+            const res = await getProgramReview(id, pageNum);
+            const data = res.data;
+            setReviews(data.list);
+        } catch(err) {console.log(err);}
+    }, [id]);
+
+    useEffect(() => {
+        loadProgramReviews();
+    }, [loadProgramReviews, id]);
+
     return (
         <>
             <div className={`review ${isMobile ? 'mobile' : ''}`}>
                 {
-                    reviews.map((el:ReviewItemProps) => <ReviewItem key={el.id} program={el.program} username={el.username} date={el.date} star={el.star} contents={el.contents} id={el.id}  />)
+                    reviews.map((el:reviewItemProps) => <ReviewItem key={el.id} title={el.title} name={el.name} score={el.score} content={el.content} id={el.id}  />)
                 }
                 <Button classnames={'wide border lightgray'} type={'text'} text={`12개 리뷰 더보기`} onclick={moreList} />
             </div>

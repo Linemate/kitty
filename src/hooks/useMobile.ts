@@ -5,6 +5,7 @@ const useMobile = (breakpoint: number = 768) => {
 
   useEffect(() => {
     const checkScreenSize = () => {
+        console.log(window.innerWidth)
       setIsMobile(window.innerWidth < breakpoint);
     };
 

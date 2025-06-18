@@ -3,60 +3,17 @@ import Modal from 'components/Portal/Modal';
 import { Button } from 'components/common/Button';
 import React, { useRef, useState } from 'react';
 import 'styles/qna.scss';
-import PopupPortal, { initPopup, popupProps } from 'components/Portal/PopupPortal';
+import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import Popup from 'components/Portal/Popup';
 import useMobile from 'hooks/useMobile';
-
-type qnaProps = {
-    qna:qnaItemProps;
-    handleDelete: Function;
-}
-
-type qnaItemProps = {
-    id: number;
-    username:string;
-    isReply:Boolean;
-    reply_contents?:string;
-    reply_date?:string;
-    date:string;
-    isSecret:Boolean;
-    contents?:string;
-}
+import { popupProps, qnaItemProps, qnaProps } from 'types/types';
+import { getInquiries } from 'api';
 
 
-const data = [
-    {
-        id:1,
-        username: 'Rbiits12**',
-        isReply:true,
-        date:'2024.01.24. 17:55',
-        isSecret: true,
-        reply_date:'2024.01.22. 17:32',
-    },
-    {
-        id:2,
-        username: 'Rbiits12**',
-        isReply:false,
-        date:'2024.01.24. 17:55',
-        isSecret: false,
-        reply_contents:'이벤트 시간은 3시간~4시간으로 상황에 따라서 길어질 수도 있습니다. ',
-        reply_date:'2024.01.24. 17:32',
-        contents:'모임 소요 시간이 어떻게 되나요?'
-    },
-    {
-        id:3,
-        username: 'Rbiits12**',
-        isReply: true,
-        date:'2024.01.24. 17:55',
-        isSecret: false,
-        reply_contents:'이벤트 시간은 3시간~4시간으로 상황에 따라서 길어질 수도 있습니다. ',
-        reply_date:'2024.01.24. 17:32',
-        contents:'모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요? 모임 소요 시간이 어떻게 되나요?'
-    },
-]
+
 const QnaItem = (props:qnaProps) => {
     const {qna, handleDelete} = props;
-    const {id, username, isReply, reply_contents, reply_date, date, isSecret, contents} = qna;
+    const {id, buddy, title, content, answer, isSecret, createdAt} = qna;
     const [seeMore, setSeeMore] = useState<boolean>(true);
     const handleQnaDelete = () => {
         console.log('delete');
@@ -70,16 +27,16 @@ const QnaItem = (props:qnaProps) => {
             <div className='qna_header'>
                 <div className='left'>
                     {
-                        isReply ?
+                        answer.id ?
                         <span className='is_reply no_reply'>답변완료</span>
                         :
                         <span className='is_reply reply'>미답변</span>
                     }
-                    <span className='username'>{username}</span>
-                    <span className='date'>{date}</span>
+                    <span className='username'>{buddy.name}</span>
+                    <span className='date'>{createdAt}</span>
                 </div>
                 {
-                    !isReply &&
+                    !answer.id &&
                     <div className='right'>
                         <Button classnames={'lightgray'} type={'text'} text={`Delete`} onclick={handleQnaDelete} />
                     </div>
@@ -92,13 +49,13 @@ const QnaItem = (props:qnaProps) => {
                     :
                     <div className='qna_contents'>
                         {
-                            seeMore ? contents?.substring(0, 200) : contents
+                            seeMore ? content?.substring(0, 200) : content
                         }
                         {
-                            seeMore && contents && contents.length >= 200 && '...'
+                            seeMore && content && content.length >= 200 && '...'
                         }
                         {
-                            seeMore && contents && contents.length >= 200 &&
+                            seeMore && content && content.length >= 200 &&
                             <div className='see_more_wrap'>
                                 <Button classnames={'lightgray'} type={'text'} text={`See More`} onclick={handleSeeMore} />
                             </div>
@@ -107,15 +64,15 @@ const QnaItem = (props:qnaProps) => {
                 }
                 {
                     // 답변
-                    isReply && 
+                    answer.id && 
                     <div className='reply'>
                         <div className='reply_contents'>
                             {
-                                isSecret ? 'Private post.' : reply_contents
+                                isSecret ? 'Private post.' : answer.contents
                             }
                         </div>
                         <div className='reply_date'>
-                            {reply_date}
+                            {answer.createdAt}
                         </div>
                     </div>
                 }
@@ -124,12 +81,15 @@ const QnaItem = (props:qnaProps) => {
     );
 }
 
-const Qna = () => {
+const Qna = ({id} : {id:string}) => {
     const [modal, setModal] = useState<boolean>(false);
     const [isPrivate, setIsPrivate] = useState<boolean>(false);
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const [qnaContent, setQnaContent] = useState<string>('');
+    const [qnas, setQnas] = useState<qnaItemProps[]>([]);
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
+    // page
+    const [pageNum, setPageNum] = useState<number>(0);
 
     const inputRef = useRef<HTMLDivElement>(null);
     const isMobile = useMobile();
@@ -138,6 +98,13 @@ const Qna = () => {
     }
     const closePortal = () => {
         setModal(false);
+    }
+
+    // qna 조회
+    const loadInquiries = async () => {
+        try {
+            const res = await getInquiries(id, pageNum)
+        } catch(err) {console.log(err)}
     }
 
 
@@ -186,7 +153,7 @@ const Qna = () => {
             </div>
             <div>
                 {
-                    data.map((el:qnaItemProps) => <QnaItem qna={el} key={el.id} handleDelete={() => handleDelete(el.id)} />)
+                    qnas.map((el:qnaItemProps) => <QnaItem qna={el} key={el.id} handleDelete={() => handleDelete(el.id)} />)
                 }
             </div>
             {

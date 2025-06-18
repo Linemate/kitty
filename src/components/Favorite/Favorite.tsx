@@ -4,18 +4,10 @@ import { IconButton } from '@mui/material';
 import 'styles/favorite.scss';
 import 'styles/button.scss';
 import { Button } from 'components/common/Button';
-
-export type FavoriteProps = {
-    size: string;       // lg, md, sm
-    isMate?: boolean;
-    isLiked?:boolean;
-    numberOfLike?: number;
-    onclick?: Function;
-    isFilledHeart?:boolean;
-}
+import { favoriteProps } from 'types/types';
 
 
-const Favorite = (props:FavoriteProps) => {
+const Favorite = (props:favoriteProps) => {
     const handleClick = (e:React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
@@ -30,7 +22,7 @@ const Favorite = (props:FavoriteProps) => {
                     <Button type="img" classnames={`img heart ${props.isFilledHeart ? 'filled' : ''} ${props.isMate ? 'mate' : ''} ${props.isLiked ? 'filled' : ''}`} text="Heart" onclick={(e:React.MouseEvent<HTMLButtonElement>)=> handleClick(e)} />
                 </div>
                 {
-                    props.numberOfLike &&
+                    props.numberOfLike !== null &&
                     <div className='amount'>
                         {props.numberOfLike}
                     </div>

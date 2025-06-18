@@ -2,17 +2,8 @@
 import { Button } from '@mui/material';
 import React, { ReactElement } from 'react';
 import 'styles/program.scss';
+import { programInMypageProps } from 'types/types';
 
-export type programInMypageProps = {
-    id: number;
-    status: string;
-    name: string;
-    date: string;
-    applyDate: string;
-    location: string;
-    type?: string;
-    children?: ReactElement;
-}
 
 const ProgramInMypage = (props:programInMypageProps) => {
     const {id, name, status, date, applyDate, type, location, children } = props;

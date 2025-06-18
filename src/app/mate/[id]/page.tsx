@@ -71,7 +71,7 @@ const MateDetails = () => {
                 {/* Header & Key visual */}
                 <Header title={'라인메이트 메인'} lang={'ko'} />
                 {/* Key visual */}
-                <Mate isSummary={false} mateName={'Rabbbbbit'} introduce={"Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet"} />
+                {/* <Mate isSummary={false} mateName={'Rabbbbbit'} introduce={"Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet"} /> */}
 
                 {/* contents */}
                 <div className='contents'>
@@ -90,7 +90,7 @@ const MateDetails = () => {
 
                     <div className='section'>
                         <Title title={'REVIEW'} />
-                        <Review reviews={reviews} />
+                        {/* <Review reviews={reviews} /> */}
                     </div>
 
                 </div>

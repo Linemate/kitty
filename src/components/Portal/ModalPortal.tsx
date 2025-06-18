@@ -3,13 +3,7 @@ import React from 'react';
 import Modal from './Modal';
 import 'styles/modal.scss';
 import { Button } from 'components/common/Button';
-
-export type modalProps = {
-    title?:string;
-    children:any;
-    type:string;
-    closePortal: Function;
-}
+import { modalProps } from 'types/types';
 
 const ModalPortal = (props:modalProps) => {
     const {title, children, type, closePortal} = props;

@@ -1,0 +1,20 @@
+.input_wrap {
+    position:relative;
+    input {
+        width:100%;
+        box-sizing: border-box;
+        border:1px solid var(--color-neutral-600);
+        padding:13px 16px;
+        background-color:#fff;
+        border-radius:8px;
+        font-size:14px;
+    }
+    .placeholder {
+        font-size:14px;
+        line-height:22px;
+        position:absolute;
+        left:16px;
+        top:13px;
+        color:var(--color-neutral-500);
+    }
+}

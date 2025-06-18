@@ -8,6 +8,14 @@
             background-repeat:no-repeat;
             background-size:100%;
         }
+        &.left {
+            padding-left:28px;
+            &::after {
+                position:absolute;
+                left:0;
+                top:0;
+            }
+        }
         &.right {
             padding-right:24px;
             &::after {
@@ -47,16 +55,16 @@
             &.gray {
                 border:1px solid var(--color-neutral-500);
             }
-            &.wide {
-                width:100%;
-                padding:12px 0;
-                box-sizing: border-box;
-            }
-            &.fit {
-                display:inline-block;
-                padding:8px 16px;
-                box-sizing: border-box;
-            }
+        }
+        &.wide {
+            width:100%;
+            padding:12px 0;
+            box-sizing: border-box;
+        }
+        &.fit {
+            display:inline-block;
+            padding:8px 16px;
+            box-sizing: border-box;
         }
         &.bg_blue {
             background-color:var(--color-primary-500);
@@ -69,6 +77,9 @@
         &.radius_none {
             border-radius: 0px;
         }
+        &.radius_8 {
+            border-radius:8px;
+        }
         &.lightgray {
             color: var(--color-neutral-500);
         }
@@ -78,6 +89,20 @@
             font-size:13px;
             font-weight:600;
             font-family:'Pretendard';
+        }
+        &.language {
+            width:auto;
+            height:20px;
+            padding-left:28px;
+            font-size:13px;
+            line-height:20px;
+            font-weight:600;
+            text-indent: 0;
+            &::after {
+                width:20px;
+                height:20px;
+                background-image:url('/assets/images/icon/ico_language.png');
+            }
         }
     }
     &.img {
@@ -159,7 +184,10 @@
             &.en {
                 background-image:url('/assets/images/btn/btn_en.png');
             }
-        }
+        }   
+        &.menu {
+            background-image:url('/assets/images/btn/btn_menu.png');
+        }     
     }
     &.ico {
         &.top {

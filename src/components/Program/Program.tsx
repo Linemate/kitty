@@ -1,24 +1,15 @@
 'use client'
 import React, { useState } from 'react';
 import Favorite from 'components/Favorite/Favorite';
-import { IconButton } from '@mui/material';
-import IosShareIcon from '@mui/icons-material/IosShare';
 import 'styles/program.scss';
 import { useRouter } from 'next/navigation';
 import { Button } from 'components/common/Button';
 import ModalPortal from 'components/Portal/ModalPortal';
 import useMobile from 'hooks/useMobile';
-export type ProgramProps = {
-    programName : string;
-    programInfo : string;
-    numberOfLike : number;
-    where: string;
-    amount: number;
-    isDetails?: boolean;
-    id: number | string;
-}
+import { programCompProps } from 'types/types';
 
-const Program = (props:ProgramProps) => {
+const Program = (props:programCompProps) => {
+    const {program, isDetails} = props;
     const router = useRouter();
     const [liked, setLiked] = useState<boolean>(false);
     const [isPopup, setIsPopup] = useState<boolean>(false);
@@ -27,9 +18,7 @@ const Program = (props:ProgramProps) => {
         setLiked(!liked);
     }
     const viewDetails = () => {
-        if (!props.isDetails) {
-            router.push(`/program/${props.id}`);
-        }
+        router.push(`/program/${program.id}`);
     }
     // 공유하기
     const viewSharePopup = () => {
@@ -44,45 +33,32 @@ const Program = (props:ProgramProps) => {
         console.log(str)
     }
     return (
-        <div className={`program_comp ${props.isDetails ? 'details' : 'element'} ${isMobile ? 'mobile' : ''}`}>
-            <div className='img_area' onClick={viewDetails}>
-                {
-                    !props.isDetails && 
-                    <div className='favorite_area'>
-                        <Favorite onclick={sendLike} isLiked={liked} isFilledHeart={false} size={'md'} />
-                    </div>
-                }
+        <div className={`program_comp ${isMobile ? 'mobile' : ''} ${isDetails ? 'details' : 'element'}`}>
+            <div className='img_area' onClick={viewDetails} style={{backgroundImage:`url(${program.thumbnail})`}}>
             </div>
             <div className='desc_area'>
-                <div className='txt_area' >
-                    {
-                        !props.isDetails &&
-                        <div className='where'>{props.where}</div>
-                    }
-                    <h4 onClick={viewDetails}>{props.programName}</h4>
+                <div className='txt_area'>
+                    <h4 onClick={viewDetails}>{program.title}</h4>
                 </div>
-                {
-                    props.isDetails &&
-                    <div className='price_area'>
-                        <span className='unit'>
-                            KRW
-                        </span>
-                        <span className='amount'>
-                            {props.amount}
-                        </span>
-                    </div>
-                }
+                <div className='price_area'>
+                    <span className='unit'>
+                        {program.currency}
+                    </span>
+                    <span className='amount'>
+                        {program.price.toLocaleString()}
+                    </span>
+                </div>
                 <div className='where_favorite_area'>
                     <div className='where_area'
                     >
-                        {props.where}
+                        {program.hiddenInfo.address}
                     </div>
                     <div className='favorite_share_area'>
                         <div>
-                            <Favorite onclick={sendLike} isLiked={liked} numberOfLike={46} size={'sm'} isFilledHeart={true} />
+                            <Favorite onclick={sendLike} isLiked={liked} numberOfLike={program.likes} size={'sm'} isFilledHeart={true} />
                         </div>
                         {
-                            props.isDetails &&
+                            isDetails &&
                             <div>
                                 <Button type='img' classnames='border share' onclick={viewSharePopup} text='공유하기' />
                             </div>
@@ -92,22 +68,20 @@ const Program = (props:ProgramProps) => {
             </div>
             <div className='bottom_area'>
                 {
-                    !props.isDetails &&
+                    !isDetails &&
                     <div className='price_area'>
                         <span className='unit'>
                             KRW
                         </span>
                         <span className='amount'>
-                            {props.amount}
+                            {program.recommendPrograms.price}
                         </span>
                     </div>
                 }
-                <div className='badge_where_area'>
+                <div className='category_badge_area'>
                     <div className='badge_area'>
                         {/* map 돌리기 */}
-                        <span className='badge outgoing'>OUTGOING</span>
-                        <span className='badge best'>BEST</span>
-                        <span className='badge like'>LIKE 999+</span>
+                        <span className='badge'>{program.category.title}</span>
                     </div>
                 </div>
             </div>

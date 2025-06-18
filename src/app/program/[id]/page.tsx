@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
 import ReactDatePicker from "react-datepicker";
@@ -18,6 +18,8 @@ import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import ModalPortal from 'components/Portal/ModalPortal';
 import AvailableTimes from 'components/Program/AvailableTimes';
+import { getProgramDetails, getProgramReview, getProgramSchedules } from 'api';
+import { programProps, reviewItemProps } from 'types/types';
 
 const tabsData = [
     {
@@ -42,68 +44,99 @@ const tabsData = [
     },
 ]
 
-const reviews = [{
+const initProgram = {
+    category: {
+        id:0,
+        title:'',
+        contents: '',
+        country: ''    
+    },
+    contents: '',
+    htmlFilePath: '',
+    currency: '',
+    price:0,
+    hiddenInfo: {
+        id:0,
+        programId:0,
+        address: ''
+    },
     id:0,
-    program: 'Make a traditional food',
-    username: 'travelholic21',
-    date: '2024. 02. 21',
-    star: 5,
-    contents: 'Lorem ipsum dolor sit amet, '
-}, {
-    id:1,
-    program: 'Make a traditional food',
-    username: 'travelholic21',
-    date: '2024. 02. 21',
-    star: 4,
-    contents: 'Lorem ipsum dolor sit amet, '
-}, {
-    id:2,
-    program: 'Make a traditional food',
-    username: 'travelholic21',
-    date: '2024. 02. 21',
-    star: 3,
-    contents: 'Lorem ipsum dolor sit amet, '
-}, {
-    id:3, 
-    program: 'Make a traditional food',
-    username: 'travelholic21',
-    date: '2024. 02. 21',
-    star: 2,
-    contents: 'Lorem ipsum dolor sit amet, '
-}, {
-    id:4,
-    program: 'Make a traditional food',
-    username: 'travelholic21',
-    date: '2024. 02. 21',
-    star: 1,
-    contents: 'Lorem ipsum dolor sit amet, '
-}, {
-    id:5,
-    program: 'Make a traditional food',
-    username: 'travelholic21',
-    date: '2024. 02. 21',
-    star: 0,
-    contents: 'Lorem ipsum dolor sit amet, '
-}];
+    images: [],
+    isEnd: false,
+    isLike: false,
+    isParking: false,
+    isReserved: false,
+    likes: 0,
+    mate: {
+        id:0,
+        email: '',
+        name: '',
+        image:{
+            id:0,
+            fileName: '',
+            url: ''
+        },
+        introduce:''
+    },
+    recommendPrograms: {
+        id: 0,
+        mateId: 0,
+        title: '',
+        station:'',
+        thumbnailUrl: '',
+        contents: '',
+        price:0,
+        currency: '',
+        reviewsCount:0,
+        likesCount:0,
+        reservationDate:'',
+        banner: []
+    },
+    reviews:0,
+    station:'',
+    thumbnail: '',
+    title: '',
+    xcoordinate: 0,
+    ycoordinate: 0
+}
 
 const ProgramDetails = () => {
     const param = useParams();
     const windowSize = useResize();
     const isMobile = useMobile();
+    const [program, setProgram] = useState<programProps>(initProgram);
     // modal
     const [isPopup, setIsPopup] = useState<boolean>(false);
     const [isCalendarModal, setIsCaleandarModal] = useState<boolean>(false);
     // 탭 선택
     const [selectedTab, setSelectedTab] = useState<string>(tabsData[0].name);
+    // 선택한 날짜들
+    const [selectedMonth, setSelectedMonth] = useState<Date>();
     const [selectedDate, setSelectedDate] = useState<Date>();
+    // 가능한 날짜들
+    const [availableDates, setAvailableDates] = useState<string[]>(['20250616']);
     const [selectedTime, setSelectedTime] = useState<any>('');
+
+    const [reviews, setReviews] = useState<reviewItemProps[]>([]);
     // 스크롤 Y값
     const [sctop, setSctop] = useState<number>(0);
     const [isFixedBottom, setIsFixedBottom] = useState<boolean>(false);
-    const [id, setId] = useState<string>('');
+    const [htmlBody, setHtmlBody] = useState<string>('');
+
+    const [id, setId] = useState<string>(param.id[0] || '');
 
     // ref
     const btnReservationRef = useRef<HTMLDivElement>(null);
+
+    // 프로그램 상세
+    const loadProgramDetails = useCallback(async () => {
+        try {
+            console.log(id);
+            const res = await getProgramDetails(id);
+            const data = res.data;
+            setProgram(data)
+        } catch(err) {console.log(err);}
+    }, [id]);
 
     // tab 이동
     const handleTab = (tab:string) => {
@@ -177,6 +210,36 @@ const ProgramDetails = () => {
             }
         }
     }
+    // 달력 change
+    const handleChangeDate = async (date:Date) => {
+        try {
+            setSelectedDate(date as Date)
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const d = date.getDate();
+            const fullD = `${year}${month < 10 ? '0' + month : month}${d < 10 ? '0' + d : d}`;
+            const res = await getProgramSchedules(id, fullD);
+            console.log(res);
+        } catch(err) {console.log(err)}                                    
+    }
+    // 월별
+    const handleChangeMonth = async (date:Date) => {
+        try {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const res = await getProgramSchedules(id, `${year}${month < 10 ? '0' + month : month}`);
+            console.log(res)
+        } catch (err) {console.log(err)}
+    }
+
+    const parseDate = (str: string) => {
+        const year = parseInt(str.substring(0, 4), 10);
+        const month = parseInt(str.substring(4, 6), 10) - 1; // JS month는 0부터
+        const day = parseInt(str.substring(6, 8), 10);
+        return new Date(year, month, day);
+    };
+
+    const disabledDates = availableDates.map(parseDate);
 
     useEffect(() => {
         if (param && param.id) {
@@ -228,6 +291,20 @@ const ProgramDetails = () => {
         }
 
     }, []);
+    useEffect(() => {
+        loadProgramDetails();
+    }, [loadProgramDetails, id]);
+    useEffect(() => {
+        if (program.htmlFilePath !== '') {
+            fetch(program.htmlFilePath)
+              .then(res => res.text())
+              .then(html => {
+                // body 내용만 추출
+                const bodyContent = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] || '';
+                setHtmlBody(bodyContent);
+              });
+        }
+    }, [program]);
 
     return (
         <div className='program'>
@@ -236,9 +313,9 @@ const ProgramDetails = () => {
                 <Header title={'라인메이트 메인'} lang={'ko'} isDepth={false} isMobileDesc={true} btns={btns()} />
                 {/* Key visual */}
                 <div className='inner'>
-                    <Program programName={'Follow me! go to Gyeongbokgung'} programInfo={'If you looking for fun, please click here. Follow me!'} numberOfLike={1267} where={'GangNam'} amount={50000} isDetails={true} id={id} />
+                    <Program program={program} isDetails={true} />
                     <div className='mate_area'>
-                        <Mate isSummary={true} mateName={'Rabbbbbit'} introduce={'Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet'} />
+                        <Mate isSummary={true} mate={program.mate} />
                     </div>
                     <div className='schedule_area'>
                         <div className='title'>
@@ -263,7 +340,15 @@ const ProgramDetails = () => {
                                 <div className='calendar_wrap'>
                                     <div className='calendar_area'>
                                         <div className='calendar'>
-                                            <ReactDatePicker onChange={(date) => setSelectedDate(date as Date)} inline />
+                                            <ReactDatePicker onChange={handleChangeDate}
+                                            onMonthChange={handleChangeMonth}
+                                            filterDate={(date) => {
+                                                // disabledDates에 포함된 날짜는 false를 반환 => 비활성화
+                                                return !disabledDates.some(
+                                                (d) => d.toDateString() === date.toDateString()
+                                                );
+                                            }}
+                                            inline />
                                         </div>
                                         <div className='guide'>
                                             <div className='available_area'><span className='ico available'></span>Available</div>
@@ -302,43 +387,7 @@ const ProgramDetails = () => {
                         </div>
                         <div className='desc_of_tab'>
                             {/* introduce */}
-                            <div className='contents_introduce tab_body'>
-                                <div className='title'>Introduce</div>
-                                <div className='contents'>
-                                    Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet’
-                                </div>
-                                <div className='title'>Timeline</div>
-                                <div className='contents'>
-                                    <dl>
-                                        <dt>20:00 - 20:15 </dt>
-                                        <dd>
-                                            Ice-breaking: Introduction each other
-                                        </dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>20:00 - 20:15 </dt>
-                                        <dd>
-                                            Ice-breaking: Introduction each other
-                                        </dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>20:00 - 20:15 </dt>
-                                        <dd>
-                                            Ice-breaking: Introduction each other
-                                        </dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>20:00 - 20:15 </dt>
-                                        <dd>
-                                            Ice-breaking: Introduction each other
-                                        </dd>
-                                    </dl>
-                                </div>
-                                <div className='title materials'>Materials</div>
-                                <div className='contents'>
-                                    Open-minded, Beverage, Camera 
-                                </div>
-                            </div>
+                            <div className='contents_introduce tab_body' dangerouslySetInnerHTML={{ __html: htmlBody }}></div>
                             {/* place */}
                             <div className='contents_place tab_body'>
                                 <div className='title'>Place</div>
@@ -396,7 +445,7 @@ const ProgramDetails = () => {
                             <div className='contents_review tab_body'>
                                 <div className='title'>Review</div>
                                 <div className='contents'>
-                                    <Review reviews={reviews} />
+                                    <Review id={id} />
                                 </div>
                             </div>
 
@@ -404,7 +453,7 @@ const ProgramDetails = () => {
                             <div className='contents_qna tab_body'>
                                 <div className='title'>Q&amp;A</div>
                                 <div className='contents'>
-                                    <Qna />
+                                    <Qna id={id} />
                                 </div>
                             </div>
                         </div>
@@ -424,22 +473,22 @@ const ProgramDetails = () => {
                             <div className='four_area'>
                                 <div className='slide'>
                                     <div className='slide_item'>
-                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} />
+                                        {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} /> */}
                                     </div>
                                 </div>
                                 <div className='slide'>
                                     <div className='slide_item'>
-                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} />
+                                        {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} /> */}
                                     </div>
                                 </div>
                                 <div className='slide'>
                                     <div className='slide_item'>
-                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} />
+                                        {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} /> */}
                                     </div>
                                 </div>
                                 <div className='slide'>
                                     <div className='slide_item'>
-                                        <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} />
+                                        {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} /> */}
                                     </div>
                                 </div>
                             </div>
@@ -448,22 +497,22 @@ const ProgramDetails = () => {
                               <SlideWrap autoplay={false} variableWidth={true} >
                                   <div className='slide'>
                                       <div className='slide_item'>
-                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} />
+                                          {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={1} /> */}
                                       </div>
                                   </div>
                                   <div className='slide'>
                                       <div className='slide_item'>
-                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} />
+                                          {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} /> */}
                                       </div>
                                   </div>
                                   <div className='slide'>
                                       <div className='slide_item'>
-                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} />
+                                          {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} /> */}
                                       </div>
                                   </div>
                                   <div className='slide'>
                                       <div className='slide_item'>
-                                          <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} />
+                                          {/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} /> */}
                                       </div>
                                   </div>
                               </SlideWrap>
