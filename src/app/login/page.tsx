@@ -9,13 +9,14 @@ import { getLogin } from 'api';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
 
+const initValues = {
+    email:'',
+    password:''
+};
 const Login = () => {
-    const initValues = {
-        email:'',
-        password:''
-    };
     const [values, setValues] = useState(initValues);
     const language = useLanguage((state) => state.language);
+    const setToken = useAuthStore((state) => state.setToken);
     const router = useRouter();
     const isMobile = useMobile();
     const viewPage = (link:string) => {
@@ -39,11 +40,13 @@ const Login = () => {
             const res = await getLogin(values);
             const token = res.data.token;
             if (token) {
-                useAuthStore.setState(token);
+                setToken(token);
                 router.push('/');
+            } else {
+                alert('계정을 다시 확인해주세요.')
             }
-        } catch(err) {console.log(err) }
-    }, [values]);
+        } catch(err) { alert('계정을 다시 확인해주세요.') }
+    }, [router, setToken, values]);
 
     useEffect(() => {
         return () => {

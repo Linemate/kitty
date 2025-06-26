@@ -44,7 +44,6 @@ const SlideWrap = ({
     dots = false,
     loop = true,
     variableWidth, centerMode = false,
-    indicator = false,
     length
   }: sliderProps) => {
     const sliderRef = useRef<Slider | null>(null);
@@ -62,19 +61,14 @@ const SlideWrap = ({
             arrows: arrows,
             variableWidth,
             centerMode,
-            indicator,
             length
         }),
-        [autoplay, loop, slidesToShow, speed],
+        [arrows, autoplay, centerMode, dots, length, slidesToScroll, slidesToShow, speed, variableWidth],
     );
     return (
         <>
             <Slider ref={sliderRef} {...settings} key={currentIdx}>
                 {children}
-                {
-                    indicator &&
-                    <span className='indicator'><span className='current'>{currentIdx + 1}</span> / {length}</span>
-                }
             </Slider>
         </>
     );

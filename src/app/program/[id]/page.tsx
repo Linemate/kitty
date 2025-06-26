@@ -19,7 +19,7 @@ import useMobile from 'hooks/useMobile';
 import ModalPortal from 'components/Portal/ModalPortal';
 import AvailableTimes from 'components/Program/AvailableTimes';
 import { getProgramDetails, getProgramReview, getProgramSchedules } from 'api';
-import { programProps, reviewItemProps } from 'types/types';
+import { imagesProps, programProps, reviewItemProps, scheduleProps } from 'types/types';
 
 const tabsData = [
     {
@@ -100,6 +100,7 @@ const initProgram = {
     ycoordinate: 0
 }
 
+const today = new Date();
 const ProgramDetails = () => {
     const param = useParams();
     const windowSize = useResize();
@@ -114,7 +115,8 @@ const ProgramDetails = () => {
     const [selectedMonth, setSelectedMonth] = useState<Date>();
     const [selectedDate, setSelectedDate] = useState<Date>();
     // 가능한 날짜들
-    const [availableDates, setAvailableDates] = useState<string[]>(['20250616']);
+    const [availableDates, setAvailableDates] = useState<Date[]>([]);
+    const [availableTimes, setAvailableTimes] = useState<Date[]>([]);
     const [selectedTime, setSelectedTime] = useState<any>('');
 
     const [reviews, setReviews] = useState<reviewItemProps[]>([]);
@@ -127,16 +129,6 @@ const ProgramDetails = () => {
 
     // ref
     const btnReservationRef = useRef<HTMLDivElement>(null);
-
-    // 프로그램 상세
-    const loadProgramDetails = useCallback(async () => {
-        try {
-            console.log(id);
-            const res = await getProgramDetails(id);
-            const data = res.data;
-            setProgram(data)
-        } catch(err) {console.log(err);}
-    }, [id]);
 
     // tab 이동
     const handleTab = (tab:string) => {
@@ -211,7 +203,7 @@ const ProgramDetails = () => {
         }
     }
     // 달력 change
-    const handleChangeDate = async (date:Date) => {
+    const handleChangeDate = useCallback(async (date:Date) => {
         try {
             setSelectedDate(date as Date)
             const year = date.getFullYear();
@@ -219,18 +211,42 @@ const ProgramDetails = () => {
             const d = date.getDate();
             const fullD = `${year}${month < 10 ? '0' + month : month}${d < 10 ? '0' + d : d}`;
             const res = await getProgramSchedules(id, fullD);
-            console.log(res);
+            const data = res.data;
+            const rTimes = data.map((d:scheduleProps) => {
+                const date = new Date(d.reservationDate);
+                const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+                return new Date(kstDate.getUTCFullYear(), kstDate.getUTCMonth(), kstDate.getUTCDate());
+            })
+            setAvailableTimes(rTimes)
         } catch(err) {console.log(err)}                                    
-    }
+    }, [id])
     // 월별
-    const handleChangeMonth = async (date:Date) => {
+    const handleChangeMonth = useCallback(async (date:Date) => {
         try {
             const year = date.getFullYear();
             const month = date.getMonth() + 1;
             const res = await getProgramSchedules(id, `${year}${month < 10 ? '0' + month : month}`);
-            console.log(res)
+            const data = res.data;
+            const rDates = data.map((d:scheduleProps) => {
+                const date = new Date(d.reservationDate);
+                const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+                return new Date(kstDate.getUTCFullYear(), kstDate.getUTCMonth(), kstDate.getUTCDate());
+            })
+            setAvailableDates(rDates)
+            handleChangeDate(date);
         } catch (err) {console.log(err)}
-    }
+    }, [handleChangeDate, id])
+
+    // 프로그램 상세
+    const loadProgramDetails = useCallback(async () => {
+        try {
+            console.log(id);
+            const res = await getProgramDetails(id);
+            const data = res.data;
+            setProgram(data)
+            handleChangeMonth(today);
+        } catch(err) {console.log(err);}
+    }, [handleChangeMonth, id]);
 
     const parseDate = (str: string) => {
         const year = parseInt(str.substring(0, 4), 10);
@@ -238,8 +254,6 @@ const ProgramDetails = () => {
         const day = parseInt(str.substring(6, 8), 10);
         return new Date(year, month, day);
     };
-
-    const disabledDates = availableDates.map(parseDate);
 
     useEffect(() => {
         if (param && param.id) {
@@ -290,7 +304,8 @@ const ProgramDetails = () => {
             window.removeEventListener('scroll', handleScroll);
         }
 
-    }, []);
+    }, [param]);
+
     useEffect(() => {
         loadProgramDetails();
     }, [loadProgramDetails, id]);
@@ -342,12 +357,7 @@ const ProgramDetails = () => {
                                         <div className='calendar'>
                                             <ReactDatePicker onChange={handleChangeDate}
                                             onMonthChange={handleChangeMonth}
-                                            filterDate={(date) => {
-                                                // disabledDates에 포함된 날짜는 false를 반환 => 비활성화
-                                                return !disabledDates.some(
-                                                (d) => d.toDateString() === date.toDateString()
-                                                );
-                                            }}
+                                            // includeDates={availableDates}
                                             inline />
                                         </div>
                                         <div className='guide'>
@@ -394,16 +404,14 @@ const ProgramDetails = () => {
                                 <div className='contents'>
                                     <div className='slide_wrap'>
                                         <SlideWrap arrows={!isMobile} dots={true} autoplay={false} slidesToShow={1} 
-                                        slidesToScroll={1} length={3} indicator={true}>
-                                            <div className='slide'>
-                                                <div className='img_area'>1</div>
-                                            </div>
-                                            <div className='slide'>
-                                                <div className='img_area'>2</div>
-                                            </div>
-                                            <div className='slide'>
-                                                <div className='img_area'>3</div>
-                                            </div>
+                                        slidesToScroll={1} length={program.images.length} indicator={true}>
+                                            {
+                                                program.images.map((el:imagesProps) => 
+                                                    <div className='slide' key={el.id}>
+                                                        <div className='img_area'><img src={el.image.url} alt='program image' /></div>
+                                                    </div>
+                                                )
+                                            }
                                         </SlideWrap>
                                     </div>
                                 </div>
@@ -412,16 +420,20 @@ const ProgramDetails = () => {
                                     {/* 지도 영역 */}
                                     <div className='map_area'>
                                         <div className='map'>
-                                            <Map />
+                                            <Map xcoordinate={program.xcoordinate} ycoordinate={program.ycoordinate} />
                                         </div>
-                                        <div className='ico location gray'>Jeongdong-gil 123, City hall, 302</div>
+                                        <div className='ico location gray'>{program.station}</div>
                                         <p>
                                             자세한 위치는 예약 확정 시 마이페이지에서 확인 가능해요:) 
                                         </p>
-                                        <div>
-                                            {/* 주차 공간 없으면 'no' */}
-                                            <span className='parking'>Parking available</span>
-                                        </div>
+                                        {
+                                            // 주차공간 여부
+                                            program.isParking ? 
+                                            <div>
+                                                <span className='parking'>Parking available</span>
+                                            </div>
+                                            : ''
+                                        }
                                     </div>
                                 </div>
                                 {/* 환불규정은 고정 */}

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import 'styles/header.scss';
 import useMobile from 'hooks/useMobile';
 import { headerProps } from 'types/types';
-import { useAuthStore, useLanguage } from 'utils/stores';
+import { getCookie, useAuthStore, useLanguage } from 'utils/stores';
 
 const Header = (props:headerProps) => {
     const { title, isDepth, lang, isMobileDesc, btns } = props;
@@ -40,7 +40,7 @@ const Header = (props:headerProps) => {
     const handleBack = () => {
         router.back();
     }
-    
+
     // isMobile이 null이면 SSR에서는 기본 값을 사용
     if (isMobile === null) return null;
 
@@ -73,7 +73,7 @@ const Header = (props:headerProps) => {
 
                             <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={viewMenu} />
                             : 
-                            isLogin ?
+                            isLogin.token || getCookie('LOGINTOKEN') ?
                             <span className='logined'>Hi Buddy!</span> : 
                             <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />
                         }
