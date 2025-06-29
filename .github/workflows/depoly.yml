@@ -22,6 +22,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+      - name: Set up environment variables
+        run: |
+          echo "NEXT_PUBLIC_API_HOST=$NEXT_PUBLIC_API_HOST" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_NAVER_ID=$NEXT_PUBLIC_NAVER_ID" >> $GITHUB_ENV
+
       - name: Add Github Actions IP to Security group
         run: |
           aws ec2 authorize-security-group-ingress \
@@ -39,8 +44,6 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo "NEXT_PUBLIC_API_HOST=$NEXT_PUBLIC_API_HOST" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_NAVER_ID=$NEXT_PUBLIC_NAVER_ID" >> $GITHUB_ENV
           IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
           docker build -t "$IMAGE_URI" .
           docker push "$IMAGE_URI"
