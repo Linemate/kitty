@@ -17,6 +17,9 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM base AS builder
+ARG NEXT_PUBLIC_API_HOST
+ENV NEXT_PUBLIC_API_HOST=$NEXT_PUBLIC_API_HOST
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
