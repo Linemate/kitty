@@ -1,4 +1,5 @@
 'use client'
+import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
@@ -18,8 +19,9 @@ import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import ModalPortal from 'components/Portal/ModalPortal';
 import AvailableTimes from 'components/Program/AvailableTimes';
-import { getProgramDetails, getProgramReview, getProgramSchedules } from 'api';
+import { getProgramDetails, getProgramReview, getProgramSchedules, requestPayments } from 'api';
 import { imagesProps, programProps, reviewItemProps, scheduleProps } from 'types/types';
+import { useAuthStore } from 'utils/stores';
 
 const tabsData = [
     {
@@ -43,6 +45,8 @@ const tabsData = [
         krName: 'Q&A',
     },
 ]
+
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const initProgram = {
     category: {
@@ -100,6 +104,13 @@ const initProgram = {
     ycoordinate: 0
 }
 
+// ------  결제위젯 초기화 ------
+// TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
+// TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
+// @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
+const clientKey = "test_ck_mBZ1gQ4YVX59gd9D5RO2rl2KPoqN";
+// const customerKey = generateRandomString();
+// const tossPayments = TossPayments(clientKey);
 const today = new Date();
 const ProgramDetails = () => {
     const param = useParams();
@@ -112,12 +123,18 @@ const ProgramDetails = () => {
     // 탭 선택
     const [selectedTab, setSelectedTab] = useState<string>(tabsData[0].name);
     // 선택한 날짜들
-    const [selectedMonth, setSelectedMonth] = useState<Date>();
     const [selectedDate, setSelectedDate] = useState<Date>();
     // 가능한 날짜들
     const [availableDates, setAvailableDates] = useState<Date[]>([]);
-    const [availableTimes, setAvailableTimes] = useState<Date[]>([]);
-    const [selectedTime, setSelectedTime] = useState<any>('');
+    const [availableTimes, setAvailableTimes] = useState<scheduleProps[]>([]);
+    const [selectedTime, setSelectedTime] = useState<scheduleProps>({
+        id: 0,
+        capacity: 0,
+        startDate: '',
+        endDate: '',
+        reservationDate: '',
+        reservationCount: 0
+    });
 
     const [reviews, setReviews] = useState<reviewItemProps[]>([]);
     // 스크롤 Y값
@@ -127,8 +144,13 @@ const ProgramDetails = () => {
 
     const [id, setId] = useState<string>(param.id[0] || '');
 
+    // 로그인 여부
+    const isLogin = useAuthStore.getState().token;
+
     // ref
     const btnReservationRef = useRef<HTMLDivElement>(null);
+    const [ready, setReady] = useState(false);
+    const [widgets, setWidgets] = useState(null);
 
     // tab 이동
     const handleTab = (tab:string) => {
@@ -147,11 +169,22 @@ const ProgramDetails = () => {
     }
 
     // 예약하기
-    const handleReservation = () => {
-        
+    const handleReservation = async () => {
+        try {
+            const numOfId = parseInt(id);
+            const values = {
+                programId: numOfId,
+                scheduleId: selectedTime.id,
+                amount: program.price
+            }
+            const res = await requestPayments(values);
+            console.log(res);
+        } catch(err) {
+            console.log(err);
+        }
     }
     
-    const chooseTime = (time:string) => {
+    const chooseTime = (time:scheduleProps) => {
         setSelectedTime(time);
         console.log(time)
     }
@@ -212,12 +245,7 @@ const ProgramDetails = () => {
             const fullD = `${year}${month < 10 ? '0' + month : month}${d < 10 ? '0' + d : d}`;
             const res = await getProgramSchedules(id, fullD);
             const data = res.data;
-            const rTimes = data.map((d:scheduleProps) => {
-                const date = new Date(d.reservationDate);
-                const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-                return new Date(kstDate.getUTCFullYear(), kstDate.getUTCMonth(), kstDate.getUTCDate());
-            })
-            setAvailableTimes(rTimes)
+            setAvailableTimes(data)
         } catch(err) {console.log(err)}                                    
     }, [id])
     // 월별
@@ -254,6 +282,11 @@ const ProgramDetails = () => {
         const day = parseInt(str.substring(6, 8), 10);
         return new Date(year, month, day);
     };
+
+    // submit
+    const handleSubmit = () => {
+        
+    }
 
     useEffect(() => {
         if (param && param.id) {
@@ -374,7 +407,7 @@ const ProgramDetails = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <AvailableTimes selectedTime={selectedTime} onclick={chooseTime} />
+                                        <AvailableTimes selectedTime={selectedTime} times={availableTimes} price={program.price} currency={program.currency} onclick={chooseTime} />
                                         <div ref={btnReservationRef}>
                                             <Button type="text" classnames='bg_blue radius_none reservation' text="Reservation" onclick={handleReservation} />
                                         </div>
@@ -385,7 +418,7 @@ const ProgramDetails = () => {
                     </div>
                     {
                         isMobile &&
-                        <AvailableTimes selectedTime={selectedTime} onclick={chooseTime} isBox={true} />
+                        <AvailableTimes selectedTime={selectedTime} times={availableTimes} price={program.price} currency={program.currency} onclick={chooseTime} isBox={true} />
                     }
                     <div className='tabs_area'>
                         <div className='tab bar'>
@@ -538,16 +571,15 @@ const ProgramDetails = () => {
                         {
                             !isMobile &&
                             <div className='desc_area'>
-                                <div className='img'>
-                                    {/* <img/> */}
+                                <div className='img' style={{backgroundImage: `url(${program.thumbnail})`}}>
                                 </div>
                                 <div className='txt'>
                                     <div className='program_name'>
-                                        Seoul Exchange Students Meet up Party
+                                        {program.title}
                                     </div>
-                                    <div className='program_date'>
-                                        2024. 07. 15(Tue) 1:00 PM 
-                                    </div>
+                                    {/* <div className='program_date'>
+                                        {selectedDate ? `${selectedDate.getFullYear()}.${selectedDate.getMonth() + 1 < 10 ? '0' + selectedDate.getMonth() + 1 : selectedDate?.getMonth() + 1}.${selectedDate.getDate() < 10 ? '0' + selectedDate.getDate() : selectedDate.getDate()}(${days[selectedDate.getDay()]}) ${selectedDate.getHours() > 12 ? selectedDate.getHours() - 12 : selectedDate.getHours()}:${selectedDate.getMinutes() < 10 ? '0' + selectedDate.getMinutes() : selectedDate.getMinutes()} ${selectedDate.getHours() < 12 ? 'am' : 'pm'}` : ''} 
+                                    </div> */}
                                 </div>
                             </div>
                         }
@@ -556,7 +588,7 @@ const ProgramDetails = () => {
                                 <Button type="text" classnames='bg_blue radius_none reservation' text="Reservation" onclick={handleReservation} />
                             </div>
                             <div className='btn_like_area'>
-                                <div className='ico heart gray_line'>3200</div>
+                                <div className={`ico heart ${program.isLike && isLogin ? 'red' : 'gray_line'}`}>{program.likes}</div>
                             </div>
                         </div>
                     </div>

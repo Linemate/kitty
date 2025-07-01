@@ -7,13 +7,18 @@ import { Button } from 'components/common/Button';
 import ModalPortal from 'components/Portal/ModalPortal';
 import useMobile from 'hooks/useMobile';
 import { programCompProps } from 'types/types';
+import { useAuthStore } from 'utils/stores';
 
 const Program = (props:programCompProps) => {
     const {program, isDetails} = props;
     const router = useRouter();
-    const [liked, setLiked] = useState<boolean>(false);
+    const [liked, setLiked] = useState<boolean>(program.isLike);
     const [isPopup, setIsPopup] = useState<boolean>(false);
     const isMobile = useMobile();
+
+    // 로그인 여부
+    const isLogin = useAuthStore.getState().token;
+
     const sendLike = () => {
         setLiked(!liked);
     }
@@ -55,7 +60,7 @@ const Program = (props:programCompProps) => {
                     </div>
                     <div className='favorite_share_area'>
                         <div>
-                            <Favorite onclick={sendLike} isLiked={liked} numberOfLike={program.likes} size={'sm'} isFilledHeart={true} />
+                            <Favorite onclick={sendLike} isLiked={liked} numberOfLike={program.likes} size={'sm'} isFilledHeart={program.isLike && isLogin ? true : false} />
                         </div>
                         {
                             isDetails &&
@@ -78,12 +83,12 @@ const Program = (props:programCompProps) => {
                         </span>
                     </div>
                 }
-                <div className='category_badge_area'>
+                {/* 여기에 카테고리 들어가야 함 */}
+                {/* <div className='category_badge_area'>
                     <div className='badge_area'>
-                        {/* map 돌리기 */}
                         <span className='badge'>{program.category.title}</span>
                     </div>
-                </div>
+                </div> */}
             </div>
             {
                 isPopup && 

@@ -49,12 +49,12 @@ const SimpleProgram = (props:programSummaryWrapProps) => {
                         {program.price}
                     </span>
                 </div>
-                <div className='category_badge_area'>
+                {/* 여기에 카테고리 들어가야 함 */}
+                {/* <div className='category_badge_area'>
                     <div className='badge_area'>
-                        {/* map 돌리기 */}
                         <span className='badge'>{program.title}</span>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

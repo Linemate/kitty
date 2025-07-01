@@ -36,6 +36,7 @@ export default function RootLayout({
         <meta name="twitter:description" content=""/>
         <meta name="twitter:image" content=""/>
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+        <script src="https://js.tosspayments.com/v2/standard"></script>
       </head>
       <body className={inter.className}>
         {children}

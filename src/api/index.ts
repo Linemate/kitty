@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginProps } from 'types/types';
+import { loginProps, paymentsProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
 const baseURL =  `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
@@ -21,6 +21,7 @@ const publicApi = axios.create({
     },
   });
   
+  console.log(useAuthStore.getState())
   // 요청 인터셉터로 privateApi에만 Authorization 자동 추가
   privateApi.interceptors.request.use(
     (config) => {
@@ -84,5 +85,11 @@ export const getInquiries = async (id:string, pageNum:number) => {
 // 로그인
 export const getLogin = async (values:loginProps) => {
     const res = await publicApi.post(`/account/sign-in`, values);
+    return res.data;
+}
+
+// 결제
+export const requestPayments = async (values:paymentsProps) => {
+    const res = await privateApi.post(`/payments/request`, values);
     return res.data;
 }

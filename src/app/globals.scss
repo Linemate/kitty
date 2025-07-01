@@ -206,6 +206,11 @@ button {background:none; border:none; cursor:pointer;}
         background-image:url('/assets/images/btn/btn_heart_gray_line.png');
       }
   }
+  &.heart.red {
+      &::before {
+        background-image:url('/assets/images/btn/btn_heart.png');
+      }
+  }
   &.thumb {
       &::before {
           background-image:url('/assets/images/icon/ico_thumb.png');

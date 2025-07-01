@@ -200,6 +200,12 @@ export type languageProps = {
     country: string;
 }
 
+export type paymentsProps = {
+    programId:number;
+    scheduleId:number;
+    amount: number;
+}
+
 export type collectionsProps = {
     id:number;
     language: languageProps;
@@ -218,7 +224,7 @@ export type categoryProps = {
     updatedAt: string;
 }
 
-// 프로그램 스케쥴 조회
+// 프로그램 스케줄 조회
 export type scheduleProps = {
     id:number;
     capacity: number;
@@ -226,6 +232,16 @@ export type scheduleProps = {
     endDate: string;
     reservationDate: string;
     reservationCount: number;
+}
+
+// 이용 가능한 스케줄들 조회
+export type AvailableTimesProps = {
+    selectedTime: scheduleProps;
+    times: scheduleProps[];
+    price: number;
+    currency: string;
+    onclick: (time:scheduleProps) => void;
+    isBox?: boolean;
 }
 
 // buddy 

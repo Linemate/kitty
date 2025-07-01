@@ -16,7 +16,7 @@ const Header = (props:headerProps) => {
     const router = useRouter();
     const language = useLanguage((state) => state.language);
     const setLanguage = useLanguage((state) => state.setLanguage);
-    const isLogin = useAuthStore.getState();
+    const isLogin = useAuthStore.getState().token;
     const changeLang = (lang:string) => {
         console.log('dddd');
     }
@@ -73,7 +73,7 @@ const Header = (props:headerProps) => {
 
                             <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={viewMenu} />
                             : 
-                            isLogin.token || getCookie('LOGINTOKEN') ?
+                            isLogin || getCookie('LOGINTOKEN') ?
                             <span className='logined'>Hi Buddy!</span> : 
                             <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />
                         }
