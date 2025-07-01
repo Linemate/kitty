@@ -11,7 +11,7 @@ token: null,
 setToken: (token) => {
     set({ token });
     console.log(token + ' setting~~~')
-    setCookie('LOGINTOKEN', token, 999)
+    setCookie('LOGINTOKEN', token, 1)
 },
 clearToken: () => {
     set({ token: null })
