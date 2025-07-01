@@ -289,3 +289,23 @@ export type qnaItemProps = {
     createdAt: string;
     updatedAt: string;
 }
+export type responsePaymentProps = {
+    id: number;
+    status: string;
+    orderId: string;
+    orderName: string;
+    taxExemptionAmount: number;
+    useEscrow: boolean;
+    cultureExpense: boolean;
+    isInterestFree: boolean;
+    useCardPoint: boolean;
+    easyPayAmount: number;
+    easyPayDiscountAmount: number;
+    country: string;
+    isPartialCancelable: boolean;
+    currency: string;
+    totalAmount: number;
+    requestedAt: string;
+    createdAt: string;
+    updatedAt: string;
+}
