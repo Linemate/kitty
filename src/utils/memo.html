@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook and KakaoTalk Share Example</title>
+</head>
+<body>
+    <h1>소셜 미디어 공유</h1>
+    <button id="kakaotalk-share-btn">카카오톡으로 공유하기</button>
+    <button id="facebook-share-btn">페이스북으로 공유하기</button>
+
+    <!-- Kakao JavaScript SDK -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <!-- Facebook JavaScript SDK -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v20.0&appId=YOUR_FACEBOOK_APP_ID"></script>
+
+    <script>
+        // Kakao SDK 초기화
+        Kakao.init('YOUR_KAKAO_JAVASCRIPT_KEY'); // Kakao Developers에서 발급받은 JavaScript 키
+        console.log(Kakao.isInitialized());
+
+        // 카카오톡 공유 버튼 이벤트
+        document.getElementById('kakaotalk-share-btn').addEventListener('click', function() {
+            Kakao.Share.createScrapButton({
+                container: '#kakaotalk-share-btn',
+                requestUrl: window.location.href, // 현재 페이지 URL
+                templateId: YOUR_KAKAO_TEMPLATE_ID, // 선택사항: Kakao 템플릿 ID
+                templateArgs: {
+                    title: document.title,
+                    description: '이 페이지를 카카오톡으로 공유해보세요!'
+                }
+            });
+        });
+
+        // 페이스북 공유 버튼 이벤트 (URL 방식)
+        document.getElementById('facebook-share-btn').addEventListener('click', function() {
+            const shareUrl = encodeURIComponent(window.location.href);
+            const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+            window.open(facebookShareUrl, '_blank', 'width=600,height=400');
+        });
+    </script>
+</body>
+</html>
