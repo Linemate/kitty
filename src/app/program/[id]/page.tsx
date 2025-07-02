@@ -22,6 +22,7 @@ import AvailableTimes from 'components/Program/AvailableTimes';
 import { getProgramDetails, getProgramReview, getProgramSchedules, requestPayments } from 'api';
 import { imagesProps, programProps, responsePaymentProps, reviewItemProps, scheduleProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
+import WidgetCheckout from "components/common/WidgetCheckout";
 
 const tabsData = [
     {
@@ -104,17 +105,6 @@ const initProgram = {
     ycoordinate: 0
 }
 
-function generateRandomString() {
-    return window.btoa(Math.random().toString()).slice(0, 20);
-}
-
-// ------  결제위젯 초기화 ------
-// TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
-// TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
-// @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
-const clientKey = "test_ck_mBZ1gQ4YVX59gd9D5RO2rl2KPoqN";
-const customerKey = generateRandomString();
-
 const today = new Date();
 const ProgramDetails = () => {
     const param = useParams();
@@ -153,9 +143,8 @@ const ProgramDetails = () => {
 
     // 결제
     const [responsePayment, setResponsePayment] = useState<responsePaymentProps | null>(null);
-    const [ready, setReady] = useState(false);
-    const [widgets, setWidgets] = useState(null);
-
+    // toss 결제
+    const [readyToToss, setReadyToToss] = useState<boolean>(false);
     // ref
     const btnReservationRef = useRef<HTMLDivElement>(null);
 
@@ -179,16 +168,16 @@ const ProgramDetails = () => {
     // 예약하기 api 호출
     const handleReservation = async () => {
         try {
-            const numOfId = parseInt(id);
-            const values = {
-                programId: numOfId,
-                scheduleId: selectedTime.id,
-                amount: program.price
-            }
-            const res = await requestPayments(values);
-            const data = res.data;
-            setResponsePayment(data);
-            handleTossPayment();
+            // const numOfId = parseInt(id);
+            // const values = {
+            //     programId: numOfId,
+            //     scheduleId: selectedTime.id,
+            //     amount: program.price
+            // }
+            // const res = await requestPayments(values);
+            // const data = res.data;
+            // setResponsePayment(data);
+            setReadyToToss(true);
         } catch(err) {
             console.log(err);
         }
@@ -285,30 +274,8 @@ const ProgramDetails = () => {
             handleChangeMonth(today);
         } catch(err) {console.log(err);}
     }, [handleChangeMonth, id]);
+
     
-    // toss 결제 widget
-    const handleTossPayment = async () => {
-        try {
-            // const res = await 
-            // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-            // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-            if (widgets) {
-                // await widgets.requestPayment({
-                //     orderId: generateRandomString(), // 고유 주문 번호
-                //     orderName: "토스 티셔츠 외 2건",
-                //     successUrl: window.location.origin + "/widget/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-                //     failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
-                //     customerEmail: "customer123@gmail.com",
-                //     customerName: "김토스",
-                //     // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
-                //     // customerMobilePhone: "01012341234",
-                //   });
-                // }
-            }
-        } catch(err) {
-            console.log(err);
-        }
-    }
 
     useEffect(() => {
         if (param && param.id) {
@@ -630,6 +597,11 @@ const ProgramDetails = () => {
                         </ul>
                     </div>
                 </ModalPortal>
+            }
+            {/* toss */}
+            {
+                readyToToss && 
+                <WidgetCheckout orderId={'abcdkflsd'} currency={program.currency} amount={program.price} />
             }
         </div>
     );

@@ -309,3 +309,8 @@ export type responsePaymentProps = {
     createdAt: string;
     updatedAt: string;
 }
+export type tossPaymentProps = {
+    orderId: string;
+    currency: string;
+    amount: number;
+}

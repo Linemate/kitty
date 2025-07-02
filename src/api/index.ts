@@ -21,7 +21,6 @@ const publicApi = axios.create({
     },
   });
   
-  console.log(useAuthStore.getState())
   // 요청 인터셉터로 privateApi에만 Authorization 자동 추가
   privateApi.interceptors.request.use(
     (config) => {
@@ -91,5 +90,11 @@ export const getLogin = async (values:loginProps) => {
 // 결제
 export const requestPayments = async (values:paymentsProps) => {
     const res = await privateApi.post(`/payments/request`, values);
+    return res.data;
+}
+
+// 결제 성공
+export const confirmPayments = async () => {
+    const res = await privateApi.post(`/payments/confirm`);
     return res.data;
 }
