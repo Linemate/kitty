@@ -1,25 +1,25 @@
 'use client';
 import { confirmPayments } from 'api';
 import { useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import BottomButton from '../_Button';
 import 'styles/toss.scss';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import useMobile from 'hooks/useMobile';
 
-const PaymentsSuccess = () => {
+const PaymentsSuccessContent = () => {
     const isMobile = useMobile();
-
     const searchParams = useSearchParams();
-    const orderId = searchParams.get('orderId');
-    const programId = searchParams.get('programId');
-    const amount = searchParams.get('amount');
-    const paymentKey = searchParams.get('paymentKey');
-    const scheduleId = searchParams.get('scheduleId');
+
     useEffect(() => {
         async function successFn() {
             try {
+                const orderId = searchParams.get('orderId');
+                const programId = searchParams.get('programId');
+                const amount = searchParams.get('amount');
+                const paymentKey = searchParams.get('paymentKey');
+                const scheduleId = searchParams.get('scheduleId');
                 if (orderId && programId && amount !== null && paymentKey && scheduleId) {
                     const values = {
                         orderId: orderId,
@@ -36,7 +36,7 @@ const PaymentsSuccess = () => {
             }
         }
         successFn();
-    }, [amount, orderId, paymentKey, programId, scheduleId]);
+    }, [searchParams]);
     return (
         <div className="payment">
             <div className={`wrapper success ${isMobile ? 'mobile' : ''}`}>
@@ -44,7 +44,7 @@ const PaymentsSuccess = () => {
                 <Header title={'라인메이트 메인'} lang={'ko'} isDepth={false} isMobileDesc={true} />
 
                 <div className="img_area">
-                    <div className="ico fail"></div>
+                    <div className="ico success"></div>
                 </div>
                 <div className="title">
                     <h2>Payment Successful</h2>
@@ -64,4 +64,11 @@ const PaymentsSuccess = () => {
     );
 };
 
-export default PaymentsSuccess;
+// 최상위 컴포넌트: Suspense로 감싸기
+export default function PaymentsSuccess() {
+    return (
+        <Suspense fallback={<div></div>}>
+            <PaymentsSuccessContent />
+        </Suspense>
+    );
+}

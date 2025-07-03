@@ -1,7 +1,7 @@
-'use client'
-import React, { useCallback, useEffect, useState } from 'react';
+'use client';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import 'styles/loginPage.scss'
+import 'styles/loginPage.scss';
 import { useAuthStore, useLanguage } from 'utils/stores';
 import Input from 'components/Input/Input';
 import { Button } from 'components/common/Button';
@@ -10,16 +10,16 @@ import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
 
 const initValues = {
-    email:'',
-    password:''
+    email: '',
+    password: '',
 };
-const Login = () => {
+const LoginContent = () => {
     const [values, setValues] = useState(initValues);
     const language = useLanguage((state) => state.language);
     const { setToken } = useAuthStore();
     const searchParams = useSearchParams();
     // redirect url
-    const redirectUrl = searchParams.get('redirect')
+    const redirectUrl = searchParams.get('redirect');
 
     const router = useRouter();
     const isMobile = useMobile();
@@ -32,15 +32,15 @@ const Login = () => {
     }, [redirectUrl]);
 
     // input change
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name;
         const value = e.target.value;
         setValues({
             ...values,
-            [name]: value
+            [name]: value,
         });
         console.log(value);
-    }
+    };
 
     // login
     const handleLogin = useCallback(async () => {
@@ -49,57 +49,52 @@ const Login = () => {
             const token = res.data.token;
             if (token) {
                 setToken(token);
-                console.log(token)
+                console.log(token);
                 if (redirectUrl) {
                     viewPage();
                 } else {
                     router.push('/');
                 }
-                
             } else {
-                alert('계정을 다시 확인해주세요.')
+                alert('계정을 다시 확인해주세요.');
             }
-        } catch(err) { alert('계정을 다시 확인해주세요.') }
+        } catch (err) {
+            alert('계정을 다시 확인해주세요.');
+        }
     }, [redirectUrl, router, setToken, values, viewPage]);
 
     useEffect(() => {
         return () => {
             setValues(initValues);
-        }
+        };
     }, []);
 
     return (
-        <div className='login'>
-            {
-                isMobile &&
+        <div className="login">
+            {isMobile && (
                 <>
                     {/* Header & Key visual */}
                     <Header title={'라인메이트 메인'} lang={'ko'} />
                 </>
-            }
+            )}
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
-                <div className='contents'>
-                    {
-                        !isMobile &&
-                        <div className={`img_area ${language}`}></div>
-                    }
-                    <div className='text_area'>
-                        <div className='main'>
-                            <h2 className='logo'>Linemate</h2>
-                            <p className='intro'>
-                                Welcome Buddy!
-                            </p>
-                            <div className='input_area'>
-                                <div className='email_area'>
-                                    <Input type='text' name={'email'} value={values.email} handleChange={handleChange} placeholder='Email' />
+                <div className="contents">
+                    {!isMobile && <div className={`img_area ${language}`}></div>}
+                    <div className="text_area">
+                        <div className="main">
+                            <h2 className="logo">Linemate</h2>
+                            <p className="intro">Welcome Buddy!</p>
+                            <div className="input_area">
+                                <div className="email_area">
+                                    <Input type="text" name={'email'} value={values.email} handleChange={handleChange} placeholder="Email" />
                                 </div>
-                                <div className='pw_area'>
-                                    <Input type='password' name={'password'} value={values.password} handleChange={handleChange} placeholder='Password' />
+                                <div className="pw_area">
+                                    <Input type="password" name={'password'} value={values.password} handleChange={handleChange} placeholder="Password" />
                                 </div>
                             </div>
-                            <div className='gray500'>Forgot Password?</div>
-                            <div className='btn_area'>
-                                <Button type='text' onclick={handleLogin} classnames='bg_blue wide radius_8' text={'Login'} />
+                            <div className="gray500">Forgot Password?</div>
+                            <div className="btn_area">
+                                <Button type="text" onclick={handleLogin} classnames="bg_blue wide radius_8" text={'Login'} />
                             </div>
                             {/* <div className='mate_mode'>Switch Mate Mode</div>
 
@@ -114,4 +109,11 @@ const Login = () => {
     );
 };
 
-export default Login;
+// 최상위 컴포넌트: Suspense로 감싸기
+export default function Login() {
+    return (
+        <Suspense fallback={<div></div>}>
+            <LoginContent />
+        </Suspense>
+    );
+}
