@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginProps, paymentsProps } from 'types/types';
+import { loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
 const baseURL =  `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
@@ -94,7 +94,7 @@ export const requestPayments = async (values:paymentsProps) => {
 }
 
 // 결제 성공
-export const confirmPayments = async () => {
-    const res = await privateApi.post(`/payments/confirm`);
+export const confirmPayments = async (values: paymentsConfirmProps) => {
+    const res = await privateApi.post(`/payments/confirm`, values);
     return res.data;
 }

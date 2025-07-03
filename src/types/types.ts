@@ -205,6 +205,13 @@ export type paymentsProps = {
     scheduleId:number;
     amount: number;
 }
+export type paymentsConfirmProps = {
+    orderId: string;
+    programId: number;
+    amount: number;
+    paymentKey: string;
+    scheduleId: number;
+}
 
 export type collectionsProps = {
     id:number;
@@ -309,8 +316,9 @@ export type responsePaymentProps = {
     createdAt: string;
     updatedAt: string;
 }
-export type tossPaymentProps = {
-    orderId: string;
-    currency: string;
-    amount: number;
+
+export type confirmPaymentProps = {
+    responsePayment: responsePaymentProps;
+    programId: number;
+    scheduleId: number;
 }

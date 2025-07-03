@@ -1,6 +1,6 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import 'styles/loginPage.scss'
 import { useAuthStore, useLanguage } from 'utils/stores';
 import Input from 'components/Input/Input';
@@ -16,12 +16,20 @@ const initValues = {
 const Login = () => {
     const [values, setValues] = useState(initValues);
     const language = useLanguage((state) => state.language);
-    const setToken = useAuthStore((state) => state.setToken);
+    const { setToken } = useAuthStore();
+    const searchParams = useSearchParams();
+    // redirect url
+    const redirectUrl = searchParams.get('redirect')
+
     const router = useRouter();
     const isMobile = useMobile();
-    const viewPage = (link:string) => {
-        router.push(`/${link}`);
-    }
+
+    // redirect 할 페이지가 있다면
+    const viewPage = useCallback(() => {
+        if (window.location.href !== null && redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+    }, [redirectUrl]);
 
     // input change
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -41,12 +49,18 @@ const Login = () => {
             const token = res.data.token;
             if (token) {
                 setToken(token);
-                router.push('/');
+                console.log(token)
+                if (redirectUrl) {
+                    viewPage();
+                } else {
+                    router.push('/');
+                }
+                
             } else {
                 alert('계정을 다시 확인해주세요.')
             }
         } catch(err) { alert('계정을 다시 확인해주세요.') }
-    }, [router, setToken, values]);
+    }, [redirectUrl, router, setToken, values, viewPage]);
 
     useEffect(() => {
         return () => {

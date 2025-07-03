@@ -5,7 +5,7 @@ import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
 import ReactDatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import 'styles/programPage.scss';
 import Review from 'components/Review/Review';
 import SlideWrap from 'components/SlideWrap/SlideWrap';
@@ -23,6 +23,7 @@ import { getProgramDetails, getProgramReview, getProgramSchedules, requestPaymen
 import { imagesProps, programProps, responsePaymentProps, reviewItemProps, scheduleProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
 import WidgetCheckout from "components/common/WidgetCheckout";
+import { parseCookies } from 'nookies';
 
 const tabsData = [
     {
@@ -139,8 +140,10 @@ const ProgramDetails = () => {
     const [id, setId] = useState<string>(param.id[0] || '');
 
     // 로그인 여부
-    const isLogin = useAuthStore.getState().token;
+    const { token, setToken } = useAuthStore();
 
+    // router
+    const router = useRouter();
     // 결제
     const [responsePayment, setResponsePayment] = useState<responsePaymentProps | null>(null);
     // toss 결제
@@ -166,22 +169,39 @@ const ProgramDetails = () => {
     }
 
     // 예약하기 api 호출
-    const handleReservation = async () => {
+    const handleReservation = useCallback(async () => {
         try {
-            // const numOfId = parseInt(id);
-            // const values = {
-            //     programId: numOfId,
-            //     scheduleId: selectedTime.id,
-            //     amount: program.price
-            // }
-            // const res = await requestPayments(values);
-            // const data = res.data;
-            // setResponsePayment(data);
+            const cookies = parseCookies();
+            const loginToken = cookies.LOGINTOKEN;
+            if (loginToken && !token) {
+                setToken(loginToken)
+            }
+            // 비로그인
+            if (!loginToken) {
+                alert('로그인이 필요해요.')
+                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`)
+                return;
+            }
+            // 시간 미선택
+            if (selectedTime.id === 0) {
+                alert('시간을 선택해주세요.')
+                return;
+            }
+            const numOfId = parseInt(id);
+            const values = {
+                programId: numOfId,
+                scheduleId: selectedTime.id,
+                amount: program.price
+            }
+            const res = await requestPayments(values);
+            const data = res.data;
+            setResponsePayment(data);
             setReadyToToss(true);
         } catch(err) {
             console.log(err);
         }
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id, program.price, router, selectedTime.id]);
     
     const chooseTime = (time:scheduleProps) => {
         setSelectedTime(time);
@@ -379,7 +399,7 @@ const ProgramDetails = () => {
                                         <div className='calendar'>
                                             <ReactDatePicker onChange={handleChangeDate}
                                             onMonthChange={handleChangeMonth}
-                                            // includeDates={availableDates}
+                                            includeDates={availableDates}
                                             inline />
                                         </div>
                                         <div className='guide'>
@@ -577,7 +597,7 @@ const ProgramDetails = () => {
                                 <Button type="text" classnames='bg_blue radius_none reservation' text="Reservation" onclick={handleReservation} />
                             </div>
                             <div className='btn_like_area'>
-                                <div className={`ico heart ${program.isLike && isLogin ? 'red' : 'gray_line'}`}>{program.likes}</div>
+                                <div className={`ico heart ${program.isLike && token ? 'red' : 'gray_line'}`}>{program.likes}</div>
                             </div>
                         </div>
                     </div>
@@ -600,8 +620,8 @@ const ProgramDetails = () => {
             }
             {/* toss */}
             {
-                readyToToss && 
-                <WidgetCheckout orderId={'abcdkflsd'} currency={program.currency} amount={program.price} />
+                readyToToss && responsePayment &&
+                <WidgetCheckout responsePayment={responsePayment} programId={program.id} scheduleId={selectedTime.id}  />
             }
         </div>
     );

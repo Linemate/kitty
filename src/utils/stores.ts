@@ -9,7 +9,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
 token: null,
 setToken: (token) => {
-    set({ token });
+    set({ token: token });
     setCookie('LOGINTOKEN', token, 1)
 },
 clearToken: () => {

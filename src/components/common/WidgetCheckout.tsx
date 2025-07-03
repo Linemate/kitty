@@ -1,6 +1,6 @@
 import { TossPaymentsWidgets, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import React, { useEffect, useState } from 'react';
-import { tossPaymentProps } from 'types/types';
+import { confirmPaymentProps } from 'types/types';
 import 'styles/toss.scss';
 
 
@@ -15,15 +15,15 @@ function generateRandomString() {
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 const customerKey = generateRandomString();
 
-const WidgetCheckout = (props:tossPaymentProps) => {
-    const { orderId, currency, amount } = props;
+const WidgetCheckout = (props:confirmPaymentProps) => {
+    const { responsePayment, programId, scheduleId } = props;
     const [ready, setReady] = useState<boolean>(false);
     const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
     
     useEffect(() => {
         async function fetchPaymentWidgets() {
           try {
-            const tossPayments = await loadTossPayments("test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm");
+            const tossPayments = await loadTossPayments(clientKey);
     
             // 회원 결제
             // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentswidgets
@@ -40,7 +40,7 @@ const WidgetCheckout = (props:tossPaymentProps) => {
         }
     
         fetchPaymentWidgets();
-    }, [clientKey, customerKey]);
+    }, []);
       
     useEffect(() => {
         async function renderPaymentWidgets() {
@@ -54,8 +54,8 @@ const WidgetCheckout = (props:tossPaymentProps) => {
             // TODO: renderPaymentMethods, renderAgreement, requestPayment 보다 반드시 선행되어야 합니다.
             // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
             await widgets.setAmount({
-                currency: currency === 'KR' ? 'KRW' : 'KRW',
-                value: amount
+                currency: responsePayment.currency === 'KR' ? 'KRW' : 'KRW',
+                value: responsePayment.totalAmount
             });
         
             await Promise.all([
@@ -80,6 +80,7 @@ const WidgetCheckout = (props:tossPaymentProps) => {
         }
     
         renderPaymentWidgets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [widgets]);
     const handleRequestPayment = () => {
         try {
@@ -87,10 +88,10 @@ const WidgetCheckout = (props:tossPaymentProps) => {
             // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
             if (widgets) {
                     widgets.requestPayment({
-                    orderId: orderId, // 고유 주문 번호
+                    orderId: responsePayment.orderId, // 고유 주문 번호
                     orderName: "토스 티셔츠 외 2건",
-                    successUrl: window.location.origin + "/widget/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-                    failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
+                    successUrl: `${window.location.origin}/program/payments/success?orderId=${responsePayment.orderId}&programId=${programId}&amount=${responsePayment.totalAmount}&paymentKey=${clientKey}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
+                    failUrl: window.location.origin + "/program/payments/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
                     customerEmail: "customer123@gmail.com",
                     customerName: "김토스",
                     // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
