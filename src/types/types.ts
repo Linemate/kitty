@@ -1,154 +1,154 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode } from 'react';
 
 export type hiddenInfoProps = {
-    id:number;
+    id: number;
     programId: number;
     address: string;
-}
+};
 
 export type imagesProps = {
-    id:number;
+    id: number;
     image: imageProps;
     type: string;
-}
+};
 
 export type programSummaryWrapProps = {
     program: programSummaryProps;
-}
+};
 
 export type bannerProps = {
-    id:number;
+    id: number;
     clickCnt: number;
     image: imageProps;
     createdAt: string;
     updatedAt: SVGStringList;
-}
+};
 
 export type programSummaryProps = {
     id: number;
     mateId: number;
-    title:string;
-    station:string;
-    thumbnailUrl:string;
-    contents:string;
-    price:number;
-    currency:any;
-    reviewsCount:number;
-    likesCount:number;
-    reservationDate:string;
+    title: string;
+    station: string;
+    thumbnailUrl: string;
+    contents: string;
+    price: number;
+    currency: any;
+    reviewsCount: number;
+    likesCount: number;
+    reservationDate: string;
     banner: bannerProps[];
-}
+};
 
 export type programCompProps = {
     program: programProps;
     isDetails: boolean;
-}
+};
 
 export type programProps = {
-    id:number;
-    title:string;
-    category:languageProps;
+    id: number;
+    title: string;
+    category: languageProps;
     images: imagesProps[];
     contents: string;
-    htmlFilePath:string;
+    htmlFilePath: string;
     currency: string;
-    price:number;
+    price: number;
     hiddenInfo: hiddenInfoProps;
-    isEnd:boolean;
-    isLike:boolean;
-    isParking:boolean;
-    isReserved:boolean;
-    likes:number;
-    mate:mateProps;
+    isEnd: boolean;
+    isLike: boolean;
+    isParking: boolean;
+    isReserved: boolean;
+    likes: number;
+    mate: mateProps;
     recommendPrograms: programSummaryProps;
-    reviews:number;
-    station:string;
-    thumbnail:string;
-    xcoordinate:number;
-    ycoordinate:number;
-}
+    reviews: number;
+    station: string;
+    thumbnail: string;
+    xcoordinate: number;
+    ycoordinate: number;
+};
 
 export type buttonProps = {
-    text:string;
-    classnames:string;
-    type:string;     // text / img
-    onclick:Function;
-}
+    text: string;
+    classnames: string;
+    type: string; // text / img
+    onclick: Function;
+};
 
 export type favoriteProps = {
-    size: string;       // lg, md, sm
+    size: string; // lg, md, sm
     isMate?: boolean;
-    isLiked?:boolean;
+    isLiked?: boolean;
     numberOfLike?: number;
     onclick?: Function;
-    isFilledHeart?:boolean;
-}
+    isFilledHeart?: boolean;
+};
 
 export type headerProps = {
     title?: string;
-    isDepth? : boolean;
-    lang:string;
+    isDepth?: boolean;
+    lang: string;
     isMobileDesc?: boolean;
     btns?: ReactNode;
-}
+};
 
 export type keyVisualProps = {
     onlyBg?: boolean;
     src?: string;
     children: ReactElement;
-}
+};
 
 export type imageProps = {
     id: number;
     fileName: string;
     url: string;
-}
+};
 
 export type emblemProps = {
     id: number;
-    title:string;
+    title: string;
     image: imageProps;
     createdAt: string;
     updatedAt: string;
-}
+};
 
 export type mateProps = {
     id: number;
     email: string;
     name: string;
     role?: 'MATE' | 'ADMIN';
-    status ?: 'ACTIVE' | 'INACTIVE' | 'PENDING' | 'BLOCKED';
+    status?: 'ACTIVE' | 'INACTIVE' | 'PENDING' | 'BLOCKED';
     password?: string;
     locale?: string;
     image: imageProps;
     certified?: boolean;
     emblems?: emblemProps[];
     introduce: string;
-}
+};
 
 export type mateCompProps = {
-    isSummary? : boolean;
-    mate : mateProps;
-}
+    isSummary?: boolean;
+    mate: mateProps;
+};
 
 export type modalProps = {
-    title?:string;
-    children:any;
-    type:string;
+    title?: string;
+    children: any;
+    type: string;
     closePortal: Function;
-}
+};
 
 export type popupProps = {
     show?: boolean;
-    title?:string;
-    children:any;
-    type:string;
-    yesFunction?:Function;
-    yesText?:string;
-    noFucntion?:Function;
-    noText?:string;
+    title?: string;
+    children: any;
+    type: string;
+    yesFunction?: Function;
+    yesText?: string;
+    noFucntion?: Function;
+    noText?: string;
     closePortal: Function;
-}
+};
 
 export type programInMypageProps = {
     id: number;
@@ -159,7 +159,7 @@ export type programInMypageProps = {
     location: string;
     type?: string;
     children?: ReactElement;
-}
+};
 
 export type reviewItemProps = {
     id: number;
@@ -167,79 +167,76 @@ export type reviewItemProps = {
     content: string;
     score: number;
     name: string;
-}
+};
 
 export type reviewProps = {
     reviews: reviewItemProps[];
-}
+};
 
 export type titleProps = {
     title: string;
     description?: string;
-    icon?:string;
-}
+    icon?: string;
+};
 
 export type inputProps = {
-    type:string;
-    value:string;
-    name:string;
-    handleChange: (e:React.ChangeEvent<HTMLInputElement>) => void;
+    type: string;
+    value: string;
+    name: string;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     classnames?: string;
-}
+};
 
 export type loginProps = {
-    email:string;
-    password:string;
-}
+    email: string;
+    password: string;
+};
 
 export type languageProps = {
     id: number;
     title: string;
     contents: string;
     country: string;
-}
+};
 
 export type paymentsProps = {
-    programId:number;
-    scheduleId:number;
-    amount: number;
-}
-export type paymentsConfirmProps = {
-    orderId: string;
     programId: number;
-    amount: number;
-    paymentKey: string;
     scheduleId: number;
-}
+    amount: number;
+};
+export type paymentsConfirmProps = {
+    programId: number;
+    scheduleId: number;
+};
 
 export type collectionsProps = {
-    id:number;
+    id: number;
     language: languageProps;
     programs: programSummaryProps[];
-}
+};
 
 export type categoryProps = {
-    id:number;
+    id: number;
     type: string;
     language: languageProps;
     image: {
-        id:number;
-        image:imageProps;
-    }
+        id: number;
+        image: imageProps;
+    };
     createdAt: string;
     updatedAt: string;
-}
+};
 
 // 프로그램 스케줄 조회
 export type scheduleProps = {
-    id:number;
+    id: number;
     capacity: number;
     startDate: string;
     endDate: string;
     reservationDate: string;
     reservationCount: number;
-}
+};
 
 // 이용 가능한 스케줄들 조회
 export type AvailableTimesProps = {
@@ -247,13 +244,13 @@ export type AvailableTimesProps = {
     times: scheduleProps[];
     price: number;
     currency: string;
-    onclick: (time:scheduleProps) => void;
+    onclick: (time: scheduleProps) => void;
     isBox?: boolean;
-}
+};
 
-// buddy 
+// buddy
 export type buddyProps = {
-    id:number;
+    id: number;
     name: string;
     password: string;
     email: string;
@@ -263,12 +260,12 @@ export type buddyProps = {
     image: imageProps;
     createdAt: string;
     updatedAt: string;
-}
+};
 
 export type qnaProps = {
-    qna:qnaItemProps;
+    qna: qnaItemProps;
     handleDelete: Function;
-}
+};
 
 export type qnaItemProps = {
     id: number;
@@ -295,7 +292,7 @@ export type qnaItemProps = {
     isSecret: boolean;
     createdAt: string;
     updatedAt: string;
-}
+};
 export type responsePaymentProps = {
     id: number;
     status: string;
@@ -315,10 +312,10 @@ export type responsePaymentProps = {
     requestedAt: string;
     createdAt: string;
     updatedAt: string;
-}
+};
 
 export type confirmPaymentProps = {
     responsePayment: responsePaymentProps;
     programId: number;
     scheduleId: number;
-}
+};
