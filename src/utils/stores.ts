@@ -1,43 +1,44 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
 interface AuthState {
     token: string | null;
     setToken: (token: string) => void;
     clearToken: () => void;
-  }
-  
-export const useAuthStore = create<AuthState>((set) => ({
-token: null,
-setToken: (token) => {
-    set({ token: token });
-    setCookie('LOGINTOKEN', token, 1)
-},
-clearToken: () => {
-    set({ token: null })
-    deleteCookie('LOGINTOKEN')
 }
+
+export const useAuthStore = create<AuthState>((set) => ({
+    token: null,
+    setToken: (token) => {
+        set({ token: token });
+        setCookie('LOGINTOKEN', token, 1);
+    },
+    clearToken: () => {
+        set({ token: null });
+        deleteCookie('LOGINTOKEN');
+    },
 }));
 
 interface ResultLanguage {
     language: string;
-    setLanguage: (language : string) => void;
+    setLanguage: (language: string) => void;
 }
 export const useLanguage = create<ResultLanguage>((set) => ({
     language: 'en',
-    setLanguage: (v) => set({
-        language: v
-    })
-}))
+    setLanguage: (v) =>
+        set({
+            language: v,
+        }),
+}));
 
-export const setCookie = (cookieName:string, value:string, days:number) => {
+export const setCookie = (cookieName: string, value: string, days: number) => {
     const exdate = new Date();
     exdate.setDate(exdate.getDate() + days);
 
-    const cookieValue = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+    const cookieValue = escape(value) + (days ? `; expires=${exdate.toUTCString()}` : '') + '; path=/'; // 루트 경로로 설정
     document.cookie = cookieName + '=' + cookieValue;
-  }
+};
 
-export const getCookie = (cookieName:string) => {
+export const getCookie = (cookieName: string) => {
     let x;
     let y;
     const val = document.cookie.split(';');
@@ -50,8 +51,8 @@ export const getCookie = (cookieName:string) => {
             return unescape(y);
         }
     }
-}
+};
 
-export const deleteCookie = (name:string) => {
+export const deleteCookie = (name: string) => {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-}
+};

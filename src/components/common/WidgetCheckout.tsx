@@ -1,3 +1,4 @@
+'use client';
 import { TossPaymentsWidgets, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import React, { useEffect, useState } from 'react';
 import { confirmPaymentProps } from 'types/types';
