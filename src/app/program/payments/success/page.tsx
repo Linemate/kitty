@@ -1,7 +1,7 @@
 'use client';
 import { confirmPayments } from 'api';
-import { useSearchParams } from 'next/navigation';
-import React, { Suspense, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense, useEffect, useState } from 'react';
 import BottomButton from '../_Button';
 import 'styles/toss.scss';
 import Header from 'components/Header/Header';
@@ -11,7 +11,8 @@ import useMobile from 'hooks/useMobile';
 const PaymentsSuccessContent = () => {
     const isMobile = useMobile();
     const searchParams = useSearchParams();
-
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
     useEffect(() => {
         async function successFn() {
             try {
@@ -30,37 +31,45 @@ const PaymentsSuccessContent = () => {
                     };
                     const res = await confirmPayments(values);
                     console.log(res);
+                    setLoading(false);
                 }
             } catch (err) {
                 console.log(err);
+                router.push('/program/payments/fail');
             }
         }
         successFn();
-    }, [searchParams]);
+    }, [searchParams, router]);
     return (
-        <div className="payment">
-            <div className={`wrapper success ${isMobile ? 'mobile' : ''}`}>
-                {/* header */}
-                <Header title={'라인메이트 메인'} lang={'ko'} isDepth={false} isMobileDesc={true} />
+        <>
+            {loading ? (
+                <div>Loading...</div>
+            ) : (
+                <div className="payment">
+                    <div className={`wrapper success ${isMobile ? 'mobile' : ''}`}>
+                        {/* header */}
+                        <Header title={'라인메이트 메인'} lang={'ko'} isDepth={false} isMobileDesc={true} />
 
-                <div className="img_area">
-                    <div className="ico success"></div>
+                        <div className="img_area">
+                            <div className="ico success"></div>
+                        </div>
+                        <div className="title">
+                            <h2>Payment Successful</h2>
+                        </div>
+                        <div className="desc_area">
+                            <p>
+                                Your payment has been processed successfully.
+                                <br />
+                                See you on LineMate, buddy!
+                            </p>
+                        </div>
+                        <BottomButton style={'bg_blue'} />
+                        {/* Footer */}
+                        <Footer />
+                    </div>
                 </div>
-                <div className="title">
-                    <h2>Payment Successful</h2>
-                </div>
-                <div className="desc_area">
-                    <p>
-                        Your payment has been processed successfully.
-                        <br />
-                        See you on LineMate, buddy!
-                    </p>
-                </div>
-                <BottomButton style={'bg_blue'} />
-                {/* Footer */}
-                <Footer />
-            </div>
-        </div>
+            )}
+        </>
     );
 };
 

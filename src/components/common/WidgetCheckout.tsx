@@ -5,7 +5,10 @@ import { confirmPaymentProps } from 'types/types';
 import 'styles/toss.scss';
 
 function generateRandomString() {
-    return window.btoa(Math.random().toString()).slice(0, 20);
+    if (typeof window !== 'undefined') {
+        return window.btoa(Math.random().toString()).slice(0, 20);
+    }
+    return '';
 }
 
 // ------  결제위젯 초기화 ------
@@ -86,19 +89,30 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
             // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
             // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
             if (widgets) {
-                widgets.requestPayment({
-                    orderId: responsePayment.orderId, // 고유 주문 번호
-                    orderName: '토스 티셔츠 외 2건',
-                    successUrl: `${window.location.origin}/program/payments/success?programId=${programId}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
-                    failUrl: window.location.origin + '/program/payments/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
-                    customerEmail: 'customer123@gmail.com',
-                    customerName: '김토스',
-                    // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
-                    // customerMobilePhone: "01012341234",
-                });
+                widgets
+                    .requestPayment({
+                        orderId: responsePayment.orderId, // 고유 주문 번호
+                        orderName: '토스 티셔츠 외 2건',
+                        successUrl: `${window.location.origin}/program/payments/success?programId=${programId}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
+                        failUrl: window.location.origin + '/program/payments/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
+                        customerEmail: 'customer123@gmail.com',
+                        customerName: '김토스',
+                        // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
+                        // customerMobilePhone: "01012341234",
+                    })
+                    .catch((err) => {
+                        alert(err.toString().replace('Error: ', ''));
+                    });
             }
         } catch (err) {
-            console.log(err);
+            if (err instanceof Error && err.message === '취소되었습니다.') {
+                alert('사용자가 결제를 취소했습니다. 다시 시도해 주세요.');
+                // 사용자에게 결제 취소 안내 메시지 표시
+            } else {
+                console.error('결제 에러:', err);
+                alert('결제 중 오류가 발생했습니다. 다시 시도해 주세요.');
+            }
+            (widgets as any).destroy();
         }
     };
     return (

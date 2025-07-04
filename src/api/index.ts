@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
-import { useAuthStore } from 'utils/stores';
+import { getCookie, useAuthStore } from 'utils/stores';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
 // 토큰 없는 axios 인스턴스 (프로그램 상세 등)
@@ -24,8 +24,9 @@ const privateApi = axios.create({
 // 요청 인터셉터로 privateApi에만 Authorization 자동 추가
 privateApi.interceptors.request.use(
     (config) => {
-        const token = useAuthStore.getState().token;
+        const token = getCookie('LOGINTOKEN');
         if (token) {
+            console.log(token);
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
@@ -95,6 +96,6 @@ export const requestPayments = async (values: paymentsProps) => {
 
 // 결제 승인
 export const confirmPayments = async (values: paymentsConfirmProps) => {
-    const res = await publicApi.post(`/payments/confirm`, values);
+    const res = await privateApi.post(`/payments/confirm`, values);
     return res.data;
 };

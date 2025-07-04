@@ -8,6 +8,7 @@ import { Button } from 'components/common/Button';
 import { getLogin } from 'api';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
+import { clearDuplicateCookies } from 'utils/clearDuplicateCookies';
 
 const initValues = {
     email: '',
@@ -64,6 +65,7 @@ const LoginContent = () => {
     }, [redirectUrl, router, setToken, values, viewPage]);
 
     useEffect(() => {
+        clearDuplicateCookies();
         return () => {
             setValues(initValues);
         };
