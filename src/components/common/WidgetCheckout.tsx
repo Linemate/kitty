@@ -88,7 +88,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                 widgets.requestPayment({
                     orderId: responsePayment.orderId, // 고유 주문 번호
                     orderName: '토스 티셔츠 외 2건',
-                    successUrl: `${window.location.origin}/program/payments/success?&programId=${programId}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
+                    successUrl: `${window.location.origin}/program/payments/success?orderId=${responsePayment.orderId}&programId=${programId}&amount=${responsePayment.totalAmount}&paymentKey=${clientKey}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
                     failUrl: window.location.origin + '/program/payments/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
                     customerEmail: 'customer123@gmail.com',
                     customerName: '김토스',

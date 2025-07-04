@@ -15,11 +15,17 @@ const PaymentsSuccessContent = () => {
     useEffect(() => {
         async function successFn() {
             try {
+                const orderId = searchParams.get('orderId');
                 const programId = searchParams.get('programId');
+                const amount = searchParams.get('amount');
+                const paymentKey = searchParams.get('paymentKey');
                 const scheduleId = searchParams.get('scheduleId');
-                if (programId && scheduleId) {
+                if (orderId && programId && amount !== null && paymentKey && scheduleId) {
                     const values = {
+                        orderId: orderId,
                         programId: Number(programId),
+                        amount: Number(amount),
+                        paymentKey: paymentKey,
                         scheduleId: Number(scheduleId),
                     };
                     const res = await confirmPayments(values);
