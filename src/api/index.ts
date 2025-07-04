@@ -96,6 +96,6 @@ export const requestPayments = async (values: paymentsProps) => {
 
 // 결제 승인
 export const confirmPayments = async (values: paymentsConfirmProps) => {
-    const res = await privateApi.post(`/payments/confirm`, values);
+    const res = await privateApi.post(`/payments/confirm`, JSON.stringify(values));
     return res.data;
 };
