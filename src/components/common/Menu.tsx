@@ -3,9 +3,11 @@ import { Button } from './Button';
 import { useRouter } from 'next/navigation';
 import 'styles/menu.scss';
 import Link from 'next/link';
+import { getCookie, useAuthStore } from 'utils/stores';
 
 const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { closeMenu: () => void; lang: string; changeLang: (lang: string) => void; openLanguage: boolean; setOpenLanguage: (open: boolean) => void }) => {
     const router = useRouter();
+    const isLogin = useAuthStore.getState().token;
     const handleLogin = () => {
         router.push('/login');
     };
@@ -15,9 +17,7 @@ const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { 
                 <div className="menu_header_left">
                     <Button text="Close" classnames="close img" type="button" onclick={closeMenu} />
                 </div>
-                <div className="menu_header_right">
-                    <Button text="Login" classnames="close text" type="button" onclick={handleLogin} />
-                </div>
+                {isLogin || getCookie('LOGINTOKEN') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={handleLogin} />}
             </div>
             <div className="menu_body">
                 <Link href="/experience">Experience</Link>
