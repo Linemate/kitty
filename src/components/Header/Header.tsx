@@ -26,7 +26,13 @@ const Header = (props: headerProps) => {
         router.push('/');
     };
     // 햄버거 버튼
-    const viewMenu = () => {};
+    const handleOpenMenu = () => {
+        setIsOpen(true);
+    };
+    // 햄버거 버튼 닫기
+    const handleCloseMenu = () => {
+        setIsOpen(false);
+    };
     // like 페이지로
     const viewLikeList = () => {
         router.push('/like/list');
@@ -49,7 +55,6 @@ const Header = (props: headerProps) => {
                 <div className={`header_inner depth`}>
                     <Button type={'img'} classnames={'back'} text={'뒤로가기'} onclick={handleBack} />
                     {isMobileDesc ? btns : <div className="header_title">{title}</div>}
-                    {isMobile ? <Menu closeMenu={() => {}} lang={language} changeLang={changeLang} openLanguage={openLanguage} setOpenLanguage={setOpenLanguage} /> : ''}
                 </div>
             ) : (
                 <div className="header_inner">
@@ -60,7 +65,7 @@ const Header = (props: headerProps) => {
                     <div className="header_right">
                         <Button type={'img text left'} classnames={`language`} text={language === 'kr' ? 'KR' : 'EN'} onclick={() => setOpenLanguage(!openLanguage)} />
                         <Button type={'img'} classnames={'like'} text={'찜한 목록으로'} onclick={viewLikeList} />
-                        {isMobile ? <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={viewMenu} /> : isLogin || getCookie('LOGINTOKEN') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />}
+                        {isMobile ? <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={handleOpenMenu} /> : isLogin || getCookie('LOGINTOKEN') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />}
                         {openLanguage ? (
                             <>
                                 <div className="options">
@@ -71,6 +76,7 @@ const Header = (props: headerProps) => {
                         ) : (
                             ''
                         )}
+                        {isOpen ? <Menu closeMenu={handleCloseMenu} lang={language} changeLang={changeLang} openLanguage={openLanguage} setOpenLanguage={setOpenLanguage} /> : ''}
                     </div>
                 </div>
             )}

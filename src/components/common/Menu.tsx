@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from './Button';
 import { useRouter } from 'next/navigation';
+import 'styles/menu.scss';
 import Link from 'next/link';
 
 const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { closeMenu: () => void; lang: string; changeLang: (lang: string) => void; openLanguage: boolean; setOpenLanguage: (open: boolean) => void }) => {
