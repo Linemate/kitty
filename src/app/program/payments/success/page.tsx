@@ -1,7 +1,7 @@
 'use client';
 import { confirmPayments } from 'api';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import BottomButton from '../_Button';
 import 'styles/toss.scss';
 import Header from 'components/Header/Header';
@@ -13,9 +13,16 @@ const PaymentsSuccessContent = () => {
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const hasExecuted = useRef(false);
+
     useEffect(() => {
+        // 이미 실행되었으면 다시 실행하지 않음
+        if (hasExecuted.current) return;
+
         async function successFn() {
             try {
+                hasExecuted.current = true; // 실행 시작 시점에 플래그 설정
+
                 const orderId = searchParams.get('orderId');
                 const programId = searchParams.get('programId');
                 const amount = searchParams.get('amount');
