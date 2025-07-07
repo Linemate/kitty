@@ -3,6 +3,9 @@ import { TossPaymentsWidgets, loadTossPayments } from '@tosspayments/tosspayment
 import React, { useEffect, useState } from 'react';
 import { confirmPaymentProps } from 'types/types';
 import 'styles/toss.scss';
+import useMobile from 'hooks/useMobile';
+import useBodyLock from 'hooks/useBodyLock';
+import { Button } from './Button';
 
 function generateRandomString() {
     if (typeof window !== 'undefined') {
@@ -19,9 +22,12 @@ const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = generateRandomString();
 
 const WidgetCheckout = (props: confirmPaymentProps) => {
-    const { responsePayment, programId, scheduleId } = props;
+    const { responsePayment, programId, scheduleId, closeWidget } = props;
     const [ready, setReady] = useState<boolean>(false);
     const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
+    const isMobile = useMobile();
+
+    useBodyLock(true);
 
     useEffect(() => {
         async function fetchPaymentWidgets() {
@@ -116,9 +122,12 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
         }
     };
     return (
-        <div className="toss_wrapper">
+        <div className={`toss_wrapper ${isMobile ? 'mobile' : ''}`}>
             <div className="bg"></div>
             <div className="toss_box_section">
+                <div className='toss_box_close'>
+                    <Button text="Close" classnames="close img" type="button" onclick={closeWidget} /> 
+                </div>
                 {/* 결제 UI */}
                 <div id="payment-method"></div>
                 {/* 이용약관 UI */}

@@ -106,6 +106,15 @@ const initProgram = {
     ycoordinate: 0,
 };
 
+const initTime = {
+    id: 0,
+    capacity: 0,
+    startDate: '',
+    endDate: '',
+    reservationDate: '',
+    reservationCount: 0,
+}
+
 const today = new Date();
 const ProgramDetails = () => {
     const param = useParams();
@@ -114,7 +123,7 @@ const ProgramDetails = () => {
     const [program, setProgram] = useState<programProps>(initProgram);
     // modal
     const [isPopup, setIsPopup] = useState<boolean>(false);
-    const [isCalendarModal, setIsCaleandarModal] = useState<boolean>(false);
+    const [isCalendarModal, setIsCalendarModal] = useState<boolean>(false);
     // 탭 선택
     const [selectedTab, setSelectedTab] = useState<string>(tabsData[0].name);
     // 선택한 날짜들
@@ -122,14 +131,7 @@ const ProgramDetails = () => {
     // 가능한 날짜들
     const [availableDates, setAvailableDates] = useState<Date[]>([]);
     const [availableTimes, setAvailableTimes] = useState<scheduleProps[]>([]);
-    const [selectedTime, setSelectedTime] = useState<scheduleProps>({
-        id: 0,
-        capacity: 0,
-        startDate: '',
-        endDate: '',
-        reservationDate: '',
-        reservationCount: 0,
-    });
+    const [selectedTime, setSelectedTime] = useState<scheduleProps>(initTime);
 
     const [reviews, setReviews] = useState<reviewItemProps[]>([]);
     // 스크롤 Y값
@@ -209,7 +211,7 @@ const ProgramDetails = () => {
 
     const chooseTime = (time: scheduleProps) => {
         setSelectedTime(time);
-        console.log(time);
+        setIsCalendarModal(false);
     };
 
     // 추천 영역
@@ -235,8 +237,7 @@ const ProgramDetails = () => {
     const btns = () => {
         return (
             <div className="btn_wrap">
-                <Button type={'img'} classnames={'heart'} text={'좋아요'} onclick={handleLike} />
-                <span className="numOfLike">46</span>
+                <div className={`ico heart ${program.isLike && token ? 'red' : 'gray_line'}`} onClick={handleLike}>{program.likes}</div>
                 <Button type={'img'} classnames={'share'} text={'공유하기'} onclick={viewSharePopup} />
             </div>
         );
@@ -244,7 +245,7 @@ const ProgramDetails = () => {
 
     // modal calendar
     const handleModalCalendar = (flag: boolean) => {
-        setIsCaleandarModal(flag);
+        setIsCalendarModal(flag);
         const body = document.querySelector('body');
         if (body) {
             if (flag) {
@@ -266,6 +267,7 @@ const ProgramDetails = () => {
                 const res = await getProgramSchedules(id, fullD);
                 const data = res.data;
                 setAvailableTimes(data);
+                setSelectedTime(initTime);
             } catch (err) {
                 console.log(err);
             }
@@ -286,6 +288,7 @@ const ProgramDetails = () => {
                     return new Date(kstDate.getUTCFullYear(), kstDate.getUTCMonth(), kstDate.getUTCDate());
                 });
                 setAvailableDates(rDates);
+                setSelectedTime(initTime);
                 handleChangeDate(date);
             } catch (err) {
                 console.log(err);
@@ -389,7 +392,7 @@ const ProgramDetails = () => {
                             {isMobile && (
                                 <div className="select_area" onClick={() => handleModalCalendar(true)}>
                                     <button className="ico select" type="button">
-                                        <span className="ico calendar">7/25 (Fri)</span>
+                                        <span className="ico calendar">{selectedDate !== undefined && `${(selectedDate?.getMonth() + 1)}/${selectedDate.getDate()} (${days[selectedDate.getDay()]})`}</span>
                                     </button>
                                 </div>
                             )}
@@ -601,7 +604,7 @@ const ProgramDetails = () => {
                 </ModalPortal>
             )}
             {/* toss */}
-            {readyToToss && responsePayment && <WidgetCheckout responsePayment={responsePayment} programId={program.id} scheduleId={selectedTime.id} />}
+            {readyToToss && responsePayment && <WidgetCheckout responsePayment={responsePayment} programId={program.id} scheduleId={selectedTime.id} closeWidget={() => setReadyToToss(false)} />}
         </div>
     );
 };

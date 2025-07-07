@@ -317,4 +317,5 @@ export type confirmPaymentProps = {
     responsePayment: responsePaymentProps;
     programId: number;
     scheduleId: number;
+    closeWidget: () => void;
 };

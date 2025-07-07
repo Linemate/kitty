@@ -76,7 +76,7 @@ const LoginContent = () => {
             {isMobile && (
                 <>
                     {/* Header & Key visual */}
-                    <Header title={'라인메이트 메인'} lang={'ko'} />
+                    <Header title={'라인메이트 메인'} />
                 </>
             )}
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>

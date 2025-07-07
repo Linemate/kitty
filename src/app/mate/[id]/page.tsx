@@ -69,7 +69,7 @@ const MateDetails = () => {
         <>
             <div className='wrapper'>
                 {/* Header & Key visual */}
-                <Header title={'라인메이트 메인'} lang={'ko'} />
+                <Header title={'라인메이트 메인'} />
                 {/* Key visual */}
                 {/* <Mate isSummary={false} mateName={'Rabbbbbit'} introduce={"Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet"} /> */}
 

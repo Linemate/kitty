@@ -60,6 +60,25 @@
             .nav {
                 display:none;
             }
+            .btn_wrap {
+                display:flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                padding-right:0;
+                .ico.heart {
+                    padding-left:28px;
+                    padding-right:0;
+                    font-size:11px;
+                    line-height:24px;
+                    margin-right:8px;
+                    &::before {
+                        width:24px;
+                        height:24px;
+                        right:auto;
+                        left:0;
+                    }
+                }
+            }
         }
         &.desc {
             

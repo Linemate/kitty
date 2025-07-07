@@ -36,7 +36,12 @@
         text-align: center;
         overflow-x: auto; /* Add this property for horizontal scrolling */
         white-space: nowrap; /* Prevent text wrapping */
-
+        .toss_box_close {
+            position: absolute;
+            right:5px;
+            top:5px;
+            z-index:103;
+        }
         .btn_payments {
             color: #f9fafb;
             background-color: #3182f6;
@@ -55,6 +60,15 @@
             border-radius: 7px;
             padding: 11px 16px;
             width: 250px;
+        }
+    }
+    &.mobile {
+        .toss_box_section {
+            top:0;
+            margin-top:0;
+            padding:0;
+            padding-bottom:30px;
+            overflow:auto;
         }
     }
 }
