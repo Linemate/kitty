@@ -55,7 +55,7 @@ const PaymentsSuccessContent = () => {
                 <div className="payment">
                     <div className={`wrapper success ${isMobile ? 'mobile' : ''}`}>
                         {/* header */}
-                        <Header title={'라인메이트 메인'} lang={'ko'} isDepth={false} isMobileDesc={true} />
+                        <Header title={'라인메이트 메인'} isDepth={false} isMobileDesc={true} />
 
                         <div className="img_area">
                             <div className="ico success"></div>

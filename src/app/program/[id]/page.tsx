@@ -376,7 +376,7 @@ const ProgramDetails = () => {
         <div className="program">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header & Key visual */}
-                <Header title={'라인메이트 메인'} lang={'ko'} isDepth={false} isMobileDesc={true} btns={btns()} />
+                <Header title={'라인메이트 메인'} isDepth={false} isMobileDesc={true} btns={btns()} />
                 {/* Key visual */}
                 <div className="inner">
                     <Program program={program} isDetails={true} />

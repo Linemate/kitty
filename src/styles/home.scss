@@ -1,91 +1,140 @@
 .home {
     .header {
-        position:absolute;
-        left:0;
-        top:0;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
     .section {
         &.category {
             max-width: 900px;
-            margin:0 auto;
+            margin: 0 auto;
         }
     }
     .cate {
-        display:flex;
-        flex-direction:row;
+        display: flex;
+        flex-direction: row;
         margin: 30px 0;
         .cate_item {
-            flex:1;
-            text-align:center;
-            display:flex;
-            flex-direction:column;
-            border-radius:30px;
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            border-radius: 30px;
             .img_area {
-                padding:12px;
-                border-radius:16px;
-                background-color:var(--color-neutral-800);
-                margin-bottom:16px;
+                padding: 12px;
+                border-radius: 16px;
+                margin-bottom: 16px;
                 .img_icon {
-                    width:64px; 
-                    height:64px; 
-                    display:block;
-                    background-repeat:no-repeat;
-                    background-size:100%;
+                    width: 64px;
+                    height: 64px;
+                    display: block;
+                    background-repeat: no-repeat;
+                    background-size: 100%;
                     background-position: center;
                 }
             }
             &.parties {
                 .img_area {
-                    background-image:url('/assets/images/icon/ico_menu_parties.png');
+                    background-image: url('/assets/images/icon/ico_menu_parties.png');
                 }
             }
             &.tour {
                 .img_area {
-                    background-image:url('/assets/images/icon/ico_menu_tour.png');
+                    background-image: url('/assets/images/icon/ico_menu_tour.png');
                 }
             }
             &.culture {
                 .img_area {
-                    background-image:url('/assets/images/icon/ico_menu_culture.png');
+                    background-image: url('/assets/images/icon/ico_menu_culture.png');
                 }
             }
             &.oneday {
                 .img_area {
-                    background-image:url('/assets/images/icon/ico_menu_oneday.png');
+                    background-image: url('/assets/images/icon/ico_menu_oneday.png');
                 }
             }
             .txt_area {
-                font-size:18px;
-                line-height:27px;
-                font-weight:500;
+                font-size: 18px;
+                line-height: 27px;
+                font-weight: 500;
             }
         }
     }
     .intro {
-        max-width:1280px;
-        margin:0 auto 20px;
-        display:flex; flex-direction:row;
-        justify-content:space-between;
+        max-width: 1280px;
+        margin: 0 auto 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: flex-end;
 
         .btn.all {
             color: var(--color-neutral-400);
-            font-size:16px;
-            font-weight:500;
-            line-height:32px;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 32px;
         }
     }
     .slide_wrap {
-        margin-bottom:96px;
+        margin-bottom: 96px;
         .slide_area {
-            max-width:1280px;
-            margin:0 auto 30px;
+            max-width: 1280px;
+            margin: 0 auto 30px;
             .slick-slide {
-                margin-right:20px;
+                margin-right: 20px;
                 .slide {
-                    width:360px;
+                    width: 360px;
                 }
             }
+        }
+    }
+    .program_item {
+        width: 50%;
+        margin-right: 12px;
+        &:nth-child(2n) {
+            margin-right: 0;
+        }
+    }
+    // 모바일 버전 스타일
+    .mobile {
+        &.wrapper {
+            padding-top: 56px;
+        }
+        .section {
+            .title {
+                h3 {
+                    font-size: 18px;
+                    line-height: 24px;
+                }
+            }
+        }
+        .cate {
+            width: 100%;
+            .cate_item {
+                .img_area {
+                    padding: 8px;
+                    text-align: center;
+                    .img_icon {
+                        width: 40px;
+                        height: 40px;
+                        margin: 0 auto;
+                    }
+                }
+                .txt_area {
+                    font-size: 12px;
+                    line-height: 20px;
+                }
+            }
+        }
+        .intro {
+            .btn.all {
+                font-size: 13px;
+                line-height: 24px;
+                padding-right: 26px;
+            }
+        }
+        .slide_wrap {
+            padding: 0 20px;
         }
     }
 }

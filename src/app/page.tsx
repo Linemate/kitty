@@ -20,7 +20,6 @@ const Main = () => {
     const [categories, setCategories] = useState<categoryProps[]>([]);
     const [list, setList] = useState<collectionsProps[]>([]);
     const isMobile = useMobile();
-    // querystring - lang=ko 붙으면 한국어로
     const router = useRouter();
     const viewMorePage = () => {
         router.push(`/more`);
@@ -60,7 +59,7 @@ const Main = () => {
         <div className="home">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header */}
-                <Header title={'라인메이트 메인'} lang={'ko'} />
+                <Header title={'라인메이트 메인'} />
                 {/* Key visual */}
                 <KeyVisual>
                     <div className="txt_area">
@@ -95,26 +94,27 @@ const Main = () => {
                                 <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={viewMorePage} />
                             </div>
                             {/* 슬라이드로 넣어야 함 */}
-                            <div className="slide_area">
-                                <SlideWrap autoplay={false} variableWidth={true}>
+                            {isMobile ? (
+                                <>
                                     {el.programs.map((program: programSummaryProps) => (
-                                        <div key={program.id} className="slide">
-                                            <div className="slide_item">
-                                                <SimpleProgram program={program} />
-                                            </div>
+                                        <div key={program.id} className="program_item">
+                                            <SimpleProgram program={program} />
                                         </div>
                                     ))}
-                                    <div className="slide">
-                                        <div className="slide_item">{/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={2} /> */}</div>
-                                    </div>
-                                    <div className="slide">
-                                        <div className="slide_item">{/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={3} /> */}</div>
-                                    </div>
-                                    <div className="slide">
-                                        <div className="slide_item">{/* <Program programName={'MAKE A TRADITIONAL FOOD'} programInfo={'If you looking for fun, please click here.'} numberOfLike={1267} where={'GangNam'} amount={50000} id={4} /> */}</div>
-                                    </div>
-                                </SlideWrap>
-                            </div>
+                                </>
+                            ) : (
+                                <div className="slide_area">
+                                    <SlideWrap autoplay={false} variableWidth={true}>
+                                        {el.programs.map((program: programSummaryProps) => (
+                                            <div key={program.id} className="slide">
+                                                <div className="slide_item">
+                                                    <SimpleProgram program={program} />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </SlideWrap>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

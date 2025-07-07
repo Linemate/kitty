@@ -87,7 +87,6 @@ export type favoriteProps = {
 export type headerProps = {
     title?: string;
     isDepth?: boolean;
-    lang: string;
     isMobileDesc?: boolean;
     btns?: ReactNode;
 };
