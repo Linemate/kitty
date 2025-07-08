@@ -142,7 +142,8 @@ const ProgramDetails = () => {
     const [id, setId] = useState<string>(param.id[0] || '');
 
     // 로그인 여부
-    const { userInfo, setUserInfo } = useAuthStore();
+    const userInfo = useAuthStore.getState().userInfo;
+    const setUserInfo = useAuthStore.getState().setUserInfo;
 
     // router
     const router = useRouter();

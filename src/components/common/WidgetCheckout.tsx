@@ -27,7 +27,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
     const [ready, setReady] = useState<boolean>(false);
     const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
     const isMobile = useMobile();
-    const { userInfo } = useAuthStore();
+    const userInfo = useAuthStore.getState().userInfo;
 
     useBodyLock(true);
 

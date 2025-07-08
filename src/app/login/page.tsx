@@ -17,7 +17,7 @@ const initValues = {
 const LoginContent = () => {
     const [values, setValues] = useState(initValues);
     const language = useLanguage((state) => state.language);
-    const { setUserInfo } = useAuthStore();
+    const setUserInfo = useAuthStore.getState().setUserInfo;
     const searchParams = useSearchParams();
     // redirect url
     const redirectUrl = searchParams.get('redirect');
@@ -49,8 +49,8 @@ const LoginContent = () => {
             const res = await getLogin(values);
             const token = res.data.token;
             if (token) {
-                setUserInfo(res.data);
-                console.log(token);
+                console.log({ ...res.data });
+                setUserInfo({ ...res.data });
                 if (redirectUrl) {
                     viewPage();
                 } else {
