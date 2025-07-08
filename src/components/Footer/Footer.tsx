@@ -61,9 +61,11 @@ const Footer = () => {
                     <div className="logo">LINEMATE</div>
                     <div className="txt">
                         <div className="top">
-                            <div className="row">대표 : 장원준</div>
-                            <div className="row">주소 : Room B02 on the 1st floor, 12 An-gil, Sinchon-ro, Mapo-gu, Seoul</div>
+                            <div className="row">상호명 : 라인메이트</div>
+                            <div className="row">대표자명 : 장원준</div>
                             <div className="row">사업자등록번호 : 596-42-00909</div>
+                            <div className="row">사업장 주소 : 서울특별시 마포구 신촌로2안길 12 건물내부 지하1층</div>
+                            <div className='row'>유선번호 : 0507-1357-6997</div>
                             <div className="row">통신판매업신고번호 : 2025-서울마포-0484</div>
                         </div>
                         {!isMobile && (

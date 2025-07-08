@@ -28,6 +28,7 @@
                     width: 64px;
                     height: 64px;
                     display: block;
+                    margin:0 auto;
                     background-repeat: no-repeat;
                     background-size: 100%;
                     background-position: center;
@@ -110,13 +111,16 @@
         }
         .cate {
             width: 100%;
+            padding:0 20px;
+            box-sizing: border-box;
+            margin:24px 0;
             .cate_item {
                 .img_area {
                     padding: 8px;
                     text-align: center;
                     .img_icon {
-                        width: 40px;
-                        height: 40px;
+                        width: 56px;
+                        height: 56px;
                         margin: 0 auto;
                     }
                 }
@@ -134,7 +138,8 @@
             }
         }
         .slide_wrap {
-            padding: 0 20px;
+            padding: 24px 20px 0;
+            margin-bottom: 40px;
         }
     }
 }
