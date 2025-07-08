@@ -113,7 +113,7 @@ const initTime = {
     endDate: '',
     reservationDate: '',
     reservationCount: 0,
-}
+};
 
 const today = new Date();
 const ProgramDetails = () => {
@@ -237,7 +237,9 @@ const ProgramDetails = () => {
     const btns = () => {
         return (
             <div className="btn_wrap">
-                <div className={`ico heart ${program.isLike && token ? 'red' : 'gray_line'}`} onClick={handleLike}>{program.likes}</div>
+                <div className={`ico heart ${program.isLike && token ? 'red' : 'gray_line'}`} onClick={handleLike}>
+                    {program.likes}
+                </div>
                 <Button type={'img'} classnames={'share'} text={'공유하기'} onclick={viewSharePopup} />
             </div>
         );
@@ -392,7 +394,7 @@ const ProgramDetails = () => {
                             {isMobile && (
                                 <div className="select_area" onClick={() => handleModalCalendar(true)}>
                                     <button className="ico select" type="button">
-                                        <span className="ico calendar">{selectedDate !== undefined && `${(selectedDate?.getMonth() + 1)}/${selectedDate.getDate()} (${days[selectedDate.getDay()]})`}</span>
+                                        <span className="ico calendar">{selectedDate !== undefined && `${selectedDate?.getMonth() + 1}/${selectedDate.getDate()} (${days[selectedDate.getDay()]})`}</span>
                                     </button>
                                 </div>
                             )}
@@ -604,7 +606,7 @@ const ProgramDetails = () => {
                 </ModalPortal>
             )}
             {/* toss */}
-            {readyToToss && responsePayment && <WidgetCheckout responsePayment={responsePayment} programId={program.id} scheduleId={selectedTime.id} closeWidget={() => setReadyToToss(false)} />}
+            {readyToToss && responsePayment && <WidgetCheckout responsePayment={responsePayment} program={program} scheduleId={selectedTime.id} closeWidget={() => setReadyToToss(false)} />}
         </div>
     );
 };

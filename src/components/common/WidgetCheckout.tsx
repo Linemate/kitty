@@ -22,7 +22,7 @@ const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = generateRandomString();
 
 const WidgetCheckout = (props: confirmPaymentProps) => {
-    const { responsePayment, programId, scheduleId, closeWidget } = props;
+    const { responsePayment, program, scheduleId, closeWidget } = props;
     const [ready, setReady] = useState<boolean>(false);
     const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
     const isMobile = useMobile();
@@ -98,8 +98,8 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                 widgets
                     .requestPayment({
                         orderId: responsePayment.orderId, // 고유 주문 번호
-                        orderName: '토스 티셔츠 외 2건',
-                        successUrl: `${window.location.origin}/program/payments/success?programId=${programId}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
+                        orderName: program.title,
+                        successUrl: `${window.location.origin}/program/payments/success?programId=${program.id}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
                         failUrl: window.location.origin + '/program/payments/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
                         customerEmail: 'customer123@gmail.com',
                         customerName: '김토스',
@@ -125,8 +125,8 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
         <div className={`toss_wrapper ${isMobile ? 'mobile' : ''}`}>
             <div className="bg"></div>
             <div className="toss_box_section">
-                <div className='toss_box_close'>
-                    <Button text="Close" classnames="close img" type="button" onclick={closeWidget} /> 
+                <div className="toss_box_close">
+                    <Button text="Close" classnames="close img" type="button" onclick={closeWidget} />
                 </div>
                 {/* 결제 UI */}
                 <div id="payment-method"></div>
