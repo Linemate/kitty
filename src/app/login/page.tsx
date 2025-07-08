@@ -40,7 +40,6 @@ const LoginContent = () => {
             ...values,
             [name]: value,
         });
-        console.log(value);
     };
 
     // login

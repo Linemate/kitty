@@ -174,12 +174,10 @@ const ProgramDetails = () => {
     const handleReservation = useCallback(async () => {
         try {
             const cookies = parseCookies();
-            const loginToken = cookies.LOGINTOKEN;
-            if (loginToken && !userInfo) {
-                setUserInfo({ ...JSON.parse(loginToken) });
-            }
+            const user = cookies.USERINFO;
+            console.log(userInfo)
             // 비로그인
-            if (!loginToken) {
+            if (!user) {
                 alert('로그인이 필요해요.');
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
                 return;
@@ -200,6 +198,7 @@ const ProgramDetails = () => {
             setResponsePayment(data);
             setReadyToToss(true);
         } catch (err) {
+            console.log(err);
             if (err && typeof err === 'object' && 'status' in err && err.status === 500) {
                 alert('로그인 토큰이 만료되었습니다. 로그인을 다시 시도해주세요.');
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);

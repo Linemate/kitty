@@ -37,7 +37,6 @@ const PaymentsSuccessContent = () => {
                         scheduleId: Number(scheduleId),
                     };
                     const res = await confirmPayments(values);
-                    console.log(res);
                     setLoading(false);
                 }
             } catch (err) {

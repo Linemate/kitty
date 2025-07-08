@@ -17,7 +17,7 @@ const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { 
                 <div className="menu_header_left">
                     <Button text="Close" classnames="close img" type="button" onclick={closeMenu} />
                 </div>
-                {isLogin || getCookie('LOGINTOKEN') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={handleLogin} />}
+                {isLogin || getCookie('USERINFO') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={handleLogin} />}
             </div>
             <div className="menu_body">
                 <Link href="/experience">Experience</Link>

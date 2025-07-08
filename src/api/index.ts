@@ -24,9 +24,9 @@ const privateApi = axios.create({
 // 요청 인터셉터로 privateApi에만 Authorization 자동 추가
 privateApi.interceptors.request.use(
     (config) => {
-        const token = getCookie('LOGINTOKEN');
-        if (token) {
-            console.log(token);
+        const user = getCookie('USERINFO');
+        if (user) {
+            const token = JSON.parse(user).token;
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
