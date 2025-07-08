@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation';
 import 'styles/header.scss';
 import useMobile from 'hooks/useMobile';
 import { headerProps } from 'types/types';
-import { getCookie, useAuthStore, useLanguage } from 'utils/stores';
+import { useAuthStore, useLanguage } from 'utils/stores';
 import Menu from 'components/common/Menu';
+import { getCookie } from 'utils/cookiesFunction';
 
 const Header = (props: headerProps) => {
     const { title, isDepth, isMobileDesc, btns } = props;

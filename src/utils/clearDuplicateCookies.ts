@@ -1,4 +1,4 @@
-import { deleteCookie } from './stores';
+import { deleteCookie } from "./cookiesFunction";
 
 export function clearDuplicateCookies() {
     // /program 경로의 USERINFO 삭제

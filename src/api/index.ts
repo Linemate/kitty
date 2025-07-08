@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
-import { getCookie, useAuthStore } from 'utils/stores';
+import { getCookie } from 'utils/cookiesFunction';
+import { useAuthStore } from 'utils/stores';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
 // 토큰 없는 axios 인스턴스 (프로그램 상세 등)

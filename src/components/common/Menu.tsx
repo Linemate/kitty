@@ -3,7 +3,8 @@ import { Button } from './Button';
 import { useRouter } from 'next/navigation';
 import 'styles/menu.scss';
 import Link from 'next/link';
-import { getCookie, useAuthStore } from 'utils/stores';
+import { useAuthStore } from 'utils/stores';
+import { getCookie } from 'utils/cookiesFunction';
 
 const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { closeMenu: () => void; lang: string; changeLang: (lang: string) => void; openLanguage: boolean; setOpenLanguage: (open: boolean) => void }) => {
     const router = useRouter();
