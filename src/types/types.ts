@@ -1,5 +1,12 @@
 import { ReactElement, ReactNode } from 'react';
 
+export type userInfoProps = {
+    id: number;
+    email: string;
+    name: string;
+    token: string;
+} | null;
+
 export type hiddenInfoProps = {
     id: number;
     programId: number;

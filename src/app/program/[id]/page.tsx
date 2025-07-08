@@ -142,7 +142,7 @@ const ProgramDetails = () => {
     const [id, setId] = useState<string>(param.id[0] || '');
 
     // 로그인 여부
-    const { token, setToken } = useAuthStore();
+    const { userInfo, setUserInfo } = useAuthStore();
 
     // router
     const router = useRouter();
@@ -174,8 +174,8 @@ const ProgramDetails = () => {
         try {
             const cookies = parseCookies();
             const loginToken = cookies.LOGINTOKEN;
-            if (loginToken && !token) {
-                setToken(loginToken);
+            if (loginToken && !userInfo) {
+                setUserInfo({ ...JSON.parse(loginToken) });
             }
             // 비로그인
             if (!loginToken) {
@@ -237,7 +237,7 @@ const ProgramDetails = () => {
     const btns = () => {
         return (
             <div className="btn_wrap">
-                <div className={`ico heart ${program.isLike && token ? 'red' : 'gray_line'}`} onClick={handleLike}>
+                <div className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`} onClick={handleLike}>
                     {program.likes}
                 </div>
                 <Button type={'img'} classnames={'share'} text={'공유하기'} onclick={viewSharePopup} />
@@ -579,7 +579,7 @@ const ProgramDetails = () => {
                                 <Button type="text" classnames="bg_blue radius_none reservation" text="Reservation" onclick={handleReservation} />
                             </div>
                             <div className="btn_like_area">
-                                <div className={`ico heart ${program.isLike && token ? 'red' : 'gray_line'}`}>{program.likes}</div>
+                                <div className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>{program.likes}</div>
                             </div>
                         </div>
                     </div>

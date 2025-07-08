@@ -17,7 +17,7 @@ const Header = (props: headerProps) => {
     const router = useRouter();
     const language = useLanguage((state) => state.language);
     const setLanguage = useLanguage((state) => state.setLanguage);
-    const isLogin = useAuthStore.getState().token;
+    const isLogin = useAuthStore.getState().userInfo?.token;
     const changeLang = (lang: string) => {
         console.log('dddd');
     };

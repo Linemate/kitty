@@ -17,7 +17,7 @@ const initValues = {
 const LoginContent = () => {
     const [values, setValues] = useState(initValues);
     const language = useLanguage((state) => state.language);
-    const { setToken } = useAuthStore();
+    const { setUserInfo } = useAuthStore();
     const searchParams = useSearchParams();
     // redirect url
     const redirectUrl = searchParams.get('redirect');
@@ -49,7 +49,7 @@ const LoginContent = () => {
             const res = await getLogin(values);
             const token = res.data.token;
             if (token) {
-                setToken(token);
+                setUserInfo(res.data);
                 console.log(token);
                 if (redirectUrl) {
                     viewPage();
@@ -62,7 +62,7 @@ const LoginContent = () => {
         } catch (err) {
             alert('계정을 다시 확인해주세요.');
         }
-    }, [redirectUrl, router, setToken, values, viewPage]);
+    }, [redirectUrl, router, setUserInfo, values, viewPage]);
 
     useEffect(() => {
         clearDuplicateCookies();

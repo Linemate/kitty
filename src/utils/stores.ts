@@ -1,19 +1,20 @@
+import { userInfoProps } from 'types/types';
 import { create } from 'zustand';
 
 interface AuthState {
-    token: string | null;
-    setToken: (token: string) => void;
+    userInfo: userInfoProps | null;
+    setUserInfo: (userInfo: userInfoProps) => void;
     clearToken: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-    token: null,
-    setToken: (token) => {
-        set({ token: token });
-        setCookie('LOGINTOKEN', token, 1);
+    userInfo: null,
+    setUserInfo: (userInfo) => {
+        set({ userInfo: userInfo });
+        setCookie('LOGINTOKEN', userInfo?.token || '', 1);
     },
     clearToken: () => {
-        set({ token: null });
+        set({ userInfo: null });
         deleteCookie('LOGINTOKEN');
     },
 }));

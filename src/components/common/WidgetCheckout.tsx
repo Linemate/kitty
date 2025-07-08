@@ -6,6 +6,7 @@ import 'styles/toss.scss';
 import useMobile from 'hooks/useMobile';
 import useBodyLock from 'hooks/useBodyLock';
 import { Button } from './Button';
+import { useAuthStore } from 'utils/stores';
 
 function generateRandomString() {
     if (typeof window !== 'undefined') {
@@ -26,6 +27,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
     const [ready, setReady] = useState<boolean>(false);
     const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
     const isMobile = useMobile();
+    const { userInfo } = useAuthStore();
 
     useBodyLock(true);
 
@@ -101,8 +103,8 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                         orderName: program.title,
                         successUrl: `${window.location.origin}/program/payments/success?programId=${program.id}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
                         failUrl: window.location.origin + '/program/payments/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
-                        customerEmail: 'customer123@gmail.com',
-                        customerName: '김토스',
+                        customerEmail: userInfo?.email || '',
+                        customerName: userInfo?.name || '',
                         // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
                         // customerMobilePhone: "01012341234",
                     })
