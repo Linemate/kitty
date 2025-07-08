@@ -7,7 +7,7 @@ import { getCookie, useAuthStore } from 'utils/stores';
 
 const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { closeMenu: () => void; lang: string; changeLang: (lang: string) => void; openLanguage: boolean; setOpenLanguage: (open: boolean) => void }) => {
     const router = useRouter();
-    const isLogin = useAuthStore.getState().token;
+    const isLogin = useAuthStore.getState().userInfo?.token;
     const handleLogin = () => {
         router.push('/login');
     };
