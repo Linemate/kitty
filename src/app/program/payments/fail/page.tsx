@@ -12,21 +12,17 @@ const PaymentsFailContent = () => {
         <div className="payment">
             <div className={`wrapper fail ${isMobile ? 'mobile' : ''}`}>
                 {/* header */}
-                <Header title={'라인메이트 메인'} isDepth={false} isMobileDesc={true} />
+                <Header title={'라인메이트 메인'} isDepth={false} isMobileDesc={false} />
                 <div className="img_area">
                     <div className="ico fail"></div>
                 </div>
                 <div className="title">
-                    <h2>Payment Failed</h2>
+                    <h2>결제 실패</h2>
                 </div>
                 <div className="desc_area">
-                    <p>
-                        We couldn`t process your payment.
-                        <br />
-                        Please try again.
-                    </p>
+                    <p>결제 실패하였습니다. 다시 시도해주세요.</p>
                 </div>
-                <BottomButton style={'border lightgray'} />
+                <BottomButton style={'border lightgray'} text="홈으로 돌아가기" href="/" />
 
                 {/* Footer */}
                 <Footer />

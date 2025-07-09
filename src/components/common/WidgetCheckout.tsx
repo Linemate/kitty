@@ -101,7 +101,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                     .requestPayment({
                         orderId: responsePayment.orderId, // 고유 주문 번호
                         orderName: program.title,
-                        successUrl: `${window.location.origin}/program/payments/success?programId=${program.id}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
+                        successUrl: `${window.location.origin}/program/payments/progress?programId=${program.id}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
                         failUrl: window.location.origin + '/program/payments/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
                         customerEmail: userInfo?.email || '',
                         customerName: userInfo?.name || '',
