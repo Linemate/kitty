@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
+import { inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
 import { getCookie } from 'utils/cookiesFunction';
 import { useAuthStore } from 'utils/stores';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
@@ -77,12 +77,6 @@ export const getProgramSchedules = async (id: string, date: string) => {
     return res.data;
 };
 
-// 프로그램 문의 조회
-export const getInquiries = async (id: string, pageNum: number) => {
-    const res = await publicApi.get(`/programs/${id}/inquiries`);
-    return res.data;
-};
-
 // 로그인
 export const getLogin = async (values: loginProps) => {
     const res = await publicApi.post(`/account/sign-in`, values);
@@ -98,5 +92,29 @@ export const requestPayments = async (values: paymentsProps) => {
 // 결제 승인
 export const confirmPayments = async (values: paymentsConfirmProps) => {
     const res = await privateApi.post(`/payments/confirm`, JSON.stringify(values));
+    return res.data;
+};
+
+// 프로그램 문의 조회
+export const getInquiries = async (id: string, pageNum: number) => {
+    const res = await publicApi.get(`/programs/${id}/inquiries`);
+    return res.data;
+};
+
+// 프로그램 문의하기
+export const postInquiry = async (id: string, values: inquiryProps) => {
+    const res = await privateApi.post(`/programs/${id}/inquiry`, values);
+    return res.data;
+};
+
+// 프로그램 문의 삭제하기
+export const deleteInquiry = async (id: number, inquiryId: number) => {
+    const res = await privateApi.delete(`/programs/${id}/inquiry`, { data: { inquiryId } });
+    return res.data;
+};
+
+// 프로그램 좋아요
+export const postProgramLike = async (id: number) => {
+    const res = await privateApi.put(`/programs/like/${id}`);
     return res.data;
 };

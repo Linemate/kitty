@@ -43,7 +43,7 @@ export type programSummaryProps = {
     reviewsCount: number;
     likesCount: number;
     reservationDate: string;
-    banner: bannerProps[];
+    banner?: bannerProps[];
 };
 
 export type programCompProps = {
@@ -270,6 +270,7 @@ export type buddyProps = {
 
 export type qnaProps = {
     qna: qnaItemProps;
+    language: string;
     handleDelete: Function;
 };
 
@@ -325,4 +326,11 @@ export type confirmPaymentProps = {
     program: programProps;
     scheduleId: number;
     closeWidget: () => void;
+};
+
+// 프로그램 문의하기
+export type inquiryProps = {
+    title: string;
+    content: string;
+    isSecret: boolean;
 };

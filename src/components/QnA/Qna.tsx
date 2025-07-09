@@ -1,112 +1,107 @@
 import ModalPortal from 'components/Portal/ModalPortal';
 import Modal from 'components/Portal/Modal';
 import { Button } from 'components/common/Button';
-import React, { useRef, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import 'styles/qna.scss';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import Popup from 'components/Portal/Popup';
 import useMobile from 'hooks/useMobile';
 import { popupProps, qnaItemProps, qnaProps } from 'types/types';
-import { getInquiries } from 'api';
+import { deleteInquiry, getInquiries, postInquiry } from 'api';
+import dateTimeOfLanguage from 'utils/dateTimeOfLanguage';
+import { useAuthStore, useLanguage } from 'utils/stores';
+import { useRouter } from 'next/navigation';
 
-
-
-const QnaItem = (props:qnaProps) => {
-    const {qna, handleDelete} = props;
-    const {id, buddy, title, content, answer, isSecret, createdAt} = qna;
+const QnaItem = (props: qnaProps) => {
+    const { qna, language, handleDelete } = props;
+    const { id, buddy, title, content, answer, isSecret, createdAt } = qna;
     const [seeMore, setSeeMore] = useState<boolean>(true);
     const handleQnaDelete = () => {
         console.log('delete');
         handleDelete(id);
-    }
-    const handleSeeMore= () => {
+    };
+    const handleSeeMore = () => {
         setSeeMore(false);
-    }
+    };
     return (
         <div className={`qna`}>
-            <div className='qna_header'>
-                <div className='left'>
-                    {
-                        answer.id ?
-                        <span className='is_reply no_reply'>답변완료</span>
-                        :
-                        <span className='is_reply reply'>미답변</span>
-                    }
-                    <span className='username'>{buddy.name}</span>
-                    <span className='date'>{createdAt}</span>
+            <div className="qna_header">
+                <div className="left">
+                    {answer && answer.id ? <span className="is_reply no_reply">답변완료</span> : <span className="is_reply reply">미답변</span>}
+                    <span className="username">{buddy.name}</span>
+                    <span className="date">{dateTimeOfLanguage(createdAt, language)}</span>
                 </div>
-                {
-                    !answer.id &&
-                    <div className='right'>
+                {!answer && (
+                    <div className="right">
                         <Button classnames={'lightgray'} type={'text'} text={`Delete`} onclick={handleQnaDelete} />
                     </div>
-                }
+                )}
             </div>
-            <div className='qna_body'>
-                {
-                    isSecret ? 
-                    <div className='ico lock qna_contents'>Private post.</div>
-                    :
-                    <div className='qna_contents'>
-                        {
-                            seeMore ? content?.substring(0, 200) : content
-                        }
-                        {
-                            seeMore && content && content.length >= 200 && '...'
-                        }
-                        {
-                            seeMore && content && content.length >= 200 &&
-                            <div className='see_more_wrap'>
+            <div className="qna_body">
+                {isSecret ? (
+                    <div className="ico lock qna_contents">Private post.</div>
+                ) : (
+                    <div className="qna_contents">
+                        {seeMore ? content?.substring(0, 200) : content}
+                        {seeMore && content && content.length >= 200 && '...'}
+                        {seeMore && content && content.length >= 200 && (
+                            <div className="see_more_wrap">
                                 <Button classnames={'lightgray'} type={'text'} text={`See More`} onclick={handleSeeMore} />
                             </div>
-                        }
+                        )}
                     </div>
-                }
+                )}
                 {
                     // 답변
-                    answer.id && 
-                    <div className='reply'>
-                        <div className='reply_contents'>
-                            {
-                                isSecret ? 'Private post.' : answer.contents
-                            }
+                    answer && answer.id && (
+                        <div className="reply">
+                            <div className="reply_contents">{isSecret ? 'Private post.' : answer.contents}</div>
+                            <div className="reply_date">{dateTimeOfLanguage(answer.createdAt, language)}</div>
                         </div>
-                        <div className='reply_date'>
-                            {answer.createdAt}
-                        </div>
-                    </div>
+                    )
                 }
             </div>
         </div>
     );
-}
+};
 
-const Qna = ({id} : {id:string}) => {
+const Qna = ({ id }: { id: string }) => {
     const [modal, setModal] = useState<boolean>(false);
-    const [isPrivate, setIsPrivate] = useState<boolean>(false);
+    const [isSecret, setIsSecret] = useState<boolean>(false);
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const [qnaContent, setQnaContent] = useState<string>('');
     const [qnas, setQnas] = useState<qnaItemProps[]>([]);
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
+    const { userInfo } = useAuthStore();
+    const { language } = useLanguage();
+    const router = useRouter();
     // page
     const [pageNum, setPageNum] = useState<number>(0);
 
     const inputRef = useRef<HTMLDivElement>(null);
     const isMobile = useMobile();
     const viewAsk = () => {
-        setModal(true);
-    }
+        if (userInfo) {
+            setModal(true);
+        } else {
+            alert('로그인 후 이용해주세요.');
+            router.push('/login');
+        }
+    };
     const closePortal = () => {
         setModal(false);
-    }
+    };
 
     // qna 조회
     const loadInquiries = async () => {
         try {
-            const res = await getInquiries(id, pageNum)
-        } catch(err) {console.log(err)}
-    }
-
+            const res = await getInquiries(id, pageNum);
+            const list = res.data.list;
+            setQnas(list);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     // qna 문의하기
     const handleInput = () => {
@@ -116,83 +111,119 @@ const Qna = ({id} : {id:string}) => {
             setIsButtonEnabled(textLength >= 1);
             setQnaContent(inputRef.current.innerText);
         }
-    }
+    };
 
     // 비밀글 여부 toggle
     const handlePrivateToggle = () => {
-        setIsPrivate(!isPrivate);
-    }
+        setIsSecret(!isSecret);
+    };
     // submit
-    const handleSubmit = () => {
-        setModal(false);
-    }
+    const handleSubmit = async () => {
+        try {
+            const res = await postInquiry(id, { title: '문의하기', content: qnaContent, isSecret: isSecret });
+            if (res.code === 200) {
+                setPopup({
+                    show: true,
+                    children: '문의가 등록되었습니다.',
+                    type: 'alert',
+                    closePortal: () => {
+                        setPopup(initPopup);
+                    },
+                    noText: '확인',
+                });
+            } else {
+                setPopup({
+                    show: true,
+                    children: '문의 등록에 실패했습니다.',
+                    type: 'alert',
+                    closePortal: () => {
+                        setPopup(initPopup);
+                    },
+                    noText: '확인',
+                });
+            }
+            setModal(false);
+            setIsButtonEnabled(false);
+            loadInquiries();
+        } catch (err) {
+            console.log(err);
+            setPopup({
+                show: true,
+                children: '문의 등록에 실패했습니다.',
+                type: 'alert',
+                closePortal: () => {
+                    setPopup(initPopup);
+                },
+                noText: '확인',
+            });
+        }
+    };
 
     // qna 삭제
-    const handleConfirmDelete = (id:number) => {
-
-    }
+    const handleConfirmDelete = async (inquiryId: number) => {
+        try {
+            const res = await deleteInquiry(Number(id), inquiryId);
+            loadInquiries();
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     // qna 삭제 여부
-    const handleDelete = (id:number) => {
+    const handleDelete = (inquiryId: number) => {
         setPopup({
             show: true,
             children: '작성한 문의를 삭제 하시겠습니까?',
             type: 'confirm',
             yesFunction: () => {
-                handleConfirmDelete(id)
+                handleConfirmDelete(inquiryId);
             },
-            closePortal : () => {
-                setPopup(initPopup)
-            }
+            closePortal: () => {
+                setPopup(initPopup);
+            },
         });
-    }
+    };
+    useEffect(() => {
+        loadInquiries();
+    }, [id]);
     return (
         <div className={`qna_area ${isMobile ? 'mobile' : ''}`}>
-            <div className='btn_area'>
-                <Button classnames='fit border lightgray' text={'Ask a question'} type='text' onclick={viewAsk} />
+            <div className="btn_area">
+                <Button classnames="fit border lightgray" text={'Ask a question'} type="text" onclick={viewAsk} />
             </div>
-            <div>
-                {
-                    qnas.map((el:qnaItemProps) => <QnaItem qna={el} key={el.id} handleDelete={() => handleDelete(el.id)} />)
-                }
-            </div>
-            {
-                modal &&
+            <div>{qnas.length > 0 ? qnas.map((el: qnaItemProps) => <QnaItem qna={el} key={el.id} language={language} handleDelete={() => handleDelete(el.id)} />) : <div className="no_qna">등록된 문의가 없습니다.</div>}</div>
+            {modal && (
                 <Modal>
-                    <ModalPortal type={'qna'} title={'문의 작성하기'} closePortal={closePortal}>
+                    <ModalPortal type={`qna ${isMobile ? 'mobile' : ''}`} title={'문의 작성하기'} closePortal={closePortal}>
                         <div>
-                            <div className='input_area'>
+                            <div className="input_area">
                                 <div ref={inputRef} className={`input_textbox`} contentEditable onInput={handleInput}></div>
-                                {
-                                    qnaContent.trim().length === 0 &&
-                                    <span className='placeholder'>문의 내용을 입력해주세요.</span>
-                                }
+                                {qnaContent.trim().length === 0 && <span className="placeholder">문의 내용을 입력해주세요.</span>}
                             </div>
-                            <div className='input_checkbox'>
+                            <div className="input_checkbox">
                                 <label>
                                     <input type="checkbox" onChange={handlePrivateToggle} />
-                                    <span className={`ico checkbox square ${isPrivate ? 'default' : 'checked'}`}></span>
-                                    <span className='text'>Private</span>
+                                    <span className={`ico checkbox square ${isSecret ? 'default' : 'checked'}`}></span>
+                                    <span className="text">Private</span>
                                 </label>
                             </div>
-                            <div className='infobox'>
-                                <div className='ico info'>You can check the response to your inquiry on the program detail page.</div>
+                            <div className="infobox">
+                                <div className="ico info">You can check the response to your inquiry on the program detail page.</div>
                             </div>
-                            <div className='btn_area'>
+                            <div className="btn_area">
                                 <Button type={'text'} onclick={handleSubmit} text={'Submit'} classnames={`${isButtonEnabled ? 'bg_blue' : 'bg_gray'} submit`} />
                             </div>
                         </div>
                     </ModalPortal>
                 </Modal>
-            }
-            {
-                popup.show &&
+            )}
+            {popup.show && (
                 <Popup>
-                    <PopupPortal type={popup.type} closePortal={popup.closePortal} yesText={'삭제'} yesFunction={popup.yesFunction}>
+                    <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : '취소'} yesText={'삭제'} yesFunction={popup.yesFunction}>
                         {popup.children}
                     </PopupPortal>
                 </Popup>
-            }
+            )}
         </div>
     );
 };

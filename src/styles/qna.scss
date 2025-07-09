@@ -1,106 +1,119 @@
 .qna_area {
+    .no_qna {
+        font-family: 'Pretendard';
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+        color: var(--color-neutral-500);
+        background-color: var(--color-neutral-800);
+        padding: 32px 0;
+        border-radius: 8px;
+        text-align: center;
+        margin-top: 24px;
+    }
     .qna {
         &.pointer {
-            cursor:pointer;
+            cursor: pointer;
         }
-        padding:20px 0;
-        border-bottom:1px solid var(--color-neutral-700);
+        padding: 20px 0;
+        border-bottom: 1px solid var(--color-neutral-700);
         &:first-child {
-            border-top:none;
+            border-top: none;
         }
         .qna_header {
-            display:flex;
+            display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            margin-bottom:12px;
+            margin-bottom: 12px;
             .left {
-                display:flex;
+                display: flex;
                 flex-direction: row;
                 align-items: center;
                 span {
-                    display:block;
-                    padding-right:16px;
-                    position:relative;
+                    display: block;
+                    padding-right: 16px;
+                    position: relative;
                     &::after {
-                        content:'';
-                        display:block;
-                        width:1px;
-                        height:19px;
+                        content: '';
+                        display: block;
+                        width: 1px;
+                        height: 19px;
                         background-color: var(--color-neutral-600);
-                        position:absolute;
-                        right:8px;
-                        top:2px;
+                        position: absolute;
+                        right: 8px;
+                        top: 2px;
                     }
                     &:last-child::after {
-                        display:none;
+                        display: none;
                     }
                 }
-                .is_reply  {
+                .is_reply {
                     font-family: 'Pretendard';
-                    font-size:16px;
+                    font-size: 16px;
                     &.reply {
                         color: var(--color-neutral-300);
                     }
                     &.no_reply {
-                        color:#377BFF;
+                        color: #377bff;
                     }
                 }
                 .username {
-                    font-weight:600;
-                    font-family:'Pretendard';
-                    font-size:16px;
-                    line-height:20px;
+                    font-weight: 600;
+                    font-family: 'Pretendard';
+                    font-size: 16px;
+                    line-height: 20px;
                     color: var(--color-neutral-100);
                 }
                 .date {
                     color: var(--color-neutral-400);
-                    font-family:'Pretendard';
-                    font-weight:400;
-                    font-size:14px;
+                    font-family: 'Pretendard';
+                    font-weight: 400;
+                    font-size: 14px;
                 }
             }
         }
         .qna_body {
             .ico.checkbox {
-                padding-left:24px;
+                padding-left: 24px;
             }
             .ico.lock {
-                display:inline-block;
-                font-family:'Pretendard';
+                display: inline-block;
+                font-family: 'Pretendard';
                 color: var(--color-neutral-300);
-                font-size:16px;
-                line-height:24px;
-                padding-right:28px;
+                font-size: 16px;
+                line-height: 24px;
+                padding-right: 28px;
                 &::before {
-                    width:24px;
-                    height:24px;
+                    width: 24px;
+                    height: 24px;
                 }
             }
             .qna_contents {
-                font-family:'Pretendard';
+                font-family: 'Pretendard';
                 color: var(--color-neutral-200);
-                font-size:16px;
-                line-height:24px;
+                font-size: 16px;
+                line-height: 24px;
                 .see_more_wrap {
-                    margin-top:12px;
+                    margin-top: 12px;
                 }
             }
             .reply {
-                margin-top:13px;
-                border-radius:16px;
-                padding:20px;
+                margin-top: 13px;
+                border-radius: 16px;
+                padding: 20px;
                 background-color: var(--color-neutral-800);
             }
-            .reply_contents, .reply_date {
-                font-family:'Pretendard';
-                font-weight:400;
-                font-size:16px;
-                line-height:24px;
+            .reply_contents,
+            .reply_date {
+                font-family: 'Pretendard';
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 24px;
                 &.reply_date {
                     color: var(--color-neutral-400);
-                    font-size:14px;
-                    margin-top:8px;
+                    font-size: 14px;
+                    margin-top: 8px;
                 }
             }
         }
@@ -108,45 +121,46 @@
     &.mobile {
         .qna {
             &:last-child {
-                border-bottom:0;    
+                border-bottom: 0;
             }
             .qna_header {
                 .left {
-                    .is_reply, .username {
-                        font-size:14px;
-                        line-height:22px;
+                    .is_reply,
+                    .username {
+                        font-size: 14px;
+                        line-height: 22px;
                     }
                     .date {
-                        font-size:12px;
+                        font-size: 12px;
                     }
                     span {
                         &::after {
-                            height:12px;
-                            top:6px;
+                            height: 12px;
+                            top: 6px;
                         }
                     }
                 }
                 .right {
                     .btn {
-                        font-size:13px;
+                        font-size: 13px;
                     }
                 }
             }
             .qna_body {
                 .reply {
-                    padding:12px 16px;
+                    padding: 12px 16px;
                 }
                 .reply_contents {
-                    font-size:14px;
-                    line-height:22px;
+                    font-size: 14px;
+                    line-height: 22px;
                 }
                 .qna_contents {
-                    font-size:14px;
-                    line-height:22px;
+                    font-size: 14px;
+                    line-height: 22px;
                 }
                 .reply_date {
-                    font-size:12px;
-                    line-height:20px;
+                    font-size: 12px;
+                    line-height: 20px;
                 }
             }
         }

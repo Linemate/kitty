@@ -52,9 +52,7 @@ const Review = ({ id }: { id: string }) => {
     return (
         <>
             <div className={`review ${isMobile ? 'mobile' : ''}`}>
-                {reviews.map((el: reviewItemProps) => (
-                    <ReviewItem key={el.id} title={el.title} name={el.name} score={el.score} content={el.content} id={el.id} />
-                ))}
+                {reviews.length > 0 ? reviews.map((el: reviewItemProps) => <ReviewItem key={el.id} title={el.title} name={el.name} score={el.score} content={el.content} id={el.id} />) : <div className="no_review">등록된 후기가 없습니다.</div>}
 
                 {/* <Button classnames={'wide border lightgray'} type={'text'} text={`12개 리뷰 더보기`} onclick={moreList} /> */}
             </div>

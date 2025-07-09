@@ -6,21 +6,39 @@ import { useRouter } from 'next/navigation';
 import { Button } from 'components/common/Button';
 import ModalPortal from 'components/Portal/ModalPortal';
 import useMobile from 'hooks/useMobile';
-import { programCompProps } from 'types/types';
+import { popupProps, programCompProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
+import { postProgramLike } from 'api';
+import Popup from 'components/Portal/Popup';
+import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 
 const Program = (props: programCompProps) => {
     const { program, isDetails } = props;
     const router = useRouter();
     const [liked, setLiked] = useState<boolean>(program.isLike);
     const [isPopup, setIsPopup] = useState<boolean>(false);
+    const [popup, setPopup] = useState<popupProps>(initPopup);
     const isMobile = useMobile();
 
     // 로그인 여부
     const isLogin = useAuthStore.getState().userInfo?.token;
 
-    const sendLike = () => {
-        setLiked(!liked);
+    const sendLike = async () => {
+        if (isLogin) {
+            await postProgramLike(program.id);
+            setLiked(!liked);
+        } else {
+            setPopup({
+                show: true,
+                type: 'login',
+                children: <div>로그인 후 이용해주세요.</div>,
+                closePortal: () => {
+                    setPopup(initPopup);
+                    router.push('/login');
+                },
+                noText: '확인',
+            });
+        }
     };
     const viewDetails = () => {
         router.push(`/program/${program.id}`);
@@ -37,6 +55,7 @@ const Program = (props: programCompProps) => {
     const shareProgram = (str: string) => {
         console.log(str);
     };
+    console.log(program);
     return (
         <div className={`program_comp ${isMobile ? 'mobile' : ''} ${isDetails ? 'details' : 'element'}`}>
             <div className="img_area" onClick={viewDetails} style={{ backgroundImage: `url(${program.thumbnail})` }}></div>
@@ -49,7 +68,7 @@ const Program = (props: programCompProps) => {
                     <span className="amount">{program.price.toLocaleString()}</span>
                 </div>
                 <div className="where_favorite_area">
-                    <div className="where_area">{program.hiddenInfo.address}</div>
+                    {program.hiddenInfo && <div className="where_area">{program.hiddenInfo.address}</div>}
                     <div className="favorite_share_area">
                         <div>
                             <Favorite onclick={sendLike} isLiked={liked} numberOfLike={program.likes} size={'sm'} isFilledHeart={program.isLike && isLogin ? true : false} />
@@ -63,12 +82,6 @@ const Program = (props: programCompProps) => {
                 </div>
             </div>
             <div className="bottom_area">
-                {!isDetails && (
-                    <div className="price_area">
-                        <span className="unit">KRW</span>
-                        <span className="amount">{program.recommendPrograms.price}</span>
-                    </div>
-                )}
                 {/* 여기에 카테고리 들어가야 함 */}
                 {/* <div className='category_badge_area'>
                     <div className='badge_area'>
@@ -92,6 +105,14 @@ const Program = (props: programCompProps) => {
                         </ul>
                     </div>
                 </ModalPortal>
+            )}
+
+            {popup.show && (
+                <Popup>
+                    <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : '취소'} yesText={'삭제'} yesFunction={popup.yesFunction}>
+                        {popup.children}
+                    </PopupPortal>
+                </Popup>
             )}
         </div>
     );
