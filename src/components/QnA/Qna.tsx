@@ -203,7 +203,7 @@ const Qna = ({ id }: { id: string }) => {
                             <div className="input_checkbox">
                                 <label>
                                     <input type="checkbox" onChange={handlePrivateToggle} />
-                                    <span className={`ico checkbox square ${isSecret ? 'default' : 'checked'}`}></span>
+                                    <span className={`ico checkbox square ${isSecret ? 'checked' : 'default'}`}></span>
                                     <span className="text">Private</span>
                                 </label>
                             </div>
