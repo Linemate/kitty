@@ -34,9 +34,9 @@ const PaymentsProgressContent = () => {
                         paymentKey: paymentKey,
                         scheduleId: Number(scheduleId),
                     };
-                    // const res = await confirmPayments(values);
-                    // console.log(res);
-                    // router.push('/program/payments/success');
+                    const res = await confirmPayments(values);
+                    console.log(res);
+                    router.push('/program/payments/success');
                 }
             } catch (err) {
                 console.log(err);

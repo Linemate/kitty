@@ -2,20 +2,22 @@
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import { TextButtonWithIcon } from 'components/common/Button';
+import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function MypageLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
+    const isMobile = useMobile();
     // 페이지 이동
     const viewPage = (pageName: string) => {
         router.push(`/mypage/${pageName}`);
     };
     return (
         <div className="mypage">
-            <div className="wrapper">
+            <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header & Key visual */}
-                <Header title={'라인메이트 메인'} />
+                <Header title={'라인메이트 메인'} isMobileDesc={false} />
                 <div className="my_info">
                     <div className="my_info_inner">
                         <div className="img_area">

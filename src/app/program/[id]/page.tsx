@@ -1,5 +1,4 @@
 'use client';
-import { loadTossPayments, ANONYMOUS } from '@tosspayments/tosspayments-sdk';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
@@ -312,6 +311,11 @@ const ProgramDetails = () => {
         }
     }, [handleChangeMonth, id]);
 
+    // 토스 창 닫기
+    const closeWidget = () => {
+        setReadyToToss(false);
+    };
+
     useEffect(() => {
         if (param && param.id) {
             setId(param.id[0]);
@@ -373,6 +377,10 @@ const ProgramDetails = () => {
                     // body 내용만 추출
                     const bodyContent = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] || '';
                     setHtmlBody(bodyContent);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setHtmlBody('');
                 });
         }
     }, [program]);
@@ -606,7 +614,7 @@ const ProgramDetails = () => {
                 </ModalPortal>
             )}
             {/* toss */}
-            {readyToToss && responsePayment && <WidgetCheckout responsePayment={responsePayment} program={program} scheduleId={selectedTime.id} closeWidget={() => setReadyToToss(false)} />}
+            {readyToToss && responsePayment && <WidgetCheckout responsePayment={responsePayment} program={program} scheduleId={selectedTime.id} closeWidget={closeWidget} />}
         </div>
     );
 };

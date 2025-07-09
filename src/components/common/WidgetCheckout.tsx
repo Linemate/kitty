@@ -127,9 +127,6 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
         <div className={`toss_wrapper ${isMobile ? 'mobile' : ''}`}>
             <div className="bg"></div>
             <div className="toss_box_section">
-                <div className="toss_box_close">
-                    <Button text="Close" classnames="close img" type="button" onclick={closeWidget} />
-                </div>
                 {/* 결제 UI */}
                 <div id="payment-method"></div>
                 {/* 이용약관 UI */}
@@ -144,6 +141,9 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                     onClick={handleRequestPayment}>
                     결제하기
                 </button>
+                <div className="toss_box_close">
+                    <Button text="Close" classnames="close img" type="button" onclick={closeWidget} />
+                </div>
             </div>
         </div>
     );

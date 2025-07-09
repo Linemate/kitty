@@ -1,7 +1,7 @@
-'use client'
+'use client';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Slider, { Settings } from 'react-slick';
-import 'styles/slideWrap.scss'
+import 'styles/slideWrap.scss';
 interface sliderProps {
     /** 슬라이더 좌우 버튼 */
     arrows?: boolean;
@@ -22,8 +22,8 @@ interface sliderProps {
     loop?: boolean;
 
     variableWidth?: boolean;
-    centerMode?:boolean;
-    centerPadding?:string;
+    centerMode?: boolean;
+    centerPadding?: string;
     afterChange?: Function;
 
     /** 슬라이드 몇인지 인디케이터 */
@@ -33,19 +33,7 @@ interface sliderProps {
     length?: number;
 }
 
-const SlideWrap = ({
-    arrows = false,
-    children,
-    className,
-    slidesToShow = 1,
-    slidesToScroll = 1,
-    autoplay = true,
-    speed = 300,
-    dots = false,
-    loop = true,
-    variableWidth, centerMode = false,
-    length
-  }: sliderProps) => {
+const SlideWrap = ({ arrows = false, children, className, slidesToShow = 1, slidesToScroll = 1, autoplay = true, speed = 300, dots = false, loop = true, variableWidth, centerMode = false, length }: sliderProps) => {
     const sliderRef = useRef<Slider | null>(null);
     const [currentIdx, setCurrentIdx] = useState<number>(0);
 
@@ -61,10 +49,30 @@ const SlideWrap = ({
             arrows: arrows,
             variableWidth,
             centerMode,
-            length
+            length,
+            responsive: [
+                {
+                    breakpoint: 768, // 모바일 브레이크포인트
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                        dots: true,
+                    },
+                },
+            ],
         }),
-        [arrows, autoplay, centerMode, dots, length, slidesToScroll, slidesToShow, speed, variableWidth],
+        [arrows, autoplay, centerMode, dots, length, slidesToScroll, slidesToShow, speed, variableWidth]
     );
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (sliderRef.current) {
+                sliderRef.current.slickGoTo(0); // 첫 번째 슬라이드로 이동
+            }
+        }, 1000); // DOM 렌더링 후 약간의 지연
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         <>
             <Slider ref={sliderRef} {...settings} key={currentIdx}>
