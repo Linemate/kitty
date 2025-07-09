@@ -175,7 +175,7 @@ const ProgramDetails = () => {
         try {
             const cookies = parseCookies();
             const user = cookies.USERINFO;
-            console.log(userInfo)
+            console.log(userInfo);
             // 비로그인
             if (!user) {
                 alert('로그인이 필요해요.');
@@ -211,7 +211,7 @@ const ProgramDetails = () => {
 
     const chooseTime = (time: scheduleProps) => {
         setSelectedTime(time);
-        setIsCalendarModal(false);
+        handleModalCalendar(false);
     };
 
     // 추천 영역
