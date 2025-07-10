@@ -205,7 +205,7 @@ const ProgramDetails = () => {
             setReadyToToss(true);
         } catch (err) {
             console.log(err);
-            if (err && typeof err === 'object' && 'status' in err && err.status === 500) {
+            if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
                 alert('로그인 토큰이 만료되었습니다. 로그인을 다시 시도해주세요.');
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
             } else {

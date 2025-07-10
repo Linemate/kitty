@@ -61,7 +61,7 @@ export const getPrograms = async () => {
 
 // 프로그램 상세
 export const getProgramDetails = async (id: string) => {
-    const res = await publicApi.get(`/programs/${id}`);
+    const res = await privateApi.get(`/programs/${id}`);
     return res.data;
 };
 
