@@ -21,7 +21,15 @@ const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { 
                 {isLogin || getCookie('USERINFO') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={handleLogin} />}
             </div>
             <div className="menu_body">
-                <Link href="/experience">Experience</Link>
+                <div className="menu_body_item">
+                    <Link href="/experience">Experience</Link>
+                </div>
+                {/* <div className="menu_body_item">
+                    <Link href="/mate">Mate</Link>
+                </div>  
+                <div className="menu_body_item">
+                    <Link href="/brand">Brand Story</Link>
+                </div> */}
             </div>
             <div className="menu_footer">
                 <Button type={'img text left'} classnames={`language`} text={lang === 'kr' ? 'KR' : 'EN'} onclick={() => setOpenLanguage(!openLanguage)} />

@@ -11,12 +11,12 @@
     display: flex;
     flex-direction: column;
     .menu_header {
-        width: 100%;
-        height: 56px;
+        width: calc(100% - 40px);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px;
+        padding: 16px 0;
+        margin:0 auto;
         box-sizing: border-box;
         border-bottom: 1px solid #e0e0e0;
         .btn {
@@ -24,11 +24,25 @@
         }
     }
     .menu_body {
-        width: 100%;
+        width: calc(100% - 40px);
         flex: 1;
-        padding: 20px;
+        padding: 28px 0;
+        margin:0 auto;
         box-sizing: border-box;
         border-bottom: 1px solid #e0e0e0;
+        .menu_body_item {
+            a {
+                padding:20px 12px;
+                display:block;
+                color:var(--color-neutral-100);
+                font-size:16px;
+                line-height:22px;
+                font-weight:500;
+                &:hover {
+                    color:var(--color-primary-500);
+                }
+            }
+        }
     }
     .menu_footer {
         width: 100%;
