@@ -18,7 +18,7 @@ import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import ModalPortal from 'components/Portal/ModalPortal';
 import AvailableTimes from 'components/Program/AvailableTimes';
-import { getProgramDetails, getProgramSchedules, postProgramLike, requestPayments } from 'api';
+import { getProgramDetails, getProgramSchedules, postProgramLike, refreshToken, requestPayments } from 'api';
 import { imagesProps, popupProps, programProps, programSummaryProps, responsePaymentProps, scheduleProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
 import WidgetCheckout from 'components/common/WidgetCheckout';
@@ -176,6 +176,19 @@ const ProgramDetails = () => {
         }
     };
 
+    // 토큰 재발급
+    const refreshTokenFn = async () => {
+        try {
+            const res = await refreshToken();
+            const data = res.data;
+            setUserInfo(data);
+            console.log(res);
+        } catch(err) {
+            console.log('???')
+            console.log(err);
+        }
+    };
+
     // 예약하기 api 호출
     const handleReservation = useCallback(async () => {
         try {
@@ -206,8 +219,7 @@ const ProgramDetails = () => {
         } catch (err) {
             console.log(err);
             if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
-                alert('로그인 토큰이 만료되었습니다. 로그인을 다시 시도해주세요.');
-                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
+                // await refreshTokenFn();
             } else {
                 alert((err as any).response?.data?.message || '오류가 발생했습니다.');
             }
@@ -251,7 +263,7 @@ const ProgramDetails = () => {
                 children: <div>로그인 후 이용해주세요.</div>,
                 closePortal: () => {
                     setPopup(initPopup);
-                    router.push('/login');
+                    router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
                 },
                 noText: '확인',
             });
@@ -335,6 +347,11 @@ const ProgramDetails = () => {
             setRecommendPrograms(data.recommendPrograms);
             handleChangeMonth(today);
         } catch (err) {
+            if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
+                // await refreshTokenFn();
+                // await loadProgramDetails();
+                console.log('err;;')
+            }
             console.log(err);
         }
     }, [handleChangeMonth, id]);

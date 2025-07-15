@@ -278,6 +278,19 @@
             }
         }
         &.mobile {
+            .contents {
+                .contents_inner {
+                    max-width: 100%;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    .side_menu {
+                        width: 100%;
+                        margin-right: 0;    
+                        padding-bottom: 40px;
+                        border-bottom: 1px solid var(--color-neutral-600);
+                    }
+                }
+            }
         }
     }
 }

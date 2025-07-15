@@ -1,13 +1,13 @@
 import ModalPortal from 'components/Portal/ModalPortal';
 import Modal from 'components/Portal/Modal';
 import { Button } from 'components/common/Button';
-import React, { use, useEffect, useRef, useState } from 'react';
+import React, { use, useCallback, useEffect, useRef, useState } from 'react';
 import 'styles/qna.scss';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import Popup from 'components/Portal/Popup';
 import useMobile from 'hooks/useMobile';
 import { popupProps, qnaItemProps, qnaProps } from 'types/types';
-import { deleteInquiry, getInquiries, postInquiry } from 'api';
+import { deleteInquiry, getInquiries, postInquiry, refreshToken } from 'api';
 import dateTimeOfLanguage from 'utils/dateTimeOfLanguage';
 import { useAuthStore, useLanguage } from 'utils/stores';
 import { useRouter } from 'next/navigation';
@@ -72,7 +72,8 @@ const Qna = ({ id }: { id: string }) => {
     const [qnaContent, setQnaContent] = useState<string>('');
     const [qnas, setQnas] = useState<qnaItemProps[]>([]);
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
-    const { userInfo } = useAuthStore();
+    const userInfo = useAuthStore.getState().userInfo;
+    const setUserInfo = useAuthStore.getState().setUserInfo;
     const { language } = useLanguage();
     const router = useRouter();
     // page
@@ -85,7 +86,7 @@ const Qna = ({ id }: { id: string }) => {
             setModal(true);
         } else {
             alert('로그인 후 이용해주세요.');
-            router.push('/login');
+            router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
         }
     };
     const closePortal = () => {
@@ -117,6 +118,14 @@ const Qna = ({ id }: { id: string }) => {
     const handlePrivateToggle = () => {
         setIsSecret(!isSecret);
     };
+
+    // 토큰 재발급
+    const refreshTokenFn = useCallback(async () => {
+        const res = await refreshToken();
+        const data = res.data;
+        setUserInfo(data);
+    }, []);
+
     // submit
     const handleSubmit = async () => {
         try {
@@ -131,6 +140,9 @@ const Qna = ({ id }: { id: string }) => {
                     },
                     noText: '확인',
                 });
+            } else if (res.code === 401) {
+                await refreshTokenFn();
+                await handleSubmit();
             } else {
                 setPopup({
                     show: true,
