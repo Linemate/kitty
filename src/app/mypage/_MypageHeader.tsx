@@ -1,3 +1,4 @@
+'use client'
 import { TextButtonWithIcon } from 'components/common/Button';
 import Header from 'components/Header/Header';
 import { useRouter } from 'next/navigation';

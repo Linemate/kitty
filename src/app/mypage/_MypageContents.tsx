@@ -1,3 +1,4 @@
+'use client'
 import { Button, TextButtonWithIcon } from 'components/common/Button';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import Title from 'components/Title/Title';
