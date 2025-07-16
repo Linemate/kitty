@@ -120,8 +120,8 @@ export const postProgramLike = async (id: number) => {
 };
 
 // 토큰 재발급
-export const refreshToken = async () => {
-    const res = await privateApi.post(`/refresh`);
+export const refreshToken = async (buddyId:number, refreshToken:string) => {
+    const res = await privateApi.post(`/refresh`, {data : {buddyId, refreshToken}});
     console.log('token~~~~~~~~~~!')
     return res.data;
 };

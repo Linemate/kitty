@@ -21,10 +21,11 @@
                 .img_area {
                     margin-right: 32px;
                     .none {
-                        width: 126px;
-                        height: 126px;
-                        background: url('/assets/images/icon/ico_default_profile.png') no-repeat center;
-                        background-size: 100%;
+                        width: 114px;
+                        height: 114 px;
+                        background: var(--color-neutral-700) url('/assets/images/icon/ico_default_profile.png') no-repeat center;
+                        background-size: 70px;
+                        border-radius:90px;
                     }
                 }
                 .desc_area {
@@ -211,7 +212,7 @@
                                 display: block;
                                 width: 24px;
                                 height: 24px;
-                                background: url('/assets/images/icon/ico_arrow_right_gray.png') center;
+                                background: url('/assets/images/btn/btn_arrow_gray_right.png') center;
                                 background-size: 100%;
                                 position: absolute;
                                 right: 0;
@@ -278,16 +279,97 @@
             }
         }
         &.mobile {
+            .my_info {
+                padding-top:88px;
+                background:none;
+                .my_info_inner {
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-start;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    .img_area {
+                        margin:0 auto;
+                        .none {
+                            width:80px;
+                            height:80px;
+                            background-size:48px;
+                        }
+                    }
+                    .desc_area {
+                        width:100%;
+                        box-sizing: border-box;
+                        padding:0 20px;
+                        .user_desc_area {
+                            flex-direction: column;
+                            align-items: flex-start;
+                            text-align:center;
+                            .user_name {
+                                width:100%;
+                                font-size: 24px;
+                                line-height: 32px;
+                                margin-right: 0;
+                                color: var(--color-neutral-100);
+                            }
+                            .join_date {
+                                width:100%;
+                                font-size:12px;
+                                line-height:16px;
+                            }
+                        }
+                        .btns_area {
+                            width:100%;
+                            padding-top:24px;
+                            ul {
+                                width:100%;
+                                li {
+                                    flex:1;
+                                    padding-right:0;
+                                    border-right:1px solid var(--color-neutral-700);
+                                    &::after {
+                                        display:none;
+                                    }
+                                    &:last-child {
+                                        border-right:none;
+                                    }
+                                    .btn.text {
+                                        font-size:13px;
+                                        line-height:18px;
+                                        &::before {
+                                            background-size:24px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             .contents {
                 .contents_inner {
                     max-width: 100%;
-                    flex-direction: column;
-                    justify-content: flex-end;
+                    flex-direction: column-reverse;
+                    box-sizing: border-box;
+                    padding:0 20px;
                     .side_menu {
                         width: 100%;
                         margin-right: 0;    
                         padding-bottom: 40px;
                         border-bottom: 1px solid var(--color-neutral-600);
+                    }
+                    .contents_area {
+                        .my_events {
+                            .my_event {
+                                padding-left:28px;
+                                padding-right: 52px;
+                                &:first-child {
+                                    padding-left:0;
+                                }
+                                &:last-child {
+                                    padding-right:0;
+                                }
+                            }
+                        }
                     }
                 }
             }

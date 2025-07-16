@@ -5,6 +5,7 @@ export type userInfoProps = {
     email: string;
     name: string;
     token: string;
+    refreshToken: string;
 } | null;
 
 export type hiddenInfoProps = {
@@ -278,7 +279,7 @@ export type qnaItemProps = {
     id: number;
     buddy: buddyProps;
     title: string;
-    content: string;
+    content?: string;
     answer: {
         id: number;
         email: string;

@@ -179,12 +179,19 @@ const ProgramDetails = () => {
     // 토큰 재발급
     const refreshTokenFn = async () => {
         try {
-            const res = await refreshToken();
-            const data = res.data;
-            setUserInfo(data);
-            console.log(res);
+            const cookies = parseCookies();
+            const user = cookies.USERINFO;
+            const userInfo = JSON.parse(user);
+            if (userInfo) {
+                const res = await refreshToken(userInfo.id, userInfo.refreshToken);
+                setUserInfo({ ...res.data });
+                console.log(res);
+            } else {
+                alert('로그인이 필요해요.');
+                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
+                return;
+            }
         } catch(err) {
-            console.log('???')
             console.log(err);
         }
     };
@@ -337,7 +344,7 @@ const ProgramDetails = () => {
     );
 
     // 프로그램 상세
-    const loadProgramDetails = useCallback(async () => {
+    const loadProgramDetails = useCallback(async (retryCount = 0, maxRetries = 1) => {
         try {
             console.log(id);
             const res = await getProgramDetails(id);
@@ -347,12 +354,28 @@ const ProgramDetails = () => {
             setRecommendPrograms(data.recommendPrograms);
             handleChangeMonth(today);
         } catch (err) {
-            if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
-                // await refreshTokenFn();
-                // await loadProgramDetails();
-                console.log('err;;')
-            }
-            console.log(err);
+            console.log(typeof err === 'object')
+            console.log(retryCount < maxRetries)
+            if (
+                err &&
+                typeof err === 'object' &&
+                'status' in err &&
+                err.status === 401 &&
+                retryCount < maxRetries
+              ) {
+                console.log('refresh try')
+                try {
+                  await refreshTokenFn();
+                  // 재시도 횟수 증가
+                  await loadProgramDetails(retryCount + 1, maxRetries);
+                } catch (refreshError) {
+                  console.error('토큰 갱신 실패:', refreshError);
+                  setLoading(false);
+                }
+              } else {
+                console.error('프로그램 로드 실패:', err);
+                setLoading(false);
+              }
         }
     }, [handleChangeMonth, id]);
 

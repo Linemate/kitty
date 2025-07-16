@@ -12,13 +12,17 @@ const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { 
     const handleLogin = () => {
         router.push('/login');
     };
+    // 마이페이지로
+    const viewMypage = () => {
+        router.push('/mypage');
+    };
     return (
         <div className="menu_wrap">
             <div className="menu_header">
                 <div className="menu_header_left">
                     <Button text="Close" classnames="close img" type="button" onclick={closeMenu} />
                 </div>
-                {isLogin || getCookie('USERINFO') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={handleLogin} />}
+                {isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={handleLogin} />}
             </div>
             <div className="menu_body">
                 <div className="menu_body_item">

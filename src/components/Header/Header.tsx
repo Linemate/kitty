@@ -46,6 +46,10 @@ const Header = (props: headerProps) => {
     const handleBack = () => {
         router.back();
     };
+    // 마이페이지로
+    const viewMypage = () => {
+        router.push('/mypage');
+    };
 
     // isMobile이 null이면 SSR에서는 기본 값을 사용
     if (isMobile === null) return null;
@@ -66,7 +70,7 @@ const Header = (props: headerProps) => {
                     <div className="header_right">
                         <Button type={'img text left'} classnames={`language`} text={language === 'kr' ? 'KR' : 'EN'} onclick={() => setOpenLanguage(!openLanguage)} />
                         <Button type={'img'} classnames={'like'} text={'찜한 목록으로'} onclick={viewLikeList} />
-                        {isMobile ? <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={handleOpenMenu} /> : isLogin || getCookie('USERINFO') ? <span className="logined">Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />}
+                        {isMobile ? <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={handleOpenMenu} /> : isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />}
                         {openLanguage ? (
                             <>
                                 <div className="options">

@@ -1,15 +1,21 @@
 'use client'
-import { TextButtonWithIcon } from 'components/common/Button';
+import { Button, TextButtonWithIcon } from 'components/common/Button';
 import Header from 'components/Header/Header';
+import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const MypageHeader = () => {
     const router = useRouter();
+    const isMobile = useMobile();
     // 페이지 이동
     const viewPage = (pageName: string) => {
         router.push(`/mypage/${pageName}`);
     };  
+    // 프로필 수정
+    const handleEditProfile = () => {
+        router.push('/mypage/profile');
+    }
     return (
         <div>
             {/* Header & Key visual */}
@@ -24,6 +30,9 @@ const MypageHeader = () => {
                             <h3 className="user_name">Happy123</h3>
                             <div className="join_date">2024.01.24 JOIN</div>
                         </div>
+                        {
+                            isMobile ? <><Button type={'text'} classnames={'wide border lightgray'} text={'프로필 수정'} onclick={handleEditProfile} /></> : ''
+                        }
                         <div className="btns_area">
                             <ul>
                                 <li>

@@ -11,6 +11,7 @@ import { deleteInquiry, getInquiries, postInquiry, refreshToken } from 'api';
 import dateTimeOfLanguage from 'utils/dateTimeOfLanguage';
 import { useAuthStore, useLanguage } from 'utils/stores';
 import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
 
 const QnaItem = (props: qnaProps) => {
     const { qna, language, handleDelete } = props;
@@ -38,19 +39,20 @@ const QnaItem = (props: qnaProps) => {
                 )}
             </div>
             <div className="qna_body">
-                {isSecret ? (
-                    <div className="ico lock qna_contents">Private post.</div>
-                ) : (
-                    <div className="qna_contents">
-                        {seeMore ? content?.substring(0, 200) : content}
-                        {seeMore && content && content.length >= 200 && '...'}
-                        {seeMore && content && content.length >= 200 && (
-                            <div className="see_more_wrap">
-                                <Button classnames={'lightgray'} type={'text'} text={`See More`} onclick={handleSeeMore} />
-                            </div>
-                        )}
-                    </div>
-                )}
+                <div className={`${isSecret ? 'ico lock' : ''} qna_contents`}>
+                    {
+                        !content || content === '' ? 'Private post.' : <>
+                        
+                            {seeMore ? content?.substring(0, 200) : content}
+                            {seeMore && content && content.length >= 200 && '...'}
+                            {seeMore && content && content.length >= 200 && (
+                                <div className="see_more_wrap">
+                                    <Button classnames={'lightgray'} type={'text'} text={`See More`} onclick={handleSeeMore} />
+                                </div>
+                            )}
+                        </>
+                    }
+                </div>
                 {
                     // 답변
                     answer && answer.id && (
@@ -120,11 +122,23 @@ const Qna = ({ id }: { id: string }) => {
     };
 
     // 토큰 재발급
-    const refreshTokenFn = useCallback(async () => {
-        const res = await refreshToken();
-        const data = res.data;
-        setUserInfo(data);
-    }, []);
+    const refreshTokenFn = async () => {
+        try {
+            const cookies = parseCookies();
+            const user = cookies.USERINFO;
+            const userInfo = JSON.parse(user);
+            if (userInfo) {
+                const res = await refreshToken(userInfo.id, userInfo.refreshToken);
+                setUserInfo({ ...res.data });
+            } else {
+                alert('로그인이 필요해요.');
+                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
+                return;
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    };
 
     // submit
     const handleSubmit = async () => {
