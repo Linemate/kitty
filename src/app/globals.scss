@@ -198,7 +198,9 @@ button {background:none; border:none; cursor:pointer;}
       &::before {
         width:24px;
         height:24px;
-          background-image:url('/assets/images/icon/ico_right_circle_arrow.png');
+        background-image:url('/assets/images/icon/ico_right_circle_arrow.png');
+        top: 50%;
+        transform: translateY(-50%);
       }
   }
   &.heart.gray_line {

@@ -1,36 +1,37 @@
 'use client'
+import useMobile from 'hooks/useMobile';
 import React from 'react';
 
 const MypageSideMenu = () => {
+    const isMobile = useMobile();
     return (
         <div>
             <div className="side_menu">
-            <h3>MY PAGE</h3>
+            {
+                isMobile ? '' : <h3>MY PAGE</h3>
+            }
             <div className="menus">
+                {
+                    isMobile ? '' : 
+                    <dl>
+                        <dt>
+                            <div>Edit Profile</div>
+                        </dt> 
+                    </dl>
+                }
                 <dl>
                     <dt>
-                        <div>MY SETTING</div>
-                    </dt>
-                    <dd>
-                        <div>Profile</div>
-                    </dd>
-                    <dd>
-                        <div>Personal Information</div>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <div>PAYMENT</div>
+                        <div>Payment History</div>
                     </dt>
                 </dl>
                 <dl>
                     <dt>
-                        <div>NOTICE</div>
+                        <div>Notice</div>
                     </dt>
                 </dl>
                 <dl>
                     <dt>
-                        <div>LOGOUT</div>
+                        <div>Logout</div>
                     </dt>
                 </dl>
             </div>

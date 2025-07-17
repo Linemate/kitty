@@ -22,7 +22,7 @@
                     margin-right: 32px;
                     .none {
                         width: 114px;
-                        height: 114 px;
+                        height: 114px;
                         background: var(--color-neutral-700) url('/assets/images/icon/ico_default_profile.png') no-repeat center;
                         background-size: 70px;
                         border-radius:90px;
@@ -113,19 +113,16 @@
                         }
                     }
                     .menus {
-                        padding-top: 32px;
+                        padding-top: 8px;
                         dl {
-                            &:not(:first-child) {
-                                padding-top: 48px;
-                            }
+                            padding:16px 0;
                         }
                         dt {
                             div {
                                 font-family: 'Pretendard';
-                                line-height: 27px;
-                                font-size: 18px;
-                                font-weight: 700;
-                                padding-bottom: 16px;
+                                line-height: 22px;
+                                font-size: 16px;
+                                font-weight: 500;
                             }
                         }
                         dd {
@@ -143,7 +140,7 @@
                 .contents_area {
                     flex: 1;
                     .intro {
-                        padding-bottom: 9px;
+                        padding-bottom: 8px;
                         margin-bottom: 32px;
                         display: flex;
                         flex-direction: row;
@@ -167,21 +164,21 @@
                         }
                         .btn.all {
                             color: var(--color-neutral-400);
-                            font-size: 16px;
+                            font-size: 13px;
                             font-weight: 500;
-                            line-height: 32px;
+                            line-height:20px;
+                            padding-right:26px;
                         }
                     }
 
                     .my_events {
                         display: flex;
                         flex-direction: row;
-                        justify-content: center;
+                        justify-content: space-between;
                         margin-bottom: 64px;
                         .my_event {
+                            flex:1;
                             cursor: pointer;
-                            padding-left: 96px;
-                            padding-right: 120px;
                             text-align: center;
                             position: relative;
                             &.active {
@@ -215,15 +212,15 @@
                                 background: url('/assets/images/btn/btn_arrow_gray_right.png') center;
                                 background-size: 100%;
                                 position: absolute;
-                                right: 0;
+                                right: -12px;
                                 top: 50%;
                                 transform: translateY(-50%);
                             }
                             &:first-child {
-                                padding-left: 0;
+                                padding-right: 0;
                             }
                             &:last-child {
-                                padding-right: 0;
+                                padding-left:0;
                                 &::before {
                                     display: none;
                                 }
@@ -245,15 +242,15 @@
                                 font-size: 16px;
                                 font-weight: 500;
                                 line-height: 24px;
-                                color: var(--color-neutral-400);
+                                color: var(--color-neutral-500);
                                 &.first_line {
                                     margin-bottom: 2px;
                                 }
                             }
-                            .btn.programs {
-                                padding: 13px 33px;
-                                font-size: 16px;
+                            .btn.around {
+                                font-size: 13px;
                                 line-height: 20px;
+                                padding:8px 16px;
                                 color: var(--color-neutral-200);
                             }
                         }
@@ -356,17 +353,36 @@
                         margin-right: 0;    
                         padding-bottom: 40px;
                         border-bottom: 1px solid var(--color-neutral-600);
+                        .menus {
+                            dl {
+                                border-bottom:1px solid var(--color-neutral-700);
+                                &:last-child {
+                                    border-bottom:none;
+                                }
+                            }
+                        }
                     }
                     .contents_area {
                         .my_events {
+                            margin-bottom:32px;
                             .my_event {
-                                padding-left:28px;
-                                padding-right: 52px;
-                                &:first-child {
-                                    padding-left:0;
+                                .num {
+                                    font-size:24px;
+                                    line-height:32px;
+                                    margin-bottom:4px;
                                 }
-                                &:last-child {
-                                    padding-right:0;
+                                .text {
+                                    font-size:12px;
+                                    line-height:16px;
+                                }
+                            }
+                        }
+                        .programs {
+                            .nothing {
+                                margin-bottom:12px;
+                                p {
+                                    font-size:14px;
+                                    line-height:22px;
                                 }
                             }
                         }

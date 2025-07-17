@@ -18,7 +18,7 @@ const MypageHeader = () => {
     }
     return (
         <div>
-            {/* Header & Key visual */}
+            {/* Header */}
             <Header title={'라인메이트 메인'} />
             <div className="my_info">
                 <div className="my_info_inner">

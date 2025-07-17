@@ -3,14 +3,15 @@ import { Button } from '@mui/material';
 import React, { ReactElement } from 'react';
 import 'styles/program.scss';
 import { programInMypageProps } from 'types/types';
+import useMobile from 'hooks/useMobile';
 
 
 const ProgramInMypage = (props:programInMypageProps) => {
     const {id, name, status, date, applyDate, type, location, children } = props;
-    console.log('program')
+    const isMobile = useMobile();
 
     return (
-        <div className='item'>
+        <div className={`item ${isMobile ? 'mobile' : ''}`}>
             <div className='item_desc_area'>
                 <div className='img_area'>
                 </div>
@@ -21,7 +22,6 @@ const ProgramInMypage = (props:programInMypageProps) => {
                         :
                         <div className='program_state'>
                             <span className={`approve_status ${status}`}>{status}</span>
-                            <span className='date'>{applyDate} apply</span>
                         </div>
                     }
                     <div className='program_name'>
@@ -34,7 +34,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                     </div>
                     <div className='program_place'>
                         <div className='ico location gray'>{location}</div> 
-                    </div>
+                    </div> 
                 </div>
             </div>
             {

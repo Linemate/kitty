@@ -58,8 +58,12 @@ const Header = (props: headerProps) => {
         <div className={`header ${isMobile ? 'mobile' : ''} ${isMobileDesc ? 'desc' : ''}`}>
             {(isMobile && isMobileDesc) || isDepth ? (
                 <div className={`header_inner depth`}>
-                    <Button type={'img'} classnames={'back'} text={'뒤로가기'} onclick={handleBack} />
-                    {isMobileDesc ? btns : <div className="header_title">{title}</div>}
+                    <div className='header_left'>
+                        <Button type={'img'} classnames={'back'} text={'뒤로가기'} onclick={handleBack} />
+                        {isMobileDesc ? btns : <div className="header_title">{title}</div>}
+                    </div>
+                    <div className='header_right'>
+                    </div>
                 </div>
             ) : (
                 <div className="header_inner">
