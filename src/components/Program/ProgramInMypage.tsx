@@ -21,7 +21,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                         ''
                         :
                         <div className='program_state'>
-                            <span className={`approve_status ${status}`}>{status}</span>
+                            <span className={`approve_status ${status}`}>{status === 'request' ? 'Cancel Request' : status}</span>
                         </div>
                     }
                     <div className='program_name'>

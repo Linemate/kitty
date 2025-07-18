@@ -10,7 +10,14 @@ import 'styles/mypage.scss';
 
 const MyAllReservations = () => {
     const [isModal, setIsModal] = useState<boolean>(false);
+    const [tab, setTab] = useState('upcoming');
     const isMobile = useMobile();
+
+    // 탭 변경
+    const changeTab = (tabText:string) => {
+        setTab(tabText);
+    }
+
     // 취소
     const cancelProgram = (id:string) => {
         
@@ -52,7 +59,7 @@ const MyAllReservations = () => {
     }
 
     return (
-        <div className='all'>
+        <div className='mypage all'>
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className='intro'></div>
                 {/* Header */}
@@ -61,33 +68,29 @@ const MyAllReservations = () => {
                 <div className='tab_area'>
                     <div className='tab rounded'>
                         <ul>
-                            <li className='selected'>Waiting</li>
-                            <li>Upcoming</li>
-                            <li>Attended</li>
-                            <li>Canceled</li>
-                        </ul>
+                            <li className={`${tab === 'upcoming' ? 'selected' : ''}`} onClick={() => changeTab('upcoming')}>Upcoming</li>
+                            <li className={`${tab === 'attended' ? 'selected' : ''}`} onClick={() => changeTab('attended')}>Attended</li>
+                            <li className={`${tab === 'canceled' ? 'selected' : ''}`} onClick={() => changeTab('canceled')}>Canceled</li>
+                        </ul> 
                     </div>
                 </div>
-                <div className='programs'>
+                <div className='programs_area'>
                     <div className='list'>
                         {/* Waiting */}
                         <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
-                            <Button type='text' classnames='border lightgray programs cancel' onclick={() => cancelProgram('1')} text='Cancel' />
+                            <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
                         </ProgramInMypage>
-                        {/* Upcoming */}
-                        <ProgramInMypage id={2} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'upcoming'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
-                            <>
-                                <Button type='text' classnames='blue ico arrow_right' onclick={() => checkLocation('2')} text='Check Location' />
-                                <Button type='text' classnames='border lightgray programs cancel' onclick={() => cancelProgram('2')} text='Cancel' />
-                            </>
+                        {/* Cancel Request */}
+                        <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'request'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
+                            <Button type='text' classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
                         </ProgramInMypage>
                         {/* Attended */}
                         <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
-                            <Button type='text' classnames='border blue review' onclick={() => leaveReview('3')} text='Leave Review' />
+                            <Button type='text' classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text='Leave Review' />
                         </ProgramInMypage>
                         {/* Canceled */}
                         <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'canceled'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
-                                <Button type='text' classnames='border lightgray programs cancel' onclick={() => viewCancelDetail('3')} text='Cancel Detail' />
+                                <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => viewCancelDetail('3')} text='Cancel Detail' />
                         </ProgramInMypage>
                     </div>
                     <div className='paging'>

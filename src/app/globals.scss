@@ -360,7 +360,7 @@ button {background:none; border:none; cursor:pointer;}
   line-height:20px;
   text-align:center;
   font-weight:500;
-  &.waiting, &.ask {
+  &.waiting, &.ask, &.request {
       background-color:#FFFBFB;
       color:#EF7777;
   }
@@ -395,13 +395,13 @@ button {background:none; border:none; cursor:pointer;}
   &.rounded {
     ul {
         li {
-            padding: 8px 16px;
+            padding: 8px 12px;
             border: 1px solid var(--color-neutral-600);
             font-weight:400;
-            font-size:16px;
-            line-height:24px;
+            font-size:14px;
+            line-height:22px;
             border-radius:100px;
-            margin-right:12px;
+            margin-right:8px;
             color:var(--color-neutral-200);
             cursor:pointer;
             &.selected {
@@ -462,6 +462,7 @@ button {background:none; border:none; cursor:pointer;}
       font-weight:700;
       line-height:20px;
       padding:10px 0;
+      cursor:pointer;
       &.selected {
         color:var(--color-primary-400);
       }

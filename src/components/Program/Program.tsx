@@ -55,7 +55,6 @@ const Program = (props: programCompProps) => {
     const shareProgram = (str: string) => {
         console.log(str);
     };
-    console.log(program);
     return (
         <div className={`program_comp ${isMobile ? 'mobile' : ''} ${isDetails ? 'details' : 'element'}`}>
             <div className="img_area" onClick={viewDetails} style={{ backgroundImage: `url(${program.thumbnail})` }}></div>

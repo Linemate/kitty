@@ -391,4 +391,24 @@
             }
         }
     }
+    &.all {
+        padding-top:56px;
+        background-color:var(--color-neutral-800);
+        .wrapper {
+            .tab_area {
+                padding:24px 16px 16px;
+                .tab {
+                    ul {
+                        li {
+                            font-size:13px;
+                            line-height:20px;
+                        }
+                    }
+                }
+            }
+            .programs_area {
+                padding:0 16px;
+            }
+        }
+    }
 }

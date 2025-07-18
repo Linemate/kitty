@@ -8,7 +8,6 @@ import { Button } from 'components/common/Button';
 import { getLogin } from 'api';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
-import { clearDuplicateCookies } from 'utils/clearDuplicateCookies';
 
 const initValues = {
     email: '',
@@ -64,7 +63,7 @@ const LoginContent = () => {
     }, [redirectUrl, router, setUserInfo, values, viewPage]);
 
     useEffect(() => {
-        clearDuplicateCookies();
+        // clearDuplicateCookies();
         return () => {
             setValues(initValues);
         };
@@ -75,7 +74,7 @@ const LoginContent = () => {
             {isMobile && (
                 <>
                     {/* Header & Key visual */}
-                    <Header title={'라인메이트 메인'} />
+                    <Header title={''} />
                 </>
             )}
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>

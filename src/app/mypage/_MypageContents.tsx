@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const MypageContents = () => {
-    const [tab, setTab] = useState('upcoming');
+    const [tab, setTab] = useState('waiting');
     const isMobile = useMobile();
     const router = useRouter();
     // 전체보기로 이동
@@ -46,10 +46,6 @@ const MypageContents = () => {
                     <div className="num">6</div>
                     <div className="text">Waiting</div>
                 </div>
-                <div className={`my_event upcoming ${tab === 'upcoming' ? 'active' : ''}`} onClick={() => changeTab('upcoming')}>
-                    <div className="num">0</div>
-                    <div className="text">Upcoming</div>
-                </div>
                 <div className={`my_event attended ${tab === 'attended' ? 'active' : ''}`} onClick={() => changeTab('attended')}>
                     <div className="num">12</div>
                     <div className="text">Attended</div>
@@ -62,18 +58,6 @@ const MypageContents = () => {
                     <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
                         <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text="Cancel" />
                     </ProgramInMypage>
-                    {/* Upcoming */}
-                    <ProgramInMypage id={2} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'upcoming'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
-                        <>
-                            {
-                                isMobile ? 
-                                '' :
-                                <Button type="text" classnames="blue ico arrow_right" onclick={() => checkLocation('2')} text="Check Location" />
-
-                            }
-                            <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('2')} text="Cancel" />
-                        </>
-                    </ProgramInMypage>
                     {/* Attended */}
                     <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
                         <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text="Leave Review" />
@@ -83,10 +67,10 @@ const MypageContents = () => {
                 <div className="nothing">
                     <div className="bg">
                         <div className="notice">
-                            <p className="first_line">현재 신청한 모임이 없습니다.</p>
-                            <p>지금 라인메이트의 모임을 둘러보세요!</p>
+                            <p className="first_line">No meetings applied yet.</p>
+                            <p>Explore Line Mate's meetings now!</p>
                         </div>
-                        <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="모임 둘러보기" />
+                        <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
                     </div>
                 </div>
             </div>

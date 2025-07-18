@@ -97,7 +97,7 @@ export const confirmPayments = async (values: paymentsConfirmProps) => {
 
 // 프로그램 문의 조회
 export const getInquiries = async (id: string, pageNum: number) => {
-    const res = await publicApi.get(`/programs/${id}/inquiries`);
+    const res = await privateApi.get(`/programs/${id}/inquiries`);
     return res.data;
 };
 

@@ -74,6 +74,11 @@
             background-color:var(--color-neutral-600);
             color:#fff;
         }
+        &.bg_darkgray {
+            background: #7676801F;
+            color: var(--color-neutral-500);
+            cursor:default;
+        }
         &.radius_none {
             border-radius: 0px;
         }

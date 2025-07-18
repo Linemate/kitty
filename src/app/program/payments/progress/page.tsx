@@ -50,7 +50,7 @@ const PaymentsProgressContent = () => {
             <div className="payment">
                 <div className={`wrapper progress ${isMobile ? 'mobile' : ''}`}>
                     {/* header */}
-                    <Header title={'라인메이트 메인'} isDepth={false} isMobileDesc={false} />
+                    <Header title={''} isDepth={false} isMobileDesc={false} />
 
                     <div className="img_area">
                         <div className="ico progress"></div>
