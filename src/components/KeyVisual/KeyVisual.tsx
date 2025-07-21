@@ -11,7 +11,7 @@ const KeyVisual = (props:keyVisualProps) => {
         router.push('');
     }
     return (
-        <>
+        <div className='key_visual_wrapper'>
             {
                 props.onlyBg ? 
                 <img src={props.src} alt='key visual' /> : <div className='bg'>
@@ -20,7 +20,7 @@ const KeyVisual = (props:keyVisualProps) => {
                     </div>
                 </div>
             }
-        </>
+        </div>
     );
 };
 

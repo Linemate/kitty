@@ -1,14 +1,18 @@
 'use client'
-import { Button } from '@mui/material';
 import React, { ReactElement } from 'react';
 import 'styles/program.scss';
 import { programInMypageProps } from 'types/types';
 import useMobile from 'hooks/useMobile';
+import { Button } from 'components/common/Button';
 
 
 const ProgramInMypage = (props:programInMypageProps) => {
     const {id, name, status, date, applyDate, type, location, children } = props;
     const isMobile = useMobile();
+
+    const checkLocation = (id:string) => {
+        console.log('checkLocation');
+    }
 
     return (
         <div className={`item ${isMobile ? 'mobile' : ''}`}>
@@ -37,12 +41,16 @@ const ProgramInMypage = (props:programInMypageProps) => {
                     </div> 
                 </div>
             </div>
-            {
-                children ? 
-                <div className='btn_area'>
-                    {children}
-                </div> : <></>
-            }
+            <div className='btn_wrapper'>
+                <Button type='text' classnames={`blue right_arrow`} onclick={() => checkLocation('1')} text='Check Location' />
+                {
+                    children ? 
+                    <div className='btn_area'>
+                        {children}
+                    </div>
+                    : <></>
+                }
+            </div>
         </div>
     );
 };

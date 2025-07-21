@@ -337,12 +337,12 @@
     .btn_area {
         display:flex;
         flex-direction: row;
-        align-items: center;
-        .btn {
-            border-radius:8px;
-            line-height:22px;
-        }
-        .btn.blue {
+        align-items: center;        
+    }
+    .btn {
+        border-radius:8px;
+        line-height:22px;
+        &.blue {
             display:inline-block;
             width:120px;
             text-align:right;
@@ -361,7 +361,7 @@
                 font-weight:500;
             }
         }
-        .btn.cancel {
+        &.cancel {
             width:140px;
             box-sizing: border-box;
             font-weight:500;
@@ -393,11 +393,28 @@
         .program_date {
             margin-bottom:4px;
         }
+        .program_place {
+            margin-bottom:8px;
+        }
+        .btn_wrapper {
+            width:100%;
+        }
         .btn_area {
             width:100%;
             margin-top:16px;
-            .btn.wide {
-                width:100%;
+            flex-direction: column;
+            align-items: flex-start;
+            .btn {
+                &.wide {
+                    width:100%;
+                }
+            }
+        }
+        .btn {
+            &.right_arrow {
+                margin-left:78px;
+                margin-right:0;
+                padding-right:16px;
             }
         }
     }

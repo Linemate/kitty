@@ -109,6 +109,16 @@
                 background-image:url('/assets/images/icon/ico_language.png');
             }
         }
+        &.right_arrow {
+            &::after {
+                width:16px;
+                height:16px;
+                background-image:url('/assets/images/icon/ico_arrow_right_blue.png');
+                position:absolute;
+                right:0;
+                top:3px;
+            }
+        }
     }
     &.img {
         width:24px;
