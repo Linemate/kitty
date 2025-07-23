@@ -1,31 +1,20 @@
 'use client';
+import { getCancelReasons } from 'api';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import 'styles/cancelPage.scss';
+import { cancelReasonProps } from 'types/types';
+import { useParams, useSearchParams } from 'next/navigation';
 
-const options = [
-    {
-        id: 1,
-        text: '개인 일정 변경',
-    },
-    {
-        id: 2,
-        text: '단순 변심',
-    },
-    {
-        id: 3,
-        text: '모임 내용 변경으로 인한 참여불가',
-    },
-    {
-        id: 4,
-        text: '오랜 대기 문제',
-    },
-];
 const Cancel = () => {
+    const reservationId = useSearchParams().get('reservationId');
+    const {id} = useParams();
     const maxLength = 200;
     const inputRef = useRef<HTMLDivElement>(null);
+    // options
+    const [options, setOptions] = useState<cancelReasonProps[]>([]);
     // 선택창 자세히 보기
     const [openSelectOptions, setOpenSelectOptions] = useState<boolean>(false);
     // 선택항목 중 기타 input 열기
@@ -41,6 +30,16 @@ const Cancel = () => {
     const [isChecked, setIsChecked] = useState<boolean>(false);
     // 모임 취소하기 버튼 활성화
     const [isBtnActive, setIsBtnActive] = useState<boolean>(false);
+
+    // 취소 사유 조회
+    const loadCancelReasons = useCallback(async () => {
+        try {
+            const res = await getCancelReasons(Number(id), Number(reservationId));
+            setOptions(res);
+        } catch (error) {
+            console.log(error);
+        }
+    }, [id, reservationId]);
 
     // 선택창 자세히 보기 on/off
     const handleOpenSelectOptions = () => {
@@ -95,6 +94,20 @@ const Cancel = () => {
     const handleChecked = () => {
         setIsChecked(!isChecked);
     };
+
+    useEffect(() => {
+        if (selectedReasonId === 0) {
+            setIsBtnActive(false);
+        } else if (selectedReasonId === 1 && !activeDetailReason) {
+            setIsBtnActive(false);
+        } else {
+            setIsBtnActive(true);
+        }
+    }, [selectedReasonId, activeDetailReason])
+
+    useEffect(() => {
+        loadCancelReasons();
+    }, [loadCancelReasons])
 
     return (
         <div className="cancel">

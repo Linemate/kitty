@@ -7,9 +7,12 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const MypageContents = () => {
+    const [reservationHistory, setReservationHistory] = useState<any[]>([]);
     const [tab, setTab] = useState('waiting');
     const isMobile = useMobile();
     const router = useRouter();
+
+
     // 전체보기로 이동
     const viewMorePage = () => {
         router.push('/mypage/all');
@@ -25,7 +28,9 @@ const MypageContents = () => {
     };
 
     // 취소
-    const cancelProgram = (id: string) => {};
+    const cancelProgram = (id: number, reservationId: number) => {
+        router.push(`/cancel/${id}?reservationId=${reservationId}`)
+    };
 
     // 위치 확인하기
     const checkLocation = (id: string) => {};
@@ -56,7 +61,7 @@ const MypageContents = () => {
                 <div className="list">
                     {/* Waiting */}
                     <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
-                        <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text="Cancel" />
+                        <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(1, 1)} text="Cancel" />
                     </ProgramInMypage>
                     {/* Attended */}
                     <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
@@ -68,7 +73,7 @@ const MypageContents = () => {
                     <div className="bg">
                         <div className="notice">
                             <p className="first_line">No meetings applied yet.</p>
-                            <p>Explore Line Mate's meetings now!</p>
+                            <p>Explore Line Mate&apos;s meetings now!</p>
                         </div>
                         <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
                     </div>

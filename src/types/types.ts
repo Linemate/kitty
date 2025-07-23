@@ -335,3 +335,29 @@ export type inquiryProps = {
     content: string;
     isSecret: boolean;
 };
+
+// 프로그램 예약 취소
+export type cancelProps = {
+    id:number;
+    reservationId:number;
+    reason:string;
+}
+
+// 프로그램 예약 취소 사유 옵션
+export type cancelReasonProps = {
+    code:string;
+    sortOrder:number;
+    label:string;
+}
+
+// 프로그램 신청내역 조회
+export type reservationHistoryProps = {
+    id:string;
+    status: string;
+    startDate: string;
+    createdAt: string;
+    updatedAt: string;
+    thumbnail: string;
+    station: string;
+    title: string;
+}

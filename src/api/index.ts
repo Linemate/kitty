@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
+import { cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
 import { getCookie } from 'utils/cookiesFunction';
 import { useAuthStore } from 'utils/stores';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
@@ -123,5 +123,22 @@ export const postProgramLike = async (id: number) => {
 export const refreshToken = async (buddyId:number, refreshToken:string) => {
     const res = await privateApi.post(`/refresh`, {data : {buddyId, refreshToken}});
     console.log('token~~~~~~~~~~!')
+    return res.data;
+};
+// 예약 취소 사유 리스트 조회
+export const getCancelReasons = async (id:number, reservationId: number) => {
+    const res = await publicApi.get(`/programs/${id}/reservation/${reservationId}/cancel-reasons`);
+    return res.data;
+};
+
+// 프로그램 예약 취소
+export const postCancelReason = async (values:cancelProps) => {
+    const res = await privateApi.post(`/programs/${values.id}/reservation/${values.reservationId}/cancel`, {data: {reason: values.reason}});
+    return res.data;
+};
+
+// 프로그램 신청내역 조회
+export const getReservationHistory = async (pageNum:number, status:string) => {
+    const res = await privateApi.get(`/buddy/programs/enrolled?page=${pageNum}&size=10&sort=id%2Cdesc&status=${status}`);
     return res.data;
 };
