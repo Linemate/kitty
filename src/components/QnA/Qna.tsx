@@ -18,7 +18,6 @@ const QnaItem = (props: qnaProps) => {
     const { id, buddy, title, content, answer, isSecret, createdAt } = qna;
     const [seeMore, setSeeMore] = useState<boolean>(true);
     const handleQnaDelete = () => {
-        console.log('delete');
         handleDelete(id);
     };
     const handleSeeMore = () => {
@@ -32,7 +31,7 @@ const QnaItem = (props: qnaProps) => {
                     <span className="username">{buddy.name}</span>
                     <span className="date">{dateTimeOfLanguage(createdAt, language)}</span>
                 </div>
-                {!answer && (
+                {!answer && qna.isOwner && (
                     <div className="right">
                         <Button classnames={'lightgray'} type={'text'} text={`Delete`} onclick={handleQnaDelete} />
                     </div>

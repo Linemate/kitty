@@ -298,28 +298,15 @@ export type qnaItemProps = {
         updatedAt: string;
     };
     isSecret: boolean;
+    isOwner: boolean;
     createdAt: string;
     updatedAt: string;
 };
 export type responsePaymentProps = {
-    id: number;
-    status: string;
+    reservationId: number;
     orderId: string;
-    orderName: string;
-    taxExemptionAmount: number;
-    useEscrow: boolean;
-    cultureExpense: boolean;
-    isInterestFree: boolean;
-    useCardPoint: boolean;
-    easyPayAmount: number;
-    easyPayDiscountAmount: number;
-    country: string;
-    isPartialCancelable: boolean;
-    currency: string;
-    totalAmount: number;
-    requestedAt: string;
-    createdAt: string;
-    updatedAt: string;
+    amount:number;
+    scheduleId:number;
 };
 
 export type confirmPaymentProps = {
@@ -352,7 +339,7 @@ export type cancelReasonProps = {
 
 // 프로그램 신청내역 조회
 export type reservationHistoryProps = {
-    id:string;
+    id:number;
     status: string;
     startDate: string;
     createdAt: string;

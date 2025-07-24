@@ -121,8 +121,7 @@ export const postProgramLike = async (id: number) => {
 
 // 토큰 재발급
 export const refreshToken = async (buddyId:number, refreshToken:string) => {
-    const res = await privateApi.post(`/refresh`, {data : {buddyId, refreshToken}});
-    console.log('token~~~~~~~~~~!')
+    const res = await privateApi.post(`/auth/refresh`, {buddyId, refreshToken});
     return res.data;
 };
 // 예약 취소 사유 리스트 조회
@@ -137,8 +136,14 @@ export const postCancelReason = async (values:cancelProps) => {
     return res.data;
 };
 
+// 프로그램 신청내역 집계 조회
+export const getReservationHistoryCount = async () => {
+    const res = await privateApi.get(`/buddy/programs/enrolled/summary`);
+    return res.data;
+};
+
 // 프로그램 신청내역 조회
-export const getReservationHistory = async (pageNum:number, status:string) => {
-    const res = await privateApi.get(`/buddy/programs/enrolled?page=${pageNum}&size=10&sort=id%2Cdesc&status=${status}`);
+export const getReservationHistory = async (pageNum:number, size:number, status:string) => {
+    const res = await privateApi.get(`/buddy/programs/enrolled?page=${pageNum}&size=${size}&sort=id%2Cdesc&status=${status}`);
     return res.data;
 };

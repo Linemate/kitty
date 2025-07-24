@@ -177,12 +177,12 @@ const ProgramDetails = () => {
     };
 
     // 토큰 재발급
-    const refreshTokenFn = async () => {
+    const refreshTokenFn = useCallback(async () => {
         try {
             const cookies = parseCookies();
             const user = cookies.USERINFO;
             const userInfo = JSON.parse(user);
-            if (userInfo) {
+            if (userInfo && userInfo.id) {
                 const res = await refreshToken(userInfo.id, userInfo.refreshToken);
                 setUserInfo({ ...res.data });
                 console.log(res);
@@ -194,7 +194,7 @@ const ProgramDetails = () => {
         } catch(err) {
             console.log(err);
         }
-    };
+    }, [id, router, userInfo]);
 
     // 예약하기 api 호출
     const handleReservation = useCallback(async () => {
@@ -377,7 +377,7 @@ const ProgramDetails = () => {
                 setLoading(false);
               }
         }
-    }, [handleChangeMonth, id]);
+    }, [handleChangeMonth, id, userInfo]);
 
     // 토스 창 닫기
     const closeWidget = () => {
@@ -435,8 +435,15 @@ const ProgramDetails = () => {
     }, [param]);
 
     useEffect(() => {
+        if (userInfo && userInfo.id) {
+            refreshTokenFn();
+        }
+    }, [userInfo, refreshTokenFn])
+
+    useEffect(() => {
         loadProgramDetails();
     }, [loadProgramDetails, id]);
+    
     useEffect(() => {
         if (program.htmlFilePath !== '') {
             fetch(program.htmlFilePath)

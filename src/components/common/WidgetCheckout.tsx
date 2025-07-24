@@ -64,8 +64,8 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
             // TODO: renderPaymentMethods, renderAgreement, requestPayment 보다 반드시 선행되어야 합니다.
             // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
             await widgets.setAmount({
-                currency: responsePayment.currency === 'KR' ? 'KRW' : 'KRW',
-                value: responsePayment.totalAmount,
+                currency: 'KRW',
+                value: responsePayment.amount,
             });
 
             await Promise.all([
