@@ -354,8 +354,6 @@ const ProgramDetails = () => {
             setRecommendPrograms(data.recommendPrograms);
             handleChangeMonth(today);
         } catch (err) {
-            console.log(typeof err === 'object')
-            console.log(retryCount < maxRetries)
             if (
                 err &&
                 typeof err === 'object' &&

@@ -360,7 +360,7 @@ button {background:none; border:none; cursor:pointer;}
   line-height:20px;
   text-align:center;
   font-weight:500;
-  &.waiting, &.ask, &.request {
+  &.ask, &.request {
       background-color:#FFFBFB;
       color:#EF7777;
   }

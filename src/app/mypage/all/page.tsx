@@ -77,21 +77,21 @@ const MyAllReservations = () => {
                 <div className='programs_area'>
                     <div className='list'>
                         {/* Waiting */}
-                        <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
+                        {/* <ProgramInMypage id={1} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
                             <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
-                        </ProgramInMypage>
+                        </ProgramInMypage> */}
                         {/* Cancel Request */}
-                        <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'request'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
+                        {/* <ProgramInMypage id={1} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'request'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
                             <Button type='text' classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
-                        </ProgramInMypage>
+                        </ProgramInMypage> */}
                         {/* Attended */}
-                        <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
+                        {/* <ProgramInMypage id={4} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
                             <Button type='text' classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text='Leave Review' />
-                        </ProgramInMypage>
+                        </ProgramInMypage> */}
                         {/* Canceled */}
-                        <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'canceled'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
+                        {/* <ProgramInMypage id={4} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'canceled'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
                                 <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => viewCancelDetail('3')} text='Cancel Detail' />
-                        </ProgramInMypage>
+                        </ProgramInMypage> */}
                     </div>
                     <div className='paging'>
                         <ul>

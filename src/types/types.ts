@@ -160,10 +160,13 @@ export type popupProps = {
 export type programInMypageProps = {
     id: number;
     status: string;
-    name: string;
-    date: string;
-    applyDate: string;
-    location: string;
+    startDate: string;
+    reservationId: number;
+    createdAt: string;
+    updatedAt: string;
+    thumbnail: string;
+    station: string;
+    title:string;
     type?: string;
     children?: ReactElement;
 };
@@ -340,6 +343,7 @@ export type cancelReasonProps = {
 // 프로그램 신청내역 조회
 export type reservationHistoryProps = {
     id:number;
+    reservationId:number;
     status: string;
     startDate: string;
     createdAt: string;

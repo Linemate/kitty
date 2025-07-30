@@ -7,17 +7,26 @@ import { Button } from 'components/common/Button';
 
 
 const ProgramInMypage = (props:programInMypageProps) => {
-    const {id, name, status, date, applyDate, type, location, children } = props;
+    const {id, title, status, thumbnail, startDate, createdAt, updatedAt, station, type, children } = props;
     const isMobile = useMobile();
 
-    const checkLocation = (id:string) => {
+    const checkLocation = (id:number) => {
         console.log('checkLocation');
     }
+
+    const formatDate = () => {
+        const dateObj = new Date(startDate);
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth() + 1;
+        const day = dateObj.getDate();
+        return `${year}.${month}.${day}`;
+    }
+
 
     return (
         <div className={`item ${isMobile ? 'mobile' : ''}`}>
             <div className='item_desc_area'>
-                <div className='img_area'>
+                <div className='img_area' style={{backgroundImage: `url(${thumbnail})`}}>
                 </div>
                 <div className='text_area'>
                     {
@@ -30,19 +39,19 @@ const ProgramInMypage = (props:programInMypageProps) => {
                     }
                     <div className='program_name'>
                         <div className='ellipsis'>
-                            {name}
+                            {title}
                         </div>
                     </div>
                     <div className='program_date'>
-                        {date}
+                        {formatDate()}
                     </div>
                     <div className='program_place'>
-                        <div className='ico location gray'>{location}</div> 
+                        <div className='ico location gray'>{station}</div> 
                     </div> 
                 </div>
             </div>
             <div className='btn_wrapper'>
-                <Button type='text' classnames={`blue right_arrow`} onclick={() => checkLocation('1')} text='Check Location' />
+                <Button type='text' classnames={`blue right_arrow`} onclick={() => checkLocation(id)} text='Check Location' />
                 {
                     children ? 
                     <div className='btn_area'>

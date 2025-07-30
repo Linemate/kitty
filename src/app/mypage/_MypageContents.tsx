@@ -32,9 +32,9 @@ const MypageContents = () => {
     // 프로그램 신청 내역
     const loadReservationHistory = useCallback(async () => {
         try {
-            const res = await getReservationHistory(1, 2, tab);
-            setReservationHistory(res);
-            console.log(res);
+            const res = await getReservationHistory(0, 2, tab);
+            const list = res.data.list;
+            setReservationHistory(list);
         } catch (err) {
             console.log(err);
         }
@@ -55,9 +55,9 @@ const MypageContents = () => {
     };
 
     // 취소
-    const cancelProgram = (id: number) => {
+    const cancelProgram = (id: number, reservationId: number) => {
         // 결제한 paymentsHistoryId가 필요한데..
-        router.push(`/cancel/${id}`)
+        router.push(`/cancel/${id}?programId=${id}&reservationId=${reservationId}`)
     };
 
     // 위치 확인하기
@@ -115,21 +115,21 @@ const MypageContents = () => {
                         <>
                             {
                                 reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                    <ProgramInMypage key={index} id={el.id} name={el.title} status={el.status} applyDate={el.startDate} date={el.startDate} location={el.station}>
-                                        <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id)} text="Cancel" />
+                                    <ProgramInMypage key={index} id={el.id} thumbnail={el.thumbnail} title={el.title} status={el.status} startDate={el.startDate} reservationId={el.reservationId} createdAt={el.createdAt} updatedAt={el.updatedAt} station={el.station}>
+                                        <Button type="text" classnames={`border lightgray programs ${(el.status === 'waiting' || el.status === 'canceled') && 'border lightgray' || el.status === 'request' && 'bg_darkgray' || el.status === 'attended' && 'border blue'}  cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id, el.reservationId)} text="Cancel" />
                                     </ProgramInMypage>
                                 )
                             }
                         </>
                     }
                     {/* Waiting */}
-                    <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
+                    {/* <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
                         <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(1)} text="Cancel" />
-                    </ProgramInMypage>
+                    </ProgramInMypage> */}
                     {/* Attended */}
-                    <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
+                    {/* <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>
                         <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text="Leave Review" />
-                    </ProgramInMypage>
+                    </ProgramInMypage> */}
                 </div>
             </div>
         </div>

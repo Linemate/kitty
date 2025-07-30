@@ -118,7 +118,7 @@ const Cancel = () => {
                     <div className="section">
                         <div className="sub_title">모임 정보</div>
                         <div className="desc">
-                            <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'} type={'simple'} />
+                            {/* <ProgramInMypage id={4} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'} type={'simple'} /> */}
                         </div>
                     </div>
                     <div className="section">
