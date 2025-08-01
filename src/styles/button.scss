@@ -47,6 +47,7 @@
             border-radius:8px;
             &.blue {
                 border:1px solid var(--color-primary-400);
+                color: var(--color-primary-500);
             }
             &.lightgray {
                 border:1px solid var(--color-neutral-600);

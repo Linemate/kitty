@@ -18,7 +18,7 @@ const Favorite = (props: favoriteProps) => {
         <div className={`favorite_wrap ${props.size} ${props.isMate ? 'mate' : 'program'}`}>
             <div className="favorite_area">
                 <div className="ico_favorite">
-                    <Button type="img" classnames={`img heart ${props.isFilledHeart ? 'filled' : ''} ${props.isMate ? 'mate' : ''} ${props.isLiked ? 'filled' : ''}`} text="Heart" onclick={(e: React.MouseEvent<HTMLButtonElement>) => handleClick(e)} />
+                    <Button type="img" classnames={`heart ${props.isFilledHeart || props.isLiked ? 'filled' : ''} ${props.isMate ? 'mate' : ''}`} text="Heart" onclick={(e: React.MouseEvent<HTMLButtonElement>) => handleClick(e)} />
                 </div>
                 {typeof props.numberOfLike === 'number' && <div className="amount">{props.numberOfLike.toLocaleString()}</div>}
             </div>

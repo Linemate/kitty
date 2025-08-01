@@ -210,7 +210,7 @@ button {background:none; border:none; cursor:pointer;}
   }
   &.heart.red {
       &::before {
-        background-image:url('/assets/images/btn/btn_heart.png');
+        background-image:url('/assets/images/btn/btn_heart_filled.png');
       }
   }
   &.thumb {

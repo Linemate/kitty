@@ -1,13 +1,19 @@
 'use client'
+import { getBuddyDetails } from 'api';
 import { Button, TextButtonWithIcon } from 'components/common/Button';
 import Header from 'components/Header/Header';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { buddyProfileProps } from 'types/types';
+import { formatDate } from 'utils/formatDate';
+import { useAuthStore } from 'utils/stores';
 
 const MypageHeader = () => {
     const router = useRouter();
     const isMobile = useMobile();
+    const userInfo = useAuthStore.getState().userInfo;
+    const [buddyInfo, setBuddyInfo] = useState<buddyProfileProps | null>(null);
     // 페이지 이동
     const viewPage = (pageName: string) => {
         router.push(`/mypage/${pageName}`);
@@ -16,6 +22,15 @@ const MypageHeader = () => {
     const handleEditProfile = () => {
         router.push('/mypage/profile');
     }
+    
+    useEffect(() => {
+        const loadBuddyInfo = async () => {
+            const res = await getBuddyDetails(userInfo?.id || 0);
+            const data = res.data;
+            setBuddyInfo(data);
+        }
+        loadBuddyInfo();
+    }, [userInfo])
     return (
         <div>
             {/* Header */}
@@ -27,8 +42,15 @@ const MypageHeader = () => {
                     </div>
                     <div className="desc_area">
                         <div className="user_desc_area">
-                            <h3 className="user_name">Happy123</h3>
-                            <div className="join_date">2024.01.24 JOIN</div>
+                            {
+                                buddyInfo ?
+                                <>
+                                    <h3 className="user_name">{buddyInfo.name}</h3>
+                                    <div className="join_date">{formatDate(buddyInfo.createdAt)} JOIN</div>
+                                </>
+                                :
+                                ''
+                            }
                         </div>
                         {
                             isMobile ? <><Button type={'text'} classnames={'wide border lightgray'} text={'프로필 수정'} onclick={handleEditProfile} /></> : ''

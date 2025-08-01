@@ -115,8 +115,23 @@ const MypageContents = () => {
                         <>
                             {
                                 reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                    <ProgramInMypage key={index} id={el.id} thumbnail={el.thumbnail} title={el.title} status={el.status} startDate={el.startDate} reservationId={el.reservationId} createdAt={el.createdAt} updatedAt={el.updatedAt} station={el.station}>
-                                        <Button type="text" classnames={`border lightgray programs ${(el.status === 'waiting' || el.status === 'canceled') && 'border lightgray' || el.status === 'request' && 'bg_darkgray' || el.status === 'attended' && 'border blue'}  cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id, el.reservationId)} text="Cancel" />
+                                    <ProgramInMypage key={index} programId={el.id} reservationId={el.reservationId} label={el.label} paymentsStatus={el.paymentsStatus} reservationStatus={el.reservationStatus} title={el.title} thumbnail={el.thumbnail} startDate={el.startDate} station={el.station} createdAt={el.createdAt} updatedAt={el.updatedAt}>
+                                        {
+                                            el.label === '참여예정' ?
+                                            <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id, el.reservationId)} text="Cancel" />
+                                            :
+                                            <>
+                                                {
+                                                el.label === '참여완료' ?
+                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.id.toString())} text="Leave Review" />
+                                                :
+                                                el.label === '취소요청' ?
+                                                <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id, el.reservationId)} text="Cancel" />
+                                                :
+                                                ''
+                                                }
+                                            </>
+                                        }
                                     </ProgramInMypage>
                                 )
                             }

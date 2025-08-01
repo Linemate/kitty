@@ -226,7 +226,7 @@ const ProgramDetails = () => {
         } catch (err) {
             console.log(err);
             if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
-                // await refreshTokenFn();
+                await refreshTokenFn();
             } else {
                 alert((err as any).response?.data?.message || '오류가 발생했습니다.');
             }

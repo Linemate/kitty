@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
+import { buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
 import { getCookie } from 'utils/cookiesFunction';
 import { useAuthStore } from 'utils/stores';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
@@ -37,7 +37,7 @@ privateApi.interceptors.request.use(
 
 // 컬렉션 전체 조회
 export const getCollections = async () => {
-    const res = await publicApi.get(`/collections`);
+    const res = await privateApi.get(`/collections`);
     return res.data;
 };
 
@@ -145,5 +145,17 @@ export const getReservationHistoryCount = async () => {
 // 프로그램 신청내역 조회
 export const getReservationHistory = async (pageNum:number, size:number, status:string) => {
     const res = await privateApi.get(`/buddy/programs/enrolled?page=${pageNum}&size=${size}&sort=id%2Cdesc&status=${status}`);
+    return res.data;
+};
+
+// 버디 상세조회
+export const getBuddyDetails = async (buddyId:number) => {
+    const res = await privateApi.get(`/buddy/${buddyId}`);
+    return res.data;
+};
+
+// 버디 프로필 수정
+export const putBuddyProfile = async (buddyId:number, values:buddyProfileProps) => {
+    const res = await privateApi.put(`/buddy/${buddyId}`, values);
     return res.data;
 };

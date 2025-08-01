@@ -7,7 +7,7 @@ import { Button } from 'components/common/Button';
 
 
 const ProgramInMypage = (props:programInMypageProps) => {
-    const {id, title, status, thumbnail, startDate, createdAt, updatedAt, station, type, children } = props;
+    const {programId, reservationId, label, paymentsStatus, reservationStatus, title, thumbnail, startDate, station, type, children } = props;
     const isMobile = useMobile();
 
     const checkLocation = (id:number) => {
@@ -34,7 +34,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                         ''
                         :
                         <div className='program_state'>
-                            <span className={`approve_status ${status}`}>{status === 'request' ? 'Cancel Request' : status}</span>
+                            <span className={`approve_status ${label === '참여예정' ? 'waiting' : label === '취소요청' ? 'request' : 'attended'}`}>{label}</span>
                         </div>
                     }
                     <div className='program_name'>
@@ -51,7 +51,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                 </div>
             </div>
             <div className='btn_wrapper'>
-                <Button type='text' classnames={`blue right_arrow`} onclick={() => checkLocation(id)} text='Check Location' />
+                <Button type='text' classnames={`blue right_arrow`} onclick={() => checkLocation(programId)} text='Check Location' />
                 {
                     children ? 
                     <div className='btn_area'>

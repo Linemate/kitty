@@ -158,10 +158,12 @@ export type popupProps = {
 };
 
 export type programInMypageProps = {
-    id: number;
-    status: string;
+    programId: number;
+    reservationId:number;
+    label:string;
+    reservationStatus: string;
+    paymentsStatus: string;
     startDate: string;
-    reservationId: number;
     createdAt: string;
     updatedAt: string;
     thumbnail: string;
@@ -344,11 +346,23 @@ export type cancelReasonProps = {
 export type reservationHistoryProps = {
     id:number;
     reservationId:number;
-    status: string;
+    label: string;
+    paymentsStatus: string;
+    reservationStatus: string;
     startDate: string;
     createdAt: string;
     updatedAt: string;
     thumbnail: string;
     station: string;
     title: string;
+    type:string;
+}
+
+// 버디 상세 조회
+export type buddyProfileProps = {
+    name: string;
+    password: string;
+    image: imageProps;
+    locale: string;
+    createdAt: string;
 }
