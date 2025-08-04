@@ -394,8 +394,10 @@
     }
     &.all {
         padding-top:56px;
+        min-height:100vh;
         background-color:var(--color-neutral-800);
         .wrapper {
+            background-color:var(--color-neutral-800);
             .tab_area {
                 padding:24px 16px 16px;
                 .tab {
@@ -407,8 +409,11 @@
                     }
                 }
             }
-            .programs_area {
-                padding:0 16px;
+            .contents_inner {
+                display:block;
+                .contents_area {
+                    padding:0 16px;
+                }
             }
         }
     }

@@ -24,6 +24,7 @@ const MypageHeader = () => {
     }
     
     useEffect(() => {
+        console.log(userInfo);
         const loadBuddyInfo = async () => {
             const res = await getBuddyDetails(userInfo?.id || 0);
             const data = res.data;

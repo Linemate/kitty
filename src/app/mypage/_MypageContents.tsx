@@ -13,7 +13,7 @@ const MypageContents = () => {
         upcoming: 0,
         completed: 0
     });
-    const [reservationHistory, setReservationHistory] = useState<any[]>([]);
+    const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [tab, setTab] = useState('UPCOMING');
     const isMobile = useMobile();
     const router = useRouter();
@@ -56,7 +56,6 @@ const MypageContents = () => {
 
     // 취소
     const cancelProgram = (id: number, reservationId: number) => {
-        // 결제한 paymentsHistoryId가 필요한데..
         router.push(`/cancel/${id}?programId=${id}&reservationId=${reservationId}`)
     };
 
