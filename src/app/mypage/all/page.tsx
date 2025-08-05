@@ -6,7 +6,7 @@ import ProgramInMypage from 'components/Program/ProgramInMypage';
 import Title from 'components/Title/Title';
 import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/mypage.scss';
 import { reservationHistoryProps } from 'types/types';
 import { useRouter } from 'next/navigation';
@@ -78,6 +78,10 @@ const MyAllReservations = () => {
     const closePortal = () => {
         setIsModal(false);
     }
+    
+    useEffect(() => {
+        loadReservationHistory();
+    }, [loadReservationHistory, tab])
 
     return (
         <div className='mypage all'>

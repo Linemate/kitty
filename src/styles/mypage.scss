@@ -398,21 +398,26 @@
         background-color:var(--color-neutral-800);
         .wrapper {
             background-color:var(--color-neutral-800);
-            .tab_area {
-                padding:24px 16px 16px;
-                .tab {
-                    ul {
-                        li {
-                            font-size:13px;
-                            line-height:20px;
+            .contents_inner {
+                flex-direction: column;
+                .contents_area {
+                    padding:0 16px;
+                }
+            }
+            &.mobile {
+                .tab_area {
+                    padding-top:24px;
+                    .tab {
+                        ul {
+                            li {
+                                font-size:13px;
+                                line-height:20px;
+                            }
                         }
                     }
                 }
-            }
-            .contents_inner {
-                display:block;
-                .contents_area {
-                    padding:0 16px;
+                .contents_inner {
+                    display:block;
                 }
             }
         }
