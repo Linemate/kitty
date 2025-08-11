@@ -14,16 +14,21 @@ import { useRouter } from 'next/navigation';
 const MyAllReservations = () => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [isModal, setIsModal] = useState<boolean>(false);
-    const [tab, setTab] = useState('upcoming');
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
+    const [tab, setTab] = useState('UPCOMING');
     const isMobile = useMobile();
     const router = useRouter();
 
     // 프로그램 신청 내역
     const loadReservationHistory = useCallback(async () => {
         try {
-            const res = await getReservationHistory(0, 2, tab);
-            const list = res.data.list;
+            const res = await getReservationHistory(0, 10, tab);
+            const data = res.data;
+            const list = data.list;
             setReservationHistory(list);
+            setTotalPages(data.totalPages);
+            console.log(list)
         } catch (err) {
             console.log(err);
         }
@@ -31,7 +36,7 @@ const MyAllReservations = () => {
     
     // 탭 변경
     const changeTab = (tabText:string) => {
-        setTab(tabText);
+        setTab(tabText.toUpperCase());
     }
 
     // 모임 둘러보기 페이지로 이동
@@ -94,9 +99,9 @@ const MyAllReservations = () => {
                         <div className='tab_area'>
                             <div className='tab rounded'>
                                 <ul>
-                                    <li className={`${tab === 'upcoming' ? 'selected' : ''}`} onClick={() => changeTab('upcoming')}>Upcoming</li>
-                                    <li className={`${tab === 'attended' ? 'selected' : ''}`} onClick={() => changeTab('attended')}>Attended</li>
-                                    <li className={`${tab === 'canceled' ? 'selected' : ''}`} onClick={() => changeTab('canceled')}>Canceled</li>
+                                    <li className={`${tab === 'UPCOMING' ? 'selected' : ''}`} onClick={() => changeTab('upcoming')}>Upcoming</li>
+                                    <li className={`${tab === 'COMPLETED' ? 'selected' : ''}`} onClick={() => changeTab('completed')}>Attended</li>
+                                    <li className={`${tab === 'CANCELED' ? 'selected' : ''}`} onClick={() => changeTab('canceled')}>Canceled</li>
                                 </ul> 
                             </div>
                         </div>
@@ -126,6 +131,11 @@ const MyAllReservations = () => {
                                                         <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id, el.reservationId)} text="Cancel" />
                                                         :
                                                         <>
+                                                            {
+                                                                el.label === '참여완료'?
+                                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text="Leave Review" />
+                                                                :''
+                                                            }
                                                         </>
                                                     }
                                                 </ProgramInMypage>
@@ -152,19 +162,15 @@ const MyAllReservations = () => {
                             </div>
                             <div className='paging'>
                                 <ul>
-                                    <li className='disabled'>
+                                    <li className={`${page === 1 ? 'disabled' : ''}`}>
                                         <Button type='img' classnames='prev' onclick={() => viewPrev()} text='이전' />
                                     </li>
-                                    <li className='selected' onClick={() => viewPaging(1)}>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                    <li>4</li>
-                                    <li>5</li>
-                                    <li>6</li>
-                                    <li>7</li>
-                                    <li>8</li>
-                                    <li>9</li>
-                                    <li className=''>
+                                    {
+                                        Array.from({length: totalPages}, (_, index) => (
+                                            <li key={index} className={`${page === index + 1 ? 'selected' : ''}`} onClick={() => viewPaging(index + 1)}>{index + 1}</li>
+                                        ))
+                                    }
+                                    <li className={`${page === totalPages || page === totalPages - 1 ? 'disabled' : ''}`}>
                                         <Button type='img' classnames='next' onclick={() => viewNext()} text='다음' />
                                     </li>
                                 </ul>

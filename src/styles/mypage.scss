@@ -123,6 +123,7 @@
                                 line-height: 22px;
                                 font-size: 16px;
                                 font-weight: 500;
+                                cursor:pointer;
                             }
                         }
                         dd {
@@ -418,6 +419,12 @@
                 }
                 .contents_inner {
                     display:block;
+                    .contents_area {
+                        padding:0;
+                        .programs {
+                            padding-top:16px;
+                        }
+                    }
                 }
             }
         }
