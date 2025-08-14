@@ -337,6 +337,7 @@ export type cancelProps = {
 
 // 프로그램 예약 취소 사유 옵션
 export type cancelReasonProps = {
+    id: number;
     code:string;
     sortOrder:number;
     label:string;
@@ -344,7 +345,7 @@ export type cancelReasonProps = {
 
 // 프로그램 신청내역 조회
 export type reservationHistoryProps = {
-    id:number;
+    programId:number;
     reservationId:number;
     label: string;
     paymentsStatus: string;
@@ -355,7 +356,6 @@ export type reservationHistoryProps = {
     thumbnail: string;
     station: string;
     title: string;
-    type:string;
 }
 
 // 버디 상세 조회

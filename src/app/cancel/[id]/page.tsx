@@ -10,6 +10,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 
 const Cancel = () => {
     const reservationId = useSearchParams().get('reservationId');
+    const price = useSearchParams().get('price');
     const {id} = useParams();
     const maxLength = 200;
     const inputRef = useRef<HTMLDivElement>(null);
@@ -24,8 +25,6 @@ const Cancel = () => {
     const [detailReason, setDetailReason] = useState<string>('');
     // 상세 사유 활성화
     const [activeDetailReason, setActiveDetailReason] = useState<boolean>(false);
-    // 한글 조합 중
-    const [isComposing, setIsComposing] = useState(false);
     // check icon
     const [isChecked, setIsChecked] = useState<boolean>(false);
     // 모임 취소하기 버튼 활성화
@@ -35,7 +34,9 @@ const Cancel = () => {
     const loadCancelReasons = useCallback(async () => {
         try {
             const res = await getCancelReasons(Number(id), Number(reservationId));
-            setOptions(res);
+            const data = res.data;
+            setOptions(data);
+            console.log(res)
         } catch (error) {
             console.log(error);
         }
@@ -47,17 +48,15 @@ const Cancel = () => {
     };
 
     // 선택창에서 선택
-    const handleSelect = (id: number, text: string) => {
-        setSelectedReasonId(id);
-        setSelectedReasonText(text);
+    const handleSelect = (el: cancelReasonProps) => {
+        setSelectedReasonId(el.id);
+        setSelectedReasonText(el.label);
         setDetailReason('');
-        setOpenInputOfEtc(false);
-    };
-
-    // 기타 선택
-    const selectEtc = () => {
-        handleOpenSelectOptions();
-        setOpenInputOfEtc(true);
+        if (el.code === 'OTHER') {
+            setOpenInputOfEtc(true);
+        } else {
+            setOpenInputOfEtc(false);
+        }
     };
 
     // 기타 - 상세 사유 입력
@@ -98,12 +97,12 @@ const Cancel = () => {
     useEffect(() => {
         if (selectedReasonId === 0) {
             setIsBtnActive(false);
-        } else if (selectedReasonId === 1 && !activeDetailReason) {
+        } else if (selectedReasonId !== 0 && (!activeDetailReason && !isChecked || detailReason.trim().length === 0 && !isChecked)) {
             setIsBtnActive(false);
         } else {
             setIsBtnActive(true);
         }
-    }, [selectedReasonId, activeDetailReason])
+    }, [selectedReasonId, activeDetailReason, isChecked, detailReason])
 
     useEffect(() => {
         loadCancelReasons();
@@ -135,14 +134,11 @@ const Cancel = () => {
                                 {openSelectOptions && (
                                     <div className="select_options">
                                         <ul>
-                                            {options.map((el: any) => (
-                                                <li key={el.id} onClick={() => handleSelect(el.id, el.text)}>
-                                                    <div className="option">{el.text}</div>
+                                            {options.map((el: cancelReasonProps) => (
+                                                <li key={el.id} onClick={() => handleSelect(el)} className={`${selectedReasonId === el.id ? 'selected' : ''}`}>
+                                                    <div className="option">{el.label}</div>
                                                 </li>
                                             ))}
-                                            <li onClick={selectEtc}>
-                                                <div className="option">기타</div>
-                                            </li>
                                         </ul>
                                     </div>
                                 )}
@@ -162,7 +158,7 @@ const Cancel = () => {
                                 </div>
                             </div>
                             <div className="input_wrap">
-                                <div className="input" ref={inputRef} contentEditable onInput={handleInput} suppressContentEditableWarning onCompositionStart={handleInput} onCompositionEnd={handleInput} />
+                                <div className="input" ref={inputRef} onClick={inputDetails} contentEditable onInput={handleInput} suppressContentEditableWarning onCompositionStart={handleInput} onCompositionEnd={handleInput} />
                                 {!activeDetailReason && (
                                     <div className="input_helper" onClick={inputDetails}>
                                         취소하는 상세한 사유를 입력해주세요.

@@ -394,36 +394,44 @@
         }
     }
     &.all {
-        padding-top:56px;
-        min-height:100vh;
-        background-color:var(--color-neutral-800);
-        .wrapper {
+        &.mobile {
+
+            padding-top:56px;
+            min-height:100vh;
             background-color:var(--color-neutral-800);
-            .contents_inner {
-                flex-direction: column;
-                .contents_area {
-                    padding:0 16px;
+            .wrapper {
+                background-color:var(--color-neutral-800);
+                .contents_inner {
+                    flex-direction: column;
+                    .contents_area {
+                        padding:0 16px;
+                    }
                 }
-            }
-            &.mobile {
-                .tab_area {
-                    padding-top:24px;
-                    .tab {
-                        ul {
-                            li {
-                                font-size:13px;
-                                line-height:20px;
+                &.mobile {
+                    .tab_area {
+                        padding-top:24px;
+                        .tab {
+                            ul {
+                                li {
+                                    font-size:13px;
+                                    line-height:20px;
+                                }
+                            }
+                        }
+                    }
+                    .contents_inner {
+                        display:block;
+                        .contents_area {
+                            padding:0;
+                            .programs {
+                                padding-top:16px;
                             }
                         }
                     }
                 }
-                .contents_inner {
-                    display:block;
-                    .contents_area {
-                        padding:0;
-                        .programs {
-                            padding-top:16px;
-                        }
+                &.pc {
+                    .tab_area {
+                        padding-bottom:24px;
                     }
                 }
             }

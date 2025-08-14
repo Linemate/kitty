@@ -109,7 +109,6 @@
                 }
             }
             .btn_area {
-                padding-bottom: 150px;
                 text-align: center;
                 .btn {
                     width: 335px;
@@ -119,6 +118,12 @@
                 }
                 &:nth-child(2) {
                     margin-top: 16px;
+                }
+            }
+            .last {
+                margin-top:16px;
+                .btn_area {
+                    padding-bottom:150px;
                 }
             }
         }

@@ -35,6 +35,7 @@ const MypageContents = () => {
             const res = await getReservationHistory(0, 2, tab);
             const list = res.data.list;
             setReservationHistory(list);
+            console.log(list)
         } catch (err) {
             console.log(err);
         }
@@ -56,7 +57,7 @@ const MypageContents = () => {
 
     // 취소
     const cancelProgram = (id: number, reservationId: number) => {
-        router.push(`/cancel/${id}?programId=${id}&reservationId=${reservationId}`)
+        router.push(`/cancel/${id}?reservationId=${reservationId}&price=${0}`)
     };
 
     // 위치 확인하기
@@ -114,18 +115,18 @@ const MypageContents = () => {
                         <>
                             {
                                 reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                    <ProgramInMypage key={index} programId={el.id} reservationId={el.reservationId} label={el.label} paymentsStatus={el.paymentsStatus} reservationStatus={el.reservationStatus} title={el.title} thumbnail={el.thumbnail} startDate={el.startDate} station={el.station} createdAt={el.createdAt} updatedAt={el.updatedAt}>
+                                    <ProgramInMypage key={index} programId={el.programId} reservationId={el.reservationId} label={el.label} paymentsStatus={el.paymentsStatus} reservationStatus={el.reservationStatus} title={el.title} thumbnail={el.thumbnail} startDate={el.startDate} station={el.station} createdAt={el.createdAt} updatedAt={el.updatedAt}>
                                         {
                                             el.label === '참여예정' ?
-                                            <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id, el.reservationId)} text="Cancel" />
+                                            <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
                                             :
                                             <>
                                                 {
                                                 el.label === '참여완료' ?
-                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.id.toString())} text="Leave Review" />
+                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId.toString())} text="Leave Review" />
                                                 :
                                                 el.label === '취소요청' ?
-                                                <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.id, el.reservationId)} text="Cancel" />
+                                                <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
                                                 :
                                                 ''
                                                 }
