@@ -11,14 +11,13 @@ import Menu from 'components/common/Menu';
 import { getCookie } from 'utils/cookiesFunction';
 
 const Header = (props: headerProps) => {
-    const { title, isDepth, isMobileDesc, btns } = props;
+    const { title, isDepth, isMobileDesc, btns, isLogin } = props;
     const [openLanguage, setOpenLanguage] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const isMobile = useMobile();
     const router = useRouter();
     const language = useLanguage((state) => state.language);
     const setLanguage = useLanguage((state) => state.setLanguage);
-    const isLogin = useAuthStore.getState().userInfo?.token;
     const changeLang = (lang: string) => {
         console.log('dddd');
     };

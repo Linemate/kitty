@@ -16,6 +16,8 @@ const initValues = {
 const LoginContent = () => {
     const [values, setValues] = useState(initValues);
     const language = useLanguage((state) => state.language);
+    // 로그인 여부
+    const userInfo = useAuthStore.getState().userInfo;
     const setUserInfo = useAuthStore.getState().setUserInfo;
     const searchParams = useSearchParams();
     // redirect url
@@ -74,7 +76,7 @@ const LoginContent = () => {
             {isMobile && (
                 <>
                     {/* Header & Key visual */}
-                    <Header title={''} />
+                    <Header title={''} isLogin={userInfo !== null} />
                 </>
             )}
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>

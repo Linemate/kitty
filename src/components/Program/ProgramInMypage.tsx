@@ -5,9 +5,25 @@ import { programInMypageProps } from 'types/types';
 import useMobile from 'hooks/useMobile';
 import { Button } from 'components/common/Button';
 
+export const initProgramInMypage = {
+    programId:0,
+    reservationId:0,
+    label: '',
+    paymentsStatus: '',
+    reservationStatus: '',
+    startDate: '',
+    createdAt: '',
+    updatedAt: '',
+    thumbnail: '',
+    station: '',
+    title: '',
+    price: 0,
+    currency: ''
+}
 
 const ProgramInMypage = (props:programInMypageProps) => {
-    const {programId, reservationId, label, paymentsStatus, reservationStatus, title, thumbnail, startDate, station, type, children } = props;
+    const { programInMypage, type, children } = props;
+    const { programId, reservationId, label, paymentsStatus, reservationStatus, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency } = programInMypage;
     const isMobile = useMobile();
 
     const checkLocation = (id:number) => {

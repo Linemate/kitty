@@ -1,19 +1,22 @@
 'use client';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import BottomButton from '../_Button';
 import 'styles/toss.scss';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import useMobile from 'hooks/useMobile';
+import { useAuthStore } from 'utils/stores';
 
 const PaymentsSuccessContent = () => {
     const isMobile = useMobile();
+    const userInfo = useAuthStore.getState().userInfo;
+
     return (
         <>
             <div className="payment">
                 <div className={`wrapper success ${isMobile ? 'mobile' : ''}`}>
                     {/* header */}
-                    <Header title={''} isDepth={false} isMobileDesc={false} />
+                    <Header title={''} isDepth={false} isMobileDesc={false} isLogin={userInfo !== null} />
 
                     <div className="img_area">
                         <div className="ico success"></div>

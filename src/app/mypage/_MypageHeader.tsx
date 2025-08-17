@@ -28,6 +28,7 @@ const MypageHeader = () => {
         const loadBuddyInfo = async () => {
             const res = await getBuddyDetails(userInfo?.id || 0);
             const data = res.data;
+            console.log(data);
             setBuddyInfo(data);
         }
         loadBuddyInfo();
@@ -35,7 +36,7 @@ const MypageHeader = () => {
     return (
         <div>
             {/* Header */}
-            <Header title={'라인메이트 메인'} />
+            <Header title={'라인메이트 메인'} isLogin={userInfo !== null} />
             <div className="my_info">
                 <div className="my_info_inner">
                     <div className="img_area">

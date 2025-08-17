@@ -52,7 +52,7 @@ const tabsData = [
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const initProgram = {
+export const initProgram = {
     category: {
         id: 0,
         title: '',
@@ -184,8 +184,8 @@ const ProgramDetails = () => {
             const userInfo = JSON.parse(user);
             if (userInfo && userInfo.id) {
                 const res = await refreshToken(userInfo.id, userInfo.refreshToken);
-                setUserInfo({ ...res.data });
-                console.log(res);
+                const data = res.data;
+                setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
             } else {
                 alert('로그인이 필요해요.');
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
@@ -312,7 +312,8 @@ const ProgramDetails = () => {
                 const fullD = `${year}${month < 10 ? '0' + month : month}${d < 10 ? '0' + d : d}`;
                 const res = await getProgramSchedules(id, fullD);
                 const data = res.data;
-                setAvailableTimes(data);
+                const timeList = data.filter((el:scheduleProps) => new Date(el.reservationDate).getTime() > today.getTime());
+                setAvailableTimes(timeList);
                 setSelectedTime(initTime);
             } catch (err) {
                 console.log(err);
@@ -363,6 +364,7 @@ const ProgramDetails = () => {
               ) {
                 console.log('refresh try')
                 try {
+                    console.log('??');
                   await refreshTokenFn();
                   // 재시도 횟수 증가
                   await loadProgramDetails(retryCount + 1, maxRetries);
@@ -433,12 +435,6 @@ const ProgramDetails = () => {
     }, [param]);
 
     useEffect(() => {
-        if (userInfo && userInfo.id) {
-            refreshTokenFn();
-        }
-    }, [userInfo, refreshTokenFn])
-
-    useEffect(() => {
         loadProgramDetails();
     }, [loadProgramDetails, id]);
     
@@ -462,7 +458,7 @@ const ProgramDetails = () => {
         <div className="program">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header & Key visual */}
-                <Header title={''} isDepth={false} isMobileDesc={true} btns={btns()} />
+                <Header title={''} isDepth={false} isMobileDesc={true} btns={btns()} isLogin={userInfo !== null} />
                 {loading ? (
                     ''
                 ) : (
@@ -492,7 +488,7 @@ const ProgramDetails = () => {
                                         <div className="calendar_wrap">
                                             <div className="calendar_area">
                                                 <div className="calendar">
-                                                    <ReactDatePicker onChange={handleChangeDate} onMonthChange={handleChangeMonth} includeDates={availableDates} inline />
+                                                    <ReactDatePicker onChange={handleChangeDate} onMonthChange={handleChangeMonth} includeDates={availableDates} minDate={today} inline />
                                                 </div>
                                                 <div className="guide">
                                                     <div className="available_area">

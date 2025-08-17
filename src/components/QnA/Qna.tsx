@@ -128,7 +128,8 @@ const Qna = ({ id }: { id: string }) => {
             const userInfo = JSON.parse(user);
             if (userInfo) {
                 const res = await refreshToken(userInfo.id, userInfo.refreshToken);
-                setUserInfo({ ...res.data });
+                const data = res.data;
+                setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
             } else {
                 alert('로그인이 필요해요.');
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);

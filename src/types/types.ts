@@ -97,6 +97,7 @@ export type headerProps = {
     isDepth?: boolean;
     isMobileDesc?: boolean;
     btns?: ReactNode;
+    isLogin: boolean;
 };
 
 export type keyVisualProps = {
@@ -158,17 +159,7 @@ export type popupProps = {
 };
 
 export type programInMypageProps = {
-    programId: number;
-    reservationId:number;
-    label:string;
-    reservationStatus: string;
-    paymentsStatus: string;
-    startDate: string;
-    createdAt: string;
-    updatedAt: string;
-    thumbnail: string;
-    station: string;
-    title:string;
+    programInMypage: reservationHistoryProps;
     type?: string;
     children?: ReactElement;
 };
@@ -330,9 +321,12 @@ export type inquiryProps = {
 
 // 프로그램 예약 취소
 export type cancelProps = {
-    id:number;
-    reservationId:number;
-    reason:string;
+    programId:string;
+    reservationId:string;
+    reason: {
+        reasonCodeId: number;
+        reasonDetail: string;
+    }
 }
 
 // 프로그램 예약 취소 사유 옵션
@@ -356,6 +350,8 @@ export type reservationHistoryProps = {
     thumbnail: string;
     station: string;
     title: string;
+    price: number;
+    currency: string;
 }
 
 // 버디 상세 조회

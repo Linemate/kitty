@@ -10,6 +10,7 @@ import 'styles/mypage.scss';
 import { reservationHistoryProps } from 'types/types';
 import { useRouter } from 'next/navigation';
 import MyPageTab from './_Tab';
+import { useAuthStore } from 'utils/stores';
 
 const MyAllReservationsMobile = () => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
@@ -19,6 +20,9 @@ const MyAllReservationsMobile = () => {
     const [tab, setTab] = useState('UPCOMING');
     const isMobile = useMobile();
     const router = useRouter();
+
+    // 로그인 여부
+    const userInfo = useAuthStore.getState().userInfo;
 
     // 프로그램 신청 내역
     const loadReservationHistory = useCallback(async () => {
@@ -97,7 +101,7 @@ const MyAllReservationsMobile = () => {
             <div className={`wrapper mobile`}>
                 <div className='intro'></div>
                 {/* Header */}
-                <Header title={'My Events'} isDepth={true} />
+                <Header title={'My Events'} isDepth={true} isLogin={userInfo !== null} />
                 <div className='contents'>
                     <div className='contents_inner'>
                         <MyPageTab tab={tab} changeTab={changeTab} />
@@ -121,7 +125,7 @@ const MyAllReservationsMobile = () => {
                                     <>
                                         {
                                             reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                                <ProgramInMypage key={index} programId={el.programId} reservationId={el.reservationId} label={el.label} paymentsStatus={el.paymentsStatus} reservationStatus={el.reservationStatus} title={el.title} thumbnail={el.thumbnail} startDate={el.startDate} station={el.station} createdAt={el.createdAt} updatedAt={el.updatedAt}>
+                                                <ProgramInMypage key={index} programInMypage={el}>
                                                     {
                                                         el.label === '참여예정' ?
                                                         <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />

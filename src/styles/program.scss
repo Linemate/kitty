@@ -203,6 +203,9 @@
                             width:24px;
                             height:24px;
                             background-image:url('/assets/images/btn/btn_heart_gray_line.png');
+                            &.filled {
+                                background-image:url('/assets/images/btn/btn_heart_filled.png');
+                            }
                         }
                     }
                 }

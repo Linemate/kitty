@@ -6,12 +6,14 @@
         width:100%;
         margin:0 auto; 
         padding:45px 80px 15px;
+        position:relative;
         box-sizing: border-box;
         display:flex;
         flex-direction:row;
         justify-content:space-between;
         align-items:center;
         &.depth {
+            max-width:704px;
             padding:20px 4px;
         }
     }
@@ -92,9 +94,6 @@
                     }
                 }
             }
-        }
-        &.desc {
-            
         }
     }
 }

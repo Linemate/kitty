@@ -132,7 +132,7 @@ export const getCancelReasons = async (id:number, reservationId: number) => {
 
 // 프로그램 예약 취소
 export const postCancelReason = async (values:cancelProps) => {
-    const res = await privateApi.post(`/programs/${values.id}/reservation/${values.reservationId}/cancel`, {data: {reason: values.reason}});
+    const res = await privateApi.post(`/programs/${values.programId}/reservation/${values.reservationId}/cancel`, {data: {reason: values.reason}});
     return res.data;
 };
 

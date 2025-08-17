@@ -14,6 +14,7 @@ import Program from 'components/Program/Program';
 import Review from 'components/Review/Review';
 import 'styles/mate.scss';
 import Footer from 'components/Footer/Footer';
+import { useAuthStore } from 'utils/stores';
 
 const reviews = [
     {
@@ -69,6 +70,9 @@ const reviews = [
 const MateDetails = () => {
     const [tempImg, setTempImg] = useState('');
     const router = useRouter();
+    
+    // 로그인 여부
+    const userInfo = useAuthStore.getState().userInfo;
     const viewDetails = (id: number) => {
         router.push(`/program/${id}`);
     };
@@ -76,7 +80,7 @@ const MateDetails = () => {
         <>
             <div className="wrapper">
                 {/* Header & Key visual */}
-                <Header title={'라인메이트 메인'} />
+                <Header title={'라인메이트 메인'} isLogin={userInfo !== null} />
                 {/* Key visual */}
                 {/* <Mate isSummary={false} mateName={'Rabbbbbit'} introduce={"Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet"} /> */}
 

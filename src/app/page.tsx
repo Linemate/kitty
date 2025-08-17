@@ -9,16 +9,22 @@ import 'styles/home.scss';
 import { TextButtonWithIcon } from 'components/common/Button';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
-import { getCategories, getCollectionDetails, getCollections } from 'api';
+import { getCategories, getCollectionDetails, getCollections, refreshToken } from 'api';
 import { categoryProps, collectionsProps, programSummaryProps } from 'types/types';
 import SimpleProgram from 'components/Program/SimpleProgram';
 import useMobile from 'hooks/useMobile';
 import { clearDuplicateCookies } from 'utils/clearDuplicateCookies';
+import { parseCookies } from 'nookies';
+import { useAuthStore } from 'utils/stores';
 
 const Main = () => {
     // 카테고리
     const [categories, setCategories] = useState<categoryProps[]>([]);
     const [list, setList] = useState<collectionsProps[]>([]);
+    const [isLogin, setIsLogin] = useState<boolean>(false);
+    // 로그인 여부
+    const userInfo = useAuthStore.getState().userInfo;
+    const setUserInfo = useAuthStore.getState().setUserInfo;
     const isMobile = useMobile();
     const router = useRouter();
     const viewMorePage = () => {
@@ -36,14 +42,52 @@ const Main = () => {
         }
     }, []);
 
+    // 토큰 재발급
+    const refreshTokenFn = useCallback(async () => {
+        try {
+            const cookies = parseCookies();
+            const user = cookies.USERINFO;
+            const userInfo = JSON.parse(user);
+            if (userInfo && userInfo.id) {
+                const res = await refreshToken(userInfo.id, userInfo.refreshToken);
+                const data = res.data;
+                setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
+                console.log(res);
+            } else {
+                setIsLogin(false);
+            }
+        } catch(err) {
+            console.log('error...');
+            console.log(err);
+        }
+    }, [router, userInfo]);
+
     // 컬렉션 전체 조회
-    const loadAllCollections = useCallback(async () => {
+    const loadAllCollections = useCallback(async (retryCount = 0, maxRetries = 1) => {
         try {
             const data = await getCollections();
             const list = data.data;
             setList(list);
         } catch (err) {
-            console.log(err);
+            if (
+                err &&
+                typeof err === 'object' &&
+                'status' in err &&
+                err.status === 401 &&
+                retryCount < maxRetries
+              ) {
+                console.log('refresh try')
+                try {
+                    console.log('??');
+                  await refreshTokenFn();
+                  // 재시도 횟수 증가
+                  await loadAllCollections(retryCount + 1, maxRetries);
+                } catch (refreshError) {
+                  console.error('토큰 갱신 실패:', refreshError);
+                }
+              } else {
+                console.error('프로그램 로드 실패:', err);
+              }
         }
     }, []);
 
@@ -59,7 +103,7 @@ const Main = () => {
         <div className="home">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header */}
-                <Header title={'라인메이트 메인'} />
+                <Header title={'라인메이트 메인'} isLogin={isLogin} />
                 {/* Key visual */}
                 <KeyVisual>
                     <div className="txt_area">

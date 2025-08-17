@@ -56,8 +56,8 @@ const MypageContents = () => {
     };
 
     // 취소
-    const cancelProgram = (id: number, reservationId: number) => {
-        router.push(`/cancel/${id}?reservationId=${reservationId}&price=${0}`)
+    const cancelProgram = (program:reservationHistoryProps) => {
+        router.push(`/cancel/${program.programId}?reservationId=${program.reservationId}&price=${program.price}&currency=${program.currency}`)
     };
 
     // 위치 확인하기
@@ -115,10 +115,10 @@ const MypageContents = () => {
                         <>
                             {
                                 reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                    <ProgramInMypage key={index} programId={el.programId} reservationId={el.reservationId} label={el.label} paymentsStatus={el.paymentsStatus} reservationStatus={el.reservationStatus} title={el.title} thumbnail={el.thumbnail} startDate={el.startDate} station={el.station} createdAt={el.createdAt} updatedAt={el.updatedAt}>
+                                    <ProgramInMypage key={index} programInMypage={el}>
                                         {
                                             el.label === '참여예정' ?
-                                            <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
+                                            <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
                                             :
                                             <>
                                                 {
@@ -126,7 +126,7 @@ const MypageContents = () => {
                                                 <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId.toString())} text="Leave Review" />
                                                 :
                                                 el.label === '취소요청' ?
-                                                <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
+                                                <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
                                                 :
                                                 ''
                                                 }
