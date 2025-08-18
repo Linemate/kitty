@@ -87,7 +87,7 @@ const MyAllReservationsPC = () => {
                                     <>
                                     {
                                         reservationHistory.map((el:reservationHistoryProps, index:number) => (
-                                            <ProgramInMypage key={index} programId={el.programId} reservationId={el.reservationId} label={el.label} paymentsStatus={el.paymentsStatus} reservationStatus={el.reservationStatus} title={el.title} thumbnail={el.thumbnail} startDate={el.startDate} station={el.station} createdAt={el.createdAt} updatedAt={el.updatedAt} />
+                                            <ProgramInMypage key={index} programInMypage={el} />
                                         ))
                                         }
                                     </>
