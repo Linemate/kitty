@@ -159,3 +159,9 @@ export const putBuddyProfile = async (buddyId:number, values:buddyProfileProps) 
     const res = await privateApi.put(`/buddy/${buddyId}`, values);
     return res.data;
 };
+
+// 프로그램 예약 정보 조회
+export const getReservationInfo = async (id:number, reservationId:number) => {
+    const res = await privateApi.get(`/programs/${id}/reservation/${reservationId}`);
+    return res.data;
+};

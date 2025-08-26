@@ -1,5 +1,5 @@
 'use client';
-import { getCancelReasons, getProgramDetails, postCancelReason, refreshToken } from 'api';
+import { getCancelReasons, getProgramDetails, getReservationInfo, postCancelReason, refreshToken } from 'api';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import ProgramInMypage, { initProgramInMypage } from 'components/Program/ProgramInMypage';
@@ -9,7 +9,6 @@ import { cancelReasonProps, programProps, reservationHistoryProps } from 'types/
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
 import { parseCookies } from 'nookies';
-import { initProgram } from 'app/program/[id]/page';
 
 const Cancel = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -65,8 +64,8 @@ const Cancel = () => {
     // 프로그램 상세
     const loadProgramDetails = useCallback(async (retryCount = 0, maxRetries = 1) => {
         try {
-            console.log(id);
-            const res = await getProgramDetails(id as string);
+            const res = await getReservationInfo(Number(id), Number(reservationId));
+            console.log(res);
             const data = res.data;
             setProgram(data);
             setLoading(false);
@@ -93,7 +92,7 @@ const Cancel = () => {
                 setLoading(false);
               }
         }
-    }, [id, userInfo]);
+    }, [id, reservationId, userInfo]);
 
 
     // 취소 사유 조회

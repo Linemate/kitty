@@ -12,7 +12,7 @@ const PaymentsFailContent = () => {
         <div className="payment">
             <div className={`wrapper fail ${isMobile ? 'mobile' : ''}`}>
                 {/* header */}
-                <Header title={''} isDepth={false} isMobileDesc={false} />
+                <Header title={''} isDepth={false} isMobileDesc={false} isLogin={false} />
                 <div className="img_area">
                     <div className="ico fail"></div>
                 </div>
