@@ -1,19 +1,19 @@
 'use client'
-import { getBuddyDetails } from 'api';
+import { getBuddyDetails, refreshToken } from 'api';
 import { Button, TextButtonWithIcon } from 'components/common/Button';
 import Header from 'components/Header/Header';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { parseCookies } from 'nookies';
+import React, { useCallback, useEffect, useState } from 'react';
 import { buddyProfileProps } from 'types/types';
 import { formatDate } from 'utils/formatDate';
 import { useAuthStore } from 'utils/stores';
 
-const MypageHeader = () => {
+const MypageHeader = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const router = useRouter();
     const isMobile = useMobile();
     const userInfo = useAuthStore.getState().userInfo;
-    const [buddyInfo, setBuddyInfo] = useState<buddyProfileProps | null>(null);
     // 페이지 이동
     const viewPage = (pageName: string) => {
         router.push(`/mypage/${pageName}`);
@@ -22,17 +22,6 @@ const MypageHeader = () => {
     const handleEditProfile = () => {
         router.push('/mypage/profile');
     }
-    
-    useEffect(() => {
-        console.log(userInfo);
-        const loadBuddyInfo = async () => {
-            const res = await getBuddyDetails(userInfo?.id || 0);
-            const data = res.data;
-            console.log(data);
-            setBuddyInfo(data);
-        }
-        loadBuddyInfo();
-    }, [userInfo])
     return (
         <div>
             {/* Header */}

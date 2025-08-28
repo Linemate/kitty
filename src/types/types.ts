@@ -362,3 +362,23 @@ export type buddyProfileProps = {
     locale: string;
     createdAt: string;
 }
+
+// 토스트 메시지
+export type toastProps = {
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info' | 'default';
+    duration?: number;
+}
+
+// 모임 정보 팝업
+export type infoOfProgramProps = {
+    handleClose: () => void;
+    programId: number;
+    reservationId: number;
+}
+
+// 모임 숨김 정보 조회
+export type reservationHiddenInfoProps = {
+    id: number;
+    address: string;
+}

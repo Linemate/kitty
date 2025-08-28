@@ -25,6 +25,7 @@ const Main = () => {
     // 로그인 여부
     const userInfo = useAuthStore.getState().userInfo;
     const setUserInfo = useAuthStore.getState().setUserInfo;
+    const clearToken = useAuthStore.getState().clearToken;
     const isMobile = useMobile();
     const router = useRouter();
     const viewMorePage = () => {
@@ -59,6 +60,9 @@ const Main = () => {
         } catch(err) {
             console.log('error...');
             console.log(err);
+            setIsLogin(false);
+            setUserInfo(null);
+            clearToken();
         }
     }, [router, userInfo]);
 

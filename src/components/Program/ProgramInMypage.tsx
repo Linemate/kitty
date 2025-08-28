@@ -1,9 +1,10 @@
 'use client'
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import 'styles/program.scss';
 import { programInMypageProps } from 'types/types';
 import useMobile from 'hooks/useMobile';
 import { Button } from 'components/common/Button';
+import InfoOfProgram from './InfoOfProgram';
 
 export const initProgramInMypage = {
     programId:0,
@@ -25,9 +26,10 @@ const ProgramInMypage = (props:programInMypageProps) => {
     const { programInMypage, type, children } = props;
     const { programId, reservationId, label, paymentsStatus, reservationStatus, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency } = programInMypage;
     const isMobile = useMobile();
+    const [isInfoOfProgram, setIsInfoOfProgram] = useState<boolean>(false);
 
-    const checkLocation = (id:number) => {
-        console.log('checkLocation');
+    const checkLocation = () => {
+        setIsInfoOfProgram(true);
     }
 
     const formatDate = () => {
@@ -67,7 +69,10 @@ const ProgramInMypage = (props:programInMypageProps) => {
                 </div>
             </div>
             <div className='btn_wrapper'>
-                <Button type='text' classnames={`blue right_arrow`} onclick={() => checkLocation(programId)} text='Check Location' />
+                {
+                    label === '참여예정' &&
+                    <Button type='text' classnames={`blue right_arrow`} onclick={checkLocation} text='Check Location' />
+                }
                 {
                     children ? 
                     <div className='btn_area'>
@@ -76,6 +81,9 @@ const ProgramInMypage = (props:programInMypageProps) => {
                     : <></>
                 }
             </div>
+            {
+                isInfoOfProgram && <InfoOfProgram handleClose={() => setIsInfoOfProgram(false)} programId={programId} reservationId={reservationId} />
+            }
         </div>
     );
 };

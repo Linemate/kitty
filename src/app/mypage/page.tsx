@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/mypage.scss';
 import MypageHeader from './_MypageHeader';
 import Footer from 'components/Footer/Footer';
@@ -9,13 +9,17 @@ import MypageSideMenu from './_MypageSideMenu';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
 import { parseCookies } from 'nookies';
-import { refreshToken } from 'api';
+import { getBuddyDetails, refreshToken } from 'api';
+import { buddyProfileProps } from 'types/types';
+import Toast from 'components/common/Toast';
 
 const MyPage = () => {
   const router = useRouter();
+  const [buddyInfo, setBuddyInfo] = useState<buddyProfileProps | null>(null);
   const userInfo = useAuthStore.getState().userInfo;
   const setUserInfo = useAuthStore.getState().setUserInfo;
-
+  const [from, setFrom] = useState<string | null>(null);
+  const [isToast, setIsToast] = useState<boolean>(false);
   const [hydrated, setHydrated] = useState(false);
 
   // 훅은 최상단에서 호출
@@ -27,7 +31,7 @@ const MyPage = () => {
   }, []);
 
   // 토큰 재발급
-  const refreshTokenFn = async () => {
+  const refreshTokenFn = useCallback(async () => {
     try {
       const cookies = parseCookies();
       const user = cookies.USERINFO;
@@ -46,7 +50,24 @@ const MyPage = () => {
         router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
       }
     }
-  };
+  }, [userInfo, router]);
+
+    
+  useEffect(() => {
+      console.log(userInfo);
+      const loadBuddyInfo = async () => {
+          try {
+              const res = await getBuddyDetails(userInfo?.id || 0);
+              const data = res.data;
+              console.log(data);
+              setBuddyInfo(data);
+          } catch (err) {
+              console.log('token..!!!')
+              refreshTokenFn();
+          }
+      }
+      loadBuddyInfo();
+  }, [userInfo, refreshTokenFn])
 
   useEffect(() => {
     if (!userInfo) {
@@ -56,6 +77,20 @@ const MyPage = () => {
     }
   }, [userInfo, router]);
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const from = urlParams.get('from');
+    if (from) {
+      setFrom(from);
+      setIsToast(true);
+      window.history.replaceState('', '', `/mypage`);
+      setTimeout(() => {
+        setFrom(null);
+        setIsToast(false);
+      }, 3000);
+    }
+  }, []);
+
   if (!hydrated) return <div className="mypage" />;
 
   return (
@@ -63,7 +98,7 @@ const MyPage = () => {
       {userInfo && userInfo.id ? (
         <>
           <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
-            <MypageHeader />
+            <MypageHeader buddyInfo={buddyInfo} />
             <div className="contents">
               <div className="contents_inner">
                 <MypageSideMenu />
@@ -72,6 +107,9 @@ const MyPage = () => {
             </div>
           </div>
           <Footer />
+          {
+            from === 'cancel' && isToast && <Toast message="모임 신청이 취소되었습니다." type="success" duration={3000} />
+          }
         </>
       ) : null}
     </div>
