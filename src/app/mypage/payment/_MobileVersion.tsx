@@ -1,5 +1,5 @@
 'use client'
-import { getReservationHistory } from 'api';
+import { getPaymentHistory, getReservationHistory } from 'api';
 import Header from 'components/Header/Header';
 import ModalPortal from 'components/Portal/ModalPortal';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
@@ -9,10 +9,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/mypage.scss';
 import { buddyProfileProps, reservationHistoryProps } from 'types/types';
 import { useRouter } from 'next/navigation';
-import MyPageTab from './_Tab';
 import { useAuthStore } from 'utils/stores';
+import MyHistoryTab from './_Tab';
 
-const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
+const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [isModal, setIsModal] = useState<boolean>(false);
     const [totalPages, setTotalPages] = useState<number>(0);
@@ -24,10 +24,10 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
     // 로그인 여부
     const userInfo = useAuthStore.getState().userInfo;
 
-    // 프로그램 신청 내역
-    const loadReservationHistory = useCallback(async () => {
+    // 결제 내역
+    const loadPaymentHistory = useCallback(async () => {
         try {
-            const res = await getReservationHistory(page, 10, tab);
+            const res = await getPaymentHistory(page, 10, '');
             const data = res.data;
             const list = data.list;
             setReservationHistory(list);
@@ -93,36 +93,30 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
     }
     
     useEffect(() => {
-        loadReservationHistory();
-    }, [loadReservationHistory, tab, page])
+        loadPaymentHistory();
+    }, [loadPaymentHistory, tab, page])
 
     useEffect(() => {
         setPage(0);
     }, [tab])
 
     return (
-        <div className='mypage all'>
+        <div className='mypage all payment_history'>
             <div className={`wrapper mobile`}>
                 <div className='intro'></div>
                 {/* Header */}
-                <Header title={'My Events'} isDepth={true} isLogin={userInfo !== null} />
+                <Header title={'결제 내역'} isDepth={true} isLogin={userInfo !== null} />
                 <div className='contents'>
                     <div className='contents_inner'>
-                        <MyPageTab tab={tab} changeTab={changeTab} />
+                        <MyHistoryTab tab={tab} changeTab={changeTab} />
                         <div className='contents_area'>
                             <div className='programs'>
                                 {
                                     reservationHistory.length === 0 ? 
                                     <>
-                                        {/* 모임 리스트가 비었을 때 */}
+                                        {/* 결제 내역이 비었을 때 */}
                                         <div className="nothing">
-                                            <div className="bg">
-                                                <div className="notice">
-                                                    <p className="first_line">No meetings applied yet.</p>
-                                                    <p>Explore Line Mate&apos;s meetings now!</p>
-                                                </div>
-                                                <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
-                                            </div>
+                                            <div className='ico payment'><p>결제 내역이 없습니다.</p></div>
                                         </div>
                                     </>
                                     :
@@ -147,22 +141,6 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
                                         }
                                     </>
                                 }
-                                {/* Waiting */}
-                                {/* <ProgramInMypage id={1} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                    <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
-                                </ProgramInMypage> */}
-                                {/* Cancel Request */}
-                                {/* <ProgramInMypage id={1} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'request'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                    <Button type='text' classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
-                                </ProgramInMypage> */}
-                                {/* Attended */}
-                                {/* <ProgramInMypage id={4} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                    <Button type='text' classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text='Leave Review' />
-                                </ProgramInMypage> */}
-                                {/* Canceled */}
-                                {/* <ProgramInMypage id={4} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'canceled'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                        <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => viewCancelDetail('3')} text='Cancel Detail' />
-                                </ProgramInMypage> */}
                             </div>
                             {
                                 reservationHistory.length > 0 &&
@@ -199,4 +177,4 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
     );
 };
 
-export default MyAllReservationsMobile;
+export default MyPaymentHistoryMobile;

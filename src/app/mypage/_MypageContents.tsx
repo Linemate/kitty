@@ -31,6 +31,7 @@ const MypageContents = () => {
 
     // 프로그램 신청 내역
     const loadReservationHistory = useCallback(async () => {
+        console.log('hihihi')
         try {
             const res = await getReservationHistory(0, 2, tab);
             const list = res.data.list;

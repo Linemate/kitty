@@ -132,7 +132,7 @@ export const getCancelReasons = async (id:number, reservationId: number) => {
 
 // 프로그램 예약 취소
 export const postCancelReason = async (values:cancelProps) => {
-    const res = await privateApi.post(`/programs/${values.programId}/reservation/${values.reservationId}/cancel`, {data: {reason: values.reason}});
+    const res = await privateApi.delete(`/programs/${values.programId}/reservation/${values.reservationId}/cancel`, { data: { reasonCodeId: values.reason.reasonCodeId, reasonDetail: values.reason.reasonDetail } });
     return res.data;
 };
 
@@ -144,7 +144,7 @@ export const getReservationHistoryCount = async () => {
 
 // 프로그램 신청내역 조회
 export const getReservationHistory = async (pageNum:number, size:number, status:string) => {
-    const res = await privateApi.get(`/buddy/programs/enrolled?page=${pageNum}&size=${size}&sort=id%2Cdesc&status=${status}`);
+    const res = await privateApi.get(`/buddy/programs/enrolled?page=${pageNum}&size=${size}&sort=id%2Casc&status=${status}`);
     return res.data;
 };
 
@@ -157,5 +157,23 @@ export const getBuddyDetails = async (buddyId:number) => {
 // 버디 프로필 수정
 export const putBuddyProfile = async (buddyId:number, values:buddyProfileProps) => {
     const res = await privateApi.put(`/buddy/${buddyId}`, values);
+    return res.data;
+};
+
+// 프로그램 예약 정보 조회
+export const getReservationInfo = async (id:number, reservationId:number) => {
+    const res = await privateApi.get(`/programs/${id}/reservation/${reservationId}`);
+    return res.data;
+};
+
+//프로그램 숨김 정보 조회 
+export const getReservationHiddenInfo = async (id:number, reservationId:number) => {
+    const res = await privateApi.get(`/programs/${id}/reservation/${reservationId}/hidden`);
+    return res.data;
+};
+
+// 결제 내역 조회
+export const getPaymentHistory = async (pageNum:number, size:number, status:string) => {
+    const res = await privateApi.get(`/payments?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
     return res.data;
 };

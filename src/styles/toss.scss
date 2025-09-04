@@ -64,6 +64,7 @@
     }
     &.mobile {
         .toss_box_section {
+            height: calc(100vh - 60px);
             top: 0;
             margin-top: 0;
             padding: 30px 0;
@@ -134,6 +135,9 @@
                 .ico {
                     background-image: url('/assets/images/icon/ico_error.png');
                 }
+            }
+            .btn_area {
+                padding-bottom:150px;
             }
         }
 

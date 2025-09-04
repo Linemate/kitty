@@ -289,6 +289,22 @@ button {background:none; border:none; cursor:pointer;}
       left:0;
     }
   }
+  &.radio {
+    &.default::before {
+      width:24px;
+      height:24px;
+      background-image:url('/assets/images/icon/ico_radio_default.png');
+      right:auto;
+      left:0;
+    }
+    &.checked::before {
+      width:24px;
+      height:24px;
+      background-image:url('/assets/images/icon/ico_radio_checked.png');
+      right:auto;
+      left:0;
+    }
+  }
   &.checkbox {
     padding-right:0;
     padding-left:32px;
@@ -347,6 +363,30 @@ button {background:none; border:none; cursor:pointer;}
   }
   &.copylink::before {
     background-image:url('/assets/images/icon/ico_copylink.png');
+  }
+  &.listen {
+    padding-right:0;
+    padding-left:26px;
+    &::before {
+      width:24px;
+      height:24px;
+      background-image:url('/assets/images/icon/ico_listen.png');
+      right:auto;
+      left:0;
+    }
+  }
+  &.payment {
+    padding-right:0;
+    padding-left:0;
+    padding-top:60px;
+    &::before {
+      width:48px;
+      height:48px;
+      background-image:url('/assets/images/icon/ico_payment.png');
+      right:auto;
+      left:50%;
+      transform:translateX(-50%);
+    }
   }
 }
 

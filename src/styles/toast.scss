@@ -1,0 +1,40 @@
+.toast {
+    min-width:220px;
+    box-sizing: border-box;
+    padding:12px 16px;
+    display:inline-block;
+    position:fixed;
+    left:50%;
+    bottom:30px;
+    transform:translateX(-50%);
+    background-color:#111111CC;
+    border-radius:4px;
+    z-index:1000;
+    .toast_message {
+        border-radius:5px;
+        color:white;
+        font-size:14px;
+        font-weight:bold;
+        line-height:22px;
+        padding-left:32px;
+        position:relative;
+        &::before {
+            content:'';
+            display:inline-block;
+            width:24px;
+            height:24px;
+            background-size:24px;
+            background-position:left center;
+            background-repeat:no-repeat;
+            position:absolute;
+            left:0;
+            top:50%;
+            transform:translateY(-50%);
+        }
+        &.success {
+            &::before {
+                background-image:url('/assets/images/icon/ico_check_white.png');
+            }
+        }
+    }
+}

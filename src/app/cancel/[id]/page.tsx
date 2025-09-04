@@ -1,5 +1,5 @@
 'use client';
-import { getCancelReasons, getProgramDetails, postCancelReason, refreshToken } from 'api';
+import { getCancelReasons, getProgramDetails, getReservationInfo, postCancelReason, refreshToken } from 'api';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import ProgramInMypage, { initProgramInMypage } from 'components/Program/ProgramInMypage';
@@ -9,7 +9,8 @@ import { cancelReasonProps, programProps, reservationHistoryProps } from 'types/
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
 import { parseCookies } from 'nookies';
-import { initProgram } from 'app/program/[id]/page';
+import useMobile from 'hooks/useMobile';
+import { Button } from 'components/common/Button';
 
 const Cancel = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -18,15 +19,16 @@ const Cancel = () => {
     const {id} = useParams();
     const maxLength = 200;
     const inputRef = useRef<HTMLDivElement>(null);
+    const isMobile = useMobile();
     // options
     const [options, setOptions] = useState<cancelReasonProps[]>([]);
     // 선택창 자세히 보기
     const [openSelectOptions, setOpenSelectOptions] = useState<boolean>(false);
     // 선택항목 중 기타 input 열기
     const [openInputOfEtc, setOpenInputOfEtc] = useState<boolean>(false);
-    const [selectedReasonId, setSelectedReasonId] = useState<number>(0);
+    const [selectedReason, setSelectedReason] = useState<cancelReasonProps | null>(null);
     const [selectedReasonText, setSelectedReasonText] = useState<string>('');
-    const [detailReason, setDetailReason] = useState<string>('');
+    const [reasonDetail, setReasonDetail] = useState<string>('');
     // 상세 사유 활성화
     const [activeDetailReason, setActiveDetailReason] = useState<boolean>(false);
     // check icon
@@ -65,8 +67,8 @@ const Cancel = () => {
     // 프로그램 상세
     const loadProgramDetails = useCallback(async (retryCount = 0, maxRetries = 1) => {
         try {
-            console.log(id);
-            const res = await getProgramDetails(id as string);
+            const res = await getReservationInfo(Number(id), Number(reservationId));
+            console.log(res);
             const data = res.data;
             setProgram(data);
             setLoading(false);
@@ -93,7 +95,7 @@ const Cancel = () => {
                 setLoading(false);
               }
         }
-    }, [id, userInfo]);
+    }, [id, reservationId, userInfo]);
 
 
     // 취소 사유 조회
@@ -111,20 +113,30 @@ const Cancel = () => {
     // 취소
     const handleCancel = useCallback(async () => {
         try {
-            const data = {
-                programId: id as string,
-                reservationId: reservationId as string,
-                reason: {
-                    reasonCodeId: selectedReasonId,
-                    reasonDetail: detailReason
+            if (selectedReason && isChecked) { 
+                if (selectedReason.code === 'OTHER') {
+                    if (reasonDetail.trim().length === 0) {
+                        alert('상세 사유를 입력해주세요.');
+                        return;
+                    }
+                }               
+                const data = {
+                    programId: id as string,
+                    reservationId: reservationId as string,
+                    reason: {
+                        reasonCodeId: selectedReason.id,
+                        reasonDetail: reasonDetail
+                    }
                 }
+                const res = await postCancelReason(data);
+                console.log(res);
+                router.push(`/mypage?from=cancel`);
             }
-            const res = await postCancelReason(data);
             
         } catch (err) {
-            console.log(err);
+            alert('다시 시도해주세요.')
         }
-    }, [id, reservationId, selectedReasonId, detailReason]);
+    }, [id, reservationId, selectedReason, reasonDetail, isChecked, router]);
 
     // 선택창 자세히 보기 on/off
     const handleOpenSelectOptions = () => {
@@ -133,9 +145,9 @@ const Cancel = () => {
 
     // 선택창에서 선택
     const handleSelect = (el: cancelReasonProps) => {
-        setSelectedReasonId(el.id);
+        setSelectedReason(el);
         setSelectedReasonText(el.label);
-        setDetailReason('');
+        setReasonDetail('');
         if (el.code === 'OTHER') {
             setOpenInputOfEtc(true);
         } else {
@@ -150,7 +162,7 @@ const Cancel = () => {
             const trimmedText = text.substring(0, maxLength);
             if (text.length > maxLength) {
                 inputRef.current.innerText = trimmedText;
-                setDetailReason(trimmedText);
+                setReasonDetail(trimmedText);
 
                 // 커서를 끝으로 이동
                 const range = document.createRange();
@@ -162,7 +174,7 @@ const Cancel = () => {
                     sel.addRange(range);
                 }
             } else {
-                setDetailReason(text);
+                setReasonDetail(text);
             }
         }
     };
@@ -183,14 +195,21 @@ const Cancel = () => {
     }, [loadProgramDetails]);
 
     useEffect(() => {
-        if (selectedReasonId === 0) {
-            setIsBtnActive(false);
-        } else if (selectedReasonId !== 0 && (!activeDetailReason && !isChecked || detailReason.trim().length === 0 && !isChecked)) {
-            setIsBtnActive(false);
+        if (isChecked) {
+            if (selectedReason === null) {
+                setIsBtnActive(false);
+            } else if (selectedReason && selectedReason.id === 0) {
+                setIsBtnActive(false);
+            } else if (selectedReason && selectedReason.code === 'OTHER' && (!activeDetailReason || reasonDetail.trim().length === 0)) {
+                setIsBtnActive(false);
+            } else {
+                setIsBtnActive(true);
+            }
         } else {
-            setIsBtnActive(true);
+            setIsBtnActive(false);
         }
-    }, [selectedReasonId, activeDetailReason, isChecked, detailReason])
+        
+    }, [selectedReason, activeDetailReason, isChecked, reasonDetail])
 
     useEffect(() => {
         loadCancelReasons();
@@ -199,7 +218,7 @@ const Cancel = () => {
 
     return (
         <div className="cancel">
-            <div className="wrapper">
+            <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header */}
                 <Header title={'모임 대기 취소'} isDepth={true}isLogin={userInfo !== null} />
                 {
@@ -218,22 +237,42 @@ const Cancel = () => {
                                 </div>
                             </div>
                             <div className="desc">
-                                <div className="select_wrap" onClick={handleOpenSelectOptions}>
-                                    <div className="select_text_wrap">
-                                        <div className={`ico arrow_bottom gray ${selectedReasonId === 0 ? 'default' : 'selected'}`}>{selectedReasonId === 0 ? '사유를 선택해주세요.' : selectedReasonText}</div>
-                                    </div>
-                                    {openSelectOptions && (
-                                        <div className="select_options">
-                                            <ul>
-                                                {options.map((el: cancelReasonProps) => (
-                                                    <li key={el.id} onClick={() => handleSelect(el)} className={`${selectedReasonId === el.id ? 'selected' : ''}`}>
-                                                        <div className="option">{el.label}</div>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                {
+                                    <div className="select_wrap" onClick={handleOpenSelectOptions}>
+                                        <div className="select_text_wrap">
+                                            <div className={`ico arrow_bottom gray ${selectedReason && selectedReason.id === 0 ? 'default' : 'selected'}`}>{selectedReason === null ? '사유를 선택해주세요.' : selectedReasonText}</div>
                                         </div>
-                                    )}
-                                </div>
+                                        {openSelectOptions && (
+                                            <div className='select_options_wrap'>
+                                                {
+                                                    isMobile &&
+                                                    <>
+                                                        <div className='bg' onClick={handleOpenSelectOptions}></div>
+                                                    </>
+                                                }
+                                                <div className="select_options">
+                                                    {
+                                                        isMobile &&
+                                                        <div className='title'>취소 사유
+                                                            <Button text="Close" classnames="close img" type="button" onclick={handleOpenSelectOptions} />
+                                                        </div>
+                                                    }
+                                                    <ul>
+                                                        {options.map((el: cancelReasonProps) => (
+                                                            <li key={el.id} onClick={() => handleSelect(el)} className={`${selectedReason && selectedReason.id === el.id ? 'selected' : ''}`}>
+                                                                <div className="option">{el.label}</div>
+                                                                {
+                                                                    isMobile &&
+                                                                    <span className={`ico radio ${selectedReason && selectedReason.id === el.id ? 'checked' : 'default'}`}></span>
+                                                                }
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                }
                             </div>
                         </div>
                         {openInputOfEtc && (
@@ -244,7 +283,7 @@ const Cancel = () => {
                                     </div>
                                     <div>
                                         <span className="letters">
-                                            <span className="current">{detailReason.length}</span>/{maxLength}
+                                            <span className="current">{reasonDetail.length}</span>/{maxLength}
                                         </span>
                                     </div>
                                 </div>
@@ -293,7 +332,7 @@ const Cancel = () => {
                                 환불 규정을 확인했으며, 이에 동의합니다.
                             </div>
                         </div>
-                        <div className={`cancel btn text ${isBtnActive ? 'bg_blue' : 'bg_gray'}`}>모임 취소하기</div>
+                        <div className={`cancel btn text ${isBtnActive ? 'bg_blue' : 'bg_gray'}`} onClick={handleCancel}>모임 취소하기</div>
                     </div>
                 }
             </div>

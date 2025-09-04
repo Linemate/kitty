@@ -4,14 +4,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { buddyProfileProps, reservationHistoryProps } from 'types/types';
 import { useRouter } from 'next/navigation';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
-import { getReservationHistory } from 'api';
-import MyPageTab from './_Tab';
+import { getPaymentHistory, getReservationHistory } from 'api';
 import MypageHeader from '../_MypageHeader';
 import MypageSideMenu from '../_MypageSideMenu';
 import Footer from 'components/Footer/Footer';
 import { Button } from 'components/common/Button';
+import MyHistoryTab from './_Tab';
 
-const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
+const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
@@ -36,10 +36,10 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
             setPage(page + 1);
         }
     }
-    // 프로그램 신청 내역
+    // 결제 내역
     const loadReservationHistory = useCallback(async () => {
         try {
-            const res = await getReservationHistory(page, 10, tab);
+            const res = await getPaymentHistory(page, 10, tab);
             const data = res.data;
             const list = data.list;
             setReservationHistory(list);
@@ -55,11 +55,6 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
         setTab(tabText.toUpperCase());
     }
 
-    // 모임 둘러보기 페이지로 이동
-    const viewProgramsPage = () => {
-        router.push('/');
-    };
-
     useEffect(() => {
         loadReservationHistory();
     }, [loadReservationHistory, tab])
@@ -74,7 +69,7 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
                     <div className='contents_inner'>
                         <MypageSideMenu />
                         <div className='contents_area'>
-                            <MyPageTab tab={tab} changeTab={changeTab} />
+                            <MyHistoryTab tab={tab} changeTab={changeTab} />
                             <div className='programs'>
                                 {
                                     reservationHistory.length === 0 ? 
@@ -85,7 +80,6 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
                                                     <p className="first_line">No meetings applied yet.</p>
                                                     <p>Explore Line Mate&apos;s meetings now!</p>
                                                 </div>
-                                                <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
                                             </div>
                                         </div>
                                     </>
@@ -124,4 +118,4 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
     );
 };
 
-export default MyAllReservationsPC;
+export default MyPaymentHistoryPC;

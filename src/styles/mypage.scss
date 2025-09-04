@@ -118,21 +118,23 @@
                             padding:16px 0;
                         }
                         dt {
-                            div {
+                            a {
                                 font-family: 'Pretendard';
                                 line-height: 22px;
                                 font-size: 16px;
                                 font-weight: 500;
+                                color:var(--color-neutral-200);
                                 cursor:pointer;
                             }
                         }
                         dd {
-                            div {
+                            a {
                                 font-family: 'Pretendard';
                                 line-height: 24px;
                                 font-size: 16px;
                                 font-weight: 400;
                                 padding-bottom: 4px;
+                                color:var(--color-neutral-200);
                                 color: var(--color-neutral-400);
                             }
                         }
@@ -397,43 +399,63 @@
         .programs {
             padding-top:24px;
         }
-        &.mobile {
-            padding-top:56px;
+        .wrapper {
             min-height:100vh;
             background-color:var(--color-neutral-800);
-            .wrapper {
-                background-color:var(--color-neutral-800);
-                .contents_inner {
-                    flex-direction: column;
-                    .contents_area {
-                        padding:0 16px;
-                    }
-                }
-                &.mobile {
-                    .tab_area {
-                        padding-top:24px;
-                        .tab {
-                            ul {
-                                li {
-                                    font-size:13px;
-                                    line-height:20px;
-                                }
-                            }
-                        }
-                    }
+            &.mobile {
+                padding-top:56px;
+                .contents {
                     .contents_inner {
-                        display:block;
+                        flex-direction: column;
                         .contents_area {
-                            padding:0;
-                            .programs {
-                                padding-top:16px;
+                            padding:0 16px;
+                        }
+                    }
+                }
+                .tab_area {
+                    padding-top:24px;
+                    .tab {
+                        ul {
+                            li {
+                                font-size:13px;
+                                line-height:20px;
                             }
                         }
                     }
                 }
-                &.pc {
-                    .tab_area {
-                        padding-bottom:24px;
+                .contents_inner {
+                    display:block;
+                    .contents_area {
+                        padding:0;
+                        .programs {
+                            padding-top:16px;
+                        }
+                    }
+                }
+            }
+            &.pc {
+                .tab_area {
+                    padding-bottom:24px;
+                }
+            }
+        }
+    }
+    // 결제 내역
+    &.payment_history {
+        .contents_area {
+            .programs {
+                .nothing {
+                    padding-top:32px;
+                    background-color:rgba(0, 0, 0, 0);
+                    .ico.payment {
+                        width:100%;
+                        background-size:48px;
+                        background-position:center;
+                        p {
+                            font-size:16px;
+                            line-height:24px;
+                            text-align:center;
+                        }
                     }
                 }
             }
