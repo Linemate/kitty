@@ -55,6 +55,11 @@ const MyAllReservationsPC = () => {
         setTab(tabText.toUpperCase());
     }
 
+    // 모임 둘러보기 페이지로 이동
+    const viewProgramsPage = () => {
+        router.push('/');
+    };
+
     useEffect(() => {
         loadReservationHistory();
     }, [loadReservationHistory, tab])
@@ -80,6 +85,7 @@ const MyAllReservationsPC = () => {
                                                     <p className="first_line">No meetings applied yet.</p>
                                                     <p>Explore Line Mate&apos;s meetings now!</p>
                                                 </div>
+                                                <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
                                             </div>
                                         </div>
                                     </>
@@ -100,7 +106,7 @@ const MyAllReservationsPC = () => {
                                     </li>
                                     {
                                         Array.from({length: totalPages}, (_, index) => (
-                                            <li key={index} className={`${page === index ? 'selected' : ''}`} onClick={() => viewPaging(index)}>{index}</li>
+                                            <li key={index} className={`${page === index ? 'selected' : ''}`} onClick={() => viewPaging(index)}>{index + 1}</li>
                                         ))
                                     }
                                     <li className={`${page === totalPages || page === totalPages - 1 ? 'disabled' : ''}`}>

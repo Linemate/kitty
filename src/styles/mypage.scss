@@ -394,8 +394,10 @@
         }
     }
     &.all {
+        .programs {
+            padding-top:24px;
+        }
         &.mobile {
-
             padding-top:56px;
             min-height:100vh;
             background-color:var(--color-neutral-800);
