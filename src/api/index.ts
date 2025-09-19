@@ -174,6 +174,6 @@ export const getReservationHiddenInfo = async (id:number, reservationId:number) 
 
 // 결제 내역 조회
 export const getPaymentHistory = async (pageNum:number, size:number, status:string) => {
-    const res = await privateApi.get(`/payments?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
+    const res = await privateApi.get(`/payments?page=${pageNum}&size=${size}&sort=id%2Cdesc&status=${status}`);
     return res.data;
 };

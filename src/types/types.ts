@@ -382,3 +382,12 @@ export type reservationHiddenInfoProps = {
     id: number;
     address: string;
 }
+
+// 결제 내역 
+export type paymentHistoryProps = {
+    id: number;
+    status:string;
+    orderId: string;
+    totalAmount: number;
+    reservation: reservationHistoryProps;
+}

@@ -1,7 +1,7 @@
 'use client'
 import Header from 'components/Header/Header';
 import React, { useCallback, useEffect, useState } from 'react';
-import { buddyProfileProps, reservationHistoryProps } from 'types/types';
+import { buddyProfileProps, paymentHistoryProps } from 'types/types';
 import { useRouter } from 'next/navigation';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import { getPaymentHistory, getReservationHistory } from 'api';
@@ -12,7 +12,7 @@ import { Button } from 'components/common/Button';
 import MyHistoryTab from './_Tab';
 
 const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
-    const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
+    const [paymentHistory, setPaymentHistory] = useState<paymentHistoryProps[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [tab, setTab] = useState('UPCOMING');
@@ -42,13 +42,15 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
             const res = await getPaymentHistory(page, 10, tab);
             const data = res.data;
             const list = data.list;
-            setReservationHistory(list);
+            setPaymentHistory(list);
             setTotalPages(data.totalPages);
             console.log(list)
         } catch (err) {
-            console.log(err);
+            alert('로그인이 필요해요.');
+            router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
+            return;
         }
-    }, [tab, page])
+    }, [page, tab, router])
     
     // 탭 변경
     const changeTab = (tabText:string) => {
@@ -72,7 +74,7 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
                             <MyHistoryTab tab={tab} changeTab={changeTab} />
                             <div className='programs'>
                                 {
-                                    reservationHistory.length === 0 ? 
+                                    paymentHistory.length === 0 ? 
                                     <>
                                         <div className="nothing">
                                             <div className="bg">
@@ -86,8 +88,8 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
                                     :
                                     <>
                                     {
-                                        reservationHistory.map((el:reservationHistoryProps, index:number) => (
-                                            <ProgramInMypage key={index} programInMypage={el} />
+                                        paymentHistory.map((el:paymentHistoryProps, index:number) => (
+                                            <ProgramInMypage key={index} programInMypage={el.reservation} type='payment' />
                                         ))
                                         }
                                     </>

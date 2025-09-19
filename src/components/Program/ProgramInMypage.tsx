@@ -32,8 +32,8 @@ const ProgramInMypage = (props:programInMypageProps) => {
         setIsInfoOfProgram(true);
     }
 
-    const formatDate = () => {
-        const dateObj = new Date(startDate);
+    const formatDate = (date:string) => {
+        const dateObj = new Date(date);
         const year = dateObj.getFullYear();
         const month = dateObj.getMonth() + 1;
         const day = dateObj.getDate();
@@ -43,47 +43,55 @@ const ProgramInMypage = (props:programInMypageProps) => {
 
     return (
         <div className={`item ${isMobile ? 'mobile' : ''}`}>
-            <div className='item_desc_area'>
-                <div className='img_area' style={{backgroundImage: `url(${thumbnail})`}}>
-                </div>
-                <div className='text_area'>
-                    {
-                        type === 'simple' ?
-                        ''
-                        :
-                        <div className='program_state'>
-                            <span className={`approve_status ${label === '참여예정' ? 'waiting' : label === '취소요청' ? 'request' : 'attended'}`}>{label}</span>
-                        </div>
-                    }
-                    <div className='program_name'>
-                        <div className='ellipsis'>
-                            {title}
-                        </div>
-                    </div>
-                    <div className='program_date'>
-                        {formatDate()}
-                    </div>
-                    <div className='program_place'>
-                        <div className='ico location gray'>{station}</div> 
-                    </div> 
-                </div>
-            </div>
-            <div className='btn_wrapper'>
-                {
-                    label === '참여예정' &&
-                    <Button type='text' classnames={`blue right_arrow`} onclick={checkLocation} text='Check Location' />
-                }
-                {
-                    children ? 
-                    <div className='btn_area'>
-                        {children}
-                    </div>
-                    : <></>
-                }
-            </div>
             {
-                isInfoOfProgram && <InfoOfProgram handleClose={() => setIsInfoOfProgram(false)} programId={programId} reservationId={reservationId} />
+                type === 'payment' &&
+                <div className='payment_status_area'>
+                    {paymentsStatus}<span className='payment_date'>{formatDate(updatedAt)}</span>
+                </div>
             }
+            <div className='item_area'>
+                <div className='item_desc_area'>
+                    <div className='img_area' style={{backgroundImage: `url(${thumbnail})`}}>
+                    </div>
+                    <div className='text_area'>
+                        {
+                            type === 'simple' ?
+                            ''
+                            :
+                            <div className='program_state'>
+                                <span className={`approve_status ${label === '참여예정' ? 'waiting' : label === '취소요청' ? 'request' : 'attended'}`}>{label}</span>
+                            </div>
+                        }
+                        <div className='program_name'>
+                            <div className='ellipsis'>
+                                {title}
+                            </div>
+                        </div>
+                        <div className='program_date'>
+                            {formatDate(startDate)}
+                        </div>
+                        <div className='program_place'>
+                            <div className='ico location gray'>{station}</div> 
+                        </div> 
+                    </div>
+                </div>
+                <div className='btn_wrapper'>
+                    {
+                        label === '참여예정' &&
+                        <Button type='text' classnames={`blue right_arrow`} onclick={checkLocation} text='Check Location' />
+                    }
+                    {
+                        children ? 
+                        <div className='btn_area'>
+                            {children}
+                        </div>
+                        : <></>
+                    }
+                </div>
+                {
+                    isInfoOfProgram && <InfoOfProgram handleClose={() => setIsInfoOfProgram(false)} programId={programId} reservationId={reservationId} />
+                }
+            </div>
         </div>
     );
 };

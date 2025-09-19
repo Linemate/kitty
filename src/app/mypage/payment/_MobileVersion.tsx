@@ -34,7 +34,8 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
             setTotalPages(data.totalPages);
             console.log(list)
         } catch (err) {
-            console.log(err);
+            alert('로그인이 필요해요.');
+            router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
         }
     }, [tab, page])  
     
