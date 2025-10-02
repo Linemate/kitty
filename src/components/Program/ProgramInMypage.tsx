@@ -23,8 +23,8 @@ export const initProgramInMypage = {
 }
 
 const ProgramInMypage = (props:programInMypageProps) => {
-    const { programInMypage, type, children } = props;
-    const { programId, reservationId, label, paymentsStatus, reservationStatus, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency } = programInMypage;
+    const { label, reservation, type, children } = props;
+    const { programId, reservationId, label:reservationLabel, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency } = reservation;
     const isMobile = useMobile();
     const [isInfoOfProgram, setIsInfoOfProgram] = useState<boolean>(false);
 
@@ -33,7 +33,8 @@ const ProgramInMypage = (props:programInMypageProps) => {
     }
 
     const formatDate = (date:string) => {
-        const dateObj = new Date(date);
+        const dateObj = new Date(date.split('.')[0]);
+        console.log(date);
         const year = dateObj.getFullYear();
         const month = dateObj.getMonth() + 1;
         const day = dateObj.getDate();
@@ -46,7 +47,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
             {
                 type === 'payment' &&
                 <div className='payment_status_area'>
-                    {paymentsStatus}<span className='payment_date'>{formatDate(updatedAt)}</span>
+                    {label}<span className='payment_date'>{formatDate(updatedAt)}</span>
                 </div>
             }
             <div className='item_area'>
@@ -59,7 +60,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                             ''
                             :
                             <div className='program_state'>
-                                <span className={`approve_status ${label === '참여예정' ? 'waiting' : label === '취소요청' ? 'request' : 'attended'}`}>{label}</span>
+                                <span className={`approve_status ${reservationLabel === '참여예정' ? 'waiting' : reservationLabel === '취소요청' ? 'request' :  reservationLabel === '취소완료' ? 'canceled' :'attended'}`}>{reservationLabel}</span>
                             </div>
                         }
                         <div className='program_name'>
@@ -68,7 +69,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                             </div>
                         </div>
                         <div className='program_date'>
-                            {formatDate(startDate)}
+                            {formatDate(updatedAt)}
                         </div>
                         <div className='program_place'>
                             <div className='ico location gray'>{station}</div> 
@@ -77,7 +78,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                 </div>
                 <div className='btn_wrapper'>
                     {
-                        label === '참여예정' &&
+                        reservationLabel === '참여예정' &&
                         <Button type='text' classnames={`blue right_arrow`} onclick={checkLocation} text='Check Location' />
                     }
                     {

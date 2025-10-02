@@ -129,7 +129,7 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
                                     <>
                                         {
                                             reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                                <ProgramInMypage key={index} programInMypage={el}>
+                                                <ProgramInMypage key={index} reservation={el}>
                                                     {
                                                         el.label === '참여예정' ?
                                                         <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />

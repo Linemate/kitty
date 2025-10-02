@@ -15,9 +15,9 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
     const [paymentHistory, setPaymentHistory] = useState<paymentHistoryProps[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
-    const [tab, setTab] = useState('UPCOMING');
+    const [tab, setTab] = useState('');
     const router = useRouter();
-
+ 
     // paging
     const viewPaging = (num:number) => {
         setPage(num);
@@ -44,10 +44,12 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
             const list = data.list;
             setPaymentHistory(list);
             setTotalPages(data.totalPages);
-            console.log(list)
         } catch (err) {
-            alert('로그인이 필요해요.');
-            router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
+            if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
+                console.log(err)
+                alert('로그인이 필요해요.');
+                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
+            }
             return;
         }
     }, [page, tab, router])
@@ -89,7 +91,7 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
                                     <>
                                     {
                                         paymentHistory.map((el:paymentHistoryProps, index:number) => (
-                                            <ProgramInMypage key={index} programInMypage={el.reservation} type='payment' />
+                                            <ProgramInMypage key={index} label={el.label} reservation={el.reservation} type='payment' />
                                         ))
                                         }
                                     </>

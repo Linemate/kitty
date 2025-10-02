@@ -93,7 +93,7 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
                                     <>
                                     {
                                         reservationHistory.map((el:reservationHistoryProps, index:number) => (
-                                            <ProgramInMypage key={index} programInMypage={el} />
+                                            <ProgramInMypage key={index} reservation={el} />
                                         ))
                                         }
                                     </>

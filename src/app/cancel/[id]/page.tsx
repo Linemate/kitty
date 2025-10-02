@@ -227,7 +227,7 @@ const Cancel = () => {
                         <div className="section">
                             <div className="sub_title">모임 정보</div>
                             <div className="desc">
-                                <ProgramInMypage programInMypage={program} type={'simple'} />
+                                <ProgramInMypage reservation={program} type={'simple'} />
                             </div>
                         </div>
                         <div className="section">

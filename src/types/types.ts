@@ -159,7 +159,8 @@ export type popupProps = {
 };
 
 export type programInMypageProps = {
-    programInMypage: reservationHistoryProps;
+    label?:string;
+    reservation: reservationHistoryProps;
     type?: string;
     children?: ReactElement;
 };
@@ -389,5 +390,6 @@ export type paymentHistoryProps = {
     status:string;
     orderId: string;
     totalAmount: number;
+    label:string;
     reservation: reservationHistoryProps;
 }
