@@ -34,8 +34,12 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
             setTotalPages(data.totalPages);
             console.log(list)
         } catch (err) {
-            alert('로그인이 필요해요.');
-            router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
+            if (err && typeof err === 'object' && 'status' in err) {
+                console.log(err)
+                alert('로그인이 필요해요.');
+                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
+            }
+            return;
         }
     }, [tab, page])  
     
@@ -126,16 +130,10 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
                                             reservationHistory.map((el:reservationHistoryProps, index:number) => 
                                                 <ProgramInMypage key={index} reservation={el}>
                                                     {
-                                                        el.label === '참여예정' ?
-                                                        <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
+                                                        el.label === '취소완료' ?
+                                                        <Button type="text" classnames={`border lightgray programs cancel wide`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
                                                         :
-                                                        <>
-                                                            {
-                                                                el.label === '참여완료'?
-                                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text="Leave Review" />
-                                                                :''
-                                                            }
-                                                        </>
+                                                        <Button type="text" classnames={`border blue review wide`} onclick={() => leaveReview('3')} text="Leave Review" />
                                                     }
                                                 </ProgramInMypage>
                                             )

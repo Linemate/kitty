@@ -36,6 +36,12 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
             setPage(page + 1);
         }
     }
+
+    // 결제 상세 페이지로 이동
+    const viewDetails = (id:number) => {
+        router.push(`/mypage/payment/details/${id}`);
+    }
+
     // 결제 내역
     const loadReservationHistory = useCallback(async () => {
         try {
@@ -45,7 +51,7 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
             setPaymentHistory(list);
             setTotalPages(data.totalPages);
         } catch (err) {
-            if (err && typeof err === 'object' && 'status' in err && err.status === 401) {
+            if (err && typeof err === 'object' && 'status' in err) {
                 console.log(err)
                 alert('로그인이 필요해요.');
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
@@ -91,7 +97,14 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
                                     <>
                                     {
                                         paymentHistory.map((el:paymentHistoryProps, index:number) => (
-                                            <ProgramInMypage key={index} label={el.label} reservation={el.reservation} type='payment' />
+                                            <ProgramInMypage key={index} label={el.label} reservation={el.reservation} type='payment'>
+                                                {
+                                                    el.label === '취소완료' ?
+                                                    <Button type="text" classnames={`border lightgray programs cancel`} onclick={() => viewDetails(el.id)} text="취소 상세" />
+                                                    :
+                                                    <Button type="text" classnames={`border blue review`} onclick={() =>  viewDetails(el.id)} text="결제 상세" />
+                                                }
+                                            </ProgramInMypage>
                                         ))
                                         }
                                     </>
