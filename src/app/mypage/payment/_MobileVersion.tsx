@@ -131,9 +131,9 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
                                                 <ProgramInMypage key={index} reservation={el}>
                                                     {
                                                         el.label === '취소완료' ?
-                                                        <Button type="text" classnames={`border lightgray programs cancel wide`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
+                                                        <Button type="text" classnames={`border lightgray cancel wide`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
                                                         :
-                                                        <Button type="text" classnames={`border blue review wide`} onclick={() => leaveReview('3')} text="Leave Review" />
+                                                        <Button type="text" classnames={`border lightgray cancel wide`} onclick={() => leaveReview('3')} text="Leave Review" />
                                                     }
                                                 </ProgramInMypage>
                                             )

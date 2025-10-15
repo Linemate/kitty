@@ -100,9 +100,9 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
                                             <ProgramInMypage key={index} label={el.label} reservation={el.reservation} type='payment'>
                                                 {
                                                     el.label === '취소완료' ?
-                                                    <Button type="text" classnames={`border lightgray programs cancel`} onclick={() => viewDetails(el.id)} text="취소 상세" />
+                                                    <Button type="text" classnames={`border lightgray cancel`} onclick={() => viewDetails(el.id)} text="취소 상세" />
                                                     :
-                                                    <Button type="text" classnames={`border blue review`} onclick={() =>  viewDetails(el.id)} text="결제 상세" />
+                                                    <Button type="text" classnames={`border lightgray cancel`} onclick={() =>  viewDetails(el.id)} text="결제 상세" />
                                                 }
                                             </ProgramInMypage>
                                         ))
