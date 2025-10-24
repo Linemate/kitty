@@ -124,7 +124,7 @@ const MypageContents = () => {
                                             <>
                                                 {
                                                 el.label === '참여완료' ?
-                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId.toString())} text="Leave Review" />
+                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!.toString())} text="Leave Review" />
                                                 :
                                                 el.label === '취소요청' ?
                                                 <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />

@@ -7,19 +7,36 @@ import { Button } from 'components/common/Button';
 import InfoOfProgram from './InfoOfProgram';
 
 export const initProgramInMypage = {
-    programId:0,
-    reservationId:0,
     label: '',
     paymentsStatus: '',
     reservationStatus: '',
     startDate: '',
     createdAt: '',
     updatedAt: '',
+    programId:0,
+    reservationId:0,
     thumbnail: '',
     station: '',
     title: '',
     price: 0,
     currency: ''
+}
+
+export const initPaymentHistory = {
+    id: 0,
+    status: '',
+    orderId: '',
+    totalAmount: 0,
+    label: '',
+    reservation: {
+        label: '',
+        reservationStatus: '',
+        paymentsStatus: '',
+        startDate: '',
+        createdAt: '',
+        updatedAt: ''
+    },
+    method:''
 }
 
 const ProgramInMypage = (props:programInMypageProps) => {
@@ -32,22 +49,12 @@ const ProgramInMypage = (props:programInMypageProps) => {
         setIsInfoOfProgram(true);
     }
 
-    const formatDate = (date:string) => {
-        const dateObj = new Date(date.split('.')[0]);
-        console.log(date);
-        const year = dateObj.getFullYear();
-        const month = dateObj.getMonth() + 1;
-        const day = dateObj.getDate();
-        return `${year}.${month}.${day}`;
-    }
-
-
     return (
         <div className={`item ${isMobile ? 'mobile' : ''}`}>
             {
                 type === 'payment' &&
                 <div className='payment_status_area'>
-                    {label}<span className='payment_date'>{formatDate(updatedAt)}</span>
+                    {label}<span className='payment_date'>{updatedAt}</span>
                 </div>
             }
             <div className='item_area'>
@@ -69,7 +76,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                             </div>
                         </div>
                         <div className='program_date'>
-                            {formatDate(updatedAt)}
+                            {updatedAt}
                         </div>
                         <div className='program_place'>
                             <div className='ico location gray'>{station}</div> 
@@ -90,7 +97,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                     }
                 </div>
                 {
-                    isInfoOfProgram && <InfoOfProgram handleClose={() => setIsInfoOfProgram(false)} programId={programId} reservationId={reservationId} />
+                    isInfoOfProgram && <InfoOfProgram handleClose={() => setIsInfoOfProgram(false)} programId={programId!} reservationId={reservationId!} />
                 }
             </div>
         </div>

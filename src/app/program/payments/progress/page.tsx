@@ -3,7 +3,7 @@ import { confirmPayments } from 'api';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import useMobile from 'hooks/useMobile';
-import 'styles/toss.scss';
+import 'styles/nicepay.scss';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 
@@ -34,6 +34,7 @@ const PaymentsProgressContent = () => {
                         paymentKey: paymentKey,
                         scheduleId: Number(scheduleId),
                     };
+                    // confirm api 호출하기
                     const res = await confirmPayments(values);
                     router.push('/program/payments/success');
                 }

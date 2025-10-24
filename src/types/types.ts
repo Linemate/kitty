@@ -208,6 +208,7 @@ export type paymentsProps = {
     programId: number;
     scheduleId: number;
     amount: number;
+    method: string;
 };
 export type paymentsConfirmProps = {
     programId: number;
@@ -340,19 +341,19 @@ export type cancelReasonProps = {
 
 // 프로그램 신청내역 조회
 export type reservationHistoryProps = {
-    programId:number;
-    reservationId:number;
     label: string;
     paymentsStatus: string;
     reservationStatus: string;
     startDate: string;
     createdAt: string;
     updatedAt: string;
-    thumbnail: string;
-    station: string;
-    title: string;
-    price: number;
-    currency: string;
+    programId?:number;
+    reservationId?:number;
+    thumbnail?: string;
+    station?: string;
+    title?: string;
+    price?: number;
+    currency?: string;
 }
 
 // 버디 상세 조회
@@ -392,4 +393,13 @@ export type paymentHistoryProps = {
     totalAmount: number;
     label:string;
     reservation: reservationHistoryProps;
+    method:string;
+}
+
+// 공지사항 목록
+export type noticeProps = {
+    id: number;
+    title: string;
+    contents: string;
+    createdAt: string;
 }

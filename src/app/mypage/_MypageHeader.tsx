@@ -29,7 +29,11 @@ const MypageHeader = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
             <div className="my_info">
                 <div className="my_info_inner">
                     <div className="img_area">
-                        <div className="none"></div>
+                        {
+                            buddyInfo && buddyInfo.image.url !== '' ?
+                            <img src={buddyInfo.image.url} alt="profile" /> :
+                            <div className="none"></div>
+                        }
                     </div>
                     <div className="desc_area">
                         <div className="user_desc_area">
@@ -49,7 +53,7 @@ const MypageHeader = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                         <div className="btns_area">
                             <ul>
                                 <li>
-                                    <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('reservations')} text={'My Events'} />
+                                    <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('')} text={'My Events'} />
                                 </li>
                                 <li>
                                     <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />

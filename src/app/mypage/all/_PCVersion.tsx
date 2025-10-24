@@ -1,5 +1,4 @@
 'use client'
-import Header from 'components/Header/Header';
 import React, { useCallback, useEffect, useState } from 'react';
 import { buddyProfileProps, reservationHistoryProps } from 'types/types';
 import { useRouter } from 'next/navigation';
@@ -10,6 +9,7 @@ import MypageHeader from '../_MypageHeader';
 import MypageSideMenu from '../_MypageSideMenu';
 import Footer from 'components/Footer/Footer';
 import { Button } from 'components/common/Button';
+import Paging from 'components/common/Paging';
 
 const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
@@ -18,24 +18,10 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
     const [tab, setTab] = useState('UPCOMING');
     const router = useRouter();
 
-    // paging
-    const viewPaging = (num:number) => {
+    const changePage = (num:number) => {
         setPage(num);
     }
 
-    // 페이징 왼쪽 방향 버튼
-    const viewPrev = () => {
-        if(page > 0) {
-            setPage(page - 1);
-        }
-    }
-
-    // 페이징 오른쪽 방향 버튼
-    const viewNext = () => {
-        if(page < totalPages - 1) {
-            setPage(page + 1);
-        }
-    }
     // 프로그램 신청 내역
     const loadReservationHistory = useCallback(async () => {
         try {
@@ -99,21 +85,7 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
                                     </>
                                 }
                             </div>
-                            <div className='paging'>
-                                <ul>
-                                    <li className={`${page === 0 ? 'disabled' : ''}`}>
-                                        <Button type='img' classnames='prev' onclick={() => viewPrev()} text='이전' />
-                                    </li>
-                                    {
-                                        Array.from({length: totalPages}, (_, index) => (
-                                            <li key={index} className={`${page === index ? 'selected' : ''}`} onClick={() => viewPaging(index)}>{index + 1}</li>
-                                        ))
-                                    }
-                                    <li className={`${page === totalPages || page === totalPages - 1 ? 'disabled' : ''}`}>
-                                        <Button type='img' classnames='next' onclick={() => viewNext()} text='다음' />
-                                    </li>
-                                </ul>
-                            </div>
+                            <Paging totalPages={totalPages} page={page} changePage={changePage} />
                         </div>
                     </div>
                 </div>

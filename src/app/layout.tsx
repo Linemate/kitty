@@ -33,7 +33,7 @@ export default function RootLayout({
                 <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
             </head>
             <body>
-                {children}
+                <div className="linemate">{children}</div>
                 <div id="modal"></div>
                 <div id="popup"></div>
             </body>

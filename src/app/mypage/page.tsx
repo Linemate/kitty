@@ -52,17 +52,13 @@ const MyPage = () => {
     }
   }, [userInfo, router]);
 
-    
   useEffect(() => {
-      console.log(userInfo);
       const loadBuddyInfo = async () => {
           try {
               const res = await getBuddyDetails(userInfo?.id || 0);
               const data = res.data;
-              console.log(data);
               setBuddyInfo(data);
           } catch (err) {
-              console.log('token..!!!')
               refreshTokenFn();
           }
       }

@@ -4,7 +4,7 @@ import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import ProgramInMypage, { initProgramInMypage } from 'components/Program/ProgramInMypage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import 'styles/cancelPage.scss';
+import 'styles/detailsPage.scss';
 import { cancelReasonProps, programProps, reservationHistoryProps } from 'types/types';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
@@ -217,7 +217,7 @@ const Cancel = () => {
 
 
     return (
-        <div className="cancel">
+        <div className="reservation_details">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header */}
                 <Header title={'모임 대기 취소'} isDepth={true}isLogin={userInfo !== null} />
@@ -301,7 +301,7 @@ const Cancel = () => {
                             <div className="calculate_price">
                                 <div className="row">
                                     <div className="cate">결제 금액</div>
-                                    <div className="price">{program.currency} {program.price.toLocaleString()}</div>
+                                    <div className="price">{program.currency} {program.price?.toLocaleString()}</div>
                                 </div>
                                 <div className="row border_bottom">
                                     <div className="cate">취소 수수료</div>
@@ -309,7 +309,7 @@ const Cancel = () => {
                                 </div>
                                 <div className="row total">
                                     <div className="cate">환불 금액</div>
-                                    <div className="price">{program.currency} {program.price.toLocaleString()}</div>
+                                    <div className="price">{program.currency} {program.price?.toLocaleString()}</div>
                                 </div>
                             </div>
                         </div>

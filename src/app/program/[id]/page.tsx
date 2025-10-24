@@ -187,7 +187,7 @@ const ProgramDetails = () => {
                 const data = res.data;
                 setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
             } else {
-                alert('로그인이 필요해요.');
+                alert('로그인이 필요해요.'); 
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
                 return;
             }
@@ -218,11 +218,15 @@ const ProgramDetails = () => {
                 programId: numOfId,
                 scheduleId: selectedTime.id,
                 amount: program.price,
+                method: 'CARD'
             };
             const res = await requestPayments(values);
             const data = res.data;
-            setResponsePayment(data);
-            setReadyToToss(true);
+            if (data) {
+                console.log(data);
+                setResponsePayment(data);
+                setReadyToToss(true);
+            }
         } catch (err) {
             console.log(err);
             if (err && typeof err === 'object' && 'status' in err && err.status === 401) {

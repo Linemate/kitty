@@ -1,12 +1,12 @@
-.header {
-    background-color: rgba(0, 0, 0, 0);
-    position: absolute;
-    left: 0;
-    top: 0;
-}
 .mypage {
     .wrapper {
         padding-top: 0;
+        .header {
+            background-color: rgba(0, 0, 0, 0);
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
         .my_info {
             padding-top: 160px;
             padding-bottom: 50px;
@@ -19,13 +19,20 @@
                 flex-direction: row;
                 align-items: center;
                 .img_area {
+                    width:114px;
+                    height:114px;
+                    border-radius:90px;
+                    overflow:hidden;
                     margin-right: 32px;
+                    img {
+                        width:100%;
+                        object-fit: cover;
+                    }
                     .none {
-                        width: 114px;
-                        height: 114px;
+                        width:100%;
+                        height:100%;
                         background: var(--color-neutral-700) url('/assets/images/icon/ico_default_profile.png') no-repeat center;
                         background-size: 70px;
-                        border-radius:90px;
                     }
                 }
                 .desc_area {
@@ -276,10 +283,12 @@
                             }
                         }
                     }
+
                 }
             }
         }
         &.mobile {
+            padding-top:56px;
             .my_info {
                 padding-top:88px;
                 background:none;
@@ -402,8 +411,16 @@
         .wrapper {
             min-height:100vh;
             background-color:var(--color-neutral-800);
+            .contents {
+                .contents_inner {
+                    .contents_area {                        
+                        .intro {
+                            margin-bottom:24px;
+                        }
+                    }
+                }
+            }
             &.mobile {
-                padding-top:56px;
                 .contents {
                     .contents_inner {
                         flex-direction: column;
@@ -433,28 +450,123 @@
                     }
                 }
             }
-            &.pc {
-                .tab_area {
-                    padding-bottom:24px;
+        }
+    }
+    // 결제 내역
+    &.payment_history {        
+        .wrapper {
+            &.mobile {
+                .contents {
+                    .contents_inner {
+                        .contents_area {
+                            padding:0;
+                        }
+                        .programs {
+                            .nothing {
+                                padding-top:32px;
+                                background-color:rgba(0, 0, 0, 0);
+                                .ico.payment {
+                                    width:100%;
+                                    background-size:48px;
+                                    background-position:center;
+                                    p {
+                                        font-size:16px;
+                                        line-height:24px;
+                                        text-align:center;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-    // 결제 내역
-    &.payment_history {
-        .contents_area {
-            .programs {
-                .nothing {
-                    padding-top:32px;
-                    background-color:rgba(0, 0, 0, 0);
-                    .ico.payment {
-                        width:100%;
-                        background-size:48px;
-                        background-position:center;
-                        p {
-                            font-size:16px;
-                            line-height:24px;
-                            text-align:center;
+    // 게시판 형태
+    &.board {
+        .wrapper {
+            .contents {
+                .contents_inner {
+                    .contents_area {
+                        .board_list_area {
+                            .board_list {
+                                padding-bottom:24px;
+                            }
+                            .nothing {
+                                width:100%;
+                                padding-top:92px;
+                                background:url('/assets/images/icon/ico_review_gray.png') no-repeat center 32px;
+                                background-size:48px;
+                                .nothing_text {
+                                    font-family: 'Pretendard';
+                                    font-size:14px;
+                                    line-height:22px;
+                                    color:var(--color-neutral-500);
+                                    text-align:center;
+                                }
+                            }
+                            .board_item {
+                                padding:16px 0;
+                                border-bottom:1px solid var(--color-neutral-700);
+                                &:first-child {
+                                    padding-top:0;
+                                }
+                                &.active {
+                                    .board_title_area {
+                                        padding-bottom:16px;
+                                    }
+                                }
+                                .board_title_area {
+                                    cursor:pointer;
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    .board_title {
+                                        font-size:14px;
+                                        line-height:22px;
+                                        font-weight:500;
+                                        font-family: 'Pretendard';
+                                        color:var(--color-neutral-100);
+                                    }
+                                    .board_date {
+                                        font-size:12px;
+                                        line-height:22px;
+                                        font-family: 'Pretendard';
+                                        color:var(--color-neutral-400);
+                                    }
+                                }
+                                .board_content_area {
+                                    padding:12px 16px;
+                                    border-radius:16px;
+                                    background-color:var(--color-neutral-800);
+                                    .board_content {
+                                        color:var(--color-neutral-200);
+                                        font-size:14px;
+                                        font-family: 'Pretendard';
+                                        line-height:26px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            &.mobile {
+                .contents {
+                    .contents_inner {
+                        .contents_area {
+                            .board_list_area {
+                                .board_list {
+                                    padding-top:24px;
+                                }
+                                .board_item {
+                                    .board_title_area {
+                                        flex-direction: column;
+                                        align-items: flex-start;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

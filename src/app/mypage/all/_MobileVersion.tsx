@@ -4,13 +4,13 @@ import Header from 'components/Header/Header';
 import ModalPortal from 'components/Portal/ModalPortal';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import { Button } from 'components/common/Button';
-import useMobile from 'hooks/useMobile';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/mypage.scss';
 import { buddyProfileProps, reservationHistoryProps } from 'types/types';
 import { useRouter } from 'next/navigation';
 import MyPageTab from './_Tab';
 import { useAuthStore } from 'utils/stores';
+import Paging from 'components/common/Paging';
 
 const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
@@ -18,7 +18,6 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [tab, setTab] = useState('UPCOMING');
-    const isMobile = useMobile();
     const router = useRouter();
 
     // 로그인 여부
@@ -68,23 +67,8 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
         
     }
 
-    // paging
-    const viewPaging = (num:number) => {
-        setPage(num - 1);
-    }
-
-    // 페이징 왼쪽 방향 버튼
-    const viewPrev = () => {
-        if(page > 0) {
-            setPage(page - 1);
-        }
-    }
-
-    // 페이징 오른쪽 방향 버튼
-    const viewNext = () => {
-        if(page < totalPages - 1) {
-            setPage(page + 1);
-        }
+    const changePage = (num:number) => {
+        setPage(num);
     }
 
     // 모달 제거
@@ -132,12 +116,12 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
                                                 <ProgramInMypage key={index} reservation={el}>
                                                     {
                                                         el.label === '참여예정' ?
-                                                        <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el.programId, el.reservationId)} text="Cancel" />
+                                                        <Button type="text" classnames={`border lightgray programs cancel wide`} onclick={() => cancelProgram(el.programId!, el.reservationId!)} text="Cancel" />
                                                         :
                                                         <>
                                                             {
                                                                 el.label === '참여완료'?
-                                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text="Leave Review" />
+                                                                <Button type="text" classnames={`border blue review wide`} onclick={() => leaveReview('3')} text="Leave Review" />
                                                                 :''
                                                             }
                                                         </>
@@ -147,40 +131,10 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
                                         }
                                     </>
                                 }
-                                {/* Waiting */}
-                                {/* <ProgramInMypage id={1} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                    <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
-                                </ProgramInMypage> */}
-                                {/* Cancel Request */}
-                                {/* <ProgramInMypage id={1} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'request'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                    <Button type='text' classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram('1')} text='Cancel' />
-                                </ProgramInMypage> */}
-                                {/* Attended */}
-                                {/* <ProgramInMypage id={4} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'attended'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                    <Button type='text' classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview('3')} text='Leave Review' />
-                                </ProgramInMypage> */}
-                                {/* Canceled */}
-                                {/* <ProgramInMypage id={4} title={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'canceled'} createdAt={'2024.02.12(Mon) 1:00 PM '} station={'Gangnam Station'}>
-                                        <Button type='text' classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => viewCancelDetail('3')} text='Cancel Detail' />
-                                </ProgramInMypage> */}
                             </div>
                             {
                                 reservationHistory.length > 0 &&
-                                <div className='paging'>
-                                    <ul>
-                                        <li className={`${page === 1 ? 'disabled' : ''}`}>
-                                            <Button type='img' classnames='prev' onclick={() => viewPrev()} text='이전' />
-                                        </li>
-                                        {
-                                            Array.from({length: totalPages}, (_, index) => (
-                                                <li key={index} className={`${page === index ? 'selected' : ''}`} onClick={() => viewPaging(index + 1)}>{index + 1}</li>
-                                            ))
-                                        }
-                                        <li className={`${page === totalPages || page === totalPages - 1 ? 'disabled' : ''}`}>
-                                            <Button type='img' classnames='next' onclick={() => viewNext()} text='다음' />
-                                        </li>
-                                    </ul>
-                                </div>
+                                <Paging totalPages={totalPages} page={page} changePage={changePage} />
                             }
                         </div>
 

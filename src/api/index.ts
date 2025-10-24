@@ -89,6 +89,12 @@ export const requestPayments = async (values: paymentsProps) => {
     return res.data;
 };
 
+// 나이스페이먼츠 결제 완료 콜백
+export const getNicePayCallback = async (values: paymentsProps) => {
+    const res = await privateApi.post(`/payments/nice/callback`, values);
+    return res.data;
+};
+
 // 결제 승인
 export const confirmPayments = async (values: paymentsConfirmProps) => {
     const res = await privateApi.post(`/payments/confirm`, JSON.stringify(values));
@@ -172,8 +178,26 @@ export const getReservationHiddenInfo = async (id:number, reservationId:number) 
     return res.data;
 };
 
-// 결제 내역 조회
+// 결제 내역 목록 조회
 export const getPaymentHistory = async (pageNum:number, size:number, status:string) => {
     const res = await privateApi.get(`/payments?page=${pageNum}&size=${size}&sort=id%2Cdesc&status=${status}`);
     return res.data;
 };
+
+// 결제 상세 조회
+export const getPaymentHistoryDetails = async (paymentsHistoryId:number) => {
+    const res = await privateApi.get(`/payments/${paymentsHistoryId}`);
+    return res.data;
+};
+
+// 공지사항 전체 조회
+export const getNoticeList = async (pageNum:number, size:number) => {
+    const res = await privateApi.get(`/notices?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
+    return res.data;
+};
+
+// 공지사항 상세 조회
+export const getNoticeDetails = async (id:number) => {
+    const res = await privateApi.get(`/notices/${id}`);
+    return res.data;
+};  

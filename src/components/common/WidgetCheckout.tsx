@@ -1,136 +1,99 @@
 'use client';
-import { TossPaymentsWidgets, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import React, { useEffect, useState } from 'react';
 import { confirmPaymentProps } from 'types/types';
-import 'styles/toss.scss';
+import 'styles/nicepay.scss';
 import useMobile from 'hooks/useMobile';
 import useBodyLock from 'hooks/useBodyLock';
 import { Button } from './Button';
 import { useAuthStore } from 'utils/stores';
+import { getNicePayCallback } from 'api';
 
-function generateRandomString() {
-    if (typeof window !== 'undefined') {
-        return window.btoa(Math.random().toString()).slice(0, 20);
-    }
-    return '';
-}
-
-// ------  결제위젯 초기화 ------
-// TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
-// TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
-// @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
-const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
-const customerKey = generateRandomString();
 
 const WidgetCheckout = (props: confirmPaymentProps) => {
     const { responsePayment, program, scheduleId, closeWidget } = props;
     const [ready, setReady] = useState<boolean>(false);
-    const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
     const isMobile = useMobile();
     const userInfo = useAuthStore.getState().userInfo;
 
     useBodyLock(true);
 
-    useEffect(() => {
-        async function fetchPaymentWidgets() {
-            try {
-                const tossPayments = await loadTossPayments(clientKey);
-
-                // 회원 결제
-                // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentswidgets
-                const widgets = tossPayments.widgets({
-                    customerKey,
-                });
-                // 비회원 결제
-                // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
-
-                setWidgets(widgets);
-            } catch (error) {
-                console.error('Error fetching payment widget:', error);
-            }
-        }
-
-        fetchPaymentWidgets();
-    }, []);
-
-    useEffect(() => {
-        async function renderPaymentWidgets() {
-            if (widgets == null) {
-                return;
-            }
-
-            // ------  주문서의 결제 금액 설정 ------
-            // TODO: 위젯의 결제금액을 결제하려는 금액으로 초기화하세요.
-            // TODO: renderPaymentMethods, renderAgreement, requestPayment 보다 반드시 선행되어야 합니다.
-            // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
-            await widgets.setAmount({
-                currency: 'KRW',
-                value: responsePayment.amount,
-            });
-
-            await Promise.all([
-                // ------  결제 UI 렌더링 ------
-                // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrenderpaymentmethods
-                widgets.renderPaymentMethods({
-                    selector: '#payment-method',
-                    // 렌더링하고 싶은 결제 UI의 variantKey
-                    // 결제 수단 및 스타일이 다른 멀티 UI를 직접 만들고 싶다면 계약이 필요해요.
-                    // @docs https://docs.tosspayments.com/guides/v2/payment-widget/admin#새로운-결제-ui-추가하기
-                    variantKey: 'DEFAULT',
-                }),
-                // ------  이용약관 UI 렌더링 ------
-                // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrenderagreement
-                widgets.renderAgreement({
-                    selector: '#agreement',
-                    variantKey: 'AGREEMENT',
-                }),
-            ]);
-
-            setReady(true);
-        }
-
-        renderPaymentWidgets();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [widgets]);
+    
     const handleRequestPayment = () => {
         try {
-            // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-            // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-            if (widgets) {
-                widgets
-                    .requestPayment({
-                        orderId: responsePayment.orderId, // 고유 주문 번호
-                        orderName: program.title,
-                        successUrl: `${window.location.origin}/program/payments/progress?programId=${program.id}&scheduleId=${scheduleId}`, // 결제 요청이 성공하면 리다이렉트되는 URL
-                        failUrl: window.location.origin + '/program/payments/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
-                        customerEmail: userInfo?.email || '',
-                        customerName: userInfo?.name || '',
-                        // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
-                        // customerMobilePhone: "01012341234",
-                    })
-                    .catch((err) => {
-                        alert(err.toString().replace('Error: ', ''));
-                    });
+            if (typeof window !== 'undefined' && typeof (window as any).goPay === 'function') {
+                (window as any).goPay({
+                    orderId: responsePayment.orderId,
+                    amount: responsePayment.amount,
+                    method: 'card',
+                    successUrl: `${window.location.origin}/program/payments/progress?programId=${program.id}&scheduleId=${scheduleId}`,
+                    failUrl: window.location.origin + '/program/payments/fail',
+                    customerEmail: userInfo?.email || '',
+                    customerName: userInfo?.name || '',
+                });
             }
         } catch (err) {
-            if (err instanceof Error && err.message === '취소되었습니다.') {
-                alert('사용자가 결제를 취소했습니다. 다시 시도해 주세요.');
-                // 사용자에게 결제 취소 안내 메시지 표시
-            } else {
-                console.error('결제 에러:', err);
-                alert('결제 중 오류가 발생했습니다. 다시 시도해 주세요.');
-            }
-            (widgets as any).destroy();
+            console.log(err);
         }
     };
+
+    const nicePayCallback = async (values: any) => {
+        try {
+            const res = await getNicePayCallback(values);
+            console.log(res);
+            // return `${process.env.NEXT_PUBLIC_API_HOST}/api/v1/payments/nice/callback`;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // 나이스페이 JS SDK 로드
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://pay.nicepay.co.kr/v1/js/';
+        script.async = true;
+        script.onload = () => {
+            console.log('나이스페이 SDK 로드 완료:', (window as any).AUTHNICE);
+            setReady(true); // SDK 로드 완료 시 버튼 활성화
+        };
+        script.onerror = () => {
+            console.error('나이스페이 SDK 로드 실패');
+            setReady(false);
+        };
+        document.head.appendChild(script);
+
+        return () => {
+            document.head.removeChild(script);
+        };
+    }, []);
+
+    // 컴포넌트 마운트 시 결제창 호출
+    useEffect(() => {
+        if (ready && typeof window !== 'undefined' && typeof (window as any).AUTHNICE.requestPay === 'function') {
+            (window as any).AUTHNICE.requestPay({
+                clientId: 'S2_003b532bf4e741bc85fdb973e8939527', // 나이스페이 클라이언트 키
+                method: 'card', // 결제 수단 무조건 카드로!!
+                orderId: responsePayment.orderId,
+                amount: responsePayment.amount,
+                goodsName: program.title,
+                returnUrl: `${window.location.origin}/program/payments/progress?programId=${program.id}&scheduleId=${scheduleId}`, // 백엔드 API
+                cancelUrl: `${window.location.origin}/program/payments/fail`,
+                buyerName: userInfo?.name || '고객',
+                buyerEmail: userInfo?.email || '',
+                mallReserved: `test=true&timestamp=${Date.now()}`,
+                fnError: (result: any) => {
+                    console.error('나이스페이 에러:', result);
+                    alert(`결제 실패: ${result.resultMsg}`);
+                },
+            });
+        }
+    }, [ready, responsePayment.orderId, responsePayment.amount, program.title, scheduleId, userInfo]);
+
     return (
-        <div className={`toss_wrapper ${isMobile ? 'mobile' : ''}`}>
+        <div className={`reservation_widget_wrapper ${isMobile ? 'mobile' : ''}`}>
             <div className="bg"></div>
-            <div className="toss_box_section">
+            <div className="reservation_widget_section">
                 {/* 결제 UI */}
                 <div id="payment-method"></div>
-                {/* 이용약관 UI */}
-                <div id="agreement"></div>
                 {/* 결제하기 버튼 */}
                 <button
                     className="btn_payments"
@@ -141,7 +104,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                     onClick={handleRequestPayment}>
                     결제하기
                 </button>
-                <div className="toss_box_close">
+                <div className="reservation_widget_close">
                     <Button text="Close" classnames="close img" type="button" onclick={closeWidget} />
                 </div>
             </div>

@@ -1,4 +1,4 @@
-.toss_wrapper {
+.reservation_widget_wrapper {
     position: fixed;
     left: 0;
     top: 0;
@@ -16,7 +16,7 @@
         right: 0;
         z-index: 1;
     }
-    .toss_box_section {
+    .reservation_widget_section {
         width: 100%;
         max-width: 800px;
         position: fixed;
@@ -36,7 +36,7 @@
         text-align: center;
         overflow-x: auto; /* Add this property for horizontal scrolling */
         white-space: nowrap; /* Prevent text wrapping */
-        .toss_box_close {
+        .reservation_widget_close {
             position: absolute;
             right: 5px;
             top: 5px;
@@ -63,7 +63,7 @@
         }
     }
     &.mobile {
-        .toss_box_section {
+        .reservation_widget_section {
             height: calc(100vh - 60px);
             top: 0;
             margin-top: 0;

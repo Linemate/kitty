@@ -1,7 +1,7 @@
 'use client';
 import React, { Suspense, useState } from 'react';
 import BottomButton from '../_Button';
-import 'styles/toss.scss';
+import 'styles/nicepay.scss';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import useMobile from 'hooks/useMobile';

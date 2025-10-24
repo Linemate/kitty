@@ -405,6 +405,10 @@
         width:100%;
         box-sizing: border-box;
         flex-direction: column;
+        padding:16px;
+        .item_area {
+            flex-direction: column;
+        }
         .img_area {
             width:72px;
             height:60px;

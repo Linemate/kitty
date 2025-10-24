@@ -1,96 +1,98 @@
-.header {
-    width:100%;
-    background-color:#fff;
-    .header_inner {
-        max-width:1440px;
+.linemate {
+    .header {
         width:100%;
-        margin:0 auto; 
-        padding:45px 80px 15px;
-        position:relative;
-        box-sizing: border-box;
-        display:flex;
-        flex-direction:row;
-        justify-content:space-between;
-        align-items:center;
-        &.depth {
-            max-width:704px;
-            padding:20px 4px;
-        }
-    }
-    .header_left {
-        display:flex;
-        flex-direction:row;
-        align-items:center;
-        h1 {
-            width:204px;
-            height:44px;
-            text-indent:-9999px;
-            margin-right:40px;
-            background:url('/assets/images/logo.svg') no-repeat center; background-size:100% 27px;
-            cursor:pointer;
-        }
-        .header_title {
-            display:inline-block;
-            position:absolute;
-            left:50%;
-            top:50%;
-            transform:translate(-50%, -50%);
-            font-size:18px;
-            line-height:24px;
-            font-weight:600;
-        }
-    }
-    .header_right {
-        display:flex;
-        flex-direction:row;
-        align-items: center;
-        .logined {
-            margin-left:20px;
-            font-weight:600;
-            font-size:14px;
-            line-height:22px;
-            padding:6px 24px;
-            display:inline-block;
-            border-radius:8px;
-            border:1px solid var(--color-neutral-200);
-            cursor:pointer;
-        }
-        button {
-            margin-left:20px;
-        }
-    }
-    &.mobile {
+        background-color:#fff;
         .header_inner {
-            max-width:none;
-            padding:16px;
-            border-bottom:1px solid var(--color-neutral-700);
+            max-width:1440px;
+            width:100%;
+            margin:0 auto; 
+            padding:45px 80px 15px;
+            position:relative;
+            box-sizing: border-box;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-between;
+            align-items:center;
             &.depth {
-                padding:16px 20px;
-                position:relative;
+                max-width:704px;
+                padding:20px 4px;
             }
+        }
+        .header_left {
+            display:flex;
+            flex-direction:row;
+            align-items:center;
             h1 {
-                width:105px;
-                height:14px;
+                width:204px;
+                height:44px;
+                text-indent:-9999px;
+                margin-right:40px;
+                background:url('/assets/images/logo.svg') no-repeat center; background-size:100% 27px;
+                cursor:pointer;
             }
-            .nav {
-                display:none;
+            .header_title {
+                display:inline-block;
+                position:absolute;
+                left:50%;
+                top:50%;
+                transform:translate(-50%, -50%);
+                font-size:18px;
+                line-height:24px;
+                font-weight:600;
             }
-            .btn_wrap {
-                display:flex;
-                flex-direction: row;
-                justify-content: flex-end;
-                padding-right:0;
-                .ico.heart {
-                    padding-left:28px;
+        }
+        .header_right {
+            display:flex;
+            flex-direction:row;
+            align-items: center;
+            .logined {
+                margin-left:20px;
+                font-weight:600;
+                font-size:14px;
+                line-height:22px;
+                padding:6px 24px;
+                display:inline-block;
+                border-radius:8px;
+                border:1px solid var(--color-neutral-200);
+                cursor:pointer;
+            }
+            button {
+                margin-left:20px;
+            }
+        }
+        &.mobile {
+            .header_inner {
+                max-width:none;
+                padding:16px;
+                border-bottom:1px solid var(--color-neutral-700);
+                &.depth {
+                    padding:16px 20px;
+                    position:relative;
+                }
+                h1 {
+                    width:105px;
+                    height:14px;
+                }
+                .nav {
+                    display:none;
+                }
+                .btn_wrap {
+                    display:flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
                     padding-right:0;
-                    font-size:11px;
-                    line-height:24px;
-                    margin-right:8px;
-                    &::before {
-                        width:24px;
-                        height:24px;
-                        right:auto;
-                        left:0;
+                    .ico.heart {
+                        padding-left:28px;
+                        padding-right:0;
+                        font-size:11px;
+                        line-height:24px;
+                        margin-right:8px;
+                        &::before {
+                            width:24px;
+                            height:24px;
+                            right:auto;
+                            left:0;
+                        }
                     }
                 }
             }

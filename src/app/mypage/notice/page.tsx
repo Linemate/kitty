@@ -2,14 +2,14 @@
 import useMobile from 'hooks/useMobile';
 import { useCallback, useEffect, useState } from 'react';
 import { buddyProfileProps } from 'types/types';
-import MyPaymentHistoryPC from './_PCVersion';
-import MyPaymentHistoryMobile from './_MobileVersion';
 import { useAuthStore } from 'utils/stores';
 import { parseCookies } from 'nookies';
 import { getBuddyDetails, refreshToken } from 'api';
 import { useRouter } from 'next/navigation';
+import NoticeMobile from './_MobileVersion';
+import NoticePC from './_PCVersion';
 
-export default function MyPaymentHistory() {
+export default function Notice() {
     const router = useRouter();
     const isMobile = useMobile();
     const [buddyInfo, setBuddyInfo] = useState<buddyProfileProps | null>(null);
@@ -63,9 +63,9 @@ export default function MyPaymentHistory() {
         <div>
             {
                 isMobile ?
-                <MyPaymentHistoryMobile buddyInfo={buddyInfo} />
+                <NoticeMobile buddyInfo={buddyInfo} />
                 :
-                <MyPaymentHistoryPC buddyInfo={buddyInfo} />
+                <NoticePC buddyInfo={buddyInfo} />
             }
         </div>
     );

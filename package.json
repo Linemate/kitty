@@ -15,7 +15,6 @@
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "@nextui-org/calendar": "^2.0.4",
-    "@tosspayments/tosspayments-sdk": "^2.3.5",
     "@types/navermaps": "^3.7.6",
     "@types/react-datepicker": "^6.2.0",
     "@types/react-slick": "^0.23.13",
