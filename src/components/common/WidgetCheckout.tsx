@@ -17,35 +17,6 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
 
     useBodyLock(true);
 
-    
-    const handleRequestPayment = () => {
-        try {
-            if (typeof window !== 'undefined' && typeof (window as any).goPay === 'function') {
-                (window as any).goPay({
-                    orderId: responsePayment.orderId,
-                    amount: responsePayment.amount,
-                    method: 'card',
-                    successUrl: `${window.location.origin}/program/payments/progress?programId=${program.id}&scheduleId=${scheduleId}`,
-                    failUrl: window.location.origin + '/program/payments/fail',
-                    customerEmail: userInfo?.email || '',
-                    customerName: userInfo?.name || '',
-                });
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const nicePayCallback = async (values: any) => {
-        try {
-            const res = await getNicePayCallback(values);
-            console.log(res);
-            // return `${process.env.NEXT_PUBLIC_API_HOST}/api/v1/payments/nice/callback`;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
     // 나이스페이 JS SDK 로드
     useEffect(() => {
         const script = document.createElement('script');
@@ -75,7 +46,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                 orderId: responsePayment.orderId,
                 amount: responsePayment.amount,
                 goodsName: program.title,
-                returnUrl: `${window.location.origin}/program/payments/progress?programId=${program.id}&scheduleId=${scheduleId}`, // 백엔드 API
+                returnUrl: `${process.env.NEXT_PUBLIC_API_HOST}/api/v1/payments/nice/callback`, // 백엔드 API
                 cancelUrl: `${window.location.origin}/program/payments/fail`,
                 buyerName: userInfo?.name || '고객',
                 buyerEmail: userInfo?.email || '',
@@ -84,31 +55,23 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                     console.error('나이스페이 에러:', result);
                     alert(`결제 실패: ${result.resultMsg}`);
                 },
+            }, 
+            function(response:any) {
+                // 결제 인증 성공 콜백
+                if (response.resultCode === '0000') {
+                    console.log(response.tid);
+                    
+                    
+                } else {
+                    console.log('결제 인증 실패: ' + response.resultMsg, true, response);
+                }
             });
         }
     }, [ready, responsePayment.orderId, responsePayment.amount, program.title, scheduleId, userInfo]);
 
     return (
-        <div className={`reservation_widget_wrapper ${isMobile ? 'mobile' : ''}`}>
-            <div className="bg"></div>
-            <div className="reservation_widget_section">
-                {/* 결제 UI */}
-                <div id="payment-method"></div>
-                {/* 결제하기 버튼 */}
-                <button
-                    className="btn_payments"
-                    style={{ marginTop: '30px' }}
-                    disabled={!ready}
-                    // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-                    // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrequestpayment
-                    onClick={handleRequestPayment}>
-                    결제하기
-                </button>
-                <div className="reservation_widget_close">
-                    <Button text="Close" classnames="close img" type="button" onclick={closeWidget} />
-                </div>
-            </div>
-        </div>
+        <>
+        </>
     );
 };
 

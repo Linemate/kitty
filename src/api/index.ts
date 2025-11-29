@@ -90,14 +90,14 @@ export const requestPayments = async (values: paymentsProps) => {
 };
 
 // 나이스페이먼츠 결제 완료 콜백
-export const getNicePayCallback = async (values: paymentsProps) => {
-    const res = await privateApi.post(`/payments/nice/callback`, values);
+export const getNicePayCallback = async () => {
+    const res = await privateApi.post(`/payments/nice/callback`);
     return res.data;
 };
 
 // 결제 승인
-export const confirmPayments = async (values: paymentsConfirmProps) => {
-    const res = await privateApi.post(`/payments/confirm`, JSON.stringify(values));
+export const confirmPayments = async (values:paymentsConfirmProps) => {
+    const res = await privateApi.post(`/payments/confirm?provider=NICE`, values);
     return res.data;
 };
 

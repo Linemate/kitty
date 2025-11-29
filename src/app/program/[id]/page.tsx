@@ -155,8 +155,8 @@ const ProgramDetails = () => {
     const router = useRouter();
     // 결제
     const [responsePayment, setResponsePayment] = useState<responsePaymentProps | null>(null);
-    // toss 결제
-    const [readyToToss, setReadyToToss] = useState<boolean>(false);
+    // 결제 준비
+    const [readyToPay, setReadyToPay] = useState<boolean>(false);
     // ref
     const btnReservationRef = useRef<HTMLDivElement>(null);
 
@@ -225,7 +225,7 @@ const ProgramDetails = () => {
             if (data) {
                 console.log(data);
                 setResponsePayment(data);
-                setReadyToToss(true);
+                setReadyToPay(true);
             }
         } catch (err) {
             console.log(err);
@@ -325,6 +325,37 @@ const ProgramDetails = () => {
         },
         [id]
     );
+    // 전 달
+    // 다음 달
+    const getDatesOfMonth = (year:number, month:number) => {
+        const date = new Date(year, month, 1);
+        const dates = [];
+
+        while (date.getMonth() === month) {
+            dates.push(new Date(date));
+            date.setDate(date.getDate() + 1);
+        }
+
+        return dates;
+    }
+
+    const getPrevCurrentNextMonthDates = (baseDate:Date) => {
+        const year = baseDate.getFullYear();
+        const month = baseDate.getMonth();
+
+        const prevYear = month === 0 ? year - 1 : year;
+        const prevMonth = month === 0 ? 11 : month - 1;
+
+        const nextYear = month === 11 ? year + 1 : year;
+        const nextMonth = month === 11 ? 0 : month + 1;
+
+        const prevDates = getDatesOfMonth(prevYear, prevMonth);
+        const nextDates = getDatesOfMonth(nextYear, nextMonth);
+
+        return [...prevDates, ...nextDates];
+    }
+
+
     // 월별
     const handleChangeMonth = useCallback(
         async (date: Date) => {
@@ -338,7 +369,8 @@ const ProgramDetails = () => {
                     const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
                     return new Date(kstDate.getUTCFullYear(), kstDate.getUTCMonth(), kstDate.getUTCDate());
                 });
-                setAvailableDates(rDates);
+                
+                setAvailableDates([...rDates, ...getPrevCurrentNextMonthDates(date)]);
                 setSelectedTime(initTime);
                 handleChangeDate(date);
             } catch (err) {
@@ -385,7 +417,7 @@ const ProgramDetails = () => {
 
     // 토스 창 닫기
     const closeWidget = () => {
-        setReadyToToss(false);
+        setReadyToPay(false);
     };
 
     useEffect(() => {
@@ -692,8 +724,8 @@ const ProgramDetails = () => {
                     </PopupPortal>
                 </Popup>
             )}
-            {/* toss */}
-            {readyToToss && responsePayment && <WidgetCheckout responsePayment={responsePayment} program={program} scheduleId={selectedTime.id} closeWidget={closeWidget} />}
+            {/* widget */}
+            {readyToPay && responsePayment && <WidgetCheckout responsePayment={responsePayment} program={program} scheduleId={selectedTime.id} closeWidget={closeWidget} />}
         </div>
     );
 };

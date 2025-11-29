@@ -211,8 +211,9 @@ export type paymentsProps = {
     method: string;
 };
 export type paymentsConfirmProps = {
-    programId: number;
-    scheduleId: number;
+    paymentKey: string;
+    amount: number;
+    orderId: string;
 };
 
 export type collectionsProps = {

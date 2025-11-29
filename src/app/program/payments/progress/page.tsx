@@ -22,17 +22,14 @@ const PaymentsProgressContent = () => {
                 hasExecuted.current = true; // 실행 시작 시점에 플래그 설정
 
                 const orderId = searchParams.get('orderId');
-                const programId = searchParams.get('programId');
                 const amount = searchParams.get('amount');
                 const paymentKey = searchParams.get('paymentKey');
-                const scheduleId = searchParams.get('scheduleId');
-                if (orderId && programId && amount !== null && paymentKey && scheduleId) {
+
+                if (orderId && paymentKey && amount) {
                     const values = {
-                        orderId: orderId,
-                        programId: Number(programId),
                         amount: Number(amount),
-                        paymentKey: paymentKey,
-                        scheduleId: Number(scheduleId),
+                        paymentKey:paymentKey,
+                        orderId: orderId,
                     };
                     // confirm api 호출하기
                     const res = await confirmPayments(values);
