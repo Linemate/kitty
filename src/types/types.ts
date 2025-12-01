@@ -40,7 +40,7 @@ export type programSummaryProps = {
     thumbnailUrl: string;
     contents: string;
     price: number;
-    currency: any;
+    currency: string;
     reviewsCount: number;
     likesCount: number;
     reservationDate: string;

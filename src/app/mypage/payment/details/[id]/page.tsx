@@ -10,7 +10,6 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
 import { parseCookies } from 'nookies';
 import useMobile from 'hooks/useMobile';
-import { Button } from 'components/common/Button';
 
 const MyPaymentHistoryDetails = () => {
     const [loading, setLoading] = useState<boolean>(true);

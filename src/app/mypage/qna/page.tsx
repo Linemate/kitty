@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import QnaMobile from './_MobileVersion';
 import QnaPC from './_PCVersion';
 
-export default function Notice() {
+export default function QnaPage() {
     const router = useRouter();
     const isMobile = useMobile();
     const [buddyInfo, setBuddyInfo] = useState<buddyProfileProps | null>(null);

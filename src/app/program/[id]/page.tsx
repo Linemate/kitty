@@ -52,7 +52,9 @@ const tabsData = [
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export const initProgram = {
+const initProgram = {
+    id: 0,
+    title: '',
     category: {
         id: 0,
         title: '',
@@ -68,7 +70,6 @@ export const initProgram = {
         programId: 0,
         address: '',
     },
-    id: 0,
     images: [],
     isEnd: false,
     isLike: false,
@@ -103,7 +104,6 @@ export const initProgram = {
     reviews: 0,
     station: '',
     thumbnail: '',
-    title: '',
     xcoordinate: 0,
     ycoordinate: 0,
 };
@@ -145,7 +145,7 @@ const ProgramDetails = () => {
     const [isFixedBottom, setIsFixedBottom] = useState<boolean>(false);
     const [htmlBody, setHtmlBody] = useState<string>('');
 
-    const [id, setId] = useState<string>(param.id[0] || '');
+    const [id, setId] = useState<string>(param?.id?.[0] || '');
 
     // 로그인 여부
     const userInfo = useAuthStore.getState().userInfo;

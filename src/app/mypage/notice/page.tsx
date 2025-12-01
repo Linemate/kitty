@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import NoticeMobile from './_MobileVersion';
 import NoticePC from './_PCVersion';
 
-export default function Notice() {
+export default function NoticePage() {
     const router = useRouter();
     const isMobile = useMobile();
     const [buddyInfo, setBuddyInfo] = useState<buddyProfileProps | null>(null);

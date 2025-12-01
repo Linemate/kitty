@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎉 Linemate (라인메이트)
 
-## Getting Started
+> 내 주변 운동/취미/공방 프로그램을 쉽고 빠르게 신청하고 결제까지 한 번에!  
+> Next.js 14 App Router + React Server Components 기반의 풀스택 프로젝트
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-14.2.0+-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-20.12.0-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+
+## 🚀 주요 기능
+
+| 카테고리           | 페이지 및 기능                                      |
+|--------------------|----------------------------------------------------|
+| 홈                 | 메인 페이지, 인기 프로그램                  |
+| 인증               | 로그인, 회원가입                                   |
+| 프로그램           | 상세보기, 날짜/시간 선택, 결제 (결제중 · 성공 · 실패) |
+| 마이페이지         | 마이페이지 홈, 공지사항, 결제 내역, 1:1 문의, 리뷰 관리 |
+| 예약 관리          | 프로그램 신청 취소, 환불 요청                      |
+| 메이트             | 함께하는 메이트 정보 보기                           |
+| 기타               | 404 페이지, 로딩 UI, 반응형 디자인                 |
+
+## 🛠️ 기술 스택
+
+| 항목                | 버전 및 설명                                      |
+|---------------------|--------------------------------------------------|
+| Node.js             | `v20.12.0` (LTS 추천)                            |
+| Next.js             | `v16.0.6+` (App Router + React Server Components) |
+| React               | 18.x                                             |
+| TypeScript          | 5.x                                              |
+| 패키지 매니저       | npm 또는 yarn/pnpm 자유                           |
+| 스타일링            | Tailwind CSS + @headlessui                       |
+| 배포                | Vercel 권장 (최적화 최고)                         |
+
+## ⚡ 빠른 시작
 
 ```bash
+# 1. 레포지토리 클론
+git clone https://github.com/Linemate/kitty.git
+cd kitty
+
+# 2. 의존성 설치
+npm install
+# 또는
+yarn install
+
+# 3. 개발 서버 실행
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# → http://localhost:3000 접속
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 빌드
+npm run build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 프로덕션 실행
+npm start
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 🌟 프로젝트 구조 (주요 부분만)
 
-## Learn More
+app/
+├── layout.tsx              → Root Layout
+├── page.tsx                → 메인 홈
+├── login/page.tsx          → 로그인
+├── signup/page.tsx         → 회원가입
+├── program/
+│   └── [id]/page.tsx       → 프로그램 상세 + 결제
+├── payment/
+│   ├── loading.tsx
+│   ├── success/page.tsx
+│   └── fail/page.tsx
+├── mypage/
+│   ├── page.tsx
+│   ├── notice/
+│   ├── payments/
+│   ├── qna/
+│   └── review/
+└── cancel/[id]/page.tsx    → 예약 취소
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## branch 규칙
+feat/기능명 또는 fix/버그설명 형태로 브랜치 이름

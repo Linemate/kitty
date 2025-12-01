@@ -5,7 +5,7 @@ import ProgramInMypage from 'components/Program/ProgramInMypage';
 import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
-import React, { use, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { reservationHistoryProps } from 'types/types';
 
 const MypageContents = () => {

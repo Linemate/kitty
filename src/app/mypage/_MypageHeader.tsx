@@ -1,11 +1,8 @@
 'use client'
-import { getBuddyDetails, refreshToken } from 'api';
 import { Button, TextButtonWithIcon } from 'components/common/Button';
 import Header from 'components/Header/Header';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
-import React, { useCallback, useEffect, useState } from 'react';
 import { buddyProfileProps } from 'types/types';
 import { formatDate } from 'utils/formatDate';
 import { useAuthStore } from 'utils/stores';

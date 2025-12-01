@@ -1,19 +1,16 @@
 'use client'
-import Header from 'components/Header/Header';
 import React, { useCallback, useEffect, useState } from 'react';
-import { buddyProfileProps, noticeProps, paymentHistoryProps } from 'types/types';
+import { buddyProfileProps, noticeProps } from 'types/types';
 import { useRouter } from 'next/navigation';
-import ProgramInMypage from 'components/Program/ProgramInMypage';
-import { getNoticeList, getPaymentHistory, getReservationHistory } from 'api';
+import { getNoticeList } from 'api';
 import MypageHeader from '../_MypageHeader';
 import MypageSideMenu from '../_MypageSideMenu';
 import Footer from 'components/Footer/Footer';
-import { Button } from 'components/common/Button';
 import Title from 'components/Title/Title';
 import Paging from 'components/common/Paging';
 
 const QnaPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
-    const [noticeList, setNoticeList] = useState<noticeProps[]>([]);
+    const [qnaList, setQnaList] = useState<noticeProps[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [showNoticeId, setShowNoticeId] = useState<number | null>(null);
@@ -38,7 +35,7 @@ const QnaPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
         try {
             const res = await getNoticeList(page, 10);
             const data = res.data;
-            setNoticeList(data);
+            setQnaList(data);
             setIsLoaded(true);
         } catch (err) {
             if (err && typeof err === 'object' && 'status' in err && 
@@ -73,9 +70,9 @@ const QnaPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                             {
                                 isLoaded ? 
                                 <>
-                                    <div className='notice_list_area'>
+                                    <div className='board_list_area'>
                                         {
-                                            noticeList.length === 0 ? 
+                                            qnaList.length === 0 ? 
                                             <>
                                                 <div className="nothing">
                                                     <p className='nothing_text'>
@@ -84,19 +81,19 @@ const QnaPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                                 </div>
                                             </>
                                             :
-                                            <div className='notice_list'>
+                                            <div className='board_list'>
                                             {
-                                                noticeList.map((el:noticeProps, index:number) => (
-                                                    <div key={index} className={`notice_item ${el.id === showNoticeId ? 'active' : ''}`} onClick={() => viewNotice(el.id)}>
+                                                qnaList.map((el:noticeProps, index:number) => (
+                                                    <div key={index} className={`board_item ${el.id === showNoticeId ? 'active' : ''}`} onClick={() => viewNotice(el.id)}>
                                                         <dl>
-                                                            <dt className='notice_title_area'>
-                                                                <div className='notice_title'>{el.title}</div>
-                                                                <div className='notice_date'>{el.createdAt}</div>
+                                                            <dt className='board_title_area'>
+                                                                <div className='board_title'>{el.title}</div>
+                                                                <div className='board_date'>{el.createdAt}</div>
                                                             </dt>
                                                             {
                                                                 el.id === showNoticeId ?
-                                                                <dd className='notice_content_area'>
-                                                                    <div className='notice_content'>{el.contents}</div>
+                                                                <dd className='board_content_area'>
+                                                                    <div className='board_content'>{el.contents}</div>
                                                                 </dd> : <dd></dd>
                                                             }
                                                         </dl>
@@ -107,7 +104,7 @@ const QnaPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                         }
                                     </div>
                                     {
-                                        noticeList.length !== 0 ? 
+                                        qnaList.length !== 0 ? 
                                         <Paging totalPages={totalPages} page={page} changePage={changePage} />
                                         :
                                         <></>
