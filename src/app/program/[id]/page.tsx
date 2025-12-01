@@ -26,6 +26,7 @@ import { parseCookies } from 'nookies';
 import SimpleProgram from 'components/Program/SimpleProgram';
 import Popup from 'components/Portal/Popup';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
+import DetailContent from './_DetailContent';
 
 const tabsData = [
     {
@@ -566,7 +567,9 @@ const ProgramDetails = () => {
                                 </div>
                                 <div className="desc_of_tab">
                                     {/* introduce */}
-                                    <div className="contents_introduce tab_body" dangerouslySetInnerHTML={{ __html: htmlBody }}></div>
+                                    <div className="contents_introduce tab_body">
+                                        <DetailContent html={htmlBody} />
+                                    </div>
                                     {/* place */}
                                     <div className="contents_place tab_body">
                                         <div className="title">Place</div>

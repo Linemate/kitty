@@ -1,0 +1,4 @@
+// SafeHtml.scss 맨 위에 한 줄 추가
+.safe-html-container * {
+    all: revert;   // 또는 unset
+}
