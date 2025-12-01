@@ -40,6 +40,9 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
     // 컴포넌트 마운트 시 결제창 호출
     useEffect(() => {
         if (ready && typeof window !== 'undefined' && typeof (window as any).AUTHNICE.requestPay === 'function') {
+            console.log('=== 나이스페이먼츠 결제 요청 ===');
+            console.log('orderId:', responsePayment.orderId);
+            console.log('amount:', responsePayment.amount);
             (window as any).AUTHNICE.requestPay({
                 clientId: 'S2_003b532bf4e741bc85fdb973e8939527', // 나이스페이 클라이언트 키
                 method: 'card', // 결제 수단 무조건 카드로!!
