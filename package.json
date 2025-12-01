@@ -46,5 +46,10 @@
     "sass": "^1.77.6",
     "typescript": "^5",
     "typescript-plugin-css-modules": "^5.1.0"
+  },
+  "overrides": {
+    "@mui/icons-material": {
+      "react": "$react"
+    }
   }
 }
