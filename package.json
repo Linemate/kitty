@@ -49,7 +49,12 @@
   },
   "overrides": {
     "@mui/icons-material": {
-      "react": "$react"
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@mui/material": {
+      "react": "$react",
+      "react-dom": "$react-dom"
     }
   }
 }
