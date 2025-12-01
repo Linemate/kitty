@@ -308,7 +308,8 @@ const ProgramDetails = () => {
     };
     // 달력 change
     const handleChangeDate = useCallback(
-        async (date: Date) => {
+        async (date: Date | null) => {
+            if (!date) return;
             try {
                 setSelectedDate(date as Date);
                 const year = date.getFullYear();
