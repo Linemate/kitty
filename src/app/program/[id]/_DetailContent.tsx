@@ -4,7 +4,7 @@ import 'styles/detailContent.scss';
 
 const DetailContent = ({html} : {html: string}) => {
     return (
-        <div className='safe-html-container' dangerouslySetInnerHTML={{ __html: html }} /> 
+        <div className='safe_detail_content' dangerouslySetInnerHTML={{ __html: html }} /> 
     );
 };
 
