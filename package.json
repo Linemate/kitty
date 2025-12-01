@@ -48,13 +48,7 @@
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "overrides": {
-    "@mui/icons-material": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    },
-    "@mui/material": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    }
+    "react": "$react",
+    "react-dom": "$react-dom"
   }
 }
