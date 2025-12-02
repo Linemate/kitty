@@ -2,6 +2,7 @@
 import { getProgramReview } from 'api';
 import Title from 'components/Title/Title';
 import { Button } from 'components/common/Button';
+import Paging from 'components/common/Paging';
 import useMobile from 'hooks/useMobile';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/review.scss';
@@ -24,9 +25,10 @@ const ReviewItem = (props: reviewItemProps) => {
     );
 };
 
-const Review = ({ id }: { id: string }) => {
+const Review = ({ id, size }: { id: string, size: number }) => {
     const [reviews, setReviews] = useState<reviewItemProps[]>([]);
-    const [pageNum, setPageNum] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const [page, setPage] = useState<number>(0);
     const isMobile = useMobile();
 
     const moreList = () => {
@@ -36,14 +38,16 @@ const Review = ({ id }: { id: string }) => {
     // 리뷰 조회
     const loadProgramReviews = useCallback(async () => {
         try {
-            const res = await getProgramReview(id, pageNum);
+            const res = await getProgramReview(id, size, page);
             const data = res.data;
             setReviews(data.list);
+            setTotalPages(data.totalPages);
+            setPage(data.page);
             console.log(data.list);
         } catch (err) {
             console.log(err);
         }
-    }, [id, pageNum]);
+    }, [id, page]);
 
     useEffect(() => {
         loadProgramReviews();
@@ -54,7 +58,7 @@ const Review = ({ id }: { id: string }) => {
             <div className={`review ${isMobile ? 'mobile' : ''}`}>
                 {reviews.length > 0 ? reviews.map((el: reviewItemProps) => <ReviewItem key={el.id} title={el.title} name={el.name} score={el.score} content={el.content} id={el.id} />) : <div className="no_review">등록된 후기가 없습니다.</div>}
 
-                {/* <Button classnames={'wide border lightgray'} type={'text'} text={`12개 리뷰 더보기`} onclick={moreList} /> */}
+                <Paging totalPages={totalPages} page={page} changePage={(num: number) => setPage(num)} />
             </div>
         </>
     );

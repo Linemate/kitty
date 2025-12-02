@@ -12,6 +12,7 @@ import dateTimeOfLanguage from 'utils/dateTimeOfLanguage';
 import { useAuthStore, useLanguage } from 'utils/stores';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
+import Paging from 'components/common/Paging';
 
 const QnaItem = (props: qnaProps) => {
     const { qna, language, handleDelete } = props;
@@ -66,7 +67,7 @@ const QnaItem = (props: qnaProps) => {
     );
 };
 
-const Qna = ({ id }: { id: string }) => {
+const Qna = ({ id, size }: { id: string, size: number }) => {
     const [modal, setModal] = useState<boolean>(false);
     const [isSecret, setIsSecret] = useState<boolean>(false);
     const [popup, setPopup] = useState<popupProps>(initPopup);
@@ -78,8 +79,8 @@ const Qna = ({ id }: { id: string }) => {
     const { language } = useLanguage();
     const router = useRouter();
     // page
-    const [pageNum, setPageNum] = useState<number>(0);
-
+    const [page, setPage] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
     const inputRef = useRef<HTMLDivElement>(null);
     const isMobile = useMobile();
     const viewAsk = () => {
@@ -97,9 +98,10 @@ const Qna = ({ id }: { id: string }) => {
     // qna 조회
     const loadInquiries = async () => {
         try {
-            const res = await getInquiries(id, pageNum);
+            const res = await getInquiries(id, size, page);
             const list = res.data.list;
             setQnas(list);
+            setTotalPages(res.data.totalPages);
         } catch (err) {
             console.log(err);
         }
@@ -211,13 +213,14 @@ const Qna = ({ id }: { id: string }) => {
     };
     useEffect(() => {
         loadInquiries();
-    }, [id]);
+    }, [id, page]);
     return (
         <div className={`qna_area ${isMobile ? 'mobile' : ''}`}>
             <div className="btn_area">
                 <Button classnames="fit border lightgray" text={'Ask a question'} type="text" onclick={viewAsk} />
             </div>
-            <div>{qnas.length > 0 ? qnas.map((el: qnaItemProps) => <QnaItem qna={el} key={el.id} language={language} handleDelete={() => handleDelete(el.id)} />) : <div className="no_qna">등록된 문의가 없습니다.</div>}</div>
+            <div className='qna_list'>{qnas.length > 0 ? qnas.map((el: qnaItemProps) => <QnaItem qna={el} key={el.id} language={language} handleDelete={() => handleDelete(el.id)} />) : <div className="no_qna">등록된 문의가 없습니다.</div>}</div>
+                <Paging totalPages={totalPages} page={page} changePage={(num: number) => setPage(num)} />
             {modal && (
                 <Modal>
                     <ModalPortal type={`qna ${isMobile ? 'mobile' : ''}`} title={'문의 작성하기'} closePortal={closePortal}>

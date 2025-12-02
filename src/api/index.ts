@@ -66,8 +66,8 @@ export const getProgramDetails = async (id: string) => {
 };
 
 // 프로그램 리뷰 조회
-export const getProgramReview = async (id: string, pageNum: number) => {
-    const res = await publicApi.get(`/programs/${id}/reviews?page=${pageNum}&size=10&sort=id%2Cdesc`);
+export const getProgramReview = async (id: string, size: number, page: number) => {
+    const res = await publicApi.get(`/programs/${id}/reviews?page=${page}&size=${size}&sort=id%2Cdesc`);
     return res.data;
 };
 
@@ -102,8 +102,8 @@ export const confirmPayments = async (values:paymentsConfirmProps) => {
 };
 
 // 프로그램 문의 조회
-export const getInquiries = async (id: string, pageNum: number) => {
-    const res = await privateApi.get(`/programs/${id}/inquiries`);
+export const getInquiries = async (id: string, size: number, page: number) => {
+    const res = await privateApi.get(`/programs/${id}/inquiries?page=${page}&size=${size}&sort=id%2Cdesc`);
     return res.data;
 };
 

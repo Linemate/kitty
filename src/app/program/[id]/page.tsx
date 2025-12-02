@@ -53,6 +53,43 @@ const tabsData = [
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+const formatReservationDate = (isoString: string) => {
+    if (!isoString) return '';
+    // AvailableTimes와 동일하게 KST(+9h) 보정
+    const base = new Date(isoString);
+    if (isNaN(base.getTime())) return '';
+    const kst = new Date(base.getTime() + 9 * 60 * 60 * 1000);
+    const y = kst.getFullYear();
+    const m = kst.getMonth() + 1;
+    const d = kst.getDate();
+    const dow = days[kst.getDay()];
+    let h = kst.getHours();
+    const ap = h < 12 ? 'am' : 'pm';
+    h = h % 12;
+    if (h === 0) h = 12;
+    const min = kst.getMinutes();
+    const mmStr = m < 10 ? `0${m}` : `${m}`;
+    const ddStr = d < 10 ? `0${d}` : `${d}`;
+    const mminStr = min < 10 ? `0${min}` : `${min}`;
+    return `${y}.${mmStr}.${ddStr} (${dow}) ${h}:${mminStr}${ap}`;
+};
+
+const formatLocalSelectedDate = (date?: Date) => {
+    if (!date) return '';
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const day = days[date.getDay()];
+    let h = date.getHours();
+    const ampm = h < 12 ? 'am' : 'pm';
+    h = h % 12;
+    if (h === 0) h = 12;
+    const min = date.getMinutes();
+    const mm = m < 10 ? `0${m}` : `${m}`;
+    const dd = d < 10 ? `0${d}` : `${d}`;
+    const mmin = min < 10 ? `0${min}` : `${min}`;
+    return `${y}.${mm}.${dd} (${day}) ${h}:${mmin}${ampm}`;
+};
 const initProgram = {
     id: 0,
     title: '',
@@ -341,6 +378,7 @@ const ProgramDetails = () => {
         return dates;
     }
 
+    // 이전, 현재, 다음 달 날짜
     const getPrevCurrentNextMonthDates = (baseDate:Date) => {
         const year = baseDate.getFullYear();
         const month = baseDate.getMonth();
@@ -571,22 +609,22 @@ const ProgramDetails = () => {
                                     <div className="contents_introduce tab_body">
                                         <DetailContent html={htmlBody} />
                                     </div>
+                                    {/* Offerings */}
+                                    <div className="contents_offerings tab_body">
+                                        <div className="title">Offerings</div>
+                                        <div className='contents'>
+                                            dsfsdfsdfsd
+                                        </div>
+                                    </div>
+                                    {/* Offerings */}
+                                    <div className="contents_materials tab_body">
+                                        <div className="title">Materials</div>
+                                        <div className='contents'>
+                                            dsfsdfsdfsd
+                                        </div>
+                                    </div>
                                     {/* place */}
                                     <div className="contents_place tab_body">
-                                        <div className="title">Place</div>
-                                        <div className="contents">
-                                            <div className="slide_wrap">
-                                                <SlideWrap arrows={!isMobile} dots={true} autoplay={false} slidesToShow={1} slidesToScroll={1} length={program.images.length} indicator={true}>
-                                                    {program.images.map((el: imagesProps) => (
-                                                        <div className="slide" key={el.id}>
-                                                            <div className="img_area">
-                                                                <img src={el.image.url} alt="program image" />
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </SlideWrap>
-                                            </div>
-                                        </div>
                                         <div className="title">Location</div>
                                         <div className="contents">
                                             {/* 지도 영역 */}
@@ -612,10 +650,10 @@ const ProgramDetails = () => {
                                         <div className="title">Refund Regulation</div>
                                         <div className="contents">
                                             <ul className="dots">
-                                                <li>참여 승인 전까지는 취소 시 전액 환불 처리 됩니다.</li>
-                                                <li>참여 승인된 소셜링 취소 시, 방문 6일 전까지 결제액 전액 환불됩니다. (자정 기준)</li>
-                                                <li>참여 승인된 소셜링 취소 시, 방문일 5일~2일 전까지는 결제액의 30%가 환불됩니다. (자정 기준)</li>
-                                                <li>방문 1일전~방문 당일 및 노쇼인 경우에는 환불이 불가합니다.</li>
+                                                <li>결제 후 30분 경과 전 : 전액 환불</li>
+                                                <li>참여 확정 모임의 진행일 기준 4일 전까지 : 전액 환불</li>
+                                                <li>참여 확정 모임의 진행일 기준 3일 전부터 : 환불 불가</li>
+                                                <li>모임 진행 당일에 신청한 경우 : 환불 불가 </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -623,7 +661,7 @@ const ProgramDetails = () => {
                                     <div className="contents_review tab_body">
                                         <div className="title">Review</div>
                                         <div className="contents">
-                                            <Review id={id} />
+                                            <Review id={id} size={4} />
                                         </div>
                                     </div>
 
@@ -631,7 +669,7 @@ const ProgramDetails = () => {
                                     <div className="contents_qna tab_body">
                                         <div className="title">Q&amp;A</div>
                                         <div className="contents">
-                                            <Qna id={id} />
+                                            <Qna id={id} size={4} />
                                         </div>
                                     </div>
                                 </div>
@@ -680,10 +718,15 @@ const ProgramDetails = () => {
                                         <div className="img" style={{ backgroundImage: `url(${program.thumbnail})` }}></div>
                                         <div className="txt">
                                             <div className="program_name">{program.title}</div>
-                                            {/* <div className='program_date'>
-                                                {selectedDate ? `${selectedDate.getFullYear()}.${selectedDate.getMonth() + 1 < 10 ? '0' + selectedDate.getMonth() + 1 : selectedDate?.getMonth() + 1}.${selectedDate.getDate() < 10 ? '0' + selectedDate.getDate() : selectedDate.getDate()}(${days[selectedDate.getDay()]}) ${selectedDate.getHours() > 12 ? selectedDate.getHours() - 12 : selectedDate.getHours()}:${selectedDate.getMinutes() < 10 ? '0' + selectedDate.getMinutes() : selectedDate.getMinutes()} ${selectedDate.getHours() < 12 ? 'am' : 'pm'}` : ''} 
-                                            </div> */}
+                                            <div className='program_date'>
+                                                {selectedTime && selectedTime.reservationDate ? formatReservationDate(selectedTime.reservationDate) : ''}
+                                            </div>
                                         </div>
+                                    </div>
+                                )}
+                                {isMobile && (
+                                    <div className='program_date'>
+                                        {selectedTime && selectedTime.reservationDate ? formatReservationDate(selectedTime.reservationDate) : ''}
                                     </div>
                                 )}
                                 <div className="btn_area">

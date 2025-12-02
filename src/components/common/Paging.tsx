@@ -5,14 +5,18 @@ const Paging = ({totalPages, page, changePage}: {totalPages: number, page: numbe
     // paging
     const viewPaging = (num:number) => {
         changePage(num);
-        window.scrollTo(0, 0);
     }
+
+    // visible page range (max 9)
+    const maxVisible = 9;
+    const half = Math.floor(maxVisible / 2);
+    const start = Math.max(0, Math.min(page - half, Math.max(0, totalPages - maxVisible)));
+    const end = Math.min(totalPages, start + maxVisible);
 
     // 페이징 왼쪽 방향 버튼
     const viewPrev = () => {
         if(page > 0) {
             changePage(page - 1);
-            window.scrollTo(0, 0);
         }
     }
 
@@ -20,7 +24,6 @@ const Paging = ({totalPages, page, changePage}: {totalPages: number, page: numbe
     const viewNext = () => {
         if(page < totalPages - 1) {
             changePage(page + 1);
-            window.scrollTo(0, 0);
         }
     }
     return (
@@ -30,9 +33,12 @@ const Paging = ({totalPages, page, changePage}: {totalPages: number, page: numbe
                     <Button type='img' classnames='prev' onclick={() => viewPrev()} text='이전' />
                 </li>
                 {
-                    Array.from({length: totalPages}, (_, index) => (
-                        <li key={index} className={`${page === index ? 'selected' : ''}`} onClick={() => viewPaging(index)}>{index + 1}</li>
-                    ))
+                    Array.from({length: end - start}, (_, i) => {
+                        const index = start + i;
+                        return (
+                            <li key={index} className={`${page === index ? 'selected' : ''}`} onClick={() => viewPaging(index)}>{index + 1}</li>
+                        );
+                    })
                 }
                 <li className={`${page === totalPages || page === totalPages - 1 ? 'disabled' : ''}`}>
                     <Button type='img' classnames='next' onclick={() => viewNext()} text='다음' />
