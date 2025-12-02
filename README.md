@@ -1,7 +1,5 @@
 # 🎉 Linemate (라인메이트)
 
-> 내 주변 운동/취미/공방 프로그램을 쉽고 빠르게 신청하고 결제까지 한 번에!  
-> Next.js 14 App Router + React Server Components 기반의 풀스택 프로젝트
 
 ![Next.js](https://img.shields.io/badge/Next.js-14.2.0+-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20.12.0-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -28,7 +26,6 @@
 | React               | 18.x                                             |
 | TypeScript          | 5.x                                              |
 | 패키지 매니저       | npm 또는 yarn/pnpm 자유                           |
-| 스타일링            | Tailwind CSS + @headlessui                       |
 | 배포                | Vercel 권장 (최적화 최고)                         |
 
 ## ⚡ 빠른 시작
