@@ -49,7 +49,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                 orderId: responsePayment.orderId,
                 amount: responsePayment.amount,
                 goodsName: program.title,
-                returnUrl: `${process.env.NEXT_PUBLIC_API_HOST}/api/v1/payments/nice/callback`, // 백엔드 API
+                returnUrl: `${window.location.origin}/api/nice/redirect`,
                 cancelUrl: `${window.location.origin}/program/payments/fail`,
                 buyerName: userInfo?.name || '고객',
                 buyerEmail: userInfo?.email || '',

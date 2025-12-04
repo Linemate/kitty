@@ -23,12 +23,12 @@ const PaymentsProgressContent = () => {
 
                 const orderId = searchParams.get('orderId');
                 const amount = searchParams.get('amount');
-                const paymentKey = searchParams.get('paymentKey');
+                const tid = searchParams.get('tid');
 
-                if (orderId && paymentKey && amount) {
+                if (orderId && tid && amount) {
                     const values = {
                         amount: Number(amount),
-                        paymentKey:paymentKey,
+                        paymentKey:tid,
                         orderId: orderId,
                     };
                     // confirm api 호출하기
