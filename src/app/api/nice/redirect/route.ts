@@ -29,7 +29,8 @@ export async function POST(req: Request) {
     // 프론트 result 페이지로 redirect (절대 URL 사용)
     return NextResponse.redirect(`${base}/program/payments/progress?${params.toString()}`, 302);
   } catch (e) {
+    const base = getBaseUrl(req);
     console.error("[/api/nice/redirect] error:", e);
-    return NextResponse.json({ error: "internal_error" }, { status: 500 });
+    return NextResponse.redirect(`${base}/program/payments/fail`, 500);
   }
 }
