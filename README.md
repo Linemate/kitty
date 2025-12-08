@@ -22,7 +22,7 @@
 | 항목                | 버전 및 설명                                      |
 |---------------------|--------------------------------------------------|
 | Node.js             | `v20.12.0` (LTS 추천)                            |
-| Next.js             | `v16.0.6+` (App Router + React Server Components) |
+| Next.js             | `v16.0.7+` (App Router + React Server Components) |
 | React               | 18.x                                             |
 | TypeScript          | 5.x                                              |
 | 패키지 매니저       | npm 또는 yarn/pnpm 자유                           |
