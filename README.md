@@ -1,7 +1,7 @@
 # 🎉 Linemate (라인메이트)
 
 
-![Next.js](https://img.shields.io/badge/Next.js-14.2.0+-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16.0.7+-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20.12.0-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 
