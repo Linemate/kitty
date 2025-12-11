@@ -54,7 +54,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
             {
                 type === 'payment' &&
                 <div className='payment_status_area'>
-                    {label}<span className='payment_date'>{updatedAt}</span>
+                    {label}<span className='payment_date'>{startDate}</span>
                 </div>
             }
             <div className='item_area'>
@@ -76,7 +76,7 @@ const ProgramInMypage = (props:programInMypageProps) => {
                             </div>
                         </div>
                         <div className='program_date'>
-                            {updatedAt}
+                            {startDate}
                         </div>
                         <div className='program_place'>
                             <div className='ico location gray'>{station}</div> 

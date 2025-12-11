@@ -201,3 +201,9 @@ export const getNoticeDetails = async (id:number) => {
     const res = await privateApi.get(`/notices/${id}`);
     return res.data;
 };  
+
+// 내가 쓴 리뷰들 조회
+export const getMyReviewList = async (pageNum:number, size:number) => {
+    const res = await privateApi.get(`/programs/reviews/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
+    return res.data;
+};

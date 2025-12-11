@@ -1,20 +1,21 @@
 'use client'
-import { getNoticeList } from 'api';
+import { getMyReviewList, getNoticeList } from 'api';
 import Header from 'components/Header/Header';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/mypage.scss';
-import { buddyProfileProps, noticeProps, } from 'types/types';
+import { buddyProfileProps, noticeProps, reviewItemProps, reviewProps, } from 'types/types';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
 import Paging from 'components/common/Paging';
 
-const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
-    const [qnaList, setQnaList] = useState<noticeProps[]>([]);
+const ReviewMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
+    const [reviewList, setReviewList] = useState<reviewItemProps[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [showNoticeId, setShowNoticeId] = useState<number | null>(null);
     const router = useRouter();
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
     // 로그인 여부
     const userInfo = useAuthStore.getState().userInfo;
 
@@ -36,7 +37,7 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
         try {
             const res = await getNoticeList(page, 10);
             const data = res.data;
-            setQnaList(data);
+            setReviewList(data);
             setIsLoaded(true);
         } catch (err) {
             if (err && typeof err === 'object' && 'status' in err && 
@@ -49,9 +50,22 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
         }
     }, [page])  
 
+    
+
+    // 내가 쓴 리뷰들 조회
+    const loadMyReviewList = useCallback(async () => {
+        try {
+            const res = await getMyReviewList(page, 10);
+            const data = res.data;
+            setReviewList(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [userInfo]);
+
     useEffect(() => {
-        loadNoticeList();
-    }, [loadNoticeList, page])
+        loadMyReviewList();
+    }, [loadMyReviewList, page])
 
 
     return (
@@ -68,7 +82,7 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                 <>
                                     <div className='board_list_area'>
                                         {
-                                            qnaList.length === 0 ? 
+                                            reviewList.length === 0 ? 
                                             <>
                                                 <div className="nothing">
                                                     <p className='nothing_text'>
@@ -79,17 +93,17 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                             :
                                             <div className='board_list'>
                                             {
-                                                qnaList.map((el:noticeProps, index:number) => (
+                                                reviewList.map((el:reviewItemProps, index:number) => (
                                                     <div key={index} className={`board_item ${el.id === showNoticeId ? 'active' : ''}`} onClick={() => viewNotice(el.id)}>
                                                         <dl>
                                                             <dt className='board_title_area'>
                                                                 <div className='board_title'>{el.title}</div>
-                                                                <div className='board_date'>{el.createdAt}</div>
+                                                                {/* <div className='board_date'>{el.createdAt}</div> */}
                                                             </dt>
                                                             {
                                                                 el.id === showNoticeId ?
                                                                 <dd className='board_content_area'>
-                                                                    <div className='board_content'>{el.contents}</div>
+                                                                    <div className='board_content'>{el.content}</div>
                                                                 </dd> : <dd></dd>
                                                             }
                                                         </dl>
@@ -100,7 +114,7 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                         }
                                     </div>
                                     {
-                                        qnaList.length !== 0 ? 
+                                        reviewList.length !== 0 ? 
                                         <Paging totalPages={totalPages} page={page} changePage={changePage} />
                                         :
                                         <></>
@@ -117,4 +131,4 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     );
 };
 
-export default QnaMobile;
+export default ReviewMobile;

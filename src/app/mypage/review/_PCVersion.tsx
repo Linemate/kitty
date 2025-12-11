@@ -1,22 +1,29 @@
 'use client'
-import { getNoticeList } from 'api';
-import Header from 'components/Header/Header';
 import React, { useCallback, useEffect, useState } from 'react';
-import 'styles/mypage.scss';
-import { buddyProfileProps, noticeProps, } from 'types/types';
+import { buddyProfileProps, reviewItemProps } from 'types/types';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from 'utils/stores';
+import { getMyReviewList, getNoticeList } from 'api';
+import MypageHeader from '../_MypageHeader';
+import MypageSideMenu from '../_MypageSideMenu';
+import Footer from 'components/Footer/Footer';
+import Title from 'components/Title/Title';
 import Paging from 'components/common/Paging';
+import { useAuthStore } from 'utils/stores';
 
-const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
-    const [qnaList, setQnaList] = useState<noticeProps[]>([]);
+const ReviewPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
+    const [reviewList, setReviewList] = useState<reviewItemProps[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [showNoticeId, setShowNoticeId] = useState<number | null>(null);
     const router = useRouter();
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+ 
     // 로그인 여부
     const userInfo = useAuthStore.getState().userInfo;
+    
+    const changePage = (num:number) => {
+        setPage(num);
+    }
 
     // 내용 보기
     const viewNotice = (id:number) => {
@@ -27,16 +34,13 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
         }
     }
 
-    const changePage = (num:number) => {
-        setPage(num);
-    }
-    
-    // 공지사항 목록
+    // 공지사항
     const loadNoticeList = useCallback(async () => {
         try {
             const res = await getNoticeList(page, 10);
             const data = res.data;
-            setQnaList(data);
+            const list = data.list;
+            setReviewList(list);
             setIsLoaded(true);
         } catch (err) {
             if (err && typeof err === 'object' && 'status' in err && 
@@ -45,51 +49,73 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                 alert('로그인이 필요해요.');
                 router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
             }
+            setIsLoaded(true);
             return;
         }
-    }, [page])  
+    }, [page, router])
+
+    
+
+    // 내가 쓴 리뷰들 조회
+    const loadMyReviewList = useCallback(async () => {
+        try {
+            const res = await getMyReviewList(page, 10);
+            const data = res.data;
+            setReviewList(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [userInfo]);
+
+    // 리뷰로 이동
+    const viewReview = (id:number) => {
+        router.push(`/mypage/review/${id}`);
+    }
 
     useEffect(() => {
         loadNoticeList();
     }, [loadNoticeList, page])
 
-
     return (
-        <div className='mypage board'>
-            <div className={`wrapper mobile`}>
-                <div className='intro'></div>
+        <div className='mypage review'>
+            <div className={`wrapper pc`}>
                 {/* Header */}
-                <Header title={'공지사항'} isDepth={true} isLogin={userInfo !== null} />
+                <MypageHeader buddyInfo={buddyInfo} />
                 <div className='contents'>
                     <div className='contents_inner'>
+                        <MypageSideMenu />
                         <div className='contents_area'>
-                        {
+                            <div className='intro'>
+                                <div>
+                                    <Title title={'Review'} />
+                                </div>
+                            </div>
+                            {
                                 isLoaded ? 
                                 <>
                                     <div className='board_list_area'>
                                         {
-                                            qnaList.length === 0 ? 
+                                            reviewList.length === 0 ? 
                                             <>
                                                 <div className="nothing">
                                                     <p className='nothing_text'>
-                                                        공지사항이 없습니다. 
+                                                        리뷰가 없습니다.
                                                     </p>
                                                 </div>
                                             </>
                                             :
                                             <div className='board_list'>
                                             {
-                                                qnaList.map((el:noticeProps, index:number) => (
-                                                    <div key={index} className={`board_item ${el.id === showNoticeId ? 'active' : ''}`} onClick={() => viewNotice(el.id)}>
+                                                reviewList.map((el:reviewItemProps, index:number) => (
+                                                    <div key={index} className={`board_item`} onClick={() => viewReview(el.id)}>
                                                         <dl>
                                                             <dt className='board_title_area'>
                                                                 <div className='board_title'>{el.title}</div>
-                                                                <div className='board_date'>{el.createdAt}</div>
                                                             </dt>
                                                             {
                                                                 el.id === showNoticeId ?
                                                                 <dd className='board_content_area'>
-                                                                    <div className='board_content'>{el.contents}</div>
+                                                                    <div className='board_content'>{el.content}</div>
                                                                 </dd> : <dd></dd>
                                                             }
                                                         </dl>
@@ -100,7 +126,7 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                         }
                                     </div>
                                     {
-                                        qnaList.length !== 0 ? 
+                                        reviewList.length !== 0 ? 
                                         <Paging totalPages={totalPages} page={page} changePage={changePage} />
                                         :
                                         <></>
@@ -113,8 +139,10 @@ const QnaMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                     </div>
                 </div>
             </div>
+            {/* Footer */}
+            <Footer />
         </div>
     );
 };
 
-export default QnaMobile;
+export default ReviewPC;
