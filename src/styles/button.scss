@@ -121,6 +121,16 @@
                 top:3px;
             }
         }
+        &.disabled {
+            background-color:#7676801F;
+            color:var(--color-neutral-500);
+            cursor:default;
+        }
+        &.in_modal {
+            font-size:14px;
+            line-height:22px;
+            border-radius:8px;
+        }
     }
     &.img {
         width:24px;

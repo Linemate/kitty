@@ -1,3 +1,6 @@
-.safe_detail_content * {
-    all: unset;   // 또는 unset
+.safe_detail_content {
+    padding-top:40px;
+    * {
+        all:unset;
+    }
 }

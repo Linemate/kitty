@@ -16,7 +16,7 @@ const MypageContents = () => {
     });
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [tab, setTab] = useState('UPCOMING');
-    const [modal, setModal] = useState(false);
+    const [modal, setModal] = useState({open:false, programId:0});
     const isMobile = useMobile();
     const router = useRouter();
 
@@ -67,13 +67,19 @@ const MypageContents = () => {
     const checkLocation = (id: string) => {};
 
     // 리뷰 남기러 가기
-    const leaveReview = (id: string) => {
-        setModal(true);
+    const leaveReview = (id: number) => {
+        setModal({
+          open:true,
+          programId: id
+        });
     };
 
     // 문의하기 닫기
     const closeModal = () => {
-        setModal(false);
+        setModal({
+          open:false,
+          programId:0
+        });
     }
 
     useEffect(() => {
@@ -134,7 +140,7 @@ const MypageContents = () => {
                                                 <>
                                                     {
                                                     el.label === '참여완료' ?
-                                                    <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!.toString())} text="Leave Review" />
+                                                    <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!)} text="Leave Review" />
                                                     :
                                                     el.label === '취소요청' ?
                                                     <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
@@ -144,15 +150,15 @@ const MypageContents = () => {
                                                 </>
                                             }
                                         </ProgramInMypage>
-
-                                        {
-                                            // 문의하기
-                                            modal && <AddReview id={el.programId || 0} closePortal={closeModal} />
-                                        }
                                     </React.Fragment>
                                 )
                             }
                         </>
+                    }
+
+                    {
+                        // 문의하기
+                        modal.open && <AddReview id={modal.programId || 0} closePortal={closeModal} />
                     }
                     {/* Waiting */}
                     {/* <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>

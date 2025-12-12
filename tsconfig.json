@@ -26,9 +26,12 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./*"],
+      "api": ["./api"],
+      "api/*": ["./api/*"],
+      "components/*": ["./components/*"],
+      "hooks/*": ["./hooks/*"],
+      "types/*": ["./types/*"]
     },
     "target": "ES2017"
   },
