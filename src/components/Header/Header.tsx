@@ -54,7 +54,7 @@ const Header = (props: headerProps) => {
     if (isMobile === null) return null;
 
     return (
-        <div className={`header ${isMobile ? 'mobile' : ''} ${isMobileDesc ? 'desc' : ''}`}>
+        <div className={`header_area ${isMobile ? 'mobile' : ''} ${isMobileDesc ? 'desc' : ''}`}>
             {(isMobile && isMobileDesc) || isDepth ? (
                 <div className={`header_inner depth`}>
                     <div className='header_left'>

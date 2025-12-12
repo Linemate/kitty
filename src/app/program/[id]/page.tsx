@@ -144,6 +144,8 @@ const initProgram = {
     thumbnail: '',
     xcoordinate: 0,
     ycoordinate: 0,
+    amenities:'',
+    requiredItems: ''
 };
 
 const initTime = {
@@ -613,14 +615,14 @@ const ProgramDetails = () => {
                                     <div className="contents_offerings tab_body">
                                         <div className="title">Offerings</div>
                                         <div className='contents'>
-                                            dsfsdfsdfsd
+                                            {program.amenities}
                                         </div>
                                     </div>
-                                    {/* Offerings */}
+                                    {/* Materials */}
                                     <div className="contents_materials tab_body">
                                         <div className="title">Materials</div>
                                         <div className='contents'>
-                                            dsfsdfsdfsd
+                                            {program.requiredItems}
                                         </div>
                                     </div>
                                     {/* place */}

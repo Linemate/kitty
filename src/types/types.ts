@@ -74,6 +74,8 @@ export type programProps = {
     thumbnail: string;
     xcoordinate: number;
     ycoordinate: number;
+    amenities:string;
+    requiredItems: string;
 };
 
 export type buttonProps = {
