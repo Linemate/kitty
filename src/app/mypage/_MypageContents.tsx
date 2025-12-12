@@ -42,7 +42,7 @@ const MypageContents = () => {
         } catch (err) {
             console.log(err);
         }
-    }, [tab])   
+    }, [tab])
 
     // 전체보기로 이동
     const viewMorePage = () => {
@@ -85,7 +85,7 @@ const MypageContents = () => {
     }, [loadReservationHistoryCount])
 
     return (
-        <div className="contents_area">            
+        <div className="contents_area">
             <div className="intro">
                 <div>
                     <Title title={'My Events'} />
@@ -107,7 +107,7 @@ const MypageContents = () => {
                 {/* 모임 리스트가 있을 때 */}
                 <div className="list">
                     {
-                        reservationHistory.length === 0 ? 
+                        reservationHistory.length === 0 ?
                         <>
                         {/* 모임 리스트가 비었을 때 */}
                         <div className="nothing">
@@ -119,13 +119,13 @@ const MypageContents = () => {
                                 <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
                             </div>
                         </div>
-                        
+
                         </>
                         :
                         <>
                             {
-                                reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                    <React.Fragment key={el.programId}>
+                                reservationHistory.map((el:reservationHistoryProps, index:number) =>
+                                    <React.Fragment key={`${el.programId}-${el.reservationId}`}>
                                         <ProgramInMypage reservation={el}>
                                             {
                                                 el.label === '참여예정' ?
@@ -144,7 +144,7 @@ const MypageContents = () => {
                                                 </>
                                             }
                                         </ProgramInMypage>
-                                        
+
                                         {
                                             // 문의하기
                                             modal && <AddReview id={el.programId || 0} closePortal={closeModal} />
