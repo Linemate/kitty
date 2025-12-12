@@ -4,8 +4,10 @@ import Modal from './Modal';
 import 'styles/modal.scss';
 import { Button } from 'components/common/Button';
 import { modalProps } from 'types/types';
+import useMobile from 'hooks/useMobile';
 
 const ModalPortal = (props:modalProps) => {
+    const isMobile = useMobile();
     const {title, children, type, closePortal} = props;
     // 모달 닫기
     const handleClose = () => {
@@ -13,7 +15,7 @@ const ModalPortal = (props:modalProps) => {
     }
     return (
         <Modal>
-            <div className={`modal_wrapper ${type}`}>
+            <div className={`modal_wrapper ${type} ${isMobile ? 'mobile' : ''}`}>
                 <div className='bg' onClick={handleClose}></div>
                 <div className='contents'>
                     <div className='modal_header'>

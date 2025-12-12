@@ -2,6 +2,7 @@
 import { getReservationHistory, getReservationHistoryCount } from 'api';
 import { Button, TextButtonWithIcon } from 'components/common/Button';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
+import AddReview from 'components/Review/_Add';
 import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
@@ -15,6 +16,7 @@ const MypageContents = () => {
     });
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [tab, setTab] = useState('UPCOMING');
+    const [modal, setModal] = useState(false);
     const isMobile = useMobile();
     const router = useRouter();
 
@@ -65,7 +67,14 @@ const MypageContents = () => {
     const checkLocation = (id: string) => {};
 
     // 리뷰 남기러 가기
-    const leaveReview = (id: string) => {};
+    const leaveReview = (id: string) => {
+        setModal(true);
+    };
+
+    // 문의하기 닫기
+    const closeModal = () => {
+        setModal(false);
+    }
 
     useEffect(() => {
         loadReservationHistory();
@@ -116,24 +125,31 @@ const MypageContents = () => {
                         <>
                             {
                                 reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                    <ProgramInMypage key={index} reservation={el}>
+                                    <React.Fragment key={el.programId}>
+                                        <ProgramInMypage reservation={el}>
+                                            {
+                                                el.label === '참여예정' ?
+                                                <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
+                                                :
+                                                <>
+                                                    {
+                                                    el.label === '참여완료' ?
+                                                    <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!.toString())} text="Leave Review" />
+                                                    :
+                                                    el.label === '취소요청' ?
+                                                    <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
+                                                    :
+                                                    ''
+                                                    }
+                                                </>
+                                            }
+                                        </ProgramInMypage>
+                                        
                                         {
-                                            el.label === '참여예정' ?
-                                            <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
-                                            :
-                                            <>
-                                                {
-                                                el.label === '참여완료' ?
-                                                <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!.toString())} text="Leave Review" />
-                                                :
-                                                el.label === '취소요청' ?
-                                                <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
-                                                :
-                                                ''
-                                                }
-                                            </>
+                                            // 문의하기
+                                            modal && <AddReview id={el.programId || 0} closePortal={closeModal} />
                                         }
-                                    </ProgramInMypage>
+                                    </React.Fragment>
                                 )
                             }
                         </>

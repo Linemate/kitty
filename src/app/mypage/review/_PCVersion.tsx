@@ -34,7 +34,7 @@ const ReviewPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
         }
     }
 
-    // 공지사항
+    // 리뷰
     const loadNoticeList = useCallback(async () => {
         try {
             const res = await getNoticeList(page, 10);

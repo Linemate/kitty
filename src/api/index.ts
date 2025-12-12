@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
+import { addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
 import { getCookie } from 'utils/cookiesFunction';
 import { useAuthStore } from 'utils/stores';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
@@ -207,3 +207,9 @@ export const getMyReviewList = async (pageNum:number, size:number) => {
     const res = await privateApi.get(`/programs/reviews/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
     return res.data;
 };
+
+// 프로그램 리뷰 작성
+export const postReview = async (id:string, data:addReviewProps) => {
+    const res = await privateApi.post(`/programs/${id}/review`);
+    return res.data;
+}

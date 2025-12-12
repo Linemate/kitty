@@ -406,3 +406,9 @@ export type noticeProps = {
     contents: string;
     createdAt: string;
 }
+
+// 프로그램 리뷰 작성
+export type addReviewProps = {
+    content: string;
+    score: number;
+}
