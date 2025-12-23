@@ -210,6 +210,6 @@ export const getMyReviewList = async (pageNum:number, size:number) => {
 
 // 프로그램 리뷰 작성
 export const postReview = async (id:string, data:addReviewProps) => {
-    const res = await privateApi.post(`/programs/${id}/review`);
+    const res = await privateApi.post(`/programs/${id}/review`, data);
     return res.data;
 }

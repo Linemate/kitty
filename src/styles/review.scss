@@ -16,13 +16,15 @@
         margin-bottom: 48px;
         .txt {
             flex: 1;
+            min-width: 0; // allow flex child to shrink for ellipsis inside
             .desc_intro {
                 display: flex;
                 flex-direction: row;
                 justify-content: flex-start;
                 padding-bottom: 0;
                 margin-bottom: 8px;
-                .username {
+                min-width: 0; // enable text truncation within flex container
+                .username, .title {
                     font-family: 'Pretendard';
                     font-weight: 600;
                     font-size: 14px;
@@ -30,6 +32,13 @@
                     vertical-align: middle;
                     position: relative;
                     padding-right: 16px;
+                    &.title {
+                        flex:1 1 auto;
+                        min-width: 0;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
                     &::before {
                         content: '';
                         display: block;
@@ -38,17 +47,20 @@
                         background-color: var(--color-neutral-600);
                         position: absolute;
                         right: 8px;
-                        top: 2p;
+                        top: 2px;
                     }
                 }
                 .date {
-                    font-family: 'Pretendard';
-                    font-weight: 400;
-                    font-size: 12px;
-                    line-height: 20px;
-                    color: var(--color-neutral-400);
-                    vertical-align: middle;
+                    flex: 0 0 auto; // prevent date from shrinking
                 }
+            }
+            .date {
+                font-family: 'Pretendard';
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 20px;
+                color: var(--color-neutral-400);
+                vertical-align: middle;
             }
             .desc {
                 width: 100%;
@@ -139,6 +151,7 @@
     // 리뷰 작성하기
     .add_review {
         .review_score {
+            margin-bottom:24px;
             display:flex;
             flex-direction: column;
             justify-content: center;
@@ -149,8 +162,11 @@
                 height:64px;
                 text-align:center;
                 margin:0 auto;
-                padding-bottom:4px;
+                padding-bottom:0px;
                 background-size:64px;
+            }
+            .score_area {
+                height:32px;
             }
             .one_star {
                 display:inline-block;
@@ -173,8 +189,18 @@
                 border:1px solid #ddd;
                 border-radius:8px;
                 padding:16px;
+                margin-bottom:8px;
+                &:focus {
+                    outline:1px solid var(--color-primary-400);
+                }
             }
-            margin-bottom:8px;
+            .review_char_count {
+                color:var(--color-neutral-400);
+                font-size:12px;
+                line-height:20px;
+                font-family:'Pretendard';
+                margin-bottom:16px;
+            }
         }
     }
     &.mobile {
@@ -192,9 +218,14 @@
             }
             .txt {
                 .desc_intro {
-                    .username,
                     .date {
                         line-height: 22px;
+                    }
+                    .title {
+                        line-height: 22px;
+                        &::before {
+                            display:none;
+                        }
                     }
                 }
                 .desc {

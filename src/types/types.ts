@@ -168,11 +168,14 @@ export type programInMypageProps = {
 };
 
 export type reviewItemProps = {
+    isMy:boolean; 
+    
     id: number;
     title: string;
     content: string;
     score: number;
     name: string;
+    createdAt: string;
 };
 
 export type reviewProps = {
@@ -409,6 +412,6 @@ export type noticeProps = {
 
 // 프로그램 리뷰 작성
 export type addReviewProps = {
-    content: string;
+    contents: string;
     score: number;
 }

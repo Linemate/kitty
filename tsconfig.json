@@ -15,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -26,12 +26,24 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "api": ["./api"],
-      "api/*": ["./api/*"],
-      "components/*": ["./components/*"],
-      "hooks/*": ["./hooks/*"],
-      "types/*": ["./types/*"]
+      "@/*": [
+        "./*"
+      ],
+      "api": [
+        "./api"
+      ],
+      "api/*": [
+        "./api/*"
+      ],
+      "components/*": [
+        "./components/*"
+      ],
+      "hooks/*": [
+        "./hooks/*"
+      ],
+      "types/*": [
+        "./types/*"
+      ]
     },
     "target": "ES2017"
   },
