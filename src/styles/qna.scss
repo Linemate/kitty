@@ -1,4 +1,7 @@
 .qna_area {
+    .only_my {
+        display:none;
+    }
     .no_qna {
         font-family: 'Pretendard';
         font-weight: 500;
@@ -14,7 +17,7 @@
     .qna_list {
         padding-bottom:24px;
     }
-    .qna {
+    .qna_item {
         &.pointer {
             cursor: pointer;
         }
@@ -68,12 +71,6 @@
                     line-height: 20px;
                     color: var(--color-neutral-100);
                 }
-                .date {
-                    color: var(--color-neutral-400);
-                    font-family: 'Pretendard';
-                    font-weight: 400;
-                    font-size: 14px;
-                }
             }
         }
         .qna_body {
@@ -120,9 +117,18 @@
                 }
             }
         }
+        .qna_footer {
+            display:none;
+        }
+        .date {
+            color: var(--color-neutral-400);
+            font-family: 'Pretendard';
+            font-weight: 400;
+            font-size: 14px;
+        }
     }
     &.mobile {
-        .qna {
+        .qna_item {
             &:last-child {
                 border-bottom: 0;
             }
@@ -148,6 +154,9 @@
                         font-size: 13px;
                     }
                 }
+                .only_pc {
+                    display:none;
+                }
             }
             .qna_body {
                 .reply {
@@ -164,6 +173,59 @@
                 .reply_date {
                     font-size: 12px;
                     line-height: 20px;
+                }
+            }
+            .qna_footer {
+                display:none;
+            }
+        }
+    }
+}
+// 마이페이지 내 Q&A 조회 페이지 스타일
+.mypage {
+    .qna_area {
+        .only_my {
+            display:block;
+        }
+        .qna_item {
+            .date {
+                font-size: 12px;
+                line-height: 20px;
+            }
+            .btn_delete {
+                font-size:13px;
+                color:var(--color-neutral-500);
+                font-family: 'Pretendard';
+                font-weight: 600;
+                line-height: 20px; 
+            }
+            .qna_footer {
+                display:none;
+            }
+        }
+        &.mobile {
+            .qna_item {
+                .qna_header {
+                    .left {
+                        .username {
+                            &::after {
+                                display:none;
+                            }
+                        }
+                        .date {
+                            display:none;
+                        }
+                    }
+                    .right {
+                        display:none;
+                    }
+                }
+                .qna_footer {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-top: 12px;
                 }
             }
         }

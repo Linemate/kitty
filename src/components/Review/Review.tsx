@@ -1,36 +1,46 @@
 'use client';
-import { getMyReviewList, getProgramReview } from 'api';
+import { deleteReview, getMyReviewList, getProgramReview } from 'api';
 import Paging from 'components/common/Paging';
 import useMobile from 'hooks/useMobile';
 import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/review.scss';
-import { reviewItemProps, reviewProps } from 'types/types';
-import AddReview from './_Add';
+import { popupProps, reviewItemProps } from 'types/types';
+import { Button } from '../common/Button';
+import { initPopup } from '../Portal/PopupPortal';
+import EditReview from './_Edit';
 
-const ReviewItem = (props: reviewItemProps) => {
+const ReviewItem = ({ isMy, title, name, score, content, id, createdAt, handleDelete, openModal }: reviewItemProps & { openModal: (id: number, content: string, score: number) => void }) => {
+    console.log(id)
+    console.log(content)
+    console.log(score)
     return (
         <div className="review_item">
-            <div className={`star img_${props.score}`}></div>
+            <div className={`star img_${score}`}></div>
             <div className="txt">
-                <div className="desc_intro">
-                    <span className={`${props.isMy ? 'title' : 'username'}`}>{props.isMy ? props.title : props.name}</span>
+                <div className="review_header">
+                    <div className='left'>
+                        <span className={`${isMy ? 'title' : 'username'}`}>{isMy ? title : name}</span>
+                        <span className='date'>{createdAt.split(' ')[0]}</span>
+                    </div>
                     {
-                        // 내가 쓴 리뷰조회가 아닐 때
-                        !props.isMy &&
-                        <span className='date'>{props.createdAt}</span>
+                        // 내가 쓴 리뷰조회일 때
+                        <div className='right only_pc only_my'>
+                            <Button classnames={'lightgray btn_edit'} type={'text'} text={`Edit`} onclick={() => openModal?.(id, content, score)} />
+                            <Button classnames={'lightgray btn_delete'} type={'text'} text={`Delete`} onclick={() => handleDelete?.(id)} />
+                        </div>
                     }
                 </div>
-                <div className="desc">
-                    <div className="contents">{props.content}</div>
+                <div className="review_body">
+                    <div className="contents">{content}</div>
                 </div>
                 {
                 // 내가 쓴 리뷰조회일 때만 날짜, 편집, 삭제 버튼 표시
-                    props.isMy && props.editReview && props.deleteReview &&
-                    <div className='date_btns_area'>
-                        <div className="date">{props.createdAt.split(' ')[0]}</div>
+                    isMy && openModal && handleDelete &&
+                    <div className='review_footer only_my'>
+                        <div className="date">{createdAt.split(' ')[0]}</div>
                         <div className="btns">
-                            <button className="btn_edit" onClick={() => props.editReview?.(props.id)}>편집</button>
-                            <button className="btn_delete" onClick={() => props.deleteReview?.(props.id)}>삭제</button>
+                            <Button classnames={'lightgray btn_edit'} type={'text'} text={`Edit`} onclick={() => openModal?.(id, content, score)} />
+                            <Button classnames={'lightgray btn_delete'} type={'text'} text={`Delete`} onclick={() => handleDelete?.(id)} />
                         </div>
                     </div>
                 }
@@ -39,17 +49,23 @@ const ReviewItem = (props: reviewItemProps) => {
     );
 };
 
-const Review = ({ id, isMy, size }: { id?: string, isMy: boolean, size: number }) => {
+const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }) => {
     const [reviews, setReviews] = useState<reviewItemProps[]>([]);
-    const [modal, setModal] = useState(false);
+    const initModal = {
+        show:false,
+        reviewId:0,
+        content: '',
+        score: 0
+    }
+    const [modal, setModal] = useState<{show: boolean, reviewId: number, content: string, score: number}>(initModal);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const isMobile = useMobile();
-
+    const [popup, setPopup] = useState<popupProps>(initPopup);
     // 리뷰 조회
     const loadProgramReviews = useCallback(async () => {
         try {
-            const res = isMy ? await getMyReviewList(page, size) : await getProgramReview(id || '', size, page);
+            const res = isMy ? await getMyReviewList(page, size) : await getProgramReview(id?.toString() || '0', size, page);
             const data = res.data;
             setReviews(data.list);
             setTotalPages(data.totalPages);
@@ -60,25 +76,42 @@ const Review = ({ id, isMy, size }: { id?: string, isMy: boolean, size: number }
         }
     }, [isMy, page, size, id]);
 
-    // 리뷰 편집
-    const editReview = useCallback(async (id: number) => {
-        try {
-            const res = await editReview(id);
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-        }
+    // 리뷰 편집 창 열기
+    const openModal = useCallback((reviewId: number, content: string, score: number) => {
+        console.log(reviewId)
+        setModal({show: true, reviewId:reviewId, content: content, score: score});
     }, []);
 
     // 리뷰 삭제    
-    const deleteReview = useCallback(async (id: number) => {
+    const handleDelete = useCallback(async (id: number) => {
         try {
             const res = await deleteReview(id);
-            console.log(res);
+            if (res && res.code === 200) {
+                loadProgramReviews();
+            } else {
+                setPopup({
+                    show: true,
+                    children: '리뷰 삭제에 실패했습니다.',
+                    type: 'alert',
+                    closePortal: () => {
+                    setPopup(initPopup);
+                    },
+                    noText: '확인',
+                });
+            }
         } catch (err) {
             console.log(err);
+            setPopup({
+                show: true,
+                children: '리뷰 삭제에 실패했습니다.',
+                type: 'alert',
+                closePortal: () => {
+                    setPopup(initPopup);
+                },
+                noText: '확인',
+            });
         }
-    }, []);
+    }, [loadProgramReviews]);
 
     useEffect(() => {
         loadProgramReviews();
@@ -86,12 +119,13 @@ const Review = ({ id, isMy, size }: { id?: string, isMy: boolean, size: number }
 
     return (
         <>
-            <div className={`review ${isMobile ? 'mobile' : ''}`}>
-                {reviews.length > 0 ? reviews.map((el: reviewItemProps) => <ReviewItem key={el.id} isMy={isMy} title={el.title} name={el.name} score={el.score} content={el.content} id={el.id} createdAt={el.createdAt} />) : <div className="no_review">등록된 후기가 없습니다.</div>}
+            <div className={`review_area ${isMobile ? 'mobile' : ''}`}>
+                {reviews.length > 0 ? reviews.map((el: reviewItemProps) => <ReviewItem key={el.id} {...el} isMy={isMy} openModal={openModal} handleDelete={handleDelete} />) : <div className="no_review">등록된 후기가 없습니다.</div>}
 
                 <Paging totalPages={totalPages} page={page} changePage={(num: number) => setPage(num)} />
             
-                {modal && <AddReview id={Number(id)} closePortal={() => setModal(false)} />}
+                {modal.show && <EditReview reviewId={modal.reviewId} content={modal.content} score={modal.score} closePortal={() => setModal(initModal)} />}
+                
             </div>
         </>
     );

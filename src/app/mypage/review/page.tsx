@@ -31,10 +31,10 @@ export default function ReviewPage() {
             router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
         }
         } catch (err: any) {
-        if (err?.status === 401) {
-            alert('로그인이 필요해요.');
-            router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
-        }
+            if (err?.status === 401) {
+                alert('로그인이 필요해요.');
+                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
+            }
         }
     }, [userInfo, router]);
 

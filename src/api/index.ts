@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
 import { getCookie } from 'utils/cookiesFunction';
-import { useAuthStore } from 'utils/stores';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
 // 토큰 없는 axios 인스턴스 (프로그램 상세 등)
@@ -211,5 +210,24 @@ export const getMyReviewList = async (pageNum:number, size:number) => {
 // 프로그램 리뷰 작성
 export const postReview = async (id:string, data:addReviewProps) => {
     const res = await privateApi.post(`/programs/${id}/review`, data);
+    return res.data;
+}
+
+// 프로그램 리뷰 수정
+export const putReview = async (id:number, data:addReviewProps) => {
+    console.log(id)
+    const res = await privateApi.put(`/programs/${id}/review`, data);
+    return res.data;
+}
+
+// 프로그램 리뷰 삭제
+export const deleteReview = async (id:number) => {
+    const res = await privateApi.delete(`/programs/${id}/review`);
+    return res.data;
+}
+
+// 내가 쓴 Q&A들 조회
+export const getMyQnaList = async (pageNum:number, size:number) => {
+    const res = await privateApi.get(`/programs/inquiries/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
     return res.data;
 }

@@ -663,7 +663,7 @@ const ProgramDetails = () => {
                                     <div className="contents_review tab_body">
                                         <div className="title">Review</div>
                                         <div className="contents">
-                                            <Review id={id} size={4} />
+                                            <Review id={Number(id)} isMy={false} size={4} />
                                         </div>
                                     </div>
 
@@ -671,7 +671,7 @@ const ProgramDetails = () => {
                                     <div className="contents_qna tab_body">
                                         <div className="title">Q&amp;A</div>
                                         <div className="contents">
-                                            <Qna id={id} size={4} />
+                                            <Qna id={id} isMy={false} size={4} />
                                         </div>
                                     </div>
                                 </div>

@@ -1,14 +1,14 @@
 'use client';
-import { postReview, refreshToken } from 'api';
+import { postReview, putReview, refreshToken } from 'api';
 import ModalPortal from 'components/Portal/ModalPortal';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import 'styles/review.scss';
 import { addReviewProps, popupProps } from 'types/types';
 import { Button } from '../common/Button';
 import PopupPortal, { initPopup } from '../Portal/PopupPortal';
 
-const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => {
-    const [reviewData, setReviewData] = useState<addReviewProps>({contents: '', score:0});
+const EditReview = ({reviewId, content, score, closePortal} : {reviewId:number, content:string, score:number, closePortal:() => void;}) => {
+    const [reviewData, setReviewData] = useState<addReviewProps>({contents: content, score: score});
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const MAX_LENGTH = 500;
 
@@ -35,25 +35,16 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
         });
     }
 
-    // 등록하기
-    const handleSubmit = async () => {
-        if (reviewData.contents.trim().length === 0) return;
+    // 리뷰 편집
+    const handleEdit = useCallback(async () => {
         try {
-            const res = await postReview(id.toString(), reviewData);
+            const res = await putReview(reviewId, {contents: reviewData.contents, score: reviewData.score});
             if (res && res.code === 200) {
-                setPopup({
-                    show: true,
-                    children: '리뷰가 등록되었습니다.',
-                    type: 'alert',
-                    closePortal: () => {
-                        setPopup(initPopup);
-                    },
-                    noText: '확인', 
-                });
+                closePortal();
             } else {
                 setPopup({
                     show: true,
-                    children: '리뷰 등록에 실패했습니다.',
+                    children: '리뷰 수정에 실패했습니다.',
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
@@ -61,13 +52,22 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                     noText: '확인',
                 });
             }
-        } catch(err) {
+        } catch (err) {
             console.log(err);
+            setPopup({
+                show: true,
+                children: '리뷰 수정에 실패했습니다.',
+                type: 'alert',
+                closePortal: () => {
+                    setPopup(initPopup);
+                },
+                noText: '확인',
+            });
         }
-    }
+    }, [reviewData.contents, reviewData.score, reviewId, closePortal]);
     return (
         <>
-            <ModalPortal type='review' title={'리뷰 작성하기'} closePortal={closePortal}>
+            <ModalPortal type='review' title={'리뷰 편집하기'} closePortal={closePortal}>
                 <div className='add_review'>
                     <div className='review_score'>
                         {/* 별점 컴포넌트 추후 구현 예정 */}
@@ -83,7 +83,7 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                     </div>
                     <div className='review_text_area'>     
                         <textarea
-                            placeholder='리뷰 내용을 입력해주세요.'
+                            placeholder='리뷰 내용을 수정해주세요.'
                             onChange={handleInput}
                             value={reviewData.contents}
                             maxLength={MAX_LENGTH}
@@ -91,7 +91,7 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                         <div className='review_char_count'>{reviewData.contents.length}/{MAX_LENGTH}</div>
                     </div>
                     <div className='review_btn_area'>
-                        <Button type="text" classnames={`in_modal ${reviewData.contents.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleSubmit()} text="등록하기" />
+                        <Button type="text" classnames={`in_modal ${reviewData.contents.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleEdit()} text="등록하기" />
                     </div>
                 </div>
             </ModalPortal>
@@ -112,4 +112,4 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
     );
 };
 
-export default AddReview;
+export default EditReview;

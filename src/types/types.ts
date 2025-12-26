@@ -170,8 +170,7 @@ export type programInMypageProps = {
 export type reviewItemProps = {
     isMy:boolean; 
     // 내가 작성한 리뷰일 때 수정, 삭제 함수 전달
-    editReview?: (id: number) => void;
-    deleteReview?: (id: number) => void;
+    handleDelete?: (id: number) => void;
 
     id: number;
     title: string;
@@ -278,15 +277,18 @@ export type buddyProps = {
 
 export type qnaProps = {
     qna: qnaItemProps;
+    isMy: boolean;
+    handleDelete: (id: number) => void;
     language: string;
-    handleDelete: Function;
 };
 
 export type qnaItemProps = {
+    isMy: boolean;
+    handleDelete: Function;
     id: number;
     buddy: buddyProps;
     title: string;
-    content?: string;
+    content?: string; 
     answer: {
         id: number;
         email: string;

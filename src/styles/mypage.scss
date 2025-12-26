@@ -413,7 +413,8 @@
             background-color:var(--color-neutral-800);
             .contents {
                 .contents_inner {
-                    .contents_area {                        
+                    .contents_area {  
+                        min-width:0;                      
                         .intro {
                             margin-bottom:24px;
                         }

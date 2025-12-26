@@ -1,18 +1,18 @@
 import { Button } from 'components/common/Button';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'styles/qna.scss';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import useMobile from 'hooks/useMobile';
 import { popupProps, qnaItemProps, qnaProps } from 'types/types';
-import { deleteInquiry, getInquiries } from 'api';
+import { deleteInquiry, getInquiries, getMyQnaList } from 'api';
 import dateTimeOfLanguage from 'utils/dateTimeOfLanguage';
 import { useAuthStore, useLanguage } from 'utils/stores';
 import { useRouter } from 'next/navigation';
 import Paging from 'components/common/Paging';
 import AddQna from './_Add';
 
-const QnaItem = (props: qnaProps) => {
-    const { qna, language, handleDelete } = props;
+const QnaItem = (props: qnaProps & { isMobile: boolean | null }) => {
+    const { qna, isMy, isMobile, language, handleDelete } = props;
     const { id, buddy, title, content, answer, isSecret, createdAt } = qna;
     const [seeMore, setSeeMore] = useState<boolean>(true);
     const handleQnaDelete = () => {
@@ -22,16 +22,16 @@ const QnaItem = (props: qnaProps) => {
         setSeeMore(false);
     };
     return (
-        <div className={`qna`}>
+        <div className={`qna_item`}>
             <div className="qna_header">
                 <div className="left">
                     {answer && answer.id ? <span className="is_reply no_reply">답변완료</span> : <span className="is_reply reply">미답변</span>}
-                    <span className="username">{buddy.name}</span>
-                    <span className="date">{dateTimeOfLanguage(createdAt, language)}</span>
+                    <span className="username">{isMy ? title :buddy.name}</span>
+                    <span className="date">{isMobile ? createdAt.split(' ')[0] : createdAt}</span>
                 </div>
-                {!answer && qna.isOwner && (
+                {!answer && qna.isOwner && (    
                     <div className="right">
-                        <Button classnames={'lightgray'} type={'text'} text={`Delete`} onclick={handleQnaDelete} />
+                        <Button classnames={'lightgray btn_delete'} type={'text'} text={`Delete`} onclick={handleQnaDelete} />
                     </div>
                 )}
             </div>
@@ -60,11 +60,15 @@ const QnaItem = (props: qnaProps) => {
                     )
                 }
             </div>
+            <div className="qna_footer only_my">
+                <div className="date">{dateTimeOfLanguage(createdAt, language)}</div>
+                <Button classnames={'lightgray btn_delete'} type={'text'} text={`Delete`} onclick={handleDelete} />
+            </div>
         </div>
     );
 };
 
-const Qna = ({ id, size }: { id: string, size: number }) => {
+const Qna = ({ id, isMy, size }: { id?: string, isMy: boolean, size: number }) => {
     const [modal, setModal] = useState<boolean>(false);
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const [qnas, setQnas] = useState<qnaItemProps[]>([]);
@@ -88,16 +92,18 @@ const Qna = ({ id, size }: { id: string, size: number }) => {
     };
 
     // qna 조회
-    const loadInquiries = async () => {
+    const loadInquiries = useCallback(async () => {
         try {
-            const res = await getInquiries(id, size, page);
-            const list = res.data.list;
+            const res = isMy ? await getMyQnaList(page, size) : await getInquiries(id || '', size, page);
+            const data = res.data;
+            const list = data.list;
             setQnas(list);
-            setTotalPages(res.data.totalPages);
+            setTotalPages(data.totalPages);
+            setPage(data.page);
         } catch (err) {
             console.log(err);
         }
-    };
+    }, [page, size, isMy, id]);
 
     // qna 삭제
     const handleConfirmDelete = async (inquiryId: number) => {
@@ -125,20 +131,24 @@ const Qna = ({ id, size }: { id: string, size: number }) => {
     };
     useEffect(() => {
         loadInquiries();
-    }, [id, page]);
+    }, [loadInquiries]);
     return (
         <div className={`qna_area ${isMobile ? 'mobile' : ''}`}>
-            {/* 버튼 영역 */}
-            <div className="btn_area">
-                <Button classnames="fit border lightgray" text={'Ask a question'} type="text" onclick={viewAsk} />
-            </div>
+            {/* 문의 등록 버튼(내가 쓴 Q&A 조회가 아닐 때만 표시) */}
+            {
+                !isMy && (
+                    <div className="btn_area">
+                        <Button classnames="fit border lightgray" text={'Ask a question'} type="text" onclick={viewAsk} />
+                    </div>
+                )
+            }
             {/* 목록 */}
-            <div className='qna_list'>{qnas.length > 0 ? qnas.map((el: qnaItemProps) => <QnaItem qna={el} key={el.id} language={language} handleDelete={() => handleDelete(el.id)} />) : <div className="no_qna">등록된 문의가 없습니다.</div>}</div>
+            <div className='qna_list'>{qnas.length > 0 ? qnas.map((el: qnaItemProps) => <QnaItem qna={el} key={el.id} isMy={isMy} isMobile={isMobile} language={language} handleDelete={() => handleDelete(el.id)} />) : <div className="no_qna">등록된 문의가 없습니다.</div>}</div>
             {/* 페이징 */}
             <Paging totalPages={totalPages} page={page} changePage={(num: number) => setPage(num)} />
             {/* 문의 등록하기 */}
             {modal && (
-                <AddQna id={id} loadData={loadInquiries} setPopup={setPopup} closePortal={closePortal} />
+                <AddQna id={id || ''} loadData={loadInquiries} setPopup={setPopup} closePortal={closePortal} />
             )}
             {/* Alert / Confirm 팝업 */}
             {popup.show && (
