@@ -6,7 +6,6 @@ import 'styles/mypage.scss';
 import { buddyProfileProps, noticeProps, reviewItemProps, reviewProps, } from 'types/types';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
-import Paging from 'components/common/Paging';
 import Review from '@/components/Review/Review';
 
 const ReviewMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {

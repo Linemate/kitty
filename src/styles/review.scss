@@ -218,9 +218,6 @@
             }
             .txt {
                 .desc_intro {
-                    .date {
-                        line-height: 22px;
-                    }
                     .title {
                         line-height: 22px;
                         &::before {
@@ -233,6 +230,44 @@
                     .contents {
                         font-size: 14px;
                         line-height: 22px;
+                    }
+                }
+                // 내가 쓴 리뷰조회일 때만 날짜, 편집, 삭제 버튼 표시
+                .date_btns_area {
+                    display:flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top:8px;
+                    .date {
+                        line-height: 20px;
+                    }
+                    .btns {
+                        display:flex;
+                        flex-direction: row;
+                        justify-content: flex-end;
+                        align-items: center;
+                        .btn_edit, .btn_delete {
+                            font-size: 13px;
+                            line-height: 20px;
+                            font-family: 'Pretendard';
+                            font-weight: 600;
+                            color:var(--color-neutral-500);
+                        }
+                        .btn_edit {
+                            position:relative;
+                            padding-right: 16px;
+                            &::before {
+                                content: '';
+                                display: block;
+                                width: 1px;
+                                height: 12px;
+                                background-color: var(--color-neutral-600);
+                                position: absolute;
+                                right: 8px;
+                                top: 4px;
+                            }
+                        }
                     }
                 }
             }

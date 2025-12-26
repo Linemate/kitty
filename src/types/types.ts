@@ -169,7 +169,10 @@ export type programInMypageProps = {
 
 export type reviewItemProps = {
     isMy:boolean; 
-    
+    // 내가 작성한 리뷰일 때 수정, 삭제 함수 전달
+    editReview?: (id: number) => void;
+    deleteReview?: (id: number) => void;
+
     id: number;
     title: string;
     content: string;
