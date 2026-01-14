@@ -173,6 +173,7 @@ export type reviewItemProps = {
     handleDelete?: (id: number) => void;
 
     id: number;
+    programId: number;
     title: string;
     content: string;
     score: number;
@@ -417,6 +418,8 @@ export type noticeProps = {
 
 // 프로그램 리뷰 작성
 export type addReviewProps = {
-    contents: string;
+    reviewId: number;
+    title: string;
+    content: string;
     score: number;
 }

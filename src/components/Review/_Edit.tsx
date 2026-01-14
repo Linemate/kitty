@@ -6,11 +6,14 @@ import 'styles/review.scss';
 import { addReviewProps, popupProps } from 'types/types';
 import { Button } from '../common/Button';
 import PopupPortal, { initPopup } from '../Portal/PopupPortal';
+import { useRouter } from 'next/navigation';
 
-const EditReview = ({reviewId, content, score, closePortal} : {reviewId:number, content:string, score:number, closePortal:() => void;}) => {
-    const [reviewData, setReviewData] = useState<addReviewProps>({contents: content, score: score});
+const EditReview = ({reviewId, programId, content, score, closePortal} : {reviewId:number, programId:number, content:string, score:number, closePortal:() => void;}) => {
+    const [reviewData, setReviewData] = useState<addReviewProps>({reviewId, title:'', content, score});
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const MAX_LENGTH = 500;
+
+    const router = useRouter();
 
     // 내용 입력 onChange
     const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -20,7 +23,7 @@ const EditReview = ({reviewId, content, score, closePortal} : {reviewId:number, 
         }
         setReviewData({
             ...reviewData,
-            contents: value
+            content: value
         })
     }
 
@@ -38,9 +41,18 @@ const EditReview = ({reviewId, content, score, closePortal} : {reviewId:number, 
     // 리뷰 편집
     const handleEdit = useCallback(async () => {
         try {
-            const res = await putReview(reviewId, {contents: reviewData.contents, score: reviewData.score});
+            const res = await putReview(programId, reviewData);
             if (res && res.code === 200) {
-                closePortal();
+                setPopup({
+                    show: true,
+                    children: '리뷰가 수정되었습니다.',
+                    type: 'alert',
+                    closePortal: () => {
+                        setPopup(initPopup);
+                        router.refresh();
+                    },
+                    noText: '확인',
+                });
             } else {
                 setPopup({
                     show: true,
@@ -64,7 +76,7 @@ const EditReview = ({reviewId, content, score, closePortal} : {reviewId:number, 
                 noText: '확인',
             });
         }
-    }, [reviewData.contents, reviewData.score, reviewId, closePortal]);
+    }, [reviewData.content, reviewData.score, programId, closePortal]);
     return (
         <>
             <ModalPortal type='review' title={'리뷰 편집하기'} closePortal={closePortal}>
@@ -85,13 +97,13 @@ const EditReview = ({reviewId, content, score, closePortal} : {reviewId:number, 
                         <textarea
                             placeholder='리뷰 내용을 수정해주세요.'
                             onChange={handleInput}
-                            value={reviewData.contents}
+                            value={reviewData.content}
                             maxLength={MAX_LENGTH}
                         />
-                        <div className='review_char_count'>{reviewData.contents.length}/{MAX_LENGTH}</div>
+                        <div className='review_char_count'>{reviewData.content.length}/{MAX_LENGTH}</div>
                     </div>
                     <div className='review_btn_area'>
-                        <Button type="text" classnames={`in_modal ${reviewData.contents.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleEdit()} text="등록하기" />
+                        <Button type="text" classnames={`in_modal ${reviewData.content.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleEdit()} text="등록하기" />
                     </div>
                 </div>
             </ModalPortal>
@@ -103,6 +115,7 @@ const EditReview = ({reviewId, content, score, closePortal} : {reviewId:number, 
                         title={popup.title}
                         type={popup.type}
                         closePortal={popup.closePortal}
+                        noText={popup.noText}
                     >
                         {popup.children}
                     </PopupPortal>
