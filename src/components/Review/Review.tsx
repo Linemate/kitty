@@ -55,10 +55,11 @@ const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }
     const initModal = {
         show:false,
         reviewId:0,
+        programId:0,
         content: '',
         score: 0
     }
-    const [modal, setModal] = useState<{show: boolean, reviewId: number, content: string, score: number}>(initModal);
+    const [modal, setModal] = useState<{show: boolean, reviewId: number, programId: number, content: string, score: number}>(initModal);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const isMobile = useMobile();
@@ -79,9 +80,9 @@ const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }
     }, [isMy, page, size, id]);
 
     // 리뷰 편집 창 열기
-    const openModal = useCallback((reviewId: number, content: string, score: number) => {
+    const openModal = useCallback((reviewId: number, programId: number, content: string, score: number) => {
         console.log(reviewId)
-        setModal({show: true, reviewId:reviewId, content: content, score: score});
+        setModal({show: true, reviewId, programId, content, score});
     }, []);
 
     // 리뷰 삭제    
@@ -147,38 +148,22 @@ const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }
     return (
         <>
             <div className={`review_area ${isMobile ? 'mobile' : ''}`}>
-                {reviews.length > 0 ? reviews.map((el: reviewItemProps) => <ReviewItem key={el.id} {...el} isMy={isMy} openModal={openModal} handleDelete={handleDelete} />) : <div className="no_review">등록된 후기가 없습니다.</div>}
+                {reviews.length > 0 ? reviews.map((el: reviewItemProps) => (
+                    <ReviewItem
+                        key={el.id}
+                        {...el}
+                        isMy={isMy}
+                        openModal={(id: number, content: string, score: number) =>
+                            openModal(el.id, el.programId, content, score)
+                        }
+                        handleDelete={handleDelete}
+                    />
+                )) : <div className="no_review">등록된 후기가 없습니다.</div>}
 
                 <Paging totalPages={totalPages} page={page} changePage={(num: number) => setPage(num)} />
             
                 {modal.show && <EditReview reviewId={modal.reviewId} content={modal.content} score={modal.score} closePortal={() => setModal(initModal)} />}
                 
-                {
-                    deleteConfirmPopup.show && (
-                        <PopupPortal
-                            show={deleteConfirmPopup.show}
-                            type={deleteConfirmPopup.type}
-                            closePortal={deleteConfirmPopup.closePortal}
-                            yesFunction={deleteConfirmPopup.yesFunction}
-                            yesText={deleteConfirmPopup.yesText}
-                            noText={deleteConfirmPopup.noText}
-                        >
-                            {deleteConfirmPopup.children}
-                        </PopupPortal>
-                    )
-                }
-                
-                {
-                    popup.show && (
-                        <PopupPortal
-                            show={popup.show}
-                            type={popup.type}
-                            closePortal={popup.closePortal}
-                        >
-                            {popup.children}
-                        </PopupPortal>
-                    )
-                }
             </div>
         </>
     );
