@@ -39,7 +39,11 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
     const handleSubmit = async () => {
         if (reviewData.content.trim().length === 0) return;
         try {
-            const res = await postReview(id.toString(), reviewData);
+            const bodyData = {
+                contents: reviewData.content,
+                score: reviewData.score
+            }
+            const res = await postReview(id.toString(), bodyData);
             if (res && res.code === 200) {
                 setPopup({
                     show: true,
@@ -63,6 +67,15 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
             }
         } catch(err) {
             console.log(err);
+            setPopup({
+                show: true,
+                children: '리뷰 등록에 실패했습니다.',
+                type: 'alert',
+                closePortal: () => {
+                    setPopup(initPopup);
+                },
+                noText: '확인',
+            });
         }
     }
     return (
@@ -103,6 +116,7 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                         title={popup.title}
                         type={popup.type}
                         closePortal={popup.closePortal}
+                        noText={popup.noText}
                     >
                         {popup.children}
                     </PopupPortal>

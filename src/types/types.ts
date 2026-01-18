@@ -171,7 +171,7 @@ export type programInMypageProps = {
 export type reviewItemProps = {
     isMy:boolean; 
     // 내가 작성한 리뷰일 때 수정, 삭제 함수 전달
-    handleDelete?: (id: number) => void;
+    handleDelete?: (id: number, programId:number) => void;
 
     id: number;
     programId: number;
@@ -199,6 +199,7 @@ export type inputProps = {
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     classnames?: string;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 export type loginProps = {
@@ -422,5 +423,11 @@ export type addReviewProps = {
     reviewId: number;
     title: string;
     content: string;
+    score: number;
+}
+
+// 프로그램 리뷰 작성 add
+export type addReviewBodyProps = {
+    contents: string;
     score: number;
 }

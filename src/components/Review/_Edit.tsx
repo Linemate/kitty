@@ -8,7 +8,7 @@ import { Button } from '../common/Button';
 import PopupPortal, { initPopup } from '../Portal/PopupPortal';
 import { useRouter } from 'next/navigation';
 
-const EditReview = ({reviewId, programId, content, score, closePortal} : {reviewId:number, programId:number, content:string, score:number, closePortal:() => void;}) => {
+const EditReview = ({reviewId, programId, content, score, closePortal, onSuccess} : {reviewId:number, programId:number, content:string, score:number, closePortal:() => void, onSuccess: () => void}) => {
     const [reviewData, setReviewData] = useState<addReviewProps>({reviewId, title:'', content, score});
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const MAX_LENGTH = 500;
@@ -49,7 +49,8 @@ const EditReview = ({reviewId, programId, content, score, closePortal} : {review
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
-                        router.refresh();
+                        closePortal();
+                        onSuccess();
                     },
                     noText: '확인',
                 });
@@ -76,7 +77,7 @@ const EditReview = ({reviewId, programId, content, score, closePortal} : {review
                 noText: '확인',
             });
         }
-    }, [reviewData.content, reviewData.score, programId, closePortal]);
+    }, [reviewData.content, reviewData.score, programId, closePortal, router]);
     return (
         <>
             <ModalPortal type='review' title={'리뷰 편집하기'} closePortal={closePortal}>

@@ -8,7 +8,7 @@ import React, { useRef, useState } from 'react';
 import { useAuthStore } from 'utils/stores';
 import { initPopup } from 'components/Portal/PopupPortal';
 
-const AddQna = ({id, loadData, setPopup, closePortal} : {id : string, loadData:Function, setPopup: Function, closePortal:Function} ) => {
+const AddQna = ({id, setPopup, onSuccess, closePortal} : {id : string, setPopup: Function, onSuccess: Function, closePortal:Function} ) => {
     const [isSecret, setIsSecret] = useState<boolean>(false);
     const [qnaContent, setQnaContent] = useState<string>('');
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
@@ -47,6 +47,7 @@ const AddQna = ({id, loadData, setPopup, closePortal} : {id : string, loadData:F
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
+                        onSuccess();
                     },
                     noText: '확인',
                 });
@@ -66,7 +67,6 @@ const AddQna = ({id, loadData, setPopup, closePortal} : {id : string, loadData:F
             }
             closePortal();
             setIsButtonEnabled(false);
-            loadData();
         } catch (err) {
             console.log(err);
             setPopup({

@@ -4,7 +4,7 @@ import { inputProps } from 'types/types';
 import 'styles/input.scss';
 
 const Input = (props:inputProps) => {
-    const {type, value, name, handleChange, placeholder, classnames} = props;
+    const {type, value, name, handleChange, placeholder, classnames, onKeyDown} = props;
     // 텍스트 on
     const [isOn, setIsOn] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -22,7 +22,7 @@ const Input = (props:inputProps) => {
     }
     return (
         <div className='input_wrap' onClick={handleClick}>
-            <input type={type} name={name} className={classnames} onChange={handleChange} value={value} ref={inputRef} onBlur={handleBlur} autoComplete="off" />
+            <input type={type} name={name} className={classnames} onChange={handleChange} value={value} ref={inputRef} onBlur={handleBlur} autoComplete="off" onKeyDown={onKeyDown} />
             {
                 !isOn && placeholder !== '' 
                 && value.trim() === '' &&

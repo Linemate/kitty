@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
+import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
 import { getCookie, deleteCookie } from 'utils/cookiesFunction';
+
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
 // 토큰 없는 axios 인스턴스 (프로그램 상세 등)
@@ -21,18 +22,24 @@ const privateApi = axios.create({
     },
 });
 
-// 요청 인터셉터로 privateApi에만 Authorization 자동 추가
-privateApi.interceptors.request.use(
-    (config) => {
-        const user = getCookie('USERINFO');
-        if (user) {
-            const token = JSON.parse(user).token;
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+// 클라이언트 환경에서만 요청 인터셉터 추가
+if (typeof window !== 'undefined') {
+    privateApi.interceptors.request.use(
+        (config) => {
+            const user = getCookie('USERINFO');
+            if (user) {
+                try {
+                    const token = JSON.parse(user).token;
+                    config.headers.Authorization = `Bearer ${token}`;
+                } catch (err) {
+                    console.error('토큰 파싱 실패:', err);
+                }
+            }
+            return config;
+        },
+        (error) => Promise.reject(error)
+    );
+}
 
 // 응답 인터셉터: 401 발생 시 로그인 페이지로 이동
 privateApi.interceptors.response.use(
@@ -42,9 +49,7 @@ privateApi.interceptors.response.use(
             const status = error?.response?.status;
             if (status === 401) {
                 if (typeof window !== 'undefined') {
-                    // 사용자 정보 삭제
                     deleteCookie('USERINFO');
-                    // 로그인 페이지로 이동 (현재 페이지로 리다이렉트 주소 포함)
                     const redirect = encodeURIComponent(window.location.href);
                     window.location.href = `/login?redirect=${redirect}`;
                 }
@@ -56,7 +61,6 @@ privateApi.interceptors.response.use(
     }
 );
 
-// publicApi에도 401 발생 시 로그인 페이지로 이동하도록 동일한 응답 인터셉터 추가
 publicApi.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -137,7 +141,7 @@ export const getNicePayCallback = async () => {
 };
 
 // 결제 승인
-export const confirmPayments = async (values:paymentsConfirmProps) => {
+export const confirmPayments = async (values: paymentsConfirmProps) => {
     const res = await privateApi.post(`/payments/confirm?provider=NICE`, values);
     return res.data;
 };
@@ -167,18 +171,19 @@ export const postProgramLike = async (id: number) => {
 };
 
 // 토큰 재발급
-export const refreshToken = async (buddyId:number, refreshToken:string) => {
-    const res = await privateApi.post(`/auth/refresh`, {buddyId, refreshToken});
+export const refreshToken = async (buddyId: number, refreshToken: string) => {
+    const res = await privateApi.post(`/auth/refresh`, { buddyId, refreshToken });
     return res.data;
 };
+
 // 예약 취소 사유 리스트 조회
-export const getCancelReasons = async (id:number, reservationId: number) => {
+export const getCancelReasons = async (id: number, reservationId: number) => {
     const res = await publicApi.get(`/programs/${id}/reservation/${reservationId}/cancel-reasons`);
     return res.data;
 };
 
 // 프로그램 예약 취소
-export const postCancelReason = async (values:cancelProps) => {
+export const postCancelReason = async (values: cancelProps) => {
     const res = await privateApi.delete(`/programs/${values.programId}/reservation/${values.reservationId}/cancel`, { data: { reasonCodeId: values.reason.reasonCodeId, reasonDetail: values.reason.reasonDetail } });
     return res.data;
 };
@@ -190,86 +195,85 @@ export const getReservationHistoryCount = async () => {
 };
 
 // 프로그램 신청내역 조회
-export const getReservationHistory = async (pageNum:number, size:number, status:string) => {
+export const getReservationHistory = async (pageNum: number, size: number, status: string) => {
     const res = await privateApi.get(`/buddy/programs/enrolled?page=${pageNum}&size=${size}&sort=id%2Casc&status=${status}`);
     return res.data;
 };
 
 // 버디 상세조회
-export const getBuddyDetails = async (buddyId:number) => {
+export const getBuddyDetails = async (buddyId: number) => {
     const res = await privateApi.get(`/buddy/${buddyId}`);
     return res.data;
 };
 
 // 버디 프로필 수정
-export const putBuddyProfile = async (buddyId:number, values:buddyProfileProps) => {
+export const putBuddyProfile = async (buddyId: number, values: buddyProfileProps) => {
     const res = await privateApi.put(`/buddy/${buddyId}`, values);
     return res.data;
 };
 
 // 프로그램 예약 정보 조회
-export const getReservationInfo = async (id:number, reservationId:number) => {
+export const getReservationInfo = async (id: number, reservationId: number) => {
     const res = await privateApi.get(`/programs/${id}/reservation/${reservationId}`);
     return res.data;
 };
 
-//프로그램 숨김 정보 조회 
-export const getReservationHiddenInfo = async (id:number, reservationId:number) => {
+// 프로그램 숨김 정보 조회
+export const getReservationHiddenInfo = async (id: number, reservationId: number) => {
     const res = await privateApi.get(`/programs/${id}/reservation/${reservationId}/hidden`);
     return res.data;
 };
 
 // 결제 내역 목록 조회
-export const getPaymentHistory = async (pageNum:number, size:number, status:string) => {
+export const getPaymentHistory = async (pageNum: number, size: number, status: string) => {
     const res = await privateApi.get(`/payments?page=${pageNum}&size=${size}&sort=id%2Cdesc&status=${status}`);
     return res.data;
 };
 
 // 결제 상세 조회
-export const getPaymentHistoryDetails = async (paymentsHistoryId:number) => {
+export const getPaymentHistoryDetails = async (paymentsHistoryId: number) => {
     const res = await privateApi.get(`/payments/${paymentsHistoryId}`);
     return res.data;
 };
 
 // 공지사항 전체 조회
-export const getNoticeList = async (pageNum:number, size:number) => {
+export const getNoticeList = async (pageNum: number, size: number) => {
     const res = await privateApi.get(`/notices?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
     return res.data;
 };
 
 // 공지사항 상세 조회
-export const getNoticeDetails = async (id:number) => {
+export const getNoticeDetails = async (id: number) => {
     const res = await privateApi.get(`/notices/${id}`);
     return res.data;
-};  
+};
 
 // 내가 쓴 리뷰들 조회
-export const getMyReviewList = async (pageNum:number, size:number) => {
+export const getMyReviewList = async (pageNum: number, size: number) => {
     const res = await privateApi.get(`/programs/reviews/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
     return res.data;
 };
 
 // 프로그램 리뷰 작성
-export const postReview = async (id:string, data:addReviewProps) => {
+export const postReview = async (id: string, data: addReviewBodyProps) => {
     const res = await privateApi.post(`/programs/${id}/review`, data);
     return res.data;
-}
+};
 
 // 프로그램 리뷰 수정
-export const putReview = async (id:number, data:addReviewProps) => {
-    console.log(id)
-    const res = await privateApi.put(`/programs/${id}/review`, data);
+export const putReview = async (programId: number, data: addReviewProps) => {
+    const res = await privateApi.put(`/programs/${programId}/review`, data);
     return res.data;
-}
+};
 
 // 프로그램 리뷰 삭제
-export const deleteReview = async (id:number) => {
-    const res = await privateApi.delete(`/programs/${id}/review`);
+export const deleteReview = async (programId: number, reviewId: number) => {
+    const res = await privateApi.delete(`/programs/${programId}/review`, { data: { reviewId } });
     return res.data;
-}
+};
 
 // 내가 쓴 Q&A들 조회
-export const getMyQnaList = async (pageNum:number, size:number) => {
+export const getMyQnaList = async (pageNum: number, size: number) => {
     const res = await privateApi.get(`/programs/inquiries/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
     return res.data;
-}
+};

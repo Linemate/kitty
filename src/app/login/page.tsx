@@ -88,10 +88,32 @@ const LoginContent = () => {
                             <p className="intro">Welcome Buddy!</p>
                             <div className="input_area">
                                 <div className="email_area">
-                                    <Input type="text" name={'email'} value={values.email} handleChange={handleChange} placeholder="Email" />
+                                    <Input
+                                        type="text"
+                                        name={'email'}
+                                        value={values.email}
+                                        handleChange={handleChange}
+                                        placeholder="Email"
+                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                            if (e.key === 'Enter') {
+                                                handleLogin();
+                                            }
+                                        }}
+                                    />
                                 </div>
                                 <div className="pw_area">
-                                    <Input type="password" name={'password'} value={values.password} handleChange={handleChange} placeholder="Password" />
+                                    <Input
+                                        type="password"
+                                        name={'password'}
+                                        value={values.password}
+                                        handleChange={handleChange}
+                                        placeholder="Password"
+                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                            if (e.key === 'Enter') {
+                                                handleLogin();
+                                            }
+                                        }}
+                                    />
                                 </div>
                             </div>
                             <div className="gray500">Forgot Password?</div>
