@@ -162,7 +162,33 @@ const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }
 
                 <Paging totalPages={totalPages} page={page} changePage={(num: number) => setPage(num)} />
             
-                {modal.show && <EditReview reviewId={modal.reviewId} content={modal.content} score={modal.score} closePortal={() => setModal(initModal)} />}
+                {modal.show && <EditReview reviewId={modal.reviewId} content={modal.content} score={modal.score} closePortal={() => setModal(initModal)} programId={modal.programId} />}
+                    {
+                    deleteConfirmPopup.show && (
+                        <PopupPortal
+                            show={deleteConfirmPopup.show}
+                            type={deleteConfirmPopup.type}
+                            closePortal={deleteConfirmPopup.closePortal}
+                            yesFunction={deleteConfirmPopup.yesFunction}
+                            yesText={deleteConfirmPopup.yesText}
+                            noText={deleteConfirmPopup.noText}
+                        >
+                            {deleteConfirmPopup.children}
+                        </PopupPortal>
+                    )
+                }
+                
+                {
+                    popup.show && (
+                        <PopupPortal
+                            show={popup.show}
+                            type={popup.type}
+                            closePortal={popup.closePortal}
+                        >
+                            {popup.children}
+                        </PopupPortal>
+                    )
+                }
                 
             </div>
         </>

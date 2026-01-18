@@ -8,7 +8,7 @@ import { Button } from '../common/Button';
 import PopupPortal, { initPopup } from '../Portal/PopupPortal';
 
 const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => {
-    const [reviewData, setReviewData] = useState<addReviewProps>({contents: '', score:0});
+    const [reviewData, setReviewData] = useState<addReviewProps>({reviewId: id, title: '', content: '', score:0});
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const MAX_LENGTH = 500;
 
@@ -20,7 +20,7 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
         }
         setReviewData({
             ...reviewData,
-            contents: value
+            content: value
         })
     }
 
@@ -37,7 +37,7 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
 
     // 등록하기
     const handleSubmit = async () => {
-        if (reviewData.contents.trim().length === 0) return;
+        if (reviewData.content.trim().length === 0) return;
         try {
             const res = await postReview(id.toString(), reviewData);
             if (res && res.code === 200) {
@@ -85,13 +85,13 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                         <textarea
                             placeholder='리뷰 내용을 입력해주세요.'
                             onChange={handleInput}
-                            value={reviewData.contents}
+                            value={reviewData.content}
                             maxLength={MAX_LENGTH}
                         />
-                        <div className='review_char_count'>{reviewData.contents.length}/{MAX_LENGTH}</div>
+                        <div className='review_char_count'>{reviewData.content.length}/{MAX_LENGTH}</div>
                     </div>
                     <div className='review_btn_area'>
-                        <Button type="text" classnames={`in_modal ${reviewData.contents.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleSubmit()} text="등록하기" />
+                        <Button type="text" classnames={`in_modal ${reviewData.content.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleSubmit()} text="등록하기" />
                     </div>
                 </div>
             </ModalPortal>

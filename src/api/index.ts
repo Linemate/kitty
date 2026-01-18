@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
-import { getCookie } from 'utils/cookiesFunction';
+import { getCookie, deleteCookie } from 'utils/cookiesFunction';
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
 // 토큰 없는 axios 인스턴스 (프로그램 상세 등)
@@ -32,6 +32,48 @@ privateApi.interceptors.request.use(
         return config;
     },
     (error) => Promise.reject(error)
+);
+
+// 응답 인터셉터: 401 발생 시 로그인 페이지로 이동
+privateApi.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        try {
+            const status = error?.response?.status;
+            if (status === 401) {
+                if (typeof window !== 'undefined') {
+                    // 사용자 정보 삭제
+                    deleteCookie('USERINFO');
+                    // 로그인 페이지로 이동 (현재 페이지로 리다이렉트 주소 포함)
+                    const redirect = encodeURIComponent(window.location.href);
+                    window.location.href = `/login?redirect=${redirect}`;
+                }
+            }
+        } catch (e) {
+            console.error('Error in response interceptor', e);
+        }
+        return Promise.reject(error);
+    }
+);
+
+// publicApi에도 401 발생 시 로그인 페이지로 이동하도록 동일한 응답 인터셉터 추가
+publicApi.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        try {
+            const status = error?.response?.status;
+            if (status === 401) {
+                if (typeof window !== 'undefined') {
+                    deleteCookie('USERINFO');
+                    const redirect = encodeURIComponent(window.location.href);
+                    window.location.href = `/login?redirect=${redirect}`;
+                }
+            }
+        } catch (e) {
+            console.error('Error in publicApi response interceptor', e);
+        }
+        return Promise.reject(error);
+    }
 );
 
 // 컬렉션 전체 조회
