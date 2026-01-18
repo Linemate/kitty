@@ -15,6 +15,7 @@ export type hiddenInfoProps = {
 };
 
 export type imagesProps = {
+    url: string | undefined;
     id: number;
     image: imageProps;
     type: string;

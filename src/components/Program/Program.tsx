@@ -11,12 +11,13 @@ import { useAuthStore } from 'utils/stores';
 import { postProgramLike } from 'api';
 import Popup from 'components/Portal/Popup';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
+import { shareProgram } from '@/utils/share';
 
 const Program = (props: programCompProps) => {
     const { program, isDetails } = props;
     const router = useRouter();
     const [liked, setLiked] = useState<boolean>(program.isLike);
-    const [isPopup, setIsPopup] = useState<boolean>(false);
+    const [isSharePopup, setIsSharePopup] = useState<boolean>(false);
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const isMobile = useMobile();
 
@@ -45,16 +46,37 @@ const Program = (props: programCompProps) => {
     };
     // 공유하기
     const viewSharePopup = () => {
-        setIsPopup(true);
+        setIsSharePopup(true);
     };
     // 공유하기 닫기
     const closeSharePopup = () => {
-        setIsPopup(false);
+        setIsSharePopup(false);
     };
-    // 공유하기
-    const shareProgram = (str: string) => {
-        console.log(str);
-    };
+
+    // 공유 완료
+    const completedShare = () => {
+        setPopup({
+            show: true,
+            children: '링크가 복사되었습니다.',
+            type: 'alert',
+            closePortal: () => {
+                setPopup(initPopup);
+                closeSharePopup();
+            },
+            noText: '확인',
+        });
+    }
+
+    // 공유 실패
+    const failedShare = () => {
+        setPopup({
+            show: true,
+            children: '공유에 실패했습니다.',
+            type: 'alert',
+            closePortal: () => setPopup(initPopup),
+            noText: '확인',
+        });
+    }
     return (
         <div className={`program_comp ${isMobile ? 'mobile' : ''} ${isDetails ? 'details' : 'element'}`}>
             <div className="img_area" onClick={viewDetails} style={{ backgroundImage: `url(${program.thumbnail})` }}></div>
@@ -88,17 +110,17 @@ const Program = (props: programCompProps) => {
                     </div>
                 </div> */}
             </div>
-            {isPopup && (
+            {isSharePopup && (
                 <ModalPortal title={'Share'} type={'share'} closePortal={closeSharePopup}>
                     <div>
                         <ul>
-                            <li onClick={() => shareProgram('kakao')}>
+                            <li onClick={() => shareProgram('kakao', program, completedShare, failedShare)}>
                                 <div className="ico kakao">Kakaotalk</div>
                             </li>
-                            <li onClick={() => shareProgram('facebook')}>
+                            <li onClick={() => shareProgram('facebook', program, completedShare, failedShare)}>
                                 <div className="ico facebook">Facebook</div>
                             </li>
-                            <li onClick={() => shareProgram('copylink')}>
+                            <li onClick={() => shareProgram('copylink', program, completedShare, failedShare)}>
                                 <div className="ico copylink">Copy Link</div>
                             </li>
                         </ul>

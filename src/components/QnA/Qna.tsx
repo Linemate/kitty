@@ -105,25 +105,52 @@ const Qna = ({ id, isMy, size }: { id?: string, isMy: boolean, size: number }) =
         }
     }, [page, size, isMy, id]);
 
-    // qna 삭제
-    const handleConfirmDelete = async (inquiryId: number) => {
-        try {
-            const res = await deleteInquiry(Number(id), inquiryId);
-            loadInquiries();
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    // qna 삭제 여부
+    // qna 삭제 여부 (리뷰 삭제와 동일한 흐름: confirm -> API 호출 -> 완료 alert -> 목록 갱신)
     const handleDelete = (inquiryId: number) => {
         setPopup({
             show: true,
-            children: '작성한 문의를 삭제 하시겠습니까?',
+            children: '작성한 문의를 삭제하시겠습니까?',
             type: 'confirm',
-            yesFunction: () => {
-                handleConfirmDelete(inquiryId);
+            yesFunction: async () => {
+                try {
+                    const res = await deleteInquiry(Number(id), inquiryId);
+                    if (res && res.code === 200) {
+                        setPopup({
+                            show: true,
+                            children: '문의가 삭제되었습니다.',
+                            type: 'alert',
+                            closePortal: () => {
+                                setPopup(initPopup);
+                                loadInquiries();
+                            },
+                            noText: '확인',
+                        });
+                    } else {
+                        setPopup({
+                            show: true,
+                            children: '문의 삭제에 실패했습니다.',
+                            type: 'alert',
+                            closePortal: () => {
+                                setPopup(initPopup);
+                            },
+                            noText: '확인',
+                        });
+                    }
+                } catch (err) {
+                    console.log(err);
+                    setPopup({
+                        show: true,
+                        children: '문의 삭제에 실패했습니다.',
+                        type: 'alert',
+                        closePortal: () => {
+                            setPopup(initPopup);
+                        },
+                        noText: '확인',
+                    });
+                }
             },
+            yesText: '확인',
+            noText: '취소',
             closePortal: () => {
                 setPopup(initPopup);
             },
@@ -152,7 +179,7 @@ const Qna = ({ id, isMy, size }: { id?: string, isMy: boolean, size: number }) =
             )}
             {/* Alert / Confirm 팝업 */}
             {popup.show && (
-                <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : '취소'} yesText={'삭제'} yesFunction={popup.yesFunction}>
+                <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : '취소'} yesText={popup.yesText ? popup.yesText : '확인'} yesFunction={popup.yesFunction}>
                     {popup.children}
                 </PopupPortal>
             )}

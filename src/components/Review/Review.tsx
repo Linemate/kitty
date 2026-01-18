@@ -7,6 +7,7 @@ import 'styles/review.scss';
 import { popupProps, reviewItemProps } from 'types/types';
 import { Button } from '../common/Button';
 import { initPopup } from '../Portal/PopupPortal';
+import PopupPortal from '../Portal/PopupPortal';
 import EditReview from './_Edit';
 
 const ReviewItem = ({ isMy, title, name, score, content, id, createdAt, handleDelete, openModal }: reviewItemProps & { openModal: (id: number, content: string, score: number) => void }) => {
@@ -62,6 +63,7 @@ const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }
     const [page, setPage] = useState<number>(0);
     const isMobile = useMobile();
     const [popup, setPopup] = useState<popupProps>(initPopup);
+    const [deleteConfirmPopup, setDeleteConfirmPopup] = useState<popupProps>(initPopup);
     // 리뷰 조회
     const loadProgramReviews = useCallback(async () => {
         try {
@@ -84,33 +86,58 @@ const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }
 
     // 리뷰 삭제    
     const handleDelete = useCallback(async (id: number) => {
-        try {
-            const res = await deleteReview(id);
-            if (res && res.code === 200) {
-                loadProgramReviews();
-            } else {
-                setPopup({
-                    show: true,
-                    children: '리뷰 삭제에 실패했습니다.',
-                    type: 'alert',
-                    closePortal: () => {
-                    setPopup(initPopup);
-                    },
-                    noText: '확인',
-                });
-            }
-        } catch (err) {
-            console.log(err);
-            setPopup({
-                show: true,
-                children: '리뷰 삭제에 실패했습니다.',
-                type: 'alert',
-                closePortal: () => {
-                    setPopup(initPopup);
-                },
-                noText: '확인',
-            });
-        }
+        // 먼저 confirm popup 표시
+        setDeleteConfirmPopup({
+            show: true,
+            children: '작성한 리뷰를 삭제하시겠습니까?',
+            type: 'confirm',
+            yesFunction: async () => {
+                try {
+                    const res = await deleteReview(id);
+                    if (res && res.code === 200) {
+                        setDeleteConfirmPopup(initPopup);
+                        setPopup({
+                            show: true,
+                            children: '리뷰가 삭제되었습니다.',
+                            type: 'alert',
+                            closePortal: () => {
+                                setPopup(initPopup);
+                                loadProgramReviews();
+                            },
+                            noText: '확인',
+                        });
+                    } else {
+                        setDeleteConfirmPopup(initPopup);
+                        setPopup({
+                            show: true,
+                            children: '리뷰 삭제에 실패했습니다.',
+                            type: 'alert',
+                            closePortal: () => {
+                                setPopup(initPopup);
+                            },
+                            noText: '확인',
+                        });
+                    }
+                } catch (err) {
+                    console.log(err);
+                    setDeleteConfirmPopup(initPopup);
+                    setPopup({
+                        show: true,
+                        children: '리뷰 삭제에 실패했습니다.',
+                        type: 'alert',
+                        closePortal: () => {
+                            setPopup(initPopup);
+                        },
+                        noText: '확인',
+                    });
+                }
+            },
+            yesText: '확인',
+            closePortal: () => {
+                setDeleteConfirmPopup(initPopup);
+            },
+            noText: '취소',
+        });
     }, [loadProgramReviews]);
 
     useEffect(() => {
@@ -126,6 +153,32 @@ const Review = ({ id, isMy, size }: { id?: number, isMy: boolean, size: number }
             
                 {modal.show && <EditReview reviewId={modal.reviewId} content={modal.content} score={modal.score} closePortal={() => setModal(initModal)} />}
                 
+                {
+                    deleteConfirmPopup.show && (
+                        <PopupPortal
+                            show={deleteConfirmPopup.show}
+                            type={deleteConfirmPopup.type}
+                            closePortal={deleteConfirmPopup.closePortal}
+                            yesFunction={deleteConfirmPopup.yesFunction}
+                            yesText={deleteConfirmPopup.yesText}
+                            noText={deleteConfirmPopup.noText}
+                        >
+                            {deleteConfirmPopup.children}
+                        </PopupPortal>
+                    )
+                }
+                
+                {
+                    popup.show && (
+                        <PopupPortal
+                            show={popup.show}
+                            type={popup.type}
+                            closePortal={popup.closePortal}
+                        >
+                            {popup.children}
+                        </PopupPortal>
+                    )
+                }
             </div>
         </>
     );

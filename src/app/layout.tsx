@@ -21,11 +21,13 @@ export default function RootLayout({
                 <meta name="robots" content="index,follow" />
                 <meta name="theme-color" content="#000000" />
                 <link rel="shortcut icon" href="/favicon.ico" />
-                <meta property="og:url" content="" />
+                <meta property="og:url" content="https://www.linemate.kr" />
                 <meta property="og:type" content="website" />
                 <meta property="og:title" content="LINEMATE" />
-                <meta property="og:description" content="" />
+                <meta property="og:description" content="라인메이트 입니다." />
                 <meta property="og:image" content="" />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
                 <meta name="twitter:card" content="summary" />
                 <meta name="twitter:title" content="LINEMATE" />
                 <meta name="twitter:description" content="" />

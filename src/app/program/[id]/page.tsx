@@ -27,6 +27,7 @@ import SimpleProgram from 'components/Program/SimpleProgram';
 import Popup from 'components/Portal/Popup';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import DetailContent from './_DetailContent';
+import { shareProgram } from '@/utils/share';
 
 const tabsData = [
     {
@@ -72,23 +73,6 @@ const formatReservationDate = (isoString: string) => {
     const ddStr = d < 10 ? `0${d}` : `${d}`;
     const mminStr = min < 10 ? `0${min}` : `${min}`;
     return `${y}.${mmStr}.${ddStr} (${dow}) ${h}:${mminStr}${ap}`;
-};
-
-const formatLocalSelectedDate = (date?: Date) => {
-    if (!date) return '';
-    const y = date.getFullYear();
-    const m = date.getMonth() + 1;
-    const d = date.getDate();
-    const day = days[date.getDay()];
-    let h = date.getHours();
-    const ampm = h < 12 ? 'am' : 'pm';
-    h = h % 12;
-    if (h === 0) h = 12;
-    const min = date.getMinutes();
-    const mm = m < 10 ? `0${m}` : `${m}`;
-    const dd = d < 10 ? `0${d}` : `${d}`;
-    const mmin = min < 10 ? `0${min}` : `${min}`;
-    return `${y}.${mm}.${dd} (${day}) ${h}:${mmin}${ampm}`;
 };
 const initProgram = {
     id: 0,
@@ -297,10 +281,31 @@ const ProgramDetails = () => {
     const closeSharePopup = () => {
         setIsSharePopup(false);
     };
-    // 공유하기
-    const shareProgram = (str: string) => {
-        console.log(str);
-    };
+    
+    // 공유 완료
+    const completedShare = () => {
+        setPopup({
+            show: true,
+            children: '링크가 복사되었습니다.',
+            type: 'alert',
+            closePortal: () => {
+                setPopup(initPopup);
+                closeSharePopup();
+            },
+            noText: '확인',
+        });
+    }
+
+    // 공유 실패
+    const failedShare = () => {
+        setPopup({
+            show: true,
+            children: '공유에 실패했습니다.',
+            type: 'alert',
+            closePortal: () => setPopup(initPopup),
+            noText: '확인',
+        });
+    }
 
     // 프로그램 좋아요
     const sendLike = async () => {
@@ -753,13 +758,13 @@ const ProgramDetails = () => {
                 <ModalPortal title={'Share'} type={'share'} closePortal={closeSharePopup}>
                     <div>
                         <ul>
-                            <li onClick={() => shareProgram('kakao')}>
+                            <li onClick={() => shareProgram('kakao', program, completedShare, failedShare)}>
                                 <div className="ico kakao">Kakaotalk</div>
                             </li>
-                            <li onClick={() => shareProgram('facebook')}>
+                            <li onClick={() => shareProgram('facebook', program, completedShare, failedShare)}>
                                 <div className="ico facebook">Facebook</div>
                             </li>
-                            <li onClick={() => shareProgram('copylink')}>
+                            <li onClick={() => shareProgram('copylink', program, completedShare, failedShare)}>
                                 <div className="ico copylink">Copy Link</div>
                             </li>
                         </ul>
