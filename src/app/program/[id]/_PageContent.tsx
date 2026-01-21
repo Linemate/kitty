@@ -18,7 +18,7 @@ import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import ModalPortal from 'components/Portal/ModalPortal';
 import AvailableTimes from 'components/Program/AvailableTimes';
-import { getProgramSchedules, postProgramLike, requestPayments } from 'api';
+import { getProgramSchedules, postProgramLike, requestPayments, getProgramDetailsWithToken } from 'api';
 import { popupProps, programProps, programSummaryProps, responsePaymentProps, scheduleProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
 import WidgetCheckout from 'components/common/WidgetCheckout';
@@ -411,6 +411,21 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         },
         [handleChangeDate, programId]
     );
+
+    // SSR 실패 시 클라이언트에서 프로그램 상세 로드
+    useEffect(() => {
+        if (!initialProgram) {
+            (async () => {
+                try {
+                    const res = await getProgramDetailsWithToken(programId);
+                    setProgram(res?.data || initProgram);
+                    handleChangeMonth(today);
+                } catch (err) {
+                    console.log('클라이언트 프로그램 상세 로드 실패:', err);
+                }
+            })();
+        }
+    }, [initialProgram, programId, handleChangeMonth]);
 
     // 토스 창 닫기
     const closeWidget = () => {

@@ -1,11 +1,11 @@
-type Params = {
-    params: {
-        id: string[];
-    };
+type Props = {
+    params: Promise<{
+        id: string;
+    }>;
 };
 
-export async function generateMetadata({ params }: Params) {
-    const id = params.id?.[0];
+export async function generateMetadata({ params }: Props) {
+    const { id } = await params;
     const host = process.env.NEXT_PUBLIC_API_HOST || '';
     let title = '';
     let image = '';
@@ -13,7 +13,12 @@ export async function generateMetadata({ params }: Params) {
 
     try {
         if (id && host) {
-            const res = await fetch(`${host.replace(/\/$/, '')}/api/v1/programs/${id}`, { cache: 'no-store' });
+            const res = await fetch(`${host.replace(/\/$/, '')}/api/v1/programs/${id}`, {
+                cache: 'no-store',
+                headers: {
+                    country: 'KR',
+                },
+            });
             const json = await res.json();
             const program = json?.data;
             title = program?.title || '';

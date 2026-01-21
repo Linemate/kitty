@@ -110,6 +110,19 @@ export const getProgramDetails = async (id: string) => {
     return res.data;
 };
 
+// 서버/클라이언트 공용: 토큰 선택적 부여로 privateApi 호출
+export const getProgramDetailsWithToken = async (id: string, token?: string) => {
+    const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        country: 'KR',
+    };
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+    const res = await privateApi.get(`/programs/${id}`, { headers });
+    return res.data;
+};
+
 // 프로그램 리뷰 조회
 export const getProgramReview = async (id: string, size: number, page: number) => {
     const res = await publicApi.get(`/programs/${id}/reviews?page=${page}&size=${size}&sort=id%2Cdesc`);
