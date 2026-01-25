@@ -31,10 +31,14 @@ const ExperiencePage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [isCalendarModal, setIsCalendarModal] = useState<boolean>(false);
+    
+    // 달력 선택된 날짜
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
+
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     
     // 신규 추가 상태
-    const [startDate, setStartDate] = useState<Date | null>(null);
     const [sortBy, setSortBy] = useState<string>('latest'); // 기본값: 최신순
     const [isSortOpen, setIsSortOpen] = useState<boolean>(false);
 
@@ -122,8 +126,11 @@ const ExperiencePage = () => {
     };
 
     // 달력 변경
-    const handleChangeCalendar = (date: Date | null) => {
-        console.log(date);
+    const handleChangeCalendar = (update: [Date | null, Date | null]) => {
+        const [startDate, endDate] = update;
+        setStartDate(startDate);
+        setEndDate(endDate);
+        console.log(startDate, endDate);
     };
 
     // 기간 설정 완료
@@ -200,7 +207,7 @@ const ExperiencePage = () => {
                                                                                                                                         닫기
                                                                                                                                     </button>                                                                                                  </div>
                                                                                                                                 <div className="calendar_wrap">
-                    <div className="calendar_area">                                                                       <div className="calendar">                                                                      <ReactDatePicker onChange={handleChangeCalendar} inline />                                              
+                    <div className="calendar_area">                                                                       <div className="calendar">                                                                      <ReactDatePicker onChange={handleChangeCalendar} startDate={startDate} endDate={endDate} selectsRange={true} inline />                                              
                     </div>
                 </div>
                                                                                                                                     <div className="calendar_details">                                                                                 <Button type="text" classnames="bg_blue radius_none reservation" text="Reservation" onclick={handleCompletedCalendar} />
