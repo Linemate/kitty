@@ -99,8 +99,25 @@ export const getCategories = async () => {
 };
 
 // 프로그램 전체
-export const getPrograms = async () => {
-    const res = await publicApi.get(`/programs`);
+export const getPrograms = async (category?: string, pageNum?: number, size?: number, date?: string, sort?: string) => {
+    let url = `/programs`;
+    const params: string[] = [];
+    
+    if (category) {
+        params.push(`category=${category}`);
+    }
+    if (pageNum !== undefined) {
+        params.push(`page=${pageNum}`);
+    }
+    if (size !== undefined) {
+        params.push(`size=${size}`);
+    }
+    
+    if (params.length > 0) {
+        url += `?${params.join('&')}`;
+    }
+    
+    const res = await publicApi.get(url);
     return res.data;
 };
 

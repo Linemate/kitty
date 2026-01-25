@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
 import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useRouter } from 'next/navigation';
 import 'styles/programPage.scss';
 import Review from 'components/Review/Review';
