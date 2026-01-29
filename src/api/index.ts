@@ -99,10 +99,10 @@ export const getCategories = async () => {
 };
 
 // 프로그램 전체
-export const getPrograms = async (category?: string, pageNum?: number, size?: number, date?: string, sort?: string) => {
+export const getPrograms = async (category?: string, pageNum?: number, size?: number, rangeFilters?: string, sort?: string) => {
     let url = `/programs`;
     const params: string[] = [];
-    
+
     if (category) {
         params.push(`category=${category}`);
     }
@@ -112,11 +112,17 @@ export const getPrograms = async (category?: string, pageNum?: number, size?: nu
     if (size !== undefined) {
         params.push(`size=${size}`);
     }
-    
+    if (rangeFilters) {
+        params.push(`rangeFilters=${rangeFilters}`);
+    }
+    if (sort) {
+        params.push(`sort=${sort}`);
+    }
+
     if (params.length > 0) {
         url += `?${params.join('&')}`;
     }
-    
+
     const res = await publicApi.get(url);
     return res.data;
 };

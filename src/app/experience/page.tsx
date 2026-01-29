@@ -10,8 +10,10 @@ import { useAuthStore } from 'utils/stores';
 
 import 'styles/home.scss';
 import 'styles/experiencePage.scss';
+import 'styles/sortModal.scss'; // Add this line
 import ReactDatePicker from 'react-datepicker';
 import { Button } from '@/components/common/Button';
+import ModalPortal from 'components/Portal/ModalPortal';
 
 const initTime = {
     id: 0,
@@ -31,16 +33,24 @@ const ExperiencePage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [isCalendarModal, setIsCalendarModal] = useState<boolean>(false);
-    
+
     // 달력 선택된 날짜
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
 
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    
+
     // 신규 추가 상태
     const [sortBy, setSortBy] = useState<string>('latest'); // 기본값: 최신순
     const [isSortOpen, setIsSortOpen] = useState<boolean>(false);
+
+    const sortOptions = [
+        { key: 'latest', label: '최신순' },
+        { key: 'popular', label: '인기순' },
+        { key: 'deadline', label: '마감 임박순' },
+        { key: 'price_high', label: '가격 높은순' },
+        { key: 'price_low', label: '가격 낮은순' },
+    ];
 
     const observerTarget = useRef<HTMLDivElement>(null);
     const isMobile = useMobile();
@@ -62,31 +72,37 @@ const ExperiencePage = () => {
 
     // 프로그램 조회 (필터 파라미터 추가)
     const loadPrograms = useCallback(async (
-        page: number, 
-        category: string | null, 
-        date: Date | null, 
-        sort: string, 
+        page: number,
+        category: string | null,
+        startDate: Date | null,
+        endDate: Date | null,
+        sort: string,
         isReset: boolean = false
     ) => {
         if (loadingRef.current) return;
-        
+
         try {
             loadingRef.current = true;
             setLoading(true);
 
-            // API 호출 시 날짜 포맷팅 및 정렬 파라미터 전달 필요 (API 스펙에 맞춰 수정)
-            const dateStr = date ? date.toISOString().split('T')[0] : undefined;
-            
-            const res = await getPrograms(category || undefined, page, size, dateStr, sort);
+            // rangeFilters 포맷팅: startDate:2023-12-25~2025-12-31
+            let rangeFilters = undefined;
+            if (startDate && endDate) {
+                const startStr = startDate.toISOString().split('T')[0];
+                const endStr = endDate.toISOString().split('T')[0];
+                rangeFilters = `startDate:${startStr}~${endStr}`;
+            }
+
+            const res = await getPrograms(category || undefined, page, size, rangeFilters, sort);
             const data = res.data;
             const list = data.list || [];
-            
+
             if (isReset) {
                 setPrograms(list);
             } else {
                 setPrograms(prev => [...prev, ...list]);
             }
-            
+
             setHasMore(data.page < data.totalPages - 1);
             setPageNum(data.page);
         } catch (err) {
@@ -112,17 +128,17 @@ const ExperiencePage = () => {
     };
 
     // 초기화 및 재검색 함수
-    const resetAndLoad = (newCategory: string | null, newDate: Date | null, newSort: string) => {
+    const resetAndLoad = (newCategory: string | null, newStartDate: Date | null, newEndDate: Date | null, newSort: string) => {
         setPageNum(0);
         setHasMore(true);
         setPrograms([]);
-        loadPrograms(0, newCategory, newDate, newSort, true);
+        loadPrograms(0, newCategory, newStartDate, newEndDate, newSort, true);
     };
 
     // 핸들러들
     const handleCategoryChange = (categoryId: string | null) => {
         setSelectedCategory(categoryId);
-        resetAndLoad(categoryId, startDate, sortBy);
+        resetAndLoad(categoryId, startDate, endDate, sortBy);
     };
 
     // 달력 변경
@@ -133,15 +149,23 @@ const ExperiencePage = () => {
         console.log(startDate, endDate);
     };
 
+    // M월 D일 
+    const exportKoreanDate = (date: Date) => {
+        const m = date.getMonth() + 1;
+        const d = date.getDate();
+        return `${m}월 ${d}일`;
+    }
+
     // 기간 설정 완료
-    const handleCompletedCalendar = () => {
+    const handleSetPeriod = () => {
         setIsCalendarModal(false);
+        resetAndLoad(selectedCategory, startDate, endDate, sortBy);
     };
 
     const handleSortChange = (sortType: string) => {
         setSortBy(sortType);
         setIsSortOpen(false);
-        resetAndLoad(selectedCategory, startDate, sortType);
+        resetAndLoad(selectedCategory, startDate, endDate, sortType);
     };
 
     // 무한스크롤 Observer
@@ -149,7 +173,7 @@ const ExperiencePage = () => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && hasMore && !loadingRef.current) {
-                    loadPrograms(pageNum + 1, selectedCategory, startDate, sortBy, false);
+                    loadPrograms(pageNum + 1, selectedCategory, startDate, endDate, sortBy, false);
                 }
             },
             { threshold: 0.1 }
@@ -158,18 +182,18 @@ const ExperiencePage = () => {
         const currentTarget = observerTarget.current;
         if (currentTarget) observer.observe(currentTarget);
         return () => { if (currentTarget) observer.unobserve(currentTarget); };
-    }, [hasMore, pageNum, selectedCategory, startDate, sortBy, loadPrograms]);
+    }, [hasMore, pageNum, selectedCategory, startDate, endDate, sortBy, loadPrograms]);
 
     useEffect(() => {
         loadCategories();
-        loadPrograms(0, null, null, 'latest', true);
+        loadPrograms(0, null, null, null, 'latest', true);
     }, [loadCategories]);
 
     return (
         <div className="home experience">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <Header title={'Experience'} isLogin={isLogin} />
-                
+
                 <div className="contents">
                     {/* 카테고리 탭 */}
                     <div className="section category_tab">
@@ -201,20 +225,22 @@ const ExperiencePage = () => {
                                     isCalendarModal && (
                                         <div className='datepicker_area'>
                                             <div className={`modal ${isCalendarModal ? 'on' : ''}`}>
-                                                                                                                                <div className="header">
-                                                                                                                                    <div className="title">날짜 선택</div>
-                                                                                                                                    <button type="button" className="btn img close big" onClick={handleModalCalendar}>
-                                                                                                                                        닫기
-                                                                                                                                    </button>                                                                                                  </div>
-                                                                                                                                <div className="calendar_wrap">
-                    <div className="calendar_area">                                                                       <div className="calendar">                                                                      <ReactDatePicker onChange={handleChangeCalendar} startDate={startDate} endDate={endDate} selectsRange={true} inline />                                              
-                    </div>
-                </div>
-                                                                                                                                    <div className="calendar_details">                                                                                 <Button type="text" classnames="bg_blue radius_none reservation" text="Reservation" onclick={handleCompletedCalendar} />
-
-                    </div>                                                                                              
-                    </div>                                                                                              
-                    </div>
+                                                <div className="header">
+                                                    <div className="title">날짜 선택</div>
+                                                    <button type="button" className="btn img close big" onClick={handleModalCalendar}>
+                                                        닫기
+                                                    </button>                         </div>
+                                                <div className="calendar_wrap">
+                                                    <div className="calendar_area">
+                                                        <div className="calendar">  <ReactDatePicker onChange={handleChangeCalendar} startDate={startDate} endDate={endDate} selectsRange={true} inline />
+                                                        </div>
+                                                    </div>
+                                                    {
+                                                        startDate && endDate ?
+                                                            <Button type="text" classnames={`border blue`} onclick={handleSetPeriod} text={`${exportKoreanDate(startDate)} ~ ${exportKoreanDate(endDate)}`} /> : ''
+                                                    }
+                                                </div>
+                                            </div>
                                         </div>
                                     )
                                 }
@@ -222,15 +248,22 @@ const ExperiencePage = () => {
 
                             {/* 정렬 버튼 */}
                             <div className="sort_wrapper">
-                                
-                            <Button type="text" classnames={`border blue`} onclick={() => setIsSortOpen(!isSortOpen)} text="정렬" />
-                                
+                                <Button type="text" classnames={`border blue`} onclick={() => setIsSortOpen(true)} text="정렬" />
                                 {isSortOpen && (
-                                    <div className="sort_popup">
-                                        <div className="sort_item" onClick={() => handleSortChange('latest')}>최신순</div>
-                                        <div className="sort_item" onClick={() => handleSortChange('popular')}>인기순</div>
-                                        <div className="sort_item" onClick={() => handleSortChange('price_low')}>가격 낮은순</div>
-                                    </div>
+                                    <ModalPortal title="정렬" type="sort_modal" closePortal={() => setIsSortOpen(false)}>
+                                        <div className="sort_list_container">
+                                            {sortOptions.map((option) => (
+                                                <div
+                                                    key={option.key}
+                                                    className={`sort_option_item ${sortBy === option.key ? 'selected' : ''}`}
+                                                    onClick={() => handleSortChange(option.key)}
+                                                >
+                                                    <span className="label">{option.label}</span>
+                                                    <div className={`radio_btn ${sortBy === option.key ? 'on' : ''}`}></div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </ModalPortal>
                                 )}
                             </div>
                         </div>
