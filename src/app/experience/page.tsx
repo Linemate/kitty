@@ -14,15 +14,6 @@ import ReactDatePicker from 'react-datepicker';
 import { Button } from '@/components/common/Button';
 import ModalPortal from 'components/Portal/ModalPortal';
 
-const initTime = {
-    id: 0,
-    capacity: 0,
-    startDate: '',
-    endDate: '',
-    reservationDate: '',
-    reservationCount: 0,
-};
-
 const ExperiencePage = () => {
     const [categories, setCategories] = useState<categoryProps[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -36,8 +27,6 @@ const ExperiencePage = () => {
     // 달력 선택된 날짜
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
-
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
     // 신규 추가 상태
     const [sortBy, setSortBy] = useState<string>('latest'); // 기본값: 최신순
@@ -194,10 +183,13 @@ const ExperiencePage = () => {
                 <Header title={'Experience'} isLogin={isLogin} />
 
                 <div className="contents">
+                    <div className='page_title'>
+                        <h3>Experience</h3>
+                    </div>
                     {/* 카테고리 탭 */}
                     <div className="section category_tab">
                         <div className="tab_area">
-                            <div className="tab rounded">
+                            <div className="tab bar">
                                 <ul>
                                     <li className={selectedCategory === null ? 'selected' : ''} onClick={() => handleCategoryChange(null)}>All</li>
                                     {categories.map((category) => (
@@ -219,7 +211,7 @@ const ExperiencePage = () => {
                         <div className="filter_container">
                             {/* 날짜 선택 버튼 */}
                             <div className="datepicker_wrapper">
-                                <Button type="text" classnames={`border blue`} onclick={handleModalCalendar} text="달력" />
+                                <Button type="text" classnames={`ico border lightgray arrow`} onclick={handleModalCalendar} text="날짜" />
                                 {
                                     isCalendarModal && (
                                         <div className='datepicker_area'>
@@ -247,7 +239,7 @@ const ExperiencePage = () => {
 
                             {/* 정렬 버튼 */}
                             <div className="sort_wrapper">
-                                <Button type="text" classnames={`border blue`} onclick={() => setIsSortOpen(true)} text="정렬" />
+                                <Button type="text" classnames={`ico border lightgray arrow`} onclick={() => setIsSortOpen(true)} text="정렬" />
                                 {isSortOpen && (
                                     <ModalPortal title="정렬" type="sorting" closePortal={() => setIsSortOpen(false)}>
                                         <div className='select_wrap'>
@@ -263,7 +255,7 @@ const ExperiencePage = () => {
                                                         </li>
                                                     ))}
                                                 </ul>
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </ModalPortal>
                                 )}
