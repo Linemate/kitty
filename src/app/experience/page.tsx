@@ -10,7 +10,6 @@ import { useAuthStore } from 'utils/stores';
 
 import 'styles/home.scss';
 import 'styles/experiencePage.scss';
-import 'styles/sortModal.scss'; // Add this line
 import ReactDatePicker from 'react-datepicker';
 import { Button } from '@/components/common/Button';
 import ModalPortal from 'components/Portal/ModalPortal';
@@ -237,7 +236,7 @@ const ExperiencePage = () => {
                                                     </div>
                                                     {
                                                         startDate && endDate ?
-                                                            <Button type="text" classnames={`border blue`} onclick={handleSetPeriod} text={`${exportKoreanDate(startDate)} ~ ${exportKoreanDate(endDate)}`} /> : ''
+                                                            <Button type="text" classnames={`border blue`} onclick={handleSetPeriod} text={`${exportKoreanDate(startDate)} ~ ${exportKoreanDate(endDate)}`} /> : '날짜를 선택해주세요'
                                                     }
                                                 </div>
                                             </div>
@@ -250,18 +249,21 @@ const ExperiencePage = () => {
                             <div className="sort_wrapper">
                                 <Button type="text" classnames={`border blue`} onclick={() => setIsSortOpen(true)} text="정렬" />
                                 {isSortOpen && (
-                                    <ModalPortal title="정렬" type="sort_modal" closePortal={() => setIsSortOpen(false)}>
-                                        <div className="sort_list_container">
-                                            {sortOptions.map((option) => (
-                                                <div
-                                                    key={option.key}
-                                                    className={`sort_option_item ${sortBy === option.key ? 'selected' : ''}`}
-                                                    onClick={() => handleSortChange(option.key)}
-                                                >
-                                                    <span className="label">{option.label}</span>
-                                                    <div className={`radio_btn ${sortBy === option.key ? 'on' : ''}`}></div>
-                                                </div>
-                                            ))}
+                                    <ModalPortal title="정렬" type="sorting" closePortal={() => setIsSortOpen(false)}>
+                                        <div className='select_wrap'>
+                                            <div className="select_options">
+                                                <ul>
+                                                    {sortOptions.map((option) => (
+                                                        <li key={option.key} onClick={() => handleSortChange(option.key)} className={`${sortBy === option.key ? 'selected' : ''}`}>
+                                                            <div className="option">{option.label}</div>
+                                                            {
+                                                                isMobile &&
+                                                                <span className={`ico radio ${sortBy === option.key ? 'checked' : 'default'}`}></span>
+                                                            }
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>                                            
                                         </div>
                                     </ModalPortal>
                                 )}

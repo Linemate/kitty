@@ -1,0 +1,167 @@
+.register {
+    .header_area {
+        &.mobile {
+            .header_right {
+                .btn {
+                    &.like, &.login {
+                        display:none;
+                    }
+                }
+            }
+        }
+    }
+    .wrapper {
+        padding:0;
+        .contents {
+            max-width:1440px;
+            min-height:1024px;
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+            margin:0 auto;
+            .img_area {
+                width:860px;
+                min-height:1024px;
+                background-repeat: no-repeat;
+                background-size:cover;
+                background-position: center;
+                /* Reuse login background or a new one */
+                &.en {
+                    background-image:url('/assets/images/bg/bg_login_en.png');
+                }
+                &.kr {
+                    background-image:url('/assets/images/bg/bg_login_kr.png');
+                }
+            }
+            .text_area {
+                width:100%;
+                flex:1;
+                padding-top:100px;
+                padding-bottom: 100px; 
+                display: flex;
+                justify-content: center; 
+                .main {
+                    width: 380px; 
+                }
+                .logo {
+                    width:130px;
+                    height:18px;
+                    background-image:url('/assets/images/logo.svg');
+                    background-repeat:no-repeat;
+                    background-size:100%;
+                    font-size:0;
+                    line-height:0;
+                    text-indent:-9999px;
+                    margin-bottom: 40px;
+                }
+                .title {
+                    font-size: 24px;
+                    font-weight: 700;
+                    margin-bottom: 32px;
+                }
+                
+                .form_area {
+                    .field {
+                        margin-bottom: 16px;
+                        label {
+                            display: block;
+                            font-size: 14px;
+                            font-weight: 500;
+                            margin-bottom: 8px;
+                            color: var(--color-neutral-800);
+                        }
+                        .input_row {
+                            display: flex;
+                            gap: 8px;
+                            .input_wrap {
+                                flex: 1;
+                            }
+                            button {
+                                width: 100px;
+                                height: 50px; // Match input height usually
+                                font-size: 14px;
+                            }
+                        }
+                        select {
+                            width: 100%;
+                            height: 50px;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            padding: 0 16px;
+                            font-size: 14px;
+                            color: var(--color-neutral-800);
+                            appearance: none;
+                            background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center/12px;
+                        }
+                        .error_msg {
+                            color: #ff4d4f;
+                            font-size: 12px;
+                            margin-top: 4px;
+                        }
+                    }
+                }
+
+                .agreement_area {
+                    margin-top: 32px;
+                    margin-bottom: 32px;
+                    border-top: 1px solid #eee;
+                    padding-top: 24px;
+
+                    .checkbox_row {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 12px;
+                        cursor: pointer;
+                        
+                        input[type="checkbox"] {
+                            width: 20px;
+                            height: 20px;
+                            margin-right: 10px;
+                            cursor: pointer;
+                        }
+
+                        span {
+                            font-size: 14px;
+                            color: var(--color-neutral-600);
+                            &.required {
+                                color: #ff6b00; // Example highlight color
+                                margin-left: 4px;
+                            }
+                        }
+
+                        &.all_agree {
+                            margin-bottom: 20px;
+                            span {
+                                font-weight: 700;
+                                color: var(--color-neutral-900);
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                }
+
+                .btn_area {
+                    margin-top: 24px;
+                }
+            }
+        }
+        &.mobile {
+            .contents {
+                display:block;
+                padding:0 20px;
+                max-width:none;
+                max-height:none;
+                .text_area {
+                    display:block;
+                    padding-top:48px; 
+                    .main {
+                        width: 100%;
+                        .logo {
+                            display:none;
+                        }
+                    }   
+                }
+            }
+        }
+    }
+}

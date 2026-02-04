@@ -39,7 +39,7 @@ const Header = (props: headerProps) => {
     };
     // 로그인 화면으로
     const viewLoginPage = () => {
-        router.push('/login');
+        router.push('/account/login');
     };
     // 뒤로가기
     const handleBack = () => {

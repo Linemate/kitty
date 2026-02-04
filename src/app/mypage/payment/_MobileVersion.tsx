@@ -35,7 +35,7 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
                 err.status === 401) {
                 console.log(err)
                 alert('로그인이 필요해요.');
-                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
+                router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
             }
             return;
         }

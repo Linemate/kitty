@@ -218,7 +218,7 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
     } else {
       alert('로그인 후 이용해주세요.');
       router.push(
-        `/login?redirect=${encodeURIComponent(
+        `/account/login?redirect=${encodeURIComponent(
           window.location.origin + '/program/' + id
         )}`
       );

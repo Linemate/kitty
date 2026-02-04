@@ -51,7 +51,7 @@ privateApi.interceptors.response.use(
                 if (typeof window !== 'undefined') {
                     deleteCookie('USERINFO');
                     const redirect = encodeURIComponent(window.location.href);
-                    window.location.href = `/login?redirect=${redirect}`;
+                    window.location.href = `/account/login?redirect=${redirect}`;
                 }
             }
         } catch (e) {
@@ -70,7 +70,7 @@ publicApi.interceptors.response.use(
                 if (typeof window !== 'undefined') {
                     deleteCookie('USERINFO');
                     const redirect = encodeURIComponent(window.location.href);
-                    window.location.href = `/login?redirect=${redirect}`;
+                    window.location.href = `/account/login?redirect=${redirect}`;
                 }
             }
         } catch (e) {
@@ -155,6 +155,18 @@ export const getProgramReview = async (id: string, size: number, page: number) =
 // 프로그램 예약 스케쥴 확인
 export const getProgramSchedules = async (id: string, date: string) => {
     const res = await publicApi.get(`/programs/${id}/reservation/schedules?date=${date}`);
+    return res.data;
+};
+
+// 회원가입 - 이메일 중복확인
+export const getEmailCheck = async (email: string) => {
+    const res = await publicApi.get(`/account/check-email?email=${email}`);
+    return res.data;
+};
+
+// 회원가입 - 동의항목 조회
+export const getAgreements = async () => {
+    const res = await publicApi.get(`/account/sign-up/consents`);
     return res.data;
 };
 

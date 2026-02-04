@@ -218,7 +218,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
             // 비로그인
             if (!user) {
                 alert('로그인이 필요해요.');
-                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
+                router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
                 return;
             }
             
@@ -304,7 +304,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                 children: <div>로그인 후 이용해주세요.</div>,
                 closePortal: () => {
                     setPopup(initPopup);
-                    router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
+                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
                 },
                 noText: '확인',
             });
