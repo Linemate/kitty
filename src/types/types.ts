@@ -431,3 +431,25 @@ export type addReviewBodyProps = {
     contents: string;
     score: number;
 }
+
+// 약관 동의 항목
+export type AgreementProps = {
+    id: number;
+    title: string;
+    contents: string;
+    isRequired: boolean;
+    type: string; // 'TERMS', 'PRIVACY', 'MARKETING' etc.
+};
+
+// 회원가입
+export type registerProps = {
+    email: string;
+    password: string;
+    name: string;
+    locale: string;
+    phone: string;
+    consents : {
+        type: string;
+        agreed: boolean;
+    }[]
+}

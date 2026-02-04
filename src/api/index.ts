@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
+import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps, registerProps } from 'types/types';
 import { getCookie, deleteCookie } from 'utils/cookiesFunction';
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
@@ -168,6 +168,12 @@ export const getEmailCheck = async (email: string) => {
 export const getAgreements = async () => {
     const res = await publicApi.get(`/account/sign-up/consents`);
     return res.data;
+};
+
+// 회원가입
+export const postRegister = async (values: registerProps) => {
+    const res = await publicApi.post(`/account/sign-up`, values);
+    return res.data;``
 };
 
 // 로그인

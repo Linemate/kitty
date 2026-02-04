@@ -8,19 +8,16 @@ import Input from 'components/Input/Input';
 import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
+import { getAgreements, getEmailCheck, postRegister } from 'api';
+import { AgreementProps } from 'types/types';
 
 interface RegisterValues {
     email: string;
     password: string;
     passwordConfirm: string;
     nationality: string;
-}
-
-interface MetaAgreement {
-    all: boolean;
-    terms: boolean;
-    privacy: boolean;
-    marketing: boolean;
+    name: string;
+    phone: string;
 }
 
 const RegisterContent = () => {
@@ -33,14 +30,31 @@ const RegisterContent = () => {
         password: '',
         passwordConfirm: '',
         nationality: '',
+        name: '',
+        phone: '',
     });
 
-    const [agreements, setAgreements] = useState<MetaAgreement>({
-        all: false,
-        terms: false,
-        privacy: false,
-        marketing: false,
-    });
+    const [agreementList, setAgreementList] = useState<AgreementProps[]>([]);
+    const [checkedList, setCheckedList] = useState<number[]>([]);
+
+    const MOCK_AGREEMENTS: AgreementProps[] = [
+        { id: 1, title: '이용약관 동의', contents: '', isRequired: true, type: 'TERMS' },
+        { id: 2, title: '개인정보 수집 및 이용 동의', contents: '', isRequired: true, type: 'PRIVACY' },
+        { id: 3, title: '마케팅 정보 수신 동의', contents: '', isRequired: false, type: 'MARKETING' },
+    ];
+
+    useEffect(() => {
+        getAgreements().then((data) => {
+            if (Array.isArray(data) && data.length > 0) {
+                setAgreementList(data);
+            } else {
+                setAgreementList(MOCK_AGREEMENTS);
+            }
+        }).catch((err) => {
+            console.error('Failed to fetch agreements:', err);
+            setAgreementList(MOCK_AGREEMENTS);
+        });
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -50,37 +64,38 @@ const RegisterContent = () => {
         }));
     };
 
-    const handleCheckboxChange = (name: keyof MetaAgreement) => {
-        if (name === 'all') {
-            const newValue = !agreements.all;
-            setAgreements({
-                all: newValue,
-                terms: newValue,
-                privacy: newValue,
-                marketing: newValue,
-            });
+    const handleCheckboxChange = (id: number | 'all') => {
+        if (id === 'all') {
+            if (checkedList.length === agreementList.length) {
+                setCheckedList([]);
+            } else {
+                setCheckedList(agreementList.map((item) => item.id));
+            }
         } else {
-            setAgreements((prev) => {
-                const newAgreements = { ...prev, [name]: !prev[name] };
-                const allChecked = newAgreements.terms && newAgreements.privacy && newAgreements.marketing;
-                // Note: user logic for "all" usually means all required + optional or just all. 
-                // Let's assume strictly all checkboxes on screen.
-                return { ...newAgreements, all: allChecked };
-            });
+            if (checkedList.includes(id)) {
+                setCheckedList(checkedList.filter((item) => item !== id));
+            } else {
+                setCheckedList([...checkedList, id]);
+            }
         }
     };
 
-    const handleDuplicateCheck = () => {
+    const handleDuplicateCheck = async () => {
         if (!values.email) {
             alert('이메일을 입력해주세요.');
             return;
         }
-        // TODO: Implement API call
-        alert('사용 가능한 이메일입니다.');
+        try {
+            const res = await getEmailCheck(values.email);
+            // Assuming res returned indicates success or availability
+            alert('사용 가능한 이메일입니다.');
+        } catch (err) {
+            alert('중복된 이메일이거나 오류가 발생했습니다.');
+        }
     };
 
-    const handleRegister = () => {
-        if (!values.email || !values.password || !values.nationality) {
+    const handleRegister = async () => {
+        if (!values.email || !values.password || !values.nationality || !values.name || !values.phone) {
             alert('필수 정보를 모두 입력해주세요.');
             return;
         }
@@ -88,16 +103,40 @@ const RegisterContent = () => {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
-        if (!agreements.terms || !agreements.privacy) {
+        
+        // Check required agreements
+        const requiredIds = agreementList.filter(item => item.isRequired).map(item => item.id);
+        const allRequiredChecked = requiredIds.every(id => checkedList.includes(id));
+        
+        if (!allRequiredChecked) {
             alert('필수 약관에 동의해주세요.');
             return;
         }
         
-        // TODO: Implement API call
-        console.log('Registering with:', values, agreements);
-        alert('회원가입이 완료되었습니다.'); // Flow simulation
-        router.push('/account/login');
+        try {
+            const consents = agreementList.map(agreement => ({
+                type: agreement.type,
+                agreed: checkedList.includes(agreement.id)
+            }));
+
+            const payload = {
+                email: values.email,
+                password: values.password,
+                name: values.name,
+                locale: values.nationality, // Assuming nationality select maps to locale mostly or handled by backend
+                phone: values.phone,
+                consents: consents
+            };
+
+            await postRegister(payload);
+            router.push(`/account/register/complete?name=${encodeURIComponent(values.name)}`); // Use real name now
+        } catch (err) {
+            console.error('Registration failed:', err);
+            alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+        }
     };
+
+    const isAllChecked = agreementList.length > 0 && checkedList.length === agreementList.length;
 
     return (
         <div className="register">
@@ -158,6 +197,30 @@ const RegisterContent = () => {
                                 </div>
 
                                 <div className="field">
+                                    <label>Name</label>
+                                    <Input
+                                        type="text"
+                                        name="name"
+                                        value={values.name}
+                                        handleChange={handleChange}
+                                        placeholder="Enter your name"
+                                        classnames=""
+                                    />
+                                </div>
+
+                                <div className="field">
+                                    <label>Phone Number</label>
+                                    <Input
+                                        type="text"
+                                        name="phone"
+                                        value={values.phone}
+                                        handleChange={handleChange}
+                                        placeholder="Enter your phone number"
+                                        classnames=""
+                                    />
+                                </div>
+
+                                <div className="field">
                                     <label>Nationality</label>
                                     <select 
                                         name="nationality" 
@@ -169,7 +232,6 @@ const RegisterContent = () => {
                                         <option value="US">USA</option>
                                         <option value="JP">Japan</option>
                                         <option value="CN">China</option>
-                                        {/* Add more countries as needed */}
                                     </select>
                                 </div>
                             </div>
@@ -181,44 +243,36 @@ const RegisterContent = () => {
                                 >
                                     <input 
                                         type="checkbox" 
-                                        checked={agreements.all} 
+                                        checked={isAllChecked} 
                                         readOnly 
                                     />
                                     <span>Agree to all</span>
                                 </div>
-                                <div 
-                                    className="checkbox_row" 
-                                    onClick={() => handleCheckboxChange('terms')}
-                                >
-                                    <input 
-                                        type="checkbox" 
-                                        checked={agreements.terms} 
-                                        readOnly 
-                                    />
-                                    <span>Terms of Service <span className="required">(Required)</span></span>
-                                </div>
-                                <div 
-                                    className="checkbox_row" 
-                                    onClick={() => handleCheckboxChange('privacy')}
-                                >
-                                    <input 
-                                        type="checkbox" 
-                                        checked={agreements.privacy} 
-                                        readOnly 
-                                    />
-                                    <span>Privacy Policy <span className="required">(Required)</span></span>
-                                </div>
-                                <div 
-                                    className="checkbox_row" 
-                                    onClick={() => handleCheckboxChange('marketing')}
-                                >
-                                    <input 
-                                        type="checkbox" 
-                                        checked={agreements.marketing} 
-                                        readOnly 
-                                    />
-                                    <span>Marketing Information <span className="optional">(Optional)</span></span>
-                                </div>
+                                {agreementList.length > 0 ? (
+                                    agreementList.map((item) => (
+                                        <div 
+                                            key={item.id} 
+                                            className="checkbox_row" 
+                                            onClick={() => handleCheckboxChange(item.id)}
+                                        >
+                                            <input 
+                                                type="checkbox" 
+                                                checked={checkedList.includes(item.id)} 
+                                                readOnly 
+                                            />
+                                            <span>
+                                                {item.title} 
+                                                <span className={item.isRequired ? "required" : "optional"}>
+                                                    {item.isRequired ? "(Required)" : "(Optional)"}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div style={{color: '#999', fontSize: '14px', textAlign: 'center'}}>
+                                        Loading agreements...
+                                    </div>
+                                )}
                             </div>
 
                             <div className="btn_area">
