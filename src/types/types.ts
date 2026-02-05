@@ -46,6 +46,7 @@ export type programSummaryProps = {
     likesCount: number;
     reservationDate: string;
     banner?: bannerProps[];
+    category:string;
 };
 
 export type programCompProps = {

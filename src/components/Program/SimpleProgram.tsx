@@ -64,11 +64,11 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
                     <span className="amount">{program.price.toLocaleString()}</span>
                 </div>
                 {/* 여기에 카테고리 들어가야 함 */}
-                {/* <div className='category_badge_area'>
+                <div className='category_badge_area'>
                     <div className='badge_area'>
-                        <span className='badge'>{program.title}</span>
+                        <span className='badge'>{program.category}</span>
                     </div>
-                </div> */}
+                </div>
             </div>
             {popup.show && (
                 <Popup>
