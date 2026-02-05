@@ -453,3 +453,8 @@ export type registerProps = {
         agreed: boolean;
     }[]
 }
+
+export type sortOptionProps = {
+    key: string;
+    label: string;
+}

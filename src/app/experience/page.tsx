@@ -4,7 +4,7 @@ import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import SimpleProgram from 'components/Program/SimpleProgram';
 import { getCategories, getPrograms } from 'api';
-import { categoryProps, programSummaryProps, scheduleProps } from 'types/types';
+import { categoryProps, programSummaryProps, scheduleProps, sortOptionProps } from 'types/types';
 import useMobile from 'hooks/useMobile';
 import { useAuthStore } from 'utils/stores';
 
@@ -29,7 +29,7 @@ const ExperiencePage = () => {
     const [endDate, setEndDate] = useState<Date | null>(null);
 
     // 신규 추가 상태
-    const [sortBy, setSortBy] = useState<string>('latest'); // 기본값: 최신순
+    const [sortBy, setSortBy] = useState<sortOptionProps | null>(null); // 기본값: 최신순
     const [isSortOpen, setIsSortOpen] = useState<boolean>(false);
 
     const sortOptions = [
@@ -126,7 +126,7 @@ const ExperiencePage = () => {
     // 핸들러들
     const handleCategoryChange = (categoryId: string | null) => {
         setSelectedCategory(categoryId);
-        resetAndLoad(categoryId, startDate, endDate, sortBy);
+        resetAndLoad(categoryId, startDate, endDate, sortBy?.key || 'latest');
     };
 
     // 달력 변경
@@ -144,16 +144,23 @@ const ExperiencePage = () => {
         return `${m}월 ${d}일`;
     }
 
+    // M.D.
+    const exportKoreanDateDot = (date: Date) => {
+        const m = date.getMonth() + 1;
+        const d = date.getDate();
+        return `${m}.${d}`;
+    }
+
     // 기간 설정 완료
     const handleSetPeriod = () => {
         setIsCalendarModal(false);
-        resetAndLoad(selectedCategory, startDate, endDate, sortBy);
+        resetAndLoad(selectedCategory, startDate, endDate, sortBy?.key || 'latest');
     };
 
-    const handleSortChange = (sortType: string) => {
+    const handleSortChange = (sortType: sortOptionProps) => {
         setSortBy(sortType);
         setIsSortOpen(false);
-        resetAndLoad(selectedCategory, startDate, endDate, sortType);
+        resetAndLoad(selectedCategory, startDate, endDate, sortType.key);
     };
 
     // 무한스크롤 Observer
@@ -161,7 +168,7 @@ const ExperiencePage = () => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && hasMore && !loadingRef.current) {
-                    loadPrograms(pageNum + 1, selectedCategory, startDate, endDate, sortBy, false);
+                    loadPrograms(pageNum + 1, selectedCategory, startDate, endDate, sortBy?.key || 'latest', false);
                 }
             },
             { threshold: 0.1 }
@@ -211,7 +218,7 @@ const ExperiencePage = () => {
                         <div className="filter_container">
                             {/* 날짜 선택 버튼 */}
                             <div className="datepicker_wrapper">
-                                <Button type="text" classnames={`ico border lightgray arrow`} onclick={handleModalCalendar} text="날짜" />
+                                <Button type="text" classnames={startDate && endDate ? `border blue` : `ico border lightgray arrow`} onclick={handleModalCalendar} text={startDate && endDate ? `${exportKoreanDateDot(startDate)} ~ ${exportKoreanDateDot(endDate)}` : `날짜`} />
                                 {
                                     isCalendarModal && (
                                         <div className='datepicker_area'>
@@ -226,10 +233,13 @@ const ExperiencePage = () => {
                                                         <div className="calendar">  <ReactDatePicker onChange={handleChangeCalendar} startDate={startDate} endDate={endDate} selectsRange={true} inline />
                                                         </div>
                                                     </div>
-                                                    {
-                                                        startDate && endDate ?
-                                                            <Button type="text" classnames={`border blue`} onclick={handleSetPeriod} text={`${exportKoreanDate(startDate)} ~ ${exportKoreanDate(endDate)}`} /> : '날짜를 선택해주세요'
-                                                    }
+                                                    <div className="btn_area">
+                                                        {
+                                                            startDate && endDate ?
+                                                                <Button type="text" classnames={`bg_blue wide`} onclick={handleSetPeriod} text={`${exportKoreanDate(startDate)} ~ ${exportKoreanDate(endDate)}`} /> : 
+                                                                <Button type="text" classnames={`bg_gray wide disabled`} onclick={() => {}} text={`날짜를 선택해주세요`} />
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,18 +249,18 @@ const ExperiencePage = () => {
 
                             {/* 정렬 버튼 */}
                             <div className="sort_wrapper">
-                                <Button type="text" classnames={`ico border lightgray arrow`} onclick={() => setIsSortOpen(true)} text="정렬" />
+                                <Button type="text" classnames={sortBy ? `ico border blue arrow` : `ico border lightgray arrow`} onclick={() => setIsSortOpen(true)} text={sortBy?.label ? sortBy.label : `정렬`} />
                                 {isSortOpen && (
                                     <ModalPortal title="정렬" type="sorting" closePortal={() => setIsSortOpen(false)}>
                                         <div className='select_wrap'>
                                             <div className="select_options">
                                                 <ul>
-                                                    {sortOptions.map((option) => (
-                                                        <li key={option.key} onClick={() => handleSortChange(option.key)} className={`${sortBy === option.key ? 'selected' : ''}`}>
+                                                    {sortOptions.map((option:sortOptionProps) => (
+                                                        <li key={option.key} onClick={() => handleSortChange(option)} className={`${sortBy?.key === option.key ? 'selected' : ''}`}>
                                                             <div className="option">{option.label}</div>
                                                             {
                                                                 isMobile &&
-                                                                <span className={`ico radio ${sortBy === option.key ? 'checked' : 'default'}`}></span>
+                                                                <span className={`ico radio ${sortBy?.key === option.key ? 'checked' : 'default'}`}></span>
                                                             }
                                                         </li>
                                                     ))}

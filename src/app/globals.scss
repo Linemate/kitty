@@ -759,6 +759,23 @@ button {background:none; border:none; cursor:pointer;}
                         top:42%;
                     }
                 }
+                .react-datepicker__day--range-start,
+                .react-datepicker__day--range-end, 
+                .react-datepicker__day--in-range {
+                  background-color: var(--color-primary-500);
+                  color: #fff;
+                }
+                .react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end) {
+                  border-radius:0;
+                }
+                .react-datepicker__day--range-start {
+                  border-top-right-radius:0;
+                  border-bottom-right-radius:0;
+                }
+                .react-datepicker__day--range-end {
+                  border-top-left-radius:0;
+                  border-bottom-left-radius:0;
+                }
             }
         }
         .guide {

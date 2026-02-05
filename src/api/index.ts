@@ -170,6 +170,12 @@ export const getAgreements = async () => {
     return res.data;
 };
 
+// 회원가입 - 인증번호 발송
+export const postSendAuthCode = async (token: string) => {
+    const res = await publicApi.post(`/account/authentication`, { token });
+    return res.data;
+};
+
 // 회원가입
 export const postRegister = async (values: registerProps) => {
     const res = await publicApi.post(`/account/sign-up`, values);

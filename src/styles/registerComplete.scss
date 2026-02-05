@@ -23,16 +23,19 @@
             text-align: center;
             
             .img_area {
-                /* Placeholder for the image */
-                width: 200px;
-                height: 200px;
-                background-color: #f0f0f0;
-                margin-bottom: 32px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 color: #aaa;
                 font-size: 14px;
+                background-image:url('/assets/iamge/icon/ico_congrats.png');
+                background-repeat:no-repeat;
+                background-size:64px;
+                background-position:center center;
+                padding-top: 88px;
+                &.sending {
+                    background-image:url('/assets/images/icon/ico_sending.png');
+                }
             }
 
             .title {
