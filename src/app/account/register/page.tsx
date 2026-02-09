@@ -8,7 +8,7 @@ import Input from 'components/Input/Input';
 import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
-import { getAgreements, getEmailCheck, postRegister } from 'api';
+import { getAgreements, getEmailCheck, getLanguages, postRegister } from 'api';
 import { AgreementProps } from 'types/types';
 
 interface RegisterValues {
@@ -16,8 +16,6 @@ interface RegisterValues {
     password: string;
     passwordConfirm: string;
     nationality: string;
-    name: string;
-    phone: string;
 }
 
 const RegisterContent = () => {
@@ -25,17 +23,20 @@ const RegisterContent = () => {
     const isMobile = useMobile();
     const language = useLanguage((state) => state.language);
 
+    const [isCheckable, setIsCheckable] = useState(false);
+    const [isEmailChecked, setIsEmailChecked] = useState(false);
+
     const [values, setValues] = useState<RegisterValues>({
         email: '',
         password: '',
         passwordConfirm: '',
         nationality: '',
-        name: '',
-        phone: '',
     });
 
     const [agreementList, setAgreementList] = useState<AgreementProps[]>([]);
     const [checkedList, setCheckedList] = useState<number[]>([]);
+
+    const [languages, setLanguages] = useState<string[]>([]);
 
     const MOCK_AGREEMENTS: AgreementProps[] = [
         { id: 1, title: '이용약관 동의', contents: '', isRequired: true, type: 'TERMS' },
@@ -64,6 +65,16 @@ const RegisterContent = () => {
         }));
     };
 
+    useEffect(() => {
+        getLanguages().then((data) => {
+            if (Array.isArray(data) && data.length > 0) {
+                setLanguages(data);
+            }
+        }).catch((err) => {
+            console.error('Failed to fetch languages:', err);
+        });
+    }, []);
+
     const handleCheckboxChange = (id: number | 'all') => {
         if (id === 'all') {
             if (checkedList.length === agreementList.length) {
@@ -85,17 +96,23 @@ const RegisterContent = () => {
             alert('이메일을 입력해주세요.');
             return;
         }
+        if (!values.email.includes('@')) {
+            alert('이메일 형식이 올바르지 않습니다.');
+            return;
+        }
         try {
             const res = await getEmailCheck(values.email);
             // Assuming res returned indicates success or availability
             alert('사용 가능한 이메일입니다.');
+            setIsEmailChecked(true);
         } catch (err) {
             alert('중복된 이메일이거나 오류가 발생했습니다.');
+            setIsEmailChecked(false);
         }
     };
 
     const handleRegister = async () => {
-        if (!values.email || !values.password || !values.nationality || !values.name || !values.phone) {
+        if (!values.email || !values.password || !values.nationality) {
             alert('필수 정보를 모두 입력해주세요.');
             return;
         }
@@ -122,14 +139,12 @@ const RegisterContent = () => {
             const payload = {
                 email: values.email,
                 password: values.password,
-                name: values.name,
-                locale: values.nationality, // Assuming nationality select maps to locale mostly or handled by backend
-                phone: values.phone,
+                locale: values.nationality, 
                 consents: consents
             };
 
             await postRegister(payload);
-            router.push(`/account/register/complete?name=${encodeURIComponent(values.name)}`); // Use real name now
+            router.push(`/account/register/complete?email=${encodeURIComponent(values.email)}`);
         } catch (err) {
             console.error('Registration failed:', err);
             alert('회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -137,6 +152,14 @@ const RegisterContent = () => {
     };
 
     const isAllChecked = agreementList.length > 0 && checkedList.length === agreementList.length;
+
+    useEffect(() => {
+        if (values.email.length > 0) {
+            setIsCheckable(true);
+        } else {
+            setIsCheckable(false);
+        }
+    }, [values.email]);
 
     return (
         <div className="register">
@@ -164,11 +187,14 @@ const RegisterContent = () => {
                                             />
                                         </div>
                                         <Button 
-                                            type="button" 
+                                            type="text" 
                                             onclick={handleDuplicateCheck} 
-                                            classnames="bg_gray radius_8" 
+                                            classnames={`${isCheckable ? isEmailChecked ? 'border lightgray' : 'bg_blue' : 'bg_gray'} radius_8`} 
                                             text="Check" 
                                         />
+                                    </div>
+                                    <div className='msg'>
+                                        모임 관련 안내가 이 메일 주소로 전송됩니다.
                                     </div>
                                 </div>
 
@@ -185,7 +211,6 @@ const RegisterContent = () => {
                                 </div>
 
                                 <div className="field">
-                                    <label>Confirm Password</label>
                                     <Input
                                         type="password"
                                         name="passwordConfirm"
@@ -197,41 +222,17 @@ const RegisterContent = () => {
                                 </div>
 
                                 <div className="field">
-                                    <label>Name</label>
-                                    <Input
-                                        type="text"
-                                        name="name"
-                                        value={values.name}
-                                        handleChange={handleChange}
-                                        placeholder="Enter your name"
-                                        classnames=""
-                                    />
-                                </div>
-
-                                <div className="field">
-                                    <label>Phone Number</label>
-                                    <Input
-                                        type="text"
-                                        name="phone"
-                                        value={values.phone}
-                                        handleChange={handleChange}
-                                        placeholder="Enter your phone number"
-                                        classnames=""
-                                    />
-                                </div>
-
-                                <div className="field">
                                     <label>Nationality</label>
                                     <select 
                                         name="nationality" 
                                         value={values.nationality} 
                                         onChange={handleChange}
                                     >
-                                        <option value="">Select your country</option>
-                                        <option value="KR">Korea</option>
-                                        <option value="US">USA</option>
-                                        <option value="JP">Japan</option>
-                                        <option value="CN">China</option>
+                                        {languages.map((language) => (
+                                            <option key={language} value={language}>
+                                                {language}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>

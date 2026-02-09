@@ -4,6 +4,15 @@ import { getCookie, deleteCookie } from 'utils/cookiesFunction';
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
+// 토큰, country 모두 없는 common API
+const commonApi = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_HOST,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+
 // 토큰 없는 axios 인스턴스 (프로그램 상세 등)
 const publicApi = axios.create({
     baseURL,
@@ -335,5 +344,11 @@ export const deleteReview = async (programId: number, reviewId: number) => {
 // 내가 쓴 Q&A들 조회
 export const getMyQnaList = async (pageNum: number, size: number) => {
     const res = await privateApi.get(`/programs/inquiries/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
+    return res.data;
+};
+
+// 다국적 제공 언어
+export const getLanguages = async () => {
+    const res = await commonApi.get(`/languages`);
     return res.data;
 };

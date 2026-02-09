@@ -446,9 +446,7 @@ export type AgreementProps = {
 export type registerProps = {
     email: string;
     password: string;
-    name: string;
     locale: string;
-    phone: string;
     consents : {
         type: string;
         agreed: boolean;
