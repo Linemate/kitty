@@ -185,10 +185,22 @@ export const postSendAuthCode = async (token: string) => {
     return res.data;
 };
 
+// 이메일 인증코드 발송
+export const postEmailSendCode = async (email: string) => {
+    const res = await publicApi.post(`/account/email/send-code`, { email });
+    return res.data;
+};
+
+// 이메일 인증코드 확인
+export const postEmailVerifyCode = async (email: string, code: string) => {
+    const res = await publicApi.post(`/account/email/verify-code`, { email, code });
+    return res.data;
+};
+
 // 회원가입
 export const postRegister = async (values: registerProps) => {
     const res = await publicApi.post(`/account/sign-up`, values);
-    return res.data;``
+    return res.data;
 };
 
 // 로그인

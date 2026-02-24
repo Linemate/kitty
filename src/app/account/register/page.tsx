@@ -8,7 +8,7 @@ import Input from 'components/Input/Input';
 import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
-import { getAgreements, getEmailCheck, getLanguages, postRegister } from 'api';
+import { getAgreements, getLanguages, postRegister, postEmailSendCode, postEmailVerifyCode } from 'api';
 import { AgreementProps } from 'types/types';
 
 interface RegisterValues {
@@ -25,6 +25,30 @@ const RegisterContent = () => {
 
     const [isCheckable, setIsCheckable] = useState(false);
     const [isEmailChecked, setIsEmailChecked] = useState(false);
+    const [isCodeSent, setIsCodeSent] = useState(false);
+    const [code, setCode] = useState('');
+    const [timeLeft, setTimeLeft] = useState(300);
+    const [isCodeVerified, setIsCodeVerified] = useState(false);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (isCodeSent && !isCodeVerified && timeLeft > 0) {
+            timer = setInterval(() => {
+                setTimeLeft((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [isCodeSent, isCodeVerified, timeLeft]);
+
+    const formatTime = (time: number) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+
+    const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        setCode(e.target.value);
+    };
 
     const [values, setValues] = useState<RegisterValues>({
         email: '',
@@ -91,7 +115,7 @@ const RegisterContent = () => {
         }
     };
 
-    const handleDuplicateCheck = async () => {
+    const handleSendCode = async () => {
         if (!values.email) {
             alert('이메일을 입력해주세요.');
             return;
@@ -101,12 +125,34 @@ const RegisterContent = () => {
             return;
         }
         try {
-            const res = await getEmailCheck(values.email);
-            // Assuming res returned indicates success or availability
-            alert('사용 가능한 이메일입니다.');
-            setIsEmailChecked(true);
+            await postEmailSendCode(values.email);
+            setIsCodeSent(true);
+            setTimeLeft(300);
+            setIsCodeVerified(false);
+            alert('인증번호가 발송되었습니다.');
         } catch (err) {
-            alert('중복된 이메일이거나 오류가 발생했습니다.');
+            alert('인증번호 발송에 실패했습니다.');
+            setIsCodeSent(false);
+        }
+    };
+
+    const handleVerifyCode = async () => {
+        if (!code) {
+            return;
+        }
+        if (timeLeft === 0) {
+            alert('인증 시간이 만료되었습니다. 다시 요청해주세요.');
+            return;
+        }
+        try {
+            await postEmailVerifyCode(values.email, code);
+            setIsCodeVerified(true);
+            setIsEmailChecked(true);
+            setIsCheckable(true);
+            alert('인증이 완료되었습니다.');
+        } catch (err) {
+            alert('인증번호가 올바르지 않거나 오류가 발생했습니다.');
+            setIsCodeVerified(false);
             setIsEmailChecked(false);
         }
     };
@@ -120,16 +166,16 @@ const RegisterContent = () => {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
-        
+
         // Check required agreements
         const requiredIds = agreementList.filter(item => item.isRequired).map(item => item.id);
         const allRequiredChecked = requiredIds.every(id => checkedList.includes(id));
-        
+
         if (!allRequiredChecked) {
             alert('필수 약관에 동의해주세요.');
             return;
         }
-        
+
         try {
             const consents = agreementList.map(agreement => ({
                 type: agreement.type,
@@ -139,7 +185,7 @@ const RegisterContent = () => {
             const payload = {
                 email: values.email,
                 password: values.password,
-                locale: values.nationality, 
+                locale: values.nationality,
                 consents: consents
             };
 
@@ -154,6 +200,9 @@ const RegisterContent = () => {
     const isAllChecked = agreementList.length > 0 && checkedList.length === agreementList.length;
 
     useEffect(() => {
+        setIsCodeVerified(false);
+        setIsCodeSent(false);
+        setCode('');
         if (values.email.length > 0) {
             setIsCheckable(true);
         } else {
@@ -171,7 +220,7 @@ const RegisterContent = () => {
                         <div className="main">
                             <h2 className="logo">Linemate</h2>
                             <h3 className="title">Join Us</h3>
-                            
+
                             <div className="form_area">
                                 <div className="field">
                                     <label>Email ID</label>
@@ -186,11 +235,34 @@ const RegisterContent = () => {
                                                 classnames=""
                                             />
                                         </div>
-                                        <Button 
-                                            type="text" 
-                                            onclick={handleDuplicateCheck} 
-                                            classnames={`${isCheckable ? isEmailChecked ? 'border lightgray' : 'bg_blue' : 'bg_gray'} radius_8`} 
-                                            text="Check" 
+                                        <Button
+                                            type="text"
+                                            onclick={isCheckable && !isCodeVerified ? handleSendCode : () => { }}
+                                            classnames={`${isCheckable ? isCodeVerified ? 'border lightgray' : 'blue border' : 'bg_gray'} radius_8`}
+                                            text={isCodeVerified ? '인증 완료' : '인증 요청'}
+                                        />
+                                    </div>
+                                    <div className="input_row" style={{ marginTop: '8px' }}>
+                                        <div className="input_wrap" style={{ position: 'relative' }}>
+                                            <Input
+                                                type="text"
+                                                name="code"
+                                                value={code}
+                                                handleChange={handleCodeChange}
+                                                placeholder="인증 번호 입력"
+                                                classnames=""
+                                            />
+                                            {isCodeSent && !isCodeVerified && (
+                                                <span style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: '#ff4d4f', fontSize: '14px', zIndex: 10 }}>
+                                                    {formatTime(timeLeft)}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <Button
+                                            type="text"
+                                            onclick={code.length > 0 ? handleVerifyCode : () => { }}
+                                            classnames={`${code.length > 0 ? 'bg_blue' : 'bg_gray'} radius_8`}
+                                            text="인증하기"
                                         />
                                     </div>
                                     <div className='msg'>
@@ -223,9 +295,9 @@ const RegisterContent = () => {
 
                                 <div className="field">
                                     <label>Nationality</label>
-                                    <select 
-                                        name="nationality" 
-                                        value={values.nationality} 
+                                    <select
+                                        name="nationality"
+                                        value={values.nationality}
                                         onChange={handleChange}
                                     >
                                         {languages.map((language) => (
@@ -238,31 +310,31 @@ const RegisterContent = () => {
                             </div>
 
                             <div className="agreement_area">
-                                <div 
-                                    className="checkbox_row all_agree" 
+                                <div
+                                    className="checkbox_row all_agree"
                                     onClick={() => handleCheckboxChange('all')}
                                 >
-                                    <input 
-                                        type="checkbox" 
-                                        checked={isAllChecked} 
-                                        readOnly 
+                                    <input
+                                        type="checkbox"
+                                        checked={isAllChecked}
+                                        readOnly
                                     />
                                     <span>Agree to all</span>
                                 </div>
                                 {agreementList.length > 0 ? (
                                     agreementList.map((item) => (
-                                        <div 
-                                            key={item.id} 
-                                            className="checkbox_row" 
+                                        <div
+                                            key={item.id}
+                                            className="checkbox_row"
                                             onClick={() => handleCheckboxChange(item.id)}
                                         >
-                                            <input 
-                                                type="checkbox" 
-                                                checked={checkedList.includes(item.id)} 
-                                                readOnly 
+                                            <input
+                                                type="checkbox"
+                                                checked={checkedList.includes(item.id)}
+                                                readOnly
                                             />
                                             <span>
-                                                {item.title} 
+                                                {item.title}
                                                 <span className={item.isRequired ? "required" : "optional"}>
                                                     {item.isRequired ? "(Required)" : "(Optional)"}
                                                 </span>
@@ -270,18 +342,18 @@ const RegisterContent = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <div style={{color: '#999', fontSize: '14px', textAlign: 'center'}}>
+                                    <div style={{ color: '#999', fontSize: '14px', textAlign: 'center' }}>
                                         Loading agreements...
                                     </div>
                                 )}
                             </div>
 
                             <div className="btn_area">
-                                <Button 
-                                    type="text" 
-                                    onclick={handleRegister} 
-                                    classnames="bg_blue wide radius_8" 
-                                    text="Next" 
+                                <Button
+                                    type="text"
+                                    onclick={handleRegister}
+                                    classnames="bg_blue wide radius_8"
+                                    text="Next"
                                 />
                             </div>
                         </div>
