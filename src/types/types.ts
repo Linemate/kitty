@@ -435,11 +435,12 @@ export type addReviewBodyProps = {
 
 // 약관 동의 항목
 export type AgreementProps = {
-    id: number;
-    title: string;
-    contents: string;
-    isRequired: boolean;
-    type: string; // 'TERMS', 'PRIVACY', 'MARKETING' etc.
+    code:string;
+    name:string;
+    content:string;
+    required:boolean;
+    version:string;
+    sortOrder:number;
 };
 
 // 회원가입

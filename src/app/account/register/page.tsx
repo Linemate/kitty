@@ -62,25 +62,6 @@ const RegisterContent = () => {
 
     const [languages, setLanguages] = useState<string[]>([]);
 
-    const MOCK_AGREEMENTS: AgreementProps[] = [
-        { id: 1, title: '이용약관 동의', contents: '', isRequired: true, type: 'TERMS' },
-        { id: 2, title: '개인정보 수집 및 이용 동의', contents: '', isRequired: true, type: 'PRIVACY' },
-        { id: 3, title: '마케팅 정보 수신 동의', contents: '', isRequired: false, type: 'MARKETING' },
-    ];
-
-    useEffect(() => {
-        getAgreements().then((data) => {
-            if (Array.isArray(data) && data.length > 0) {
-                setAgreementList(data);
-            } else {
-                setAgreementList(MOCK_AGREEMENTS);
-            }
-        }).catch((err) => {
-            console.error('Failed to fetch agreements:', err);
-            setAgreementList(MOCK_AGREEMENTS);
-        });
-    }, []);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setValues((prev) => ({
@@ -88,6 +69,18 @@ const RegisterContent = () => {
             [name]: value,
         }));
     };
+    
+    useEffect(() => {
+        getAgreements().then((data) => {
+            const list = data.data;
+            if (Array.isArray(list) && list.length > 0) {
+                setAgreementList(list);
+            } 
+        }).catch((err) => {
+            console.error('Failed to fetch agreements:', err);
+            setAgreementList([]);
+        });
+    }, []);
 
     useEffect(() => {
         getLanguages().then((data) => {
@@ -99,18 +92,18 @@ const RegisterContent = () => {
         });
     }, []);
 
-    const handleCheckboxChange = (id: number | 'all') => {
-        if (id === 'all') {
+    const handleCheckboxChange = (sortOrder: number | 'all') => {
+        if (sortOrder === 'all') {
             if (checkedList.length === agreementList.length) {
                 setCheckedList([]);
             } else {
-                setCheckedList(agreementList.map((item) => item.id));
+                setCheckedList(agreementList.map((item) => item.sortOrder));
             }
         } else {
-            if (checkedList.includes(id)) {
-                setCheckedList(checkedList.filter((item) => item !== id));
+            if (checkedList.includes(sortOrder)) {
+                setCheckedList(checkedList.filter((item) => item !== sortOrder));
             } else {
-                setCheckedList([...checkedList, id]);
+                setCheckedList([...checkedList, sortOrder]);
             }
         }
     };
@@ -168,7 +161,7 @@ const RegisterContent = () => {
         }
 
         // Check required agreements
-        const requiredIds = agreementList.filter(item => item.isRequired).map(item => item.id);
+        const requiredIds = agreementList.filter(item => item.required).map(item => item.sortOrder);
         const allRequiredChecked = requiredIds.every(id => checkedList.includes(id));
 
         if (!allRequiredChecked) {
@@ -178,8 +171,8 @@ const RegisterContent = () => {
 
         try {
             const consents = agreementList.map(agreement => ({
-                type: agreement.type,
-                agreed: checkedList.includes(agreement.id)
+                type: agreement.code,
+                agreed: checkedList.includes(agreement.sortOrder)
             }));
 
             const payload = {
@@ -189,6 +182,7 @@ const RegisterContent = () => {
                 consents: consents
             };
 
+            console.log(payload);
             await postRegister(payload);
             router.push(`/account/register/complete?email=${encodeURIComponent(values.email)}`);
         } catch (err) {
@@ -242,7 +236,10 @@ const RegisterContent = () => {
                                             text={isCodeVerified ? '인증 완료' : '인증 요청'}
                                         />
                                     </div>
-                                    <div className="input_row" style={{ marginTop: '8px' }}>
+                                    <div className='msg'>
+                                        모임 관련 안내가 이 메일 주소로 전송됩니다.
+                                    </div>
+                                    <div className="input_row second">
                                         <div className="input_wrap" style={{ position: 'relative' }}>
                                             <Input
                                                 type="text"
@@ -264,9 +261,6 @@ const RegisterContent = () => {
                                             classnames={`${code.length > 0 ? 'bg_blue' : 'bg_gray'} radius_8`}
                                             text="인증하기"
                                         />
-                                    </div>
-                                    <div className='msg'>
-                                        모임 관련 안내가 이 메일 주소로 전송됩니다.
                                     </div>
                                 </div>
 
@@ -324,21 +318,24 @@ const RegisterContent = () => {
                                 {agreementList.length > 0 ? (
                                     agreementList.map((item) => (
                                         <div
-                                            key={item.id}
-                                            className="checkbox_row"
-                                            onClick={() => handleCheckboxChange(item.id)}
+                                            key={item.sortOrder}
+                                            className="agreement_row"
                                         >
-                                            <input
-                                                type="checkbox"
-                                                checked={checkedList.includes(item.id)}
-                                                readOnly
-                                            />
-                                            <span>
-                                                {item.title}
-                                                <span className={item.isRequired ? "required" : "optional"}>
-                                                    {item.isRequired ? "(Required)" : "(Optional)"}
+                                            <div
+                                            className="checkbox_row" onClick={() => handleCheckboxChange(item.sortOrder)}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={checkedList.includes(item.sortOrder)}
+                                                    readOnly
+                                                />
+                                                <span>
+                                                    {item.name}
+                                                    <span>
+                                                        {item.required ? "(필수)" : "(선택)"}
+                                                    </span>
                                                 </span>
-                                            </span>
+                                            </div>
+                                            <span className='btn_show_details'>Show Details</span>
                                         </div>
                                     ))
                                 ) : (

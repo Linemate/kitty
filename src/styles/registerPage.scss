@@ -79,9 +79,12 @@
                                 flex: 1;
                             }
                             button {
-                                width: 100px;
+                                width:84px;
                                 height: 48px; // Match input height usually
                                 font-size: 14px;
+                            }
+                            &.second {
+                                margin-top:16px;
                             }
                         }
                         select {
@@ -114,23 +117,34 @@
                     margin-bottom: 32px;
                     border-top: 1px solid #eee;
                     padding-top: 24px;
-
                     .checkbox_row {
                         display: flex;
                         align-items: center;
-                        margin-bottom: 12px;
+                        margin-bottom: 16px;
                         cursor: pointer;
                         
                         input[type="checkbox"] {
-                            width: 20px;
-                            height: 20px;
-                            margin-right: 10px;
+                            width: 24px;
+                            height: 24px;
+                            margin-right: 8px;
                             cursor: pointer;
+                            background-image:url('/assets/images/icon/ico_check_default.png');
+                            background-repeat:no-repeat;
+                            background-size:100%;
+                            font-size:0;
+                            line-height:0;
+                            text-indent:-9999px;
+                            appearance: none;
+                            &:checked {
+                                background-image:url('/assets/images/icon/ico_check_checked.png');
+                            }
                         }
 
                         span {
                             font-size: 14px;
-                            color: var(--color-neutral-600);
+                            font-weight:600;
+                            line-height:22px;
+                            color: var(--color-neutral-100);
                             &.required {
                                 color: #ff6b00; // Example highlight color
                                 margin-left: 4px;
@@ -138,12 +152,41 @@
                         }
 
                         &.all_agree {
-                            margin-bottom: 20px;
+                            padding-bottom:16px;
+                            margin-bottom: 16px;
+                            position:relative;
                             span {
                                 font-weight: 700;
-                                color: var(--color-neutral-900);
+                                color: var(--color-neutral-100);
                                 font-size: 16px;
                             }
+                            &::after {
+                                content:''; 
+                                display:block;
+                                width:100%; 
+                                height:1px;
+                                background-color:var(--color-neutral-600);
+                                position:absolute;
+                                bottom:0;
+                                left:0;
+                            }
+                        }
+                    }
+                    .agreement_row {
+                        position:relative;
+                        .btn_show_details {
+                            display:block;
+                            width:16px;
+                            height:16px;
+                            font-size:0;
+                            line-height:0;
+                            text-indent:-9999px;
+                            background-image:url('/assets/images/icon/ico_arrow_right_gray.png');
+                            background-repeat:no-repeat;
+                            background-size:100%;
+                            position:absolute;
+                            top:4px;
+                            right:0;
                         }
                     }
                 }
