@@ -121,6 +121,7 @@ const initProgram = {
         likesCount: 0,
         reservationDate: '',
         banner: [],
+        category: '',
     },
     reviews: 0,
     station: '',
@@ -178,8 +179,14 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const [htmlBody, setHtmlBody] = useState<string>('');
 
     // 로그인 여부
-    const userInfo = useAuthStore.getState().userInfo;
-    const setUserInfo = useAuthStore.getState().setUserInfo;
+    const storeUserInfo = useAuthStore((state) => state.userInfo);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const userInfo = isMounted ? storeUserInfo : null;
 
     // router
     const router = useRouter();

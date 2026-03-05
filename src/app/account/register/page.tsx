@@ -185,8 +185,6 @@ const RegisterContent = () => {
                 locale: values.locale,
                 consents: consents
             };
-
-            console.log(payload);
             await postRegister(payload);
             router.push(`/account/register/complete?email=${encodeURIComponent(values.email)}`);
         } catch (err) {
