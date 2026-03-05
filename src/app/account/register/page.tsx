@@ -155,7 +155,6 @@ const RegisterContent = () => {
     };
 
     const handleRegister = async () => {
-        console.log(values)
         if (!values.email || !values.password || !values.locale) {
             alert('필수 정보를 모두 입력해주세요.');
             return;
