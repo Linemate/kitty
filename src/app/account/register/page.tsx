@@ -15,7 +15,7 @@ interface RegisterValues {
     email: string;
     password: string;
     passwordConfirm: string;
-    nationality: string;
+    locale: string;
 }
 
 const RegisterContent = () => {
@@ -54,7 +54,7 @@ const RegisterContent = () => {
         email: '',
         password: '',
         passwordConfirm: '',
-        nationality: '',
+        locale: '',
     });
 
     const [agreementList, setAgreementList] = useState<AgreementProps[]>([]);
@@ -86,6 +86,10 @@ const RegisterContent = () => {
         getLanguages().then((data) => {
             if (Array.isArray(data) && data.length > 0) {
                 setLanguages(data);
+                setValues((prev) => ({
+                    ...prev,
+                    locale: data[0],
+                }));
             }
         }).catch((err) => {
             console.error('Failed to fetch languages:', err);
@@ -151,7 +155,8 @@ const RegisterContent = () => {
     };
 
     const handleRegister = async () => {
-        if (!values.email || !values.password || !values.nationality) {
+        console.log(values)
+        if (!values.email || !values.password || !values.locale) {
             alert('필수 정보를 모두 입력해주세요.');
             return;
         }
@@ -178,7 +183,7 @@ const RegisterContent = () => {
             const payload = {
                 email: values.email,
                 password: values.password,
-                locale: values.nationality,
+                locale: values.locale,
                 consents: consents
             };
 
@@ -219,7 +224,7 @@ const RegisterContent = () => {
                                 <div className="field">
                                     <label>Email ID</label>
                                     <div className="input_row">
-                                        <div className="input_wrap">
+                                        <div className="input_area">
                                             <Input
                                                 type="text"
                                                 name="email"
@@ -232,15 +237,16 @@ const RegisterContent = () => {
                                         <Button
                                             type="text"
                                             onclick={isCheckable && !isCodeVerified ? handleSendCode : () => { }}
-                                            classnames={`${isCheckable ? isCodeVerified ? 'border lightgray' : 'blue border' : 'bg_gray'} radius_8`}
-                                            text={isCodeVerified ? '인증 완료' : '인증 요청'}
+                                            classnames={`${isCheckable ? isCodeSent ? 'border lightgray' : 'blue border' : 'bg_gray'} radius_8`}
+                                            isDisabled={isCodeVerified && isCodeSent}
+                                            text={isCodeVerified ? '인증 완료' : isCodeSent ? '인증 재요청' : '인증 요청'}
                                         />
                                     </div>
                                     <div className='msg'>
                                         모임 관련 안내가 이 메일 주소로 전송됩니다.
                                     </div>
                                     <div className="input_row second">
-                                        <div className="input_wrap" style={{ position: 'relative' }}>
+                                        <div className={`input_area ${isCodeVerified ? 'checked' : ''}`}>
                                             <Input
                                                 type="text"
                                                 name="code"
@@ -250,15 +256,16 @@ const RegisterContent = () => {
                                                 classnames=""
                                             />
                                             {isCodeSent && !isCodeVerified && (
-                                                <span style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: '#ff4d4f', fontSize: '14px', zIndex: 10 }}>
+                                                <span className='timer'>
                                                     {formatTime(timeLeft)}
                                                 </span>
                                             )}
                                         </div>
                                         <Button
                                             type="text"
-                                            onclick={code.length > 0 ? handleVerifyCode : () => { }}
-                                            classnames={`${code.length > 0 ? 'bg_blue' : 'bg_gray'} radius_8`}
+                                            onclick={!isCodeVerified && code.length > 0 ? handleVerifyCode : () => { }}
+                                            classnames={`${!isCodeVerified && code.length > 0 ? 'bg_blue' : 'bg_gray'} radius_8`}
+                                            isDisabled={isCodeVerified}
                                             text="인증하기"
                                         />
                                     </div>
@@ -288,10 +295,10 @@ const RegisterContent = () => {
                                 </div>
 
                                 <div className="field">
-                                    <label>Nationality</label>
+                                    <label>locale</label>
                                     <select
-                                        name="nationality"
-                                        value={values.nationality}
+                                        name="locale"
+                                        value={values.locale}
                                         onChange={handleChange}
                                     >
                                         {languages.map((language) => (

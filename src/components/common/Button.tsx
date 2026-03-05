@@ -5,7 +5,7 @@ import { buttonProps } from 'types/types';
 export const Button = (props:buttonProps) => {
     return (
         <>
-            <button type="button" className={`btn ${props.type} ${props.classnames}`} onClick={() => props.onclick()}>{props.text}</button>
+            <button type="button" className={`btn ${props.type} ${props.classnames}`} onClick={() => props.onclick()} disabled={props.isDisabled}>{props.text}</button>
         </>
     );
 };

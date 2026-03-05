@@ -85,6 +85,7 @@ export type buttonProps = {
     classnames: string;
     type: string; // text / img
     onclick: Function;
+    isDisabled?: boolean;
 };
 
 export type favoriteProps = {

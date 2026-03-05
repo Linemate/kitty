@@ -75,8 +75,33 @@
                         .input_row {
                             display: flex;
                             gap: 8px;
-                            .input_wrap {
+                            .input_area {
                                 flex: 1;
+                                position:relative;
+                                &.checked {
+                                    &::after {
+                                        content:''; 
+                                        display:block;
+                                        width:24px;
+                                        height:24px;
+                                        background:url('/assets/images/icon/ico_blue_check.png');
+                                        background-repeat:no-repeat;
+                                        background-size:100%;
+                                        position:absolute;
+                                        right:16px;
+                                        top:50%;
+                                        transform:translateY(-50%);
+                                    }
+                                }
+                            }
+                            .timer {
+                                position:absolute;
+                                right:16px;
+                                top:50%;
+                                transform:translateY(-50%);
+                                color:var(--color-primary-500);
+                                font-size:14px;
+                                z-index:1;
                             }
                             button {
                                 padding:0 16px;
