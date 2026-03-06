@@ -45,10 +45,6 @@ const Footer = () => {
             link: '',
         },
     ];
-    const router = useRouter();
-    const viewPage = (link: string) => {
-        router.push(`/${link}`);
-    };
 
     // 연락처 관련 페이지로 이동
     const handleContact = (link: string) => {
@@ -70,8 +66,8 @@ const Footer = () => {
                         </div>
                         {!isMobile && (
                             <div className="bottom">
-                                <div onClick={() => viewPage('term')}>이용약관</div>
-                                <div onClick={() => viewPage('privacy')}>개인정보 처리방침</div>
+                                <a href="https://policy.linemate.kr/service.html#tos" target='_blank'>이용약관</a>
+                                <a href="https://policy.linemate.kr/service.html#privacy" target='_blank'>개인정보 처리방침</a>
                             </div>
                         )}
                     </div>

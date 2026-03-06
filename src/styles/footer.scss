@@ -40,10 +40,11 @@
                 margin-top: 16px;
                 display: flex;
                 flex-direction: row;
-                & > div {
+                & > a {
                     color: #fff;
                     font-size: 14px;
                     line-height: 20px;
+                    cursor:pointer;
                     &:first-child {
                         position: relative;
                         padding-right: 12px;
