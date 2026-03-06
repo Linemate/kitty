@@ -133,12 +133,14 @@
             }
         }
     }
+    .program_item_area {
+        display:flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
     .program_item {
-        width: 50%;
-        margin-right: 12px;
-        &:nth-child(2n) {
-            margin-right: 0;
-        }
+        flex:0 0 calc(50% - 6px);
     }
     // 모바일 버전 스타일
     .mobile {

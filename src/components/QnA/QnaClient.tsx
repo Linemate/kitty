@@ -45,7 +45,7 @@ const QnaItem = (props: qnaProps & {
           ) : (
             <span className="is_reply reply">미답변</span>
           )}
-          <span className="username">{isMy ? title : buddy.name}</span>
+          <span className="username">{isMy ? title : buddy?.name || ''}</span>
           <span className="date">
             {isMobile ? createdAt.split(' ')[0] : createdAt}
           </span>

@@ -141,28 +141,30 @@ const Main = () => {
                                 </div>
                                 <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={viewMorePage} />
                             </div>
-                            {/* 슬라이드로 넣어야 함 */}
-                            {isMobile ? (
-                                <>
-                                    {el.programs.map((program: programSummaryProps) => (
-                                        <div key={program.id} className="program_item">
-                                            <SimpleProgram program={program} />
-                                        </div>
-                                    ))}
-                                </>
-                            ) : (
-                                <div className="slide_area">
-                                    <SlideWrap autoplay={false} variableWidth={true}>
+                            <div className='program_item_area'>
+                                {/* 슬라이드로 넣어야 함 */}
+                                {isMobile ? (
+                                    <>
                                         {el.programs.map((program: programSummaryProps) => (
-                                            <div key={program.id} className="slide">
-                                                <div className="slide_item">
-                                                    <SimpleProgram program={program} />
-                                                </div>
+                                            <div key={program.id} className="program_item">
+                                                <SimpleProgram program={program} />
                                             </div>
                                         ))}
-                                    </SlideWrap>
-                                </div>
-                            )}
+                                    </>
+                                ) : (
+                                    <div className="slide_area">
+                                        <SlideWrap autoplay={false} variableWidth={true}>
+                                            {el.programs.map((program: programSummaryProps) => (
+                                                <div key={program.id} className="slide">
+                                                    <div className="slide_item">
+                                                        <SimpleProgram program={program} />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </SlideWrap>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>
