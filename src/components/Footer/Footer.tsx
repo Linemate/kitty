@@ -64,12 +64,10 @@ const Footer = () => {
                             <div className='row'>유선번호 : 0507-1357-6997</div>
                             <div className="row">통신판매업신고번호 : 2025-서울마포-0484</div>
                         </div>
-                        {!isMobile && (
-                            <div className="bottom">
-                                <a href="https://policy.linemate.kr/service.html#tos" target='_blank'>이용약관</a>
-                                <a href="https://policy.linemate.kr/service.html#privacy" target='_blank'>개인정보 처리방침</a>
-                            </div>
-                        )}
+                        <div className="bottom">
+                            <a href="https://policy.linemate.kr/service.html#tos" target='_blank'>이용약관</a>
+                            <a href="https://policy.linemate.kr/service.html#privacy" target='_blank'>개인정보 처리방침</a>
+                        </div>
                     </div>
                 </div>
                 {!isMobile && (
