@@ -161,6 +161,12 @@ export const getProgramReview = async (id: string, size: number, page: number) =
     return res.data;
 };
 
+// 프로그램 커스텀 폼 조회
+export const getCustomForm = async (id: number) => {
+    const res = await privateApi.get(`/programs/${id}/custom-form`);
+    return res.data;
+};
+
 // 프로그램 예약 스케쥴 확인
 export const getProgramSchedules = async (id: string, date: string) => {
     const res = await publicApi.get(`/programs/${id}/reservation/schedules?date=${date}`);

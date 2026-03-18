@@ -14,11 +14,16 @@ const AvailableTimes = (props: AvailableTimesProps) => {
         <div className={`choose_time ${isMobile ? 'mobile' : ''} ${isBox ? 'box' : ''}`}>
             <div className="btn_time_wrap">
                 {times.map((el: scheduleProps) => {
-                    const date = new Date(el.reservationDate);
-                    const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-                    const h = kstDate.getHours();
-                    const m = kstDate.getMinutes();
-                    const convertedDate = `${h > 12 ? h - 12 : h}:${m < 10 ? '0' + m : m} ${h < 12 ? 'am' : 'pm'}`;
+                    const formatTime = (isoString?: string) => {
+                        if (!isoString) return '';
+                        // ISO 8601 문자열을 Date 객체로 변환 시 로컬 타임셋 오프셋 방지를 위해 KST(+9) 더하기 (기존 로직 동일 적용)
+                        const d = new Date(isoString);
+                        const kstD = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+                        const h = kstD.getUTCHours();
+                        const m = kstD.getUTCMinutes();
+                        return `${h < 10 ? '0' + h : h}:${m < 10 ? '0' + m : m}`;
+                    };
+                    const convertedDate = `${formatTime(el.startDate)}~${formatTime(el.endDate)}`;
                     return (
                         <div className={`${el.capacity !== el.reservationCount ? 'available' : 'soldout'} btn_time ${selectedTime.id === el.id ? 'selected' : ''}`} onClick={() => handleChoose(el)} key={el.id}>
                             <div className="time_area">
