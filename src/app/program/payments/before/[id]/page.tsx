@@ -47,6 +47,12 @@ const BeforePayment = () => {
             const customRes = await getCustomForm(Number(programIdStr));
             setCustomFormData(customRes.data);
 
+            if (!customRes.data || (Array.isArray(customRes.data) && customRes.data.length === 0)) {
+                setIsChecked(true);
+            } else {
+                setIsChecked(false);
+            }
+
             setLoading(false);
         } catch (err) {
             console.error(err);
@@ -57,10 +63,6 @@ const BeforePayment = () => {
     useEffect(() => {
         loadData();
     }, [loadData]);
-
-    const handleChecked = () => {
-        setIsChecked(!isChecked);
-    };
 
     const handlePayment = async () => {
         if (!isChecked) {
@@ -167,7 +169,7 @@ const BeforePayment = () => {
                                     <div className="section check_wrap">
                                         위 내용을 확인했으며, 이에 동의합니다.
                                     </div>
-                                    <Button type="text" onclick={handlePayment} classnames={`bg_blue wide radius_8  ${isBtnActive ? 'bg_blue' : 'bg_gray'}`} text={'결제하기'} />
+                                    <Button type="text" onclick={handlePayment} classnames={`wide radius_8 ${isBtnActive ? 'bg_blue' : 'bg_gray'}`} text={'결제하기'} />
                                 </div>
                             </div>
                             :

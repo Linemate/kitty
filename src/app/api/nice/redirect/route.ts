@@ -24,9 +24,21 @@ export async function POST(req: Request) {
       // 주의: 민감한 값(signature 등)은 쿼리로 보내지 않는 것을 권장
     });
 
+    const authResultCode = payload["AuthResultCode"]?.toString() || payload["resultCode"]?.toString() || "";
+    const authResultMsg = payload["AuthResultMsg"]?.toString() || payload["resultMsg"]?.toString() || "";
+
     const base = getBaseUrl(req);
 
-    // 프론트 result 페이지로 redirect (절대 URL 사용)
+    if (authResultCode !== "0000") {
+      // 결제 실패 시 fail 페이지로 이동
+      const failParams = new URLSearchParams({
+        message: authResultMsg,
+        code: authResultCode
+      });
+      return NextResponse.redirect(`${base}/program/payments/fail?${failParams.toString()}`, 302);
+    }
+
+    // 프론트 progress 페이지로 redirect (절대 URL 사용)
     return NextResponse.redirect(`${base}/program/payments/progress?${params.toString()}`, 302);
   } catch (e) {
     const base = getBaseUrl(req);
