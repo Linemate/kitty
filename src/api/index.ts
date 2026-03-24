@@ -96,8 +96,22 @@ export const getCollections = async () => {
 };
 
 // 컬렉션 상세 조회
-export const getCollectionDetails = async (id: number) => {
-    const res = await publicApi.get(`/collections/${id}`);
+export const getCollectionDetails = async (id: number, pageNum?: number, size?: number) => {
+    let url = `/collections/${id}`;
+    const params: string[] = [];
+
+    if (pageNum !== undefined) {
+        params.push(`page=${pageNum}`);
+    }
+    if (size !== undefined) {
+        params.push(`size=${size}`);
+    }
+
+    if (params.length > 0) {
+        url += `?${params.join('&')}`;
+    }
+
+    const res = await publicApi.get(url);
     return res.data;
 };
 
@@ -108,7 +122,7 @@ export const getCategories = async () => {
 };
 
 // 프로그램 전체
-export const getPrograms = async (category?: string, pageNum?: number, size?: number, rangeFilters?: string, sort?: string) => {
+export const getPrograms = async (category?: string, pageNum?: number, size?: number, rangeFilters?: string, sort?: string, filter?: string) => {
     let url = `/programs`;
     const params: string[] = [];
 
@@ -126,6 +140,9 @@ export const getPrograms = async (category?: string, pageNum?: number, size?: nu
     }
     if (sort) {
         params.push(`sort=${sort}`);
+    }
+    if (filter) {
+        params.push(`filter=${filter}`);
     }
 
     if (params.length > 0) {

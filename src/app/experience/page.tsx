@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { Suspense, useCallback, useEffect, useState, useRef } from 'react';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import SimpleProgram from 'components/Program/SimpleProgram';
@@ -13,10 +13,16 @@ import 'styles/experiencePage.scss';
 import ReactDatePicker from 'react-datepicker';
 import { Button } from '@/components/common/Button';
 import ModalPortal from 'components/Portal/ModalPortal';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-const ExperiencePage = () => {
+const ExperiencePageContent = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const cateParam = searchParams.get('cate');
+    const initialCategory = cateParam ? cateParam : null;
+
     const [categories, setCategories] = useState<categoryProps[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
     const [programs, setPrograms] = useState<programSummaryProps[]>([]);
     const [pageNum, setPageNum] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
@@ -65,6 +71,7 @@ const ExperiencePage = () => {
         startDate: Date | null,
         endDate: Date | null,
         sort: string,
+        filter: string | null = null,
         isReset: boolean = false
     ) => {
         if (loadingRef.current) return;
@@ -81,7 +88,7 @@ const ExperiencePage = () => {
                 rangeFilters = `startDate:${startStr}~${endStr}`;
             }
 
-            const res = await getPrograms(category || undefined, page, size, rangeFilters, sort);
+            const res = await getPrograms(category || undefined, page, size, rangeFilters, sort, filter || undefined);
             const data = res.data;
             const list = data.list || [];
 
@@ -120,11 +127,14 @@ const ExperiencePage = () => {
         setPageNum(0);
         setHasMore(true);
         setPrograms([]);
-        loadPrograms(0, newCategory, newStartDate, newEndDate, newSort, true);
+        const filterStr = newCategory ? `category:${newCategory}` : null;
+        loadPrograms(0, newCategory, newStartDate, newEndDate, newSort, filterStr, true);
     };
 
     // 핸들러들
     const handleCategoryChange = (categoryId: string | null) => {
+        const path = categoryId ? `/experience?cate=${categoryId}` : `/experience`;
+        router.push(path);
         setSelectedCategory(categoryId);
         resetAndLoad(categoryId, startDate, endDate, sortBy?.key || 'latest');
     };
@@ -168,7 +178,8 @@ const ExperiencePage = () => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && hasMore && !loadingRef.current) {
-                    loadPrograms(pageNum + 1, selectedCategory, startDate, endDate, sortBy?.key || 'latest', false);
+                    const filterStr = selectedCategory ? `category:${selectedCategory}` : null;
+                    loadPrograms(pageNum + 1, selectedCategory, startDate, endDate, sortBy?.key || 'latest', filterStr, false);
                 }
             },
             { threshold: 0.1 }
@@ -181,7 +192,9 @@ const ExperiencePage = () => {
 
     useEffect(() => {
         loadCategories();
-        loadPrograms(0, null, null, null, 'latest', true);
+        const filterStr = initialCategory ? `category:${initialCategory}` : null;
+        loadPrograms(0, initialCategory, null, null, 'latest', filterStr, true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadCategories]);
 
     return (
@@ -236,8 +249,8 @@ const ExperiencePage = () => {
                                                     <div className="btn_area">
                                                         {
                                                             startDate && endDate ?
-                                                                <Button type="text" classnames={`bg_blue wide`} onclick={handleSetPeriod} text={`${exportKoreanDate(startDate)} ~ ${exportKoreanDate(endDate)}`} /> : 
-                                                                <Button type="text" classnames={`bg_gray wide disabled`} onclick={() => {}} text={`날짜를 선택해주세요`} />
+                                                                <Button type="text" classnames={`bg_blue wide`} onclick={handleSetPeriod} text={`${exportKoreanDate(startDate)} ~ ${exportKoreanDate(endDate)}`} /> :
+                                                                <Button type="text" classnames={`bg_gray wide disabled`} onclick={() => { }} text={`날짜를 선택해주세요`} />
                                                         }
                                                     </div>
                                                 </div>
@@ -255,7 +268,7 @@ const ExperiencePage = () => {
                                         <div className='select_wrap'>
                                             <div className="select_options">
                                                 <ul>
-                                                    {sortOptions.map((option:sortOptionProps) => (
+                                                    {sortOptions.map((option: sortOptionProps) => (
                                                         <li key={option.key} onClick={() => handleSortChange(option)} className={`${sortBy?.key === option.key ? 'selected' : ''}`}>
                                                             <div className="option">{option.label}</div>
                                                             {
@@ -300,4 +313,10 @@ const ExperiencePage = () => {
     );
 };
 
-export default ExperiencePage;
+export default function ExperiencePage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ExperiencePageContent />
+        </Suspense>
+    );
+}

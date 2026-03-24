@@ -1,5 +1,15 @@
 .home.experience {
+    .section {
+        max-width: 1280px;
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+
     .page_title {
+        max-width: 1280px;
+        box-sizing: border-box;
+        margin: 0 auto;
+
         h3 {
             padding: 32px 20px 0;
             font-family: 'Montserrat';
@@ -25,8 +35,6 @@
                     padding: 8px 0;
                     border: none;
                     border-radius: 0;
-                    min-width: 0;
-                    flex: 1 0 auto;
                     margin-right: 16px;
 
                     &.selected {
@@ -44,13 +52,17 @@
                             background-color: var(--color-primary-400);
                             position: absolute;
                             left: 0;
-                            bottom: 2px;
+                            bottom: 0px;
                         }
                     }
                 }
             }
         }
 
+    }
+
+    .filter_bar {
+        margin-bottom: 24px;
     }
 
     .filter_container {
@@ -62,31 +74,46 @@
             margin-right: 12px;
         }
     }
+
     .datepicker_area {
         .modal {
             .calendar_wrap {
-                height:calc(100vh - 57px);
+                height: calc(100vh - 57px);
             }
         }
     }
-    .datepicker_wrapper .btn.border, .sort_wrapper .btn.border {
+
+    .datepicker_wrapper .btn.border,
+    .sort_wrapper .btn.border {
         padding: 6px 12px;
+
         &.lightgray.arrow {
-            padding:6px 28px 6px 12px;
+            padding: 6px 28px 6px 12px;
         }
     }
+
     .btn_area {
-        position:fixed;
-        bottom:24px;
-        left:0;
-        right:0;
-        padding:0 32px;
+        position: fixed;
+        bottom: 24px;
+        left: 0;
+        right: 0;
+        padding: 0 32px;
     }
 
     .mobile {
         .section {
             &.category_tab {
                 padding: 16px 20px 0;
+
+                .tab_area {
+                    .tab {
+                        li {
+
+                            min-width: 0;
+                            flex: 1 0 auto;
+                        }
+                    }
+                }
             }
         }
 

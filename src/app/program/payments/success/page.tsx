@@ -6,17 +6,18 @@ import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import useMobile from 'hooks/useMobile';
 import { useAuthStore } from 'utils/stores';
-import { useSearchParams } from 'next/navigation';
-import { confirmPayments } from 'api';
-import { paymentHistoryProps } from 'types/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { confirmPayments, getProgramDetailsWithToken } from 'api';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 
 const PaymentsSuccessContent = () => {
     const isMobile = useMobile();
     const userInfo = useAuthStore.getState().userInfo;
     const searchParams = useSearchParams();
+    const router = useRouter();
 
-    const [paymentData, setPaymentData] = useState<paymentHistoryProps | null>(null);
+    const [paymentData, setPaymentData] = useState<any>(null); // raw payment object
+    const [programData, setProgramData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const hasExecuted = useRef(false);
 
@@ -30,6 +31,8 @@ const PaymentsSuccessContent = () => {
                 const amount = searchParams.get('amount');
                 const tid = searchParams.get('tid');
 
+                const programId = searchParams.get('programId');
+
                 if (orderId && tid && amount) {
                     const values = {
                         amount: Number(amount),
@@ -37,7 +40,24 @@ const PaymentsSuccessContent = () => {
                         orderId: orderId,
                     };
                     const res = await confirmPayments(values);
-                    setPaymentData(res.data);
+
+                    if (res?.status === false || res === false) {
+                        router.push('/program/payments/fail');
+                        return;
+                    }
+
+                    setPaymentData(res.data || res);
+
+                    if (programId) {
+                        try {
+                            const progRes = await getProgramDetailsWithToken(programId, userInfo?.token);
+                            setProgramData(progRes.data);
+                        } catch (err) {
+                            console.error('Failed to load program details', err);
+                        }
+                    }
+
+                    setLoading(false);
                 }
             } catch (err) {
                 console.error(err);
@@ -55,47 +75,64 @@ const PaymentsSuccessContent = () => {
                     {/* header */}
                     <Header title={''} isDepth={false} isMobileDesc={false} isLogin={userInfo !== null} />
 
-                    <div className="img_area">
-                        <div className="ico success"></div>
-                    </div>
-                    <div className="title">
-                        <h2>신청 완료</h2>
-                    </div>
-                    <div className="desc_area">
-                        <p>
-                            결제가 정상적으로 처리되었습니다.
-                            <br />
-                            라인메이트에서 만나요, buddy!
-                        </p>
-                    </div>
-
-                    {!loading && paymentData && (
-                        <div className="payment_info_area" style={{ padding: '0 20px', marginBottom: '40px', textAlign: 'left' }}>
-                            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '16px', color: '#111' }}>신청 정보</h3>
-                            <ProgramInMypage reservation={paymentData.reservation} type="simple" />
-
-                            <div className="details" style={{ marginTop: '24px', borderTop: '1px solid #eee', paddingTop: '16px', fontSize: '14px', lineHeight: '24px' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                                    <span style={{ color: '#666' }}>결제 일시</span>
-                                    <span>{paymentData.reservation.createdAt ? paymentData.reservation.createdAt.replace('T', ' ').substring(0, 16) : ''}</span>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                                    <span style={{ color: '#666' }}>결제 수단</span>
-                                    <span>{paymentData.method === 'CARD' ? '신용카드' : paymentData.method}</span>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                                    <span style={{ color: '#666' }}>결제 금액</span>
-                                    <span style={{ fontWeight: 'bold' }}>{paymentData.reservation.currency} {paymentData.totalAmount?.toLocaleString()}</span>
-                                </div>
-                            </div>
+                    {loading ? (
+                        <div style={{ textAlign: 'center', padding: '100px 0' }}>
+                            <p style={{ fontSize: '18px', color: 'var(--color-neutral-300)' }}>결제 처리를 확인하고 있습니다.<br />잠시만 기다려주세요...</p>
                         </div>
+                    ) : (
+                        <>
+                            <div className="img_area">
+                                <div className="ico success"></div>
+                            </div>
+                            <div className="title">
+                                <h2>신청 완료</h2>
+                            </div>
+                            <div className="desc_area">
+                                <p>
+                                    결제가 정상적으로 처리되었습니다.
+                                    <br />
+                                    라인메이트에서 만나요, buddy!
+                                </p>
+                            </div>
+
+                            {paymentData && (
+                                <div className="payment_info_area">
+                                    <h3>신청 정보</h3>
+                                    <ProgramInMypage reservation={{
+                                        programId: programData?.id || Number(searchParams.get('programId') || 0),
+                                        title: programData?.title || paymentData.orderName,
+                                        thumbnail: programData?.thumbnail,
+                                        station: programData?.station,
+                                        price: paymentData.totalAmount,
+                                        currency: paymentData.currency || programData?.currency,
+                                        createdAt: paymentData.approvedAt || paymentData.requestedAt,
+                                    } as any} type="simple" />
+
+                                    <div className="details">
+                                        <div className='row'>
+                                            <span>결제 일시</span>
+                                            <span>{(paymentData.approvedAt || paymentData.requestedAt || '').replace('T', ' ').substring(0, 16)}</span>
+                                        </div>
+                                        <div className='row'>
+                                            <span>결제 수단</span>
+                                            <span>{paymentData.method === 'CARD' ? '신용카드' : paymentData.method}</span>
+                                        </div>
+                                        <div className='row'>
+                                            <span>결제 금액</span>
+                                            <span>{paymentData.currency} {paymentData.totalAmount?.toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div>
+                                <BottomButton style={'bg_blue'} text="홈으로 돌아가기" href="/" />
+                            </div>
+                            <div className="last">
+                                <BottomButton style={'lightgray border'} text="마이 페이지로 이동" href="/mypage" />
+                            </div>
+                        </>
                     )}
-                    <div>
-                        <BottomButton style={'bg_blue'} text="홈으로 돌아가기" href="/" />
-                    </div>
-                    <div className="last">
-                        <BottomButton style={'lightgray border'} text="마이 페이지로 이동" href="/mypage" />
-                    </div>
                     {/* Footer */}
                     <Footer />
                 </div>

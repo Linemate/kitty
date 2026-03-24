@@ -76,7 +76,10 @@ const Header = (props: headerProps) => {
                     </div>
                     <div className="header_right">
                         <Button type={'img text left'} classnames={`language`} text={language === 'kr' ? 'KR' : 'EN'} onclick={() => setOpenLanguage(!openLanguage)} />
-                        <Button type={'img'} classnames={'like'} text={'찜한 목록으로'} onclick={viewLikeList} />
+                        {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
+                        <div style={{ display: 'none' }}>
+                            <Button type={'img'} classnames={'like'} text={'찜한 목록으로'} onclick={viewLikeList} />
+                        </div>
                         {isMobile ? <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={handleOpenMenu} /> : isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />}
                         {openLanguage ? (
                             <>

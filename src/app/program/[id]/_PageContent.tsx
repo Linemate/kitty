@@ -329,8 +329,11 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const btns = () => {
         return (
             <div className="btn_wrap">
-                <div onClick={sendLike} className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>
-                    {program.likes}
+                {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
+                <div style={{ display: 'none' }}>
+                    <div onClick={sendLike} className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>
+                        {program.likes}
+                    </div>
                 </div>
                 <Button type={'img'} classnames={'share'} text={'공유하기'} onclick={viewSharePopup} />
             </div>
@@ -730,7 +733,8 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                     <div className="btn_reservation_area">
                                         <Button type="text" classnames="bg_blue radius_none reservation" text="Reservation" onclick={handleReservation} />
                                     </div>
-                                    <div className="btn_like_area">
+                                    {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
+                                    <div className="btn_like_area" style={{ display: 'none' }}>
                                         <div onClick={sendLike} className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>
                                             {program.likes}
                                         </div>

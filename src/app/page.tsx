@@ -31,6 +31,9 @@ const Main = () => {
     const viewMorePage = () => {
         router.push(`/more`);
     };
+    const viewCollectionPage = (collectionId: number) => {
+        router.push(`/collection/${collectionId}`);
+    };
 
     // 카테고리 조회
     const loadAllCategories = useCallback(async () => {
@@ -52,12 +55,12 @@ const Main = () => {
             if (userInfo && userInfo.id) {
                 const res = await refreshToken(userInfo.id, userInfo.refreshToken);
                 const data = res.data;
-                setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
+                setUserInfo({ ...userInfo, token: data.token, refreshToken: data.refreshToken });
                 console.log(res);
             } else {
                 setIsLogin(false);
             }
-        } catch(err) {
+        } catch (err) {
             console.log('error...');
             console.log(err);
             setIsLogin(false);
@@ -79,19 +82,19 @@ const Main = () => {
                 'status' in err &&
                 err.status === 401 &&
                 retryCount < maxRetries
-              ) {
+            ) {
                 console.log('refresh try')
                 try {
                     console.log('??');
-                  await refreshTokenFn();
-                  // 재시도 횟수 증가
-                  await loadAllCollections(retryCount + 1, maxRetries);
+                    await refreshTokenFn();
+                    // 재시도 횟수 증가
+                    await loadAllCollections(retryCount + 1, maxRetries);
                 } catch (refreshError) {
-                  console.error('토큰 갱신 실패:', refreshError);
+                    console.error('토큰 갱신 실패:', refreshError);
                 }
-              } else {
+            } else {
                 console.error('프로그램 로드 실패:', err);
-              }
+            }
         }
     }, []);
 
@@ -113,7 +116,7 @@ const Main = () => {
                     <div className="txt_area">
                         <div className="title">DON’T BE A TRAVELER, BE A LOCAL</div>
                         <p>Let’s share experience together in Linemate</p>
-                        <TextButtonWithIcon classnames="right more" type="text" onclick={() => viewMorePage()} text={'See More'} />
+                        <TextButtonWithIcon classnames="right more" type="text" onclick={viewMorePage} text={'See More'} />
                     </div>
                 </KeyVisual>
 
@@ -123,7 +126,7 @@ const Main = () => {
                     <div className="section category">
                         <div className="cate">
                             {categories.map((el: categoryProps) => (
-                                <div className={`cate_item`} key={el.id}>
+                                <div className={`cate_item`} key={el.id} onClick={() => router.push(`/experience?cate=${el.id}`)} style={{ cursor: 'pointer' }}>
                                     <div className="img_area">
                                         <span className="img_icon" style={{ backgroundImage: `url(${el.image.image.url})` }}></span>
                                     </div>
@@ -139,7 +142,7 @@ const Main = () => {
                                 <div>
                                     <Title title={el.language.title} icon={'thumb'} />
                                 </div>
-                                <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={viewMorePage} />
+                                <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={() => viewCollectionPage(el.id)} />
                             </div>
                             <div className='program_item_area'>
                                 {/* 슬라이드로 넣어야 함 */}

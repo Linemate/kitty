@@ -1,36 +1,43 @@
 .favorite_wrap {
+    display: none !important;
+
     .favorite_area {
-        display:flex;
+        display: flex;
         flex-direction: row;
-        align-items:center;
+        align-items: center;
+
         .amount {
             color: var(--color-neutral-300);
-            font-size:11px;
-            line-height:14px;
-            text-align:center;
-            margin-left:4px;
+            font-size: 11px;
+            line-height: 14px;
+            text-align: center;
+            margin-left: 4px;
         }
     }
+
     &.mate {
         .favorite_area {
             .amount {
-                line-height:40px;
+                line-height: 40px;
             }
         }
     }
+
     .btn.img.heart {
         vertical-align: 5px;
     }
+
     &.md {
         .btn.img.heart {
-            width:32px;
-            height:32px;
+            width: 32px;
+            height: 32px;
         }
     }
+
     &.sm {
         .btn.img.heart {
-            width:12px;
-            height:12px;
+            width: 12px;
+            height: 12px;
         }
     }
 }

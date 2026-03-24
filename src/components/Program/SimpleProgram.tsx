@@ -61,7 +61,7 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
             <div className="bottom_area">
                 <div className="price_area">
                     <span className="unit">KRW</span>
-                    <span className="amount">{program.price.toLocaleString()}</span>
+                    <span className="amount">{program.price?.toLocaleString() || 0}</span>
                 </div>
                 {/* 여기에 카테고리 들어가야 함 */}
                 <div className='category_badge_area'>

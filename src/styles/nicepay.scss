@@ -93,6 +93,7 @@
                 margin-bottom: 12px;
 
                 .ico {
+                    background-image: url('/assets/images/icon/ico_progress.gif');
                     width: 48px;
                     height: 48px;
                     background-repeat: no-repeat;
@@ -168,12 +169,37 @@
                     background-image: url('/assets/images/icon/ico_check.png');
                 }
             }
-        }
 
-        &.progress {
-            .img_area {
-                .ico {
-                    background-image: url('/assets/images/icon/ico_progress.gif');
+            .desc_area {
+                padding: 0 16px;
+            }
+
+            .payment_info_area {
+                padding: 24px 20px;
+                border: 1px solid var(--color-neutral-700);
+                box-shadow: 0px 0px 8px 0px #00000029;
+
+                h3 {
+                    color: var(--color-neutral-100);
+                    font-size: 16px;
+                    line-height: 22px;
+                    margin-bottom: 12px;
+                }
+
+                .item {
+                    box-shadow: none;
+                }
+
+                .details {
+                    margin-top: 24px;
+                    border-top: 1px solid var(--color-neutral-700);
+                    padding-top: 24px;
+
+                    .row {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                    }
                 }
             }
         }
