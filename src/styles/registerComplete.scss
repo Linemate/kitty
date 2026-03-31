@@ -1,0 +1,75 @@
+.register_complete {
+    .header_area {
+        &.mobile {
+            .header_right {
+                .btn {
+                    &.like, &.login {
+                        display:none;
+                    }
+                }
+            }
+        }
+    }
+    .wrapper {
+        padding: 0;
+        .contents {
+            max-width: 1440px;
+            min-height: 1024px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            text-align: center;
+            
+            .img_area {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #aaa;
+                font-size: 14px;
+                background-image:url('/assets/iamge/icon/ico_congrats.png');
+                background-repeat:no-repeat;
+                background-size:64px;
+                background-position:center center;
+                padding-top: 88px;
+                &.sending {
+                    background-image:url('/assets/images/icon/ico_sending.png');
+                }
+            }
+
+            .title {
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 700;
+                font-size: 24px;
+                line-height: 32px;
+                letter-spacing: 0%;
+                color: var(--color-neutral-900);
+                margin-bottom: 16px;
+            }
+
+            .desc {
+                font-family: 'Pretendard', sans-serif;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 22px;
+                letter-spacing: 0%;
+                color: var(--color-neutral-800); // Assuming a dark gray
+                margin-bottom: 40px;
+            }
+
+            .btn_area {
+                width: 380px;
+            }
+        }
+        &.mobile {
+            .contents {
+                padding: 0 20px;
+                width: 100%;
+                .btn_area {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

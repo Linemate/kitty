@@ -35,7 +35,7 @@ const Program = (props: programCompProps) => {
                 children: <div>로그인 후 이용해주세요.</div>,
                 closePortal: () => {
                     setPopup(initPopup);
-                    router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id)}`);
+                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id)}`);
                 },
                 noText: '확인',
             });

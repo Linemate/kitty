@@ -28,7 +28,7 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
                 children: <div>로그인 후 이용해주세요.</div>,
                 closePortal: () => {
                     setPopup(initPopup);
-                    router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id)}`);
+                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id)}`);
                 },
                 noText: '확인',
             });
@@ -61,14 +61,14 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
             <div className="bottom_area">
                 <div className="price_area">
                     <span className="unit">KRW</span>
-                    <span className="amount">{program.price.toLocaleString()}</span>
+                    <span className="amount">{program.price?.toLocaleString() || 0}</span>
                 </div>
                 {/* 여기에 카테고리 들어가야 함 */}
-                {/* <div className='category_badge_area'>
+                <div className='category_badge_area'>
                     <div className='badge_area'>
-                        <span className='badge'>{program.title}</span>
+                        <span className='badge'>{program.category}</span>
                     </div>
-                </div> */}
+                </div>
             </div>
             {popup.show && (
                 <Popup>

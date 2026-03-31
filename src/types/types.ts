@@ -46,6 +46,7 @@ export type programSummaryProps = {
     likesCount: number;
     reservationDate: string;
     banner?: bannerProps[];
+    category:string;
 };
 
 export type programCompProps = {
@@ -84,6 +85,7 @@ export type buttonProps = {
     classnames: string;
     type: string; // text / img
     onclick: Function;
+    isDisabled?: boolean;
 };
 
 export type favoriteProps = {
@@ -430,4 +432,30 @@ export type addReviewProps = {
 export type addReviewBodyProps = {
     contents: string;
     score: number;
+}
+
+// 약관 동의 항목
+export type AgreementProps = {
+    code:string;
+    name:string;
+    content:string;
+    required:boolean;
+    version:string;
+    sortOrder:number;
+};
+
+// 회원가입
+export type registerProps = {
+    email: string;
+    password: string;
+    locale: string;
+    consents : {
+        type: string;
+        agreed: boolean;
+    }[]
+}
+
+export type sortOptionProps = {
+    key: string;
+    label: string;
 }

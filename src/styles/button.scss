@@ -1,246 +1,314 @@
 .btn {
-    cursor:pointer;
+    cursor: pointer;
+
     &.text {
         position: relative;
         color: var(--color-neutral-200);
+
         &::after {
-            content:'';
-            display:block;
-            background-repeat:no-repeat;
-            background-size:100%;
+            content: '';
+            display: block;
+            background-repeat: no-repeat;
+            background-size: 100%;
         }
+
         &.left {
-            padding-left:28px;
+            padding-left: 28px;
+
             &::after {
-                position:absolute;
-                left:0;
-                top:0;
+                position: absolute;
+                left: 0;
+                top: 0;
             }
         }
+
         &.right {
-            padding-right:24px;
+            padding-right: 24px;
+
             &::after {
-                position:absolute;
-                right:0;
-                top:0;
+                position: absolute;
+                right: 0;
+                top: 0;
             }
         }
+
         &.more {
-            line-height:24px;
-            padding:14px 52px 14px 24px;
-            background-color:var(--color-primary-400);
+            line-height: 24px;
+            padding: 14px 52px 14px 24px;
+            background-color: var(--color-primary-400);
             color: var(--color-neutral-900);
-            border-radius:100px;
+            border-radius: 100px;
+
             &::after {
-                width:24px;
-                height:24px;
-                font-size:16px;
-                background-image:url('/assets/images/icon/ico_right_arrow.png');
-                right:24px;
-                top:14px;
+                width: 24px;
+                height: 24px;
+                font-size: 16px;
+                background-image: url('/assets/images/icon/ico_right_arrow.png');
+                right: 24px;
+                top: 14px;
             }
         }
+
         &.border {
-            line-height:22px;
-            font-family:'Pretendard';
-            font-size:14px;
-            font-weight:600;
-            border-radius:8px;
+            line-height: 22px;
+            font-family: 'Pretendard';
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+
             &.blue {
-                border:1px solid var(--color-primary-400);
+                border: 1px solid var(--color-primary-400);
                 color: var(--color-primary-500);
             }
+
             &.lightgray {
-                border:1px solid var(--color-neutral-600);
+                border: 1px solid var(--color-neutral-600);
                 color: var(--color-neutral-200);
             }
+
             &.gray {
-                border:1px solid var(--color-neutral-500);
+                border: 1px solid var(--color-neutral-500);
             }
         }
+
         &.wide {
-            width:100%;
-            padding:12px 0;
+            width: 100%;
+            padding: 15px 0;
             box-sizing: border-box;
         }
+
         &.fit {
-            display:inline-block;
-            padding:8px 16px;
+            display: inline-block;
+            padding: 8px 16px;
             box-sizing: border-box;
         }
+
         &.bg_blue {
-            background-color:var(--color-primary-500);
+            background-color: var(--color-primary-500);
             color: var(--color-neutral-900);
         }
+
         &.bg_gray {
-            background-color:var(--color-neutral-600);
-            color:#fff;
+            background-color: var(--color-neutral-600);
+            color: #fff;
         }
+
         &.bg_darkgray {
             background: #7676801F;
             color: var(--color-neutral-500);
-            cursor:default;
+            cursor: default;
         }
+
         &.radius_none {
             border-radius: 0px;
         }
+
         &.radius_8 {
-            border-radius:8px;
+            border-radius: 8px;
         }
+
         &.lightgray {
             color: var(--color-neutral-500);
         }
+
         &.all {
-            line-height:24px;
-            color:var(--color-neutral-500);
-            font-size:13px;
-            font-weight:600;
-            font-family:'Pretendard';
+            line-height: 24px;
+            color: var(--color-neutral-500);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Pretendard';
         }
+
         &.language {
-            width:auto;
-            height:20px;
-            padding-left:28px;
-            font-size:13px;
-            line-height:20px;
-            font-weight:600;
+            width: auto;
+            height: 20px;
+            padding-left: 28px;
+            font-size: 13px;
+            line-height: 20px;
+            font-weight: 600;
             text-indent: 0;
+
             &::after {
-                width:20px;
-                height:20px;
-                background-image:url('/assets/images/icon/ico_language.png');
+                width: 20px;
+                height: 20px;
+                background-image: url('/assets/images/icon/ico_language.png');
             }
         }
+
         &.right_arrow {
             &::after {
-                width:16px;
-                height:16px;
-                background-image:url('/assets/images/icon/ico_arrow_right_blue.png');
-                position:absolute;
-                right:0;
-                top:3px;
+                width: 16px;
+                height: 16px;
+                background-image: url('/assets/images/icon/ico_arrow_right_blue.png');
+                position: absolute;
+                right: 0;
+                top: 3px;
             }
         }
+
         &.disabled {
-            background-color:#7676801F;
-            color:var(--color-neutral-500);
-            cursor:default;
+            background-color: #7676801F;
+            color: var(--color-neutral-500);
+            cursor: default;
         }
+
         &.in_modal {
-            font-size:14px;
-            line-height:22px;
-            border-radius:8px;
+            font-size: 14px;
+            line-height: 22px;
+            border-radius: 8px;
         }
     }
+
     &.img {
-        width:24px;
-        height:24px;
-        background-repeat:no-repeat;
-        background-size:100%;
-        line-height:0;
-        font-size:0;
-        text-indent:-9999px;
+        width: 24px;
+        height: 24px;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        line-height: 0;
+        font-size: 0;
+        text-indent: -9999px;
+
         &.close {
-            background-image:url('/assets/images/btn/btn_close.png');
+            background-image: url('/assets/images/btn/btn_close.png');
+
             &.big {
-                background-image:url('/assets/images/btn/btn_close_big.png');
+                background-image: url('/assets/images/btn/btn_close_big.png');
             }
         }
+
         &.like {
-            background-image:url('/assets/images/btn/btn_like.png');
+            background-image: url('/assets/images/btn/btn_like.png');
         }
+
         &.heart {
-            width:32px;
-            height:32px;
-            background-image:url('/assets/images/btn/btn_heart.png');
+            width: 32px;
+            height: 32px;
+            background-image: url('/assets/images/btn/btn_heart.png');
         }
+
         &.share {
-            width:24px;
-            height:24px;
-            background-image:url('/assets/images/btn/btn_share.png');
+            width: 24px;
+            height: 24px;
+            background-image: url('/assets/images/btn/btn_share.png');
         }
+
         &.heart.filled {
-            width:32px;
-            height:32px;
-            background-image:url('/assets/images/btn/btn_heart_filled.png');
+            width: 32px;
+            height: 32px;
+            background-image: url('/assets/images/btn/btn_heart_filled.png');
         }
+
         &.my {
-            background-image:url('/assets/images/btn/btn_my.png');
+            background-image: url('/assets/images/btn/btn_my.png');
         }
+
         &.login {
-            width:81px;
-            height:44px;
-            background-image:url('/assets/images/btn/btn_login.png');
+            width: 81px;
+            height: 44px;
+            background-image: url('/assets/images/btn/btn_login.png');
         }
+
         &.contact {
-            width:32px;
-            height:32px;
+            width: 32px;
+            height: 32px;
+
             &.sms {
-                background-image:url('/assets/images/btn/btn_sms.png');
+                background-image: url('/assets/images/btn/btn_sms.png');
             }
+
             &.instagram {
-                background-image:url('/assets/images/btn/btn_instagram.png');
+                background-image: url('/assets/images/btn/btn_instagram.png');
             }
+
             &.facebook {
-                background-image:url('/assets/images/btn/btn_facebook.png');
+                background-image: url('/assets/images/btn/btn_facebook.png');
             }
+
             &.line {
-                background-image:url('/assets/images/btn/btn_line.png');
+                background-image: url('/assets/images/btn/btn_line.png');
             }
+
             &.whatsapp {
-                background-image:url('/assets/images/btn/btn_whatsapp.png');
+                background-image: url('/assets/images/btn/btn_whatsapp.png');
             }
         }
-        &.prev, &.next {
-            width:16px;
-            height:16px;
-            background-image:url('/assets/images/btn/btn_arrow_black_right.png');
+
+        &.prev,
+        &.next {
+            width: 16px;
+            height: 16px;
+            background-image: url('/assets/images/btn/btn_arrow_black_right.png');
         }
+
         &.prev {
-            transform:rotate(180deg);
+            transform: rotate(180deg);
         }
+
         &.back {
-            background-image:url('/assets/images/btn/btn_back.png');
+            background-image: url('/assets/images/btn/btn_back.png');
         }
-        &.ko, &.en {
-            width:50px;
-            height:24px;
+
+        &.ko,
+        &.en {
+            width: 50px;
+            height: 24px;
+
             &.ko {
-                background-image:url('/assets/images/btn/btn_ko.png');
+                background-image: url('/assets/images/btn/btn_ko.png');
             }
+
             &.en {
-                background-image:url('/assets/images/btn/btn_en.png');
+                background-image: url('/assets/images/btn/btn_en.png');
             }
-        }   
+        }
+
         &.menu {
-            background-image:url('/assets/images/btn/btn_menu.png');
-        }     
+            background-image: url('/assets/images/btn/btn_menu.png');
+        }
     }
+
     &.ico {
         &.top {
-            padding-top:39px;
-            padding-right:0;
-            position:relative;
+            padding-top: 39px;
+            padding-right: 0;
+            position: relative;
+
             &::before {
-                position:absolute;
-                top:0;
-                left:50%;
-                transform:translateX(-50%);
-                background-size:32px;
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                background-size: 32px;
             }
         }
+
+        &.lightgray.arrow {
+            &::before {
+                width: 16px;
+                height: 16px;
+                background-image: url('/assets/images/icon/ico_arrow_down_gray_in_btn.png');
+                background-size: 16px;
+                background-repeat: no-repeat;
+                right: 8px;
+                top: 9px;
+            }
+        }
+
         &.reservations::before {
-            background-image:url('/assets/images/icon/ico_reservation.png');
+            background-image: url('/assets/images/icon/ico_reservation.png');
         }
+
         &.review::before {
-            background-image:url('/assets/images/icon/ico_review.png');
+            background-image: url('/assets/images/icon/ico_review.png');
         }
+
         &.like::before {
-            background-image:url('/assets/images/icon/ico_heart.png');
+            background-image: url('/assets/images/icon/ico_heart.png');
         }
+
         &.qna::before {
-            background-image:url('/assets/images/icon/ico_qna.png');
+            background-image: url('/assets/images/icon/ico_qna.png');
         }
     }
-    
+
 }

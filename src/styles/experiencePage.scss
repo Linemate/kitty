@@ -1,0 +1,124 @@
+.home.experience {
+    .section {
+        max-width: 1280px;
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+
+    .page_title {
+        max-width: 1280px;
+        box-sizing: border-box;
+        margin: 0 auto;
+
+        h3 {
+            padding: 32px 20px 0;
+            font-family: 'Montserrat';
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 24px;
+        }
+    }
+
+    .category_tab {
+        .tab_area {
+            border-bottom: 1px solid var(--color-neutral-700);
+
+            .tab {
+                ul {
+                    overflow-x: auto;
+                }
+
+                li {
+                    width: auto;
+                    font-size: 14px;
+                    line-height: 22px;
+                    padding: 8px 0;
+                    border: none;
+                    border-radius: 0;
+                    margin-right: 16px;
+
+                    &.selected {
+                        font-weight: 700;
+                        position: relative;
+                        background-color: rgba(0, 0, 0, 0);
+                        color: var(--color-neutral-100);
+
+                        &::before {
+                            content: '';
+                            display: block;
+
+                            width: 100%;
+                            height: 2px;
+                            background-color: var(--color-primary-400);
+                            position: absolute;
+                            left: 0;
+                            bottom: 0px;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    .filter_bar {
+        margin-bottom: 24px;
+    }
+
+    .filter_container {
+        padding: 0 20px;
+        display: flex;
+        flex-direction: row;
+
+        .datepicker_wrapper {
+            margin-right: 12px;
+        }
+    }
+
+    .datepicker_area {
+        .modal {
+            .calendar_wrap {
+                height: calc(100vh - 57px);
+            }
+        }
+    }
+
+    .datepicker_wrapper .btn.border,
+    .sort_wrapper .btn.border {
+        padding: 6px 12px;
+
+        &.lightgray.arrow {
+            padding: 6px 28px 6px 12px;
+        }
+    }
+
+    .btn_area {
+        position: fixed;
+        bottom: 24px;
+        left: 0;
+        right: 0;
+        padding: 0 32px;
+    }
+
+    .mobile {
+        .section {
+            &.category_tab {
+                padding: 16px 20px 0;
+
+                .tab_area {
+                    .tab {
+                        li {
+
+                            min-width: 0;
+                            flex: 1 0 auto;
+                        }
+                    }
+                }
+            }
+        }
+
+        .program_item {
+            width: 100%;
+        }
+    }
+}

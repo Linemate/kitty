@@ -1,0 +1,243 @@
+.register {
+    .header_area {
+        &.mobile {
+            .header_right {
+                .btn {
+                    &.like, &.login {
+                        display:none;
+                    }
+                }
+            }
+        }
+    }
+    .wrapper {
+        padding:0;
+        .contents {
+            max-width:1440px;
+            min-height:1024px;
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+            margin:0 auto;
+            .img_area {
+                width:860px;
+                min-height:1024px;
+                background-repeat: no-repeat;
+                background-size:cover;
+                background-position: center;
+                /* Reuse login background or a new one */
+                &.en {
+                    background-image:url('/assets/images/bg/bg_login_en.png');
+                }
+                &.kr {
+                    background-image:url('/assets/images/bg/bg_login_kr.png');
+                }
+            }
+            .text_area {
+                width:100%;
+                flex:1;
+                padding-top:100px;
+                padding-bottom: 100px; 
+                display: flex;
+                justify-content: center; 
+                .main {
+                    width: 380px; 
+                }
+                .logo {
+                    width:130px;
+                    height:18px;
+                    background-image:url('/assets/images/logo.svg');
+                    background-repeat:no-repeat;
+                    background-size:100%;
+                    font-size:0;
+                    line-height:0;
+                    text-indent:-9999px;
+                    margin-bottom: 40px;
+                }
+                .title {
+                    font-size: 24px;
+                    font-weight: 700;
+                    margin-bottom: 32px;
+                }
+                
+                .form_area {
+                    .field {
+                        margin-bottom: 16px;
+                        label {
+                            font-family:'Pretendard';
+                            display: block;
+                            font-size: 14px;
+                            font-weight: 500;
+                            line-height:22px;
+                            margin-bottom: 8px;
+                            color: var(--color-neutral-100);
+                        }
+                        .input_row {
+                            display: flex;
+                            gap: 8px;
+                            .input_area {
+                                flex: 1;
+                                position:relative;
+                                &.checked {
+                                    &::after {
+                                        content:''; 
+                                        display:block;
+                                        width:24px;
+                                        height:24px;
+                                        background:url('/assets/images/icon/ico_blue_check.png');
+                                        background-repeat:no-repeat;
+                                        background-size:100%;
+                                        position:absolute;
+                                        right:16px;
+                                        top:50%;
+                                        transform:translateY(-50%);
+                                    }
+                                }
+                            }
+                            .timer {
+                                position:absolute;
+                                right:16px;
+                                top:50%;
+                                transform:translateY(-50%);
+                                color:var(--color-primary-500);
+                                font-size:14px;
+                                z-index:1;
+                            }
+                            button {
+                                padding:0 16px;
+                                height: 48px; // Match input height usually
+                                font-size: 14px;
+                            }
+                            &.second {
+                                margin-top:16px;
+                            }
+                        }
+                        select {
+                            width: 100%;
+                            height: 48px;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            padding: 0 16px;
+                            font-size: 14px;
+                            color: var(--color-neutral-100);
+                            appearance: none;
+                            background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center/12px;
+                        }
+                        .error_msg {
+                            color: #ff4d4f;
+                            font-size: 12px;
+                            margin-top: 4px;
+                        }
+                        .msg {
+                            color: var(--color-neutral-400);
+                            font-size: 13px;
+                            line-height:18px;
+                            margin-top:8px;
+                        }
+                    }
+                }
+
+                .agreement_area {
+                    margin-top: 32px;
+                    margin-bottom: 32px;
+                    border-top: 1px solid #eee;
+                    padding-top: 24px;
+                    .checkbox_row {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 16px;
+                        cursor: pointer;
+                        
+                        input[type="checkbox"] {
+                            width: 24px;
+                            height: 24px;
+                            margin-right: 8px;
+                            cursor: pointer;
+                            background-image:url('/assets/images/icon/ico_check_default.png');
+                            background-repeat:no-repeat;
+                            background-size:100%;
+                            font-size:0;
+                            line-height:0;
+                            text-indent:-9999px;
+                            appearance: none;
+                            &:checked {
+                                background-image:url('/assets/images/icon/ico_check_checked.png');
+                            }
+                        }
+
+                        span {
+                            font-size: 14px;
+                            font-weight:600;
+                            line-height:22px;
+                            color: var(--color-neutral-100);
+                            &.required {
+                                color: #ff6b00; // Example highlight color
+                                margin-left: 4px;
+                            }
+                        }
+
+                        &.all_agree {
+                            padding-bottom:16px;
+                            margin-bottom: 16px;
+                            position:relative;
+                            span {
+                                font-weight: 700;
+                                color: var(--color-neutral-100);
+                                font-size: 16px;
+                            }
+                            &::after {
+                                content:''; 
+                                display:block;
+                                width:100%; 
+                                height:1px;
+                                background-color:var(--color-neutral-600);
+                                position:absolute;
+                                bottom:0;
+                                left:0;
+                            }
+                        }
+                    }
+                    .agreement_row {
+                        position:relative;
+                        .btn_show_details {
+                            display:block;
+                            width:16px;
+                            height:16px;
+                            font-size:0;
+                            line-height:0;
+                            text-indent:-9999px;
+                            background-image:url('/assets/images/icon/ico_arrow_right_gray.png');
+                            background-repeat:no-repeat;
+                            background-size:100%;
+                            position:absolute;
+                            top:4px;
+                            right:0;
+                        }
+                    }
+                }
+
+                .btn_area {
+                    margin-top: 24px;
+                }
+            }
+        }
+        &.mobile {
+            .contents {
+                display:block;
+                padding:0 20px;
+                max-width:none;
+                max-height:none;
+                .text_area {
+                    display:block;
+                    padding-top:48px; 
+                    .main {
+                        width: 100%;
+                        .logo {
+                            display:none;
+                        }
+                    }   
+                }
+            }
+        }
+    }
+}

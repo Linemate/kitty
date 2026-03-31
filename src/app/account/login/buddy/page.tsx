@@ -43,6 +43,10 @@ const LoginContent = () => {
         });
     };
 
+    const handleChangeMode = () => {
+        router.push('/account/login/mate');
+    }
+
     // login
     const handleLogin = useCallback(async () => {
         try {
@@ -120,11 +124,12 @@ const LoginContent = () => {
                             <div className="btn_area">
                                 <Button type="text" onclick={handleLogin} classnames="bg_blue wide radius_8" text={'Login'} />
                             </div>
-                            {/* <div className='mate_mode'>Switch Mate Mode</div>
-
-                            <div className='gray400'>Don't have an account?<span className='link' onClick={() => viewPage('/register')}>Register</span></div> */}
-
-                            {/* <div className='horizon'><span className='or'>Or</span></div> */}
+                            <div className='btn_area'>
+                                <Button type="text" onclick={handleChangeMode} classnames="bg_blue wide radius_8" text={'Log in as a host'} />
+                            </div>
+                            <div className='join_area'>
+                                <div className='gray400'>Don&apos;t have an account?<span className='link' onClick={() => router.push('/account/register')}>Register</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>

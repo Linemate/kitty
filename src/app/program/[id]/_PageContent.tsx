@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
 import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useRouter } from 'next/navigation';
 import 'styles/programPage.scss';
 import Review from 'components/Review/Review';
@@ -122,6 +121,7 @@ const initProgram = {
         likesCount: 0,
         reservationDate: '',
         banner: [],
+        category: '',
     },
     reviews: 0,
     station: '',
@@ -153,18 +153,18 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const windowSize = useResize();
     const isMobile = useMobile();
     const [program, setProgram] = useState<programProps>(initialProgram || initProgram);
-    
+
     // modal
     const [isSharePopup, setIsSharePopup] = useState<boolean>(false);
     const [isCalendarModal, setIsCalendarModal] = useState<boolean>(false);
     const [popup, setPopup] = useState<popupProps>(initPopup);
-    
+
     // 탭 선택
     const [selectedTab, setSelectedTab] = useState<string>(tabsData[0].name);
-    
+
     // 선택한 날짜들
     const [selectedDate, setSelectedDate] = useState<Date>();
-    
+
     // 가능한 날짜들
     const [availableDates, setAvailableDates] = useState<Date[]>([]);
     const [availableTimes, setAvailableTimes] = useState<scheduleProps[]>([]);
@@ -179,18 +179,24 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const [htmlBody, setHtmlBody] = useState<string>('');
 
     // 로그인 여부
-    const userInfo = useAuthStore.getState().userInfo;
-    const setUserInfo = useAuthStore.getState().setUserInfo;
+    const storeUserInfo = useAuthStore((state) => state.userInfo);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const userInfo = isMounted ? storeUserInfo : null;
 
     // router
     const router = useRouter();
-    
+
     // 결제
     const [responsePayment, setResponsePayment] = useState<responsePaymentProps | null>(null);
-    
+
     // 결제 준비
     const [readyToPay, setReadyToPay] = useState<boolean>(false);
-    
+
     // ref
     const btnReservationRef = useRef<HTMLDivElement>(null);
 
@@ -215,34 +221,41 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         try {
             const cookies = parseCookies();
             const user = cookies.USERINFO;
-            
+
             // 비로그인
             if (!user) {
                 alert('로그인이 필요해요.');
-                router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
+                router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
                 return;
             }
-            
+
             // 시간 미선택
             if (selectedTime.id === 0) {
                 alert('시간을 선택해주세요.');
                 return;
             }
-            
-            const numOfId = parseInt(programId);
-            const values = {
-                programId: numOfId,
-                scheduleId: selectedTime.id,
-                amount: program.price,
-                method: 'CARD',
-            };
-            const res = await requestPayments(values);
-            const data = res.data;
-            if (data) {
-                console.log(data);
-                setResponsePayment(data);
-                setReadyToPay(true);
+
+            let dateText = '';
+            if (selectedTime.reservationDate) {
+                const date = new Date(selectedTime.reservationDate);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+                const dayName = dayNames[date.getDay()];
+
+                let ampm = '';
+                if (selectedTime.startDate) {
+                    const [hour] = selectedTime.startDate.split(':');
+                    ampm = Number(hour) >= 12 ? '오후' : '오전';
+                }
+                const startFormatted = selectedTime.startDate ? selectedTime.startDate.substring(0, 5) : '';
+                const endFormatted = selectedTime.endDate ? `~${selectedTime.endDate.substring(0, 5)}` : '';
+
+                dateText = `${year}.${month}.${day}(${dayName}) ${ampm} ${startFormatted}${endFormatted}`.trim();
             }
+
+            router.push(`/program/payments/before/${programId}?scheduleId=${selectedTime.id}&dateText=${encodeURIComponent(dateText)}`);
         } catch (err) {
             console.log(err);
             alert((err as any).response?.data?.message || '오류가 발생했습니다.');
@@ -258,12 +271,12 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const viewSharePopup = () => {
         setIsSharePopup(true);
     };
-    
+
     // 공유하기 닫기
     const closeSharePopup = () => {
         setIsSharePopup(false);
     };
-    
+
     // 공유 완료
     const completedShare = () => {
         setPopup({
@@ -305,7 +318,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                 children: <div>로그인 후 이용해주세요.</div>,
                 closePortal: () => {
                     setPopup(initPopup);
-                    router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
+                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
                 },
                 noText: '확인',
             });
@@ -316,8 +329,11 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const btns = () => {
         return (
             <div className="btn_wrap">
-                <div onClick={sendLike} className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>
-                    {program.likes}
+                {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
+                <div style={{ display: 'none' }}>
+                    <div onClick={sendLike} className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>
+                        {program.likes}
+                    </div>
                 </div>
                 <Button type={'img'} classnames={'share'} text={'공유하기'} onclick={viewSharePopup} />
             </div>
@@ -401,7 +417,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                     const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
                     return new Date(kstDate.getUTCFullYear(), kstDate.getUTCMonth(), kstDate.getUTCDate());
                 });
-                
+
                 setAvailableDates([...rDates, ...getPrevCurrentNextMonthDates(date)]);
                 setSelectedTime(initTime);
                 handleChangeDate(date);
@@ -666,7 +682,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                         <div>
                                             <Title title={'Recommended For You'} icon={'gift_heart'} description={''} />
                                         </div>
-                                        <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={() => {}} />
+                                        <TextButtonWithIcon classnames={'all'} type={'text'} text={'ALL'} onclick={() => { }} />
                                     </div>
                                     {/* 슬라이드로 넣어야 함 */}
                                     {isMobile ? (
@@ -717,7 +733,8 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                     <div className="btn_reservation_area">
                                         <Button type="text" classnames="bg_blue radius_none reservation" text="Reservation" onclick={handleReservation} />
                                     </div>
-                                    <div className="btn_like_area">
+                                    {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
+                                    <div className="btn_like_area" style={{ display: 'none' }}>
                                         <div onClick={sendLike} className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>
                                             {program.likes}
                                         </div>

@@ -1,11 +1,11 @@
 'use client';
-import { confirmPayments } from 'api';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import useMobile from 'hooks/useMobile';
 import 'styles/nicepay.scss';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
+import PaymentLoading from 'components/common/PaymentLoading';
 
 const PaymentsProgressContent = () => {
     const isMobile = useMobile();
@@ -26,14 +26,9 @@ const PaymentsProgressContent = () => {
                 const tid = searchParams.get('tid');
 
                 if (orderId && tid && amount) {
-                    const values = {
-                        amount: Number(amount),
-                        paymentKey:tid,
-                        orderId: orderId,
-                    };
-                    // confirm api 호출하기
-                    const res = await confirmPayments(values);
-                    router.push('/program/payments/success');
+                    router.push(`/program/payments/success?orderId=${orderId}&amount=${amount}&tid=${tid}`);
+                } else {
+                    router.push('/program/payments/fail');
                 }
             } catch (err) {
                 console.log(err);
@@ -49,15 +44,7 @@ const PaymentsProgressContent = () => {
                     {/* header */}
                     <Header title={''} isDepth={false} isMobileDesc={false} isLogin={true} />
 
-                    <div className="img_area">
-                        <div className="ico progress"></div>
-                    </div>
-                    <div className="title">
-                        <h2>결제 진행 중입니다.</h2>
-                    </div>
-                    <div className="desc_area">
-                        <p>잠시만 기다려주세요!</p>
-                    </div>
+                    <PaymentLoading />
                     {/* Footer */}
                     <Footer />
                 </div>

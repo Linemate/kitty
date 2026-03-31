@@ -1,8 +1,17 @@
 import axios from 'axios';
-import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps } from 'types/types';
+import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps, registerProps } from 'types/types';
 import { getCookie, deleteCookie } from 'utils/cookiesFunction';
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
+
+// 토큰, country 모두 없는 common API
+const commonApi = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_HOST,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
 
 // 토큰 없는 axios 인스턴스 (프로그램 상세 등)
 const publicApi = axios.create({
@@ -51,7 +60,7 @@ privateApi.interceptors.response.use(
                 if (typeof window !== 'undefined') {
                     deleteCookie('USERINFO');
                     const redirect = encodeURIComponent(window.location.href);
-                    window.location.href = `/login?redirect=${redirect}`;
+                    window.location.href = `/account/login?redirect=${redirect}`;
                 }
             }
         } catch (e) {
@@ -70,7 +79,7 @@ publicApi.interceptors.response.use(
                 if (typeof window !== 'undefined') {
                     deleteCookie('USERINFO');
                     const redirect = encodeURIComponent(window.location.href);
-                    window.location.href = `/login?redirect=${redirect}`;
+                    window.location.href = `/account/login?redirect=${redirect}`;
                 }
             }
         } catch (e) {
@@ -87,8 +96,22 @@ export const getCollections = async () => {
 };
 
 // 컬렉션 상세 조회
-export const getCollectionDetails = async (id: number) => {
-    const res = await publicApi.get(`/collections/${id}`);
+export const getCollectionDetails = async (id: number, pageNum?: number, size?: number) => {
+    let url = `/collections/${id}`;
+    const params: string[] = [];
+
+    if (pageNum !== undefined) {
+        params.push(`page=${pageNum}`);
+    }
+    if (size !== undefined) {
+        params.push(`size=${size}`);
+    }
+
+    if (params.length > 0) {
+        url += `?${params.join('&')}`;
+    }
+
+    const res = await publicApi.get(url);
     return res.data;
 };
 
@@ -99,8 +122,34 @@ export const getCategories = async () => {
 };
 
 // 프로그램 전체
-export const getPrograms = async () => {
-    const res = await publicApi.get(`/programs`);
+export const getPrograms = async (category?: string, pageNum?: number, size?: number, rangeFilters?: string, sort?: string, filter?: string) => {
+    let url = `/programs`;
+    const params: string[] = [];
+
+    if (category) {
+        params.push(`category=${category}`);
+    }
+    if (pageNum !== undefined) {
+        params.push(`page=${pageNum}`);
+    }
+    if (size !== undefined) {
+        params.push(`size=${size}`);
+    }
+    if (rangeFilters) {
+        params.push(`rangeFilters=${rangeFilters}`);
+    }
+    if (sort) {
+        params.push(`sort=${sort}`);
+    }
+    if (filter) {
+        params.push(`filter=${filter}`);
+    }
+
+    if (params.length > 0) {
+        url += `?${params.join('&')}`;
+    }
+
+    const res = await publicApi.get(url);
     return res.data;
 };
 
@@ -129,9 +178,51 @@ export const getProgramReview = async (id: string, size: number, page: number) =
     return res.data;
 };
 
+// 프로그램 커스텀 폼 조회
+export const getCustomForm = async (id: number) => {
+    const res = await privateApi.get(`/programs/${id}/custom-form`);
+    return res.data;
+};
+
 // 프로그램 예약 스케쥴 확인
 export const getProgramSchedules = async (id: string, date: string) => {
     const res = await publicApi.get(`/programs/${id}/reservation/schedules?date=${date}`);
+    return res.data;
+};
+
+// 회원가입 - 이메일 중복확인
+export const getEmailCheck = async (email: string) => {
+    const res = await publicApi.get(`/account/check-email?email=${email}`);
+    return res.data;
+};
+
+// 회원가입 - 동의항목 조회
+export const getAgreements = async () => {
+    const res = await publicApi.get(`/account/sign-up/consents`);
+    return res.data;
+};
+
+// 회원가입 - 인증번호 발송
+export const postSendAuthCode = async (token: string) => {
+    const res = await publicApi.post(`/account/authentication`, { token });
+    return res.data;
+};
+
+// 이메일 인증코드 발송
+export const postEmailSendCode = async (email: string) => {
+    const res = await publicApi.post(`/account/email/send-code`, { email });
+    return res.data;
+};
+
+// 이메일 인증코드 확인
+export const postEmailVerifyCode = async (email: string, code: string) => {
+    const res = await publicApi.post(`/account/email/verify-code`, { email, code });
+    return res.data;
+};
+
+// 회원가입
+export const postRegister = async (values: registerProps) => {
+    const res = await publicApi.post(`/account/sign-up`, values);
     return res.data;
 };
 
@@ -288,5 +379,11 @@ export const deleteReview = async (programId: number, reviewId: number) => {
 // 내가 쓴 Q&A들 조회
 export const getMyQnaList = async (pageNum: number, size: number) => {
     const res = await privateApi.get(`/programs/inquiries/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
+    return res.data;
+};
+
+// 다국적 제공 언어
+export const getLanguages = async () => {
+    const res = await commonApi.get(`/languages`);
     return res.data;
 };

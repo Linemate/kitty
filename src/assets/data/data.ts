@@ -1,7 +1,7 @@
 export const navData = [
     {
         navName : 'Experience',
-        link: '/experience'
+        link: 'experience'
     },
     // {
     //     navName : 'Linecare',

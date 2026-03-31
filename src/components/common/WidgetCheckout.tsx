@@ -49,8 +49,8 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                 orderId: responsePayment.orderId,
                 amount: responsePayment.amount,
                 goodsName: program.title,
-                returnUrl: `${window.location.origin}/api/nice/redirect`,
-                cancelUrl: `${window.location.origin}/program/payments/fail`,
+                returnUrl: `${window.location.origin}/api/nice/redirect?programId=${program.id}`,
+                cancelUrl: `${window.location.origin}/program/payments/fail?program=${program.id}`,
                 buyerName: userInfo?.name || '고객',
                 buyerEmail: userInfo?.email || '',
                 mallReserved: `test=true&timestamp=${Date.now()}`,
@@ -58,17 +58,17 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                     console.error('나이스페이 에러:', result);
                     alert(`결제 실패: ${result.resultMsg}`);
                 },
-            }, 
-            function(response:any) {
-                // 결제 인증 성공 콜백
-                if (response.resultCode === '0000') {
-                    console.log(response.tid);
-                    
-                    
-                } else {
-                    console.log('결제 인증 실패: ' + response.resultMsg, true, response);
-                }
-            });
+            },
+                function (response: any) {
+                    // 결제 인증 성공 콜백
+                    if (response.resultCode === '0000') {
+                        console.log(response.tid);
+
+
+                    } else {
+                        console.log('결제 인증 실패: ' + response.resultMsg, true, response);
+                    }
+                });
         }
     }, [ready, responsePayment.orderId, responsePayment.amount, program.title, scheduleId, userInfo]);
 

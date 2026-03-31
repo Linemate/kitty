@@ -45,7 +45,7 @@ const QnaItem = (props: qnaProps & {
           ) : (
             <span className="is_reply reply">미답변</span>
           )}
-          <span className="username">{isMy ? title : buddy.name}</span>
+          <span className="username">{isMy ? title : buddy?.name || ''}</span>
           <span className="date">
             {isMobile ? createdAt.split(' ')[0] : createdAt}
           </span>
@@ -218,7 +218,7 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
     } else {
       alert('로그인 후 이용해주세요.');
       router.push(
-        `/login?redirect=${encodeURIComponent(
+        `/account/login?redirect=${encodeURIComponent(
           window.location.origin + '/program/' + id
         )}`
       );

@@ -42,12 +42,12 @@ const MyPage = () => {
         setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
       } else {
         alert('로그인이 필요해요.');
-        router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
+        router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
       }
     } catch (err: any) {
       if (err?.status === 401) {
         alert('로그인이 필요해요.');
-        router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
+        router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
       }
     }
   }, [userInfo, router]);
@@ -67,7 +67,7 @@ const MyPage = () => {
 
   useEffect(() => {
     if (!userInfo) {
-        router.push(`/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
+        router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
     } else if (userInfo.id == null) {
         refreshTokenFn();
     }
