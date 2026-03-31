@@ -164,20 +164,28 @@
 
         // 결제 성공 화면
         &.success {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+
+            .title {
+                margin-bottom: 24px;
+            }
+
             .img_area {
+                margin-top: 32px;
+
                 .ico {
                     background-image: url('/assets/images/icon/ico_check.png');
                 }
             }
 
-            .desc_area {
-                padding: 0 16px;
-            }
-
             .payment_info_area {
+                margin: 0 16px;
                 padding: 24px 20px;
                 border: 1px solid var(--color-neutral-700);
                 box-shadow: 0px 0px 8px 0px #00000029;
+                border-radius: 8px;
 
                 h3 {
                     color: var(--color-neutral-100);
@@ -187,20 +195,55 @@
                 }
 
                 .item {
+                    padding: 0;
                     box-shadow: none;
+                    border: none;
+
+                    .program_place {
+                        .ico.location {
+                            font-size: 13px;
+                        }
+                    }
+                }
+
+                .img_area {
+                    margin: 0;
+                    width: 74px;
+                    height: 74px;
+                }
+
+                .text_area {
+                    margin-left: 16px;
                 }
 
                 .details {
-                    margin-top: 24px;
+                    margin-top: 16px;
                     border-top: 1px solid var(--color-neutral-700);
-                    padding-top: 24px;
+                    padding-top: 16px;
 
                     .row {
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
+                        font-size: 14px;
+                        line-height: 22px;
+                        color: #666;
+                        margin-bottom: 12px;
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
                     }
                 }
+
+                .btn_wrapper {
+                    display: none;
+                }
+            }
+
+            .btn_area {
+                margin-top: auto;
+                padding-bottom: 32px;
             }
         }
 

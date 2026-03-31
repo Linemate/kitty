@@ -5,6 +5,7 @@ import useMobile from 'hooks/useMobile';
 import 'styles/nicepay.scss';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
+import PaymentLoading from 'components/common/PaymentLoading';
 
 const PaymentsProgressContent = () => {
     const isMobile = useMobile();
@@ -43,15 +44,7 @@ const PaymentsProgressContent = () => {
                     {/* header */}
                     <Header title={''} isDepth={false} isMobileDesc={false} isLogin={true} />
 
-                    <div className="img_area">
-                        <div className="ico progress"></div>
-                    </div>
-                    <div className="title">
-                        <h2>결제 진행 중입니다.</h2>
-                    </div>
-                    <div className="desc_area">
-                        <p>잠시만 기다려주세요!</p>
-                    </div>
+                    <PaymentLoading />
                     {/* Footer */}
                     <Footer />
                 </div>

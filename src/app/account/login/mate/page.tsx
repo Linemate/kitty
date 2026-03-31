@@ -128,7 +128,7 @@ const LoginContent = () => {
                                 <Button type="text" onclick={handleChangeMode} classnames="bg_blue wide radius_8" text={'Log in as a buddy'} />
                             </div>
                             <div className='join_area'>
-                                <div className='gray400'>Don't have an account?<span className='link' onClick={() => router.push('/account/register')}>Register</span></div>
+                                <div className='gray400'>Don&apos;t have an account?<span className='link' onClick={() => router.push('/account/register')}>Register</span></div>
                             </div>
                         </div>
                     </div>

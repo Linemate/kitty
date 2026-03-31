@@ -9,6 +9,7 @@ import { useAuthStore } from 'utils/stores';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { confirmPayments, getProgramDetailsWithToken } from 'api';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
+import PaymentLoading from 'components/common/PaymentLoading';
 
 const PaymentsSuccessContent = () => {
     const isMobile = useMobile();
@@ -76,9 +77,7 @@ const PaymentsSuccessContent = () => {
                     <Header title={''} isDepth={false} isMobileDesc={false} isLogin={userInfo !== null} />
 
                     {loading ? (
-                        <div style={{ textAlign: 'center', padding: '100px 0' }}>
-                            <p style={{ fontSize: '18px', color: 'var(--color-neutral-300)' }}>결제 처리를 확인하고 있습니다.<br />잠시만 기다려주세요...</p>
-                        </div>
+                        <PaymentLoading />
                     ) : (
                         <>
                             <div className="img_area">
@@ -86,13 +85,6 @@ const PaymentsSuccessContent = () => {
                             </div>
                             <div className="title">
                                 <h2>신청 완료</h2>
-                            </div>
-                            <div className="desc_area">
-                                <p>
-                                    결제가 정상적으로 처리되었습니다.
-                                    <br />
-                                    라인메이트에서 만나요, buddy!
-                                </p>
                             </div>
 
                             {paymentData && (
@@ -124,12 +116,13 @@ const PaymentsSuccessContent = () => {
                                     </div>
                                 </div>
                             )}
-
-                            <div>
-                                <BottomButton style={'bg_blue'} text="홈으로 돌아가기" href="/" />
-                            </div>
-                            <div className="last">
-                                <BottomButton style={'lightgray border'} text="마이 페이지로 이동" href="/mypage" />
+                            <div className='btn_area'>
+                                <div>
+                                    <BottomButton style={'bg_blue'} text="홈으로 돌아가기" href="/" />
+                                </div>
+                                <div className="last">
+                                    <BottomButton style={'lightgray border'} text="마이 페이지로 이동" href="/mypage" />
+                                </div>
                             </div>
                         </>
                     )}
