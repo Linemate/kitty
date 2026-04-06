@@ -85,10 +85,32 @@
 
     .datepicker_wrapper .btn.border,
     .sort_wrapper .btn.border {
-        padding: 6px 12px;
+        padding: 6px 8px 6px 12px;
 
         &.lightgray.arrow {
             padding: 6px 28px 6px 12px;
+        }
+
+        &.filter_selected {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            .text_elem {
+                margin-right: 6px;
+            }
+
+            .btn_reset {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                background-image: url('/assets/images/btn/btn_reset_blue.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                cursor: pointer;
+            }
         }
     }
 

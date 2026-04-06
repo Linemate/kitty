@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAuthStore } from 'utils/stores';
 import { getCookie } from 'utils/cookiesFunction';
 
-const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { closeMenu: () => void; lang: string; changeLang: (lang: string) => void; openLanguage: boolean; setOpenLanguage: (open: boolean) => void }) => {
+const Menu = ({ closeMenu }: { closeMenu: () => void }) => {
     const router = useRouter();
     const isLogin = useAuthStore.getState().userInfo?.token;
     const handleLogin = () => {
@@ -36,18 +36,6 @@ const Menu = ({ closeMenu, lang, changeLang, openLanguage, setOpenLanguage }: { 
                 </div> */}
             </div>
             <div className="menu_footer">
-                <Button type={'img text left'} classnames={`language`} text={lang === 'kr' ? 'KR' : 'EN'} onclick={() => setOpenLanguage(!openLanguage)} />
-
-                {openLanguage ? (
-                    <>
-                        <div className="options">
-                            <div onClick={() => changeLang('EN')}>EN</div>
-                            <div onClick={() => changeLang('KR')}>KR</div>
-                        </div>
-                    </>
-                ) : (
-                    ''
-                )}
             </div>
         </div>
     );
