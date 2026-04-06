@@ -70,20 +70,6 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-                {!isMobile && (
-                    <div className="right">
-                        <div className="subtitle">FOLLOW US</div>
-                        <div className="col">
-                            <ul>
-                                {contactList.map((el: contactProps) => (
-                                    <li key={el.id}>
-                                        <Button type={'img'} text={el.name} classnames={`contact ${el.value}`} onclick={() => handleContact(el.link)} />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

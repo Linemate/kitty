@@ -27,16 +27,16 @@ const CompleteContent = () => {
                     </div>
                     <div className="title">가입이 완료되었습니다!</div>
                     <div className="desc">
-                        {name}님,<br />
+                        <span className='name'>{name}</span>님,<br />
                         LINEMATE 가입을 환영합니다.
                     </div>
-                    
+
                     <div className="btn_area">
-                        <Button 
-                            type="text" 
-                            onclick={handleLogin} 
-                            classnames="bg_blue wide radius_8" 
-                            text="로그인" 
+                        <Button
+                            type="text"
+                            onclick={handleLogin}
+                            classnames="bg_blue wide radius_8"
+                            text="로그인"
                         />
                     </div>
                 </div>

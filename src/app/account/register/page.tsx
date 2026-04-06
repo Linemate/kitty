@@ -69,13 +69,13 @@ const RegisterContent = () => {
             [name]: value,
         }));
     };
-    
+
     useEffect(() => {
         getAgreements().then((data) => {
             const list = data.data;
             if (Array.isArray(list) && list.length > 0) {
                 setAgreementList(list);
-            } 
+            }
         }).catch((err) => {
             console.error('Failed to fetch agreements:', err);
             setAgreementList([]);
@@ -185,8 +185,9 @@ const RegisterContent = () => {
                 locale: values.locale,
                 consents: consents
             };
-            await postRegister(payload);
-            router.push(`/account/register/complete?email=${encodeURIComponent(values.email)}`);
+            const res = await postRegister(payload);
+            const returnedName = res?.data?.name || res?.name || '';
+            router.push(`/account/register/complete?name=${encodeURIComponent(returnedName)}`);
         } catch (err) {
             console.error('Registration failed:', err);
             alert('회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -208,7 +209,7 @@ const RegisterContent = () => {
 
     return (
         <div className="register">
-            {isMobile && <Header title="Register" isLogin={false} />}
+            <Header title="" isDepth={true} isMobileDesc={false} isLogin={false} />
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className="contents">
                     {!isMobile && <div className={`img_area ${language}`}></div>}
@@ -326,7 +327,7 @@ const RegisterContent = () => {
                                             className="agreement_row"
                                         >
                                             <div
-                                            className="checkbox_row" onClick={() => handleCheckboxChange(item.sortOrder)}>
+                                                className="checkbox_row" onClick={() => handleCheckboxChange(item.sortOrder)}>
                                                 <input
                                                     type="checkbox"
                                                     checked={checkedList.includes(item.sortOrder)}

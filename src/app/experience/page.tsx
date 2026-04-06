@@ -147,6 +147,19 @@ const ExperiencePageContent = () => {
         console.log(startDate, endDate);
     };
 
+    const handleResetDate = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setStartDate(null);
+        setEndDate(null);
+        resetAndLoad(selectedCategory, null, null, sortBy?.key || 'latest');
+    };
+
+    const handleResetSort = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setSortBy(null);
+        resetAndLoad(selectedCategory, startDate, endDate, 'latest');
+    };
+
     // M월 D일 
     const exportKoreanDate = (date: Date) => {
         const m = date.getMonth() + 1;
@@ -231,7 +244,14 @@ const ExperiencePageContent = () => {
                         <div className="filter_container">
                             {/* 날짜 선택 버튼 */}
                             <div className="datepicker_wrapper">
-                                <Button type="text" classnames={startDate && endDate ? `border blue` : `ico border lightgray arrow`} onclick={handleModalCalendar} text={startDate && endDate ? `${exportKoreanDateDot(startDate)} ~ ${exportKoreanDateDot(endDate)}` : `날짜`} />
+                                {startDate && endDate ? (
+                                    <div className="btn text border blue filter_selected" onClick={handleModalCalendar}>
+                                        <span className="text_elem">{`${exportKoreanDateDot(startDate)} ~ ${exportKoreanDateDot(endDate)}`}</span>
+                                        <span className="btn_reset" onClick={handleResetDate}></span>
+                                    </div>
+                                ) : (
+                                    <Button type="text" classnames={`ico border lightgray arrow`} onclick={handleModalCalendar} text={`날짜`} />
+                                )}
                                 {
                                     isCalendarModal && (
                                         <div className='datepicker_area'>
@@ -262,7 +282,14 @@ const ExperiencePageContent = () => {
 
                             {/* 정렬 버튼 */}
                             <div className="sort_wrapper">
-                                <Button type="text" classnames={sortBy ? `ico border blue arrow` : `ico border lightgray arrow`} onclick={() => setIsSortOpen(true)} text={sortBy?.label ? sortBy.label : `정렬`} />
+                                {sortBy ? (
+                                    <div className="btn text border blue filter_selected" onClick={() => setIsSortOpen(true)}>
+                                        <span className="text_elem">{sortBy?.label}</span>
+                                        <span className="btn_reset" onClick={handleResetSort}></span>
+                                    </div>
+                                ) : (
+                                    <Button type="text" classnames={`ico border lightgray arrow`} onclick={() => setIsSortOpen(true)} text={`정렬`} />
+                                )}
                                 {isSortOpen && (
                                     <ModalPortal title="정렬" type="sorting" closePortal={() => setIsSortOpen(false)}>
                                         <div className='select_wrap'>

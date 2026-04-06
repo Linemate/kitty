@@ -12,15 +12,9 @@ import { getCookie } from 'utils/cookiesFunction';
 
 const Header = (props: headerProps) => {
     const { title, isDepth, isMobileDesc, btns, isLogin } = props;
-    const [openLanguage, setOpenLanguage] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const isMobile = useMobile();
     const router = useRouter();
-    const language = useLanguage((state) => state.language);
-    const setLanguage = useLanguage((state) => state.setLanguage);
-    const changeLang = (lang: string) => {
-        console.log('dddd');
-    };
     // 홈으로
     const viewHomePage = () => {
         router.push('/');
@@ -75,23 +69,12 @@ const Header = (props: headerProps) => {
                         <Nav />
                     </div>
                     <div className="header_right">
-                        <Button type={'img text left'} classnames={`language`} text={language === 'kr' ? 'KR' : 'EN'} onclick={() => setOpenLanguage(!openLanguage)} />
                         {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
                         <div style={{ display: 'none' }}>
                             <Button type={'img'} classnames={'like'} text={'찜한 목록으로'} onclick={viewLikeList} />
                         </div>
                         {isMobile ? <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={handleOpenMenu} /> : isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />}
-                        {openLanguage ? (
-                            <>
-                                <div className="options">
-                                    <div onClick={() => changeLang('EN')}>EN</div>
-                                    <div onClick={() => changeLang('KR')}>KR</div>
-                                </div>
-                            </>
-                        ) : (
-                            ''
-                        )}
-                        {isOpen ? <Menu closeMenu={handleCloseMenu} lang={language} changeLang={changeLang} openLanguage={openLanguage} setOpenLanguage={setOpenLanguage} /> : ''}
+                        {isOpen ? <Menu closeMenu={handleCloseMenu} /> : ''}
                     </div>
                 </div>
             )}
