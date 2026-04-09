@@ -267,6 +267,23 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         handleModalCalendar(false);
     };
 
+    const getShareDescription = () => {
+        let loc = program.station || '';
+        if (loc.split(' ').length > 2) {
+            loc = loc.split(' ').slice(0, 2).join(' ');
+        }
+        let dateStr = '';
+        const targetDate = selectedDate || (availableDates.length > 0 ? availableDates[0] : null);
+        if (targetDate) {
+            const month = targetDate.getMonth() + 1;
+            const date = targetDate.getDate();
+            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            const day = dayNames[targetDate.getDay()];
+            dateStr = `, ${month}월 ${date}일(${day})`;
+        }
+        return `${loc}${dateStr}`;
+    };
+
     // 공유하기
     const viewSharePopup = () => {
         setIsSharePopup(true);
@@ -609,23 +626,9 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                     <div className="contents_introduce tab_body">
                                         <DetailContent html={htmlBody} />
                                     </div>
-                                    {/* Offerings */}
-                                    <div className="contents_offerings tab_body">
-                                        <div className="title">Offerings</div>
-                                        <div className='contents'>
-                                            {program.amenities}
-                                        </div>
-                                    </div>
-                                    {/* Materials */}
-                                    <div className="contents_materials tab_body">
-                                        <div className="title">Materials</div>
-                                        <div className='contents'>
-                                            {program.requiredItems}
-                                        </div>
-                                    </div>
                                     {/* place */}
                                     <div className="contents_place tab_body">
-                                        <div className="title">Location</div>
+                                        <div className="title">Place</div>
                                         <div className="contents">
                                             {/* 지도 영역 */}
                                             <div className="map_area">
@@ -752,10 +755,10 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                 <ModalPortal title={'Share'} type={'share'} closePortal={closeSharePopup}>
                     <div>
                         <ul>
-                            <li onClick={() => shareProgram('kakao', program, completedShare, failedShare)}>
+                            <li onClick={() => shareProgram('kakao', program, completedShare, failedShare, getShareDescription())}>
                                 <div className="ico kakao">Kakaotalk</div>
                             </li>
-                            <li onClick={() => shareProgram('facebook', program, completedShare, failedShare)}>
+                            <li onClick={() => shareProgram('facebook', program, completedShare, failedShare, getShareDescription())}>
                                 <div className="ico facebook">Facebook</div>
                             </li>
                             <li onClick={() => shareProgram('copylink', program, completedShare, failedShare)}>

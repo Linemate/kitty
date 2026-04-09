@@ -8,12 +8,12 @@ import React, { useRef, useState } from 'react';
 import { useAuthStore } from 'utils/stores';
 import { initPopup } from 'components/Portal/PopupPortal';
 
-const AddQna = ({id, setPopup, onSuccess, closePortal} : {id : string, setPopup: Function, onSuccess: Function, closePortal:Function} ) => {
+const AddQna = ({ id, setPopup, onSuccess, closePortal }: { id: string, setPopup: Function, onSuccess: Function, closePortal: Function }) => {
     const [isSecret, setIsSecret] = useState<boolean>(false);
     const [qnaContent, setQnaContent] = useState<string>('');
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
     const setUserInfo = useAuthStore.getState().setUserInfo;
-    
+
     const inputRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     // 토큰 재발급
@@ -25,13 +25,13 @@ const AddQna = ({id, setPopup, onSuccess, closePortal} : {id : string, setPopup:
             if (userInfo) {
                 const res = await refreshToken(userInfo.id, userInfo.refreshToken);
                 const data = res.data;
-                setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
+                setUserInfo({ ...userInfo, token: data.token, refreshToken: data.refreshToken });
             } else {
                 alert('로그인이 필요해요.');
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
                 return;
             }
-        } catch(err) {
+        } catch (err) {
             console.log(err);
         }
     };
@@ -39,7 +39,7 @@ const AddQna = ({id, setPopup, onSuccess, closePortal} : {id : string, setPopup:
     // submit
     const handleSubmit = async () => {
         try {
-            const res = await postInquiry(id, { title: '문의하기', content: qnaContent, isSecret: isSecret });
+            const res = await postInquiry(id, { content: qnaContent, isSecret: isSecret });
             if (res.code === 200) {
                 setPopup({
                     show: true,
@@ -80,7 +80,7 @@ const AddQna = ({id, setPopup, onSuccess, closePortal} : {id : string, setPopup:
             });
         }
     };
-    
+
     // qna 문의하기
     const handleInput = () => {
         if (inputRef.current) {
@@ -98,25 +98,25 @@ const AddQna = ({id, setPopup, onSuccess, closePortal} : {id : string, setPopup:
     return (
         <>
             <ModalPortal type='qna' title={'문의 작성하기'} closePortal={closePortal}>
-                    <div>
-                        <div className="input_area">
-                            <div ref={inputRef} className={`input_textbox`} contentEditable onInput={handleInput}></div>
-                            {qnaContent.trim().length === 0 && <span className="placeholder">문의 내용을 입력해주세요.</span>}
-                        </div>
-                        <div className="input_checkbox">
-                            <label>
-                                <input type="checkbox" onChange={handlePrivateToggle} />
-                                <span className={`ico checkbox square ${isSecret ? 'checked' : 'default'}`}></span>
-                                <span className="text">Private</span>
-                            </label>
-                        </div>
-                        <div className="infobox">
-                            <div className="ico info">You can check the response to your inquiry on the program detail page.</div>
-                        </div>
-                        <div className="btn_area">
-                            <Button type={'text'} onclick={handleSubmit} text={'Submit'} classnames={`${isButtonEnabled ? 'bg_blue' : 'bg_gray'} submit`} />
-                        </div>
+                <div>
+                    <div className="input_area">
+                        <div ref={inputRef} className={`input_textbox`} contentEditable onInput={handleInput}></div>
+                        {qnaContent.trim().length === 0 && <span className="placeholder">문의 내용을 입력해주세요.</span>}
                     </div>
+                    <div className="input_checkbox">
+                        <label>
+                            <input type="checkbox" onChange={handlePrivateToggle} />
+                            <span className={`ico checkbox square ${isSecret ? 'checked' : 'default'}`}></span>
+                            <span className="text">Private</span>
+                        </label>
+                    </div>
+                    <div className="infobox">
+                        <div className="ico info">You can check the response to your inquiry on the program detail page.</div>
+                    </div>
+                    <div className="btn_area">
+                        <Button type={'text'} onclick={handleSubmit} text={'Submit'} classnames={`${isButtonEnabled ? 'bg_blue' : 'bg_gray'} submit`} />
+                    </div>
+                </div>
 
             </ModalPortal>
         </>

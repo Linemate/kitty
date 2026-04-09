@@ -25,14 +25,6 @@ export type programSummaryWrapProps = {
     program: programSummaryProps;
 };
 
-export type bannerProps = {
-    id: number;
-    clickCnt: number;
-    image: imageProps;
-    createdAt: string;
-    updatedAt: SVGStringList;
-};
-
 export type programSummaryProps = {
     id: number;
     mateId: number;
@@ -46,7 +38,7 @@ export type programSummaryProps = {
     likesCount: number;
     reservationDate: string;
     banner?: bannerProps[];
-    category:string;
+    category: string;
 };
 
 export type programCompProps = {
@@ -76,7 +68,7 @@ export type programProps = {
     thumbnail: string;
     xcoordinate: number;
     ycoordinate: number;
-    amenities:string;
+    amenities: string;
     requiredItems: string;
 };
 
@@ -103,12 +95,6 @@ export type headerProps = {
     isMobileDesc?: boolean;
     btns?: ReactNode;
     isLogin: boolean;
-};
-
-export type keyVisualProps = {
-    onlyBg?: boolean;
-    src?: string;
-    children: ReactElement;
 };
 
 export type imageProps = {
@@ -164,16 +150,16 @@ export type popupProps = {
 };
 
 export type programInMypageProps = {
-    label?:string;
+    label?: string;
     reservation: reservationHistoryProps;
     type?: string;
     children?: ReactElement;
 };
 
 export type reviewItemProps = {
-    isMy:boolean; 
+    isMy: boolean;
     // 내가 작성한 리뷰일 때 수정, 삭제 함수 전달
-    handleDelete?: (id: number, programId:number) => void;
+    handleDelete?: (id: number, programId: number) => void;
 
     id: number;
     programId: number;
@@ -293,7 +279,7 @@ export type qnaItemProps = {
     id: number;
     buddy: buddyProps;
     title: string;
-    content?: string; 
+    content?: string;
     answer: {
         id: number;
         email: string;
@@ -319,8 +305,8 @@ export type qnaItemProps = {
 export type responsePaymentProps = {
     reservationId: number;
     orderId: string;
-    amount:number;
-    scheduleId:number;
+    amount: number;
+    scheduleId: number;
 };
 
 export type confirmPaymentProps = {
@@ -332,15 +318,14 @@ export type confirmPaymentProps = {
 
 // 프로그램 문의하기
 export type inquiryProps = {
-    title: string;
     content: string;
     isSecret: boolean;
 };
 
 // 프로그램 예약 취소
 export type cancelProps = {
-    programId:string;
-    reservationId:string;
+    programId: string;
+    reservationId: string;
     reason: {
         reasonCodeId: number;
         reasonDetail: string;
@@ -350,9 +335,9 @@ export type cancelProps = {
 // 프로그램 예약 취소 사유 옵션
 export type cancelReasonProps = {
     id: number;
-    code:string;
-    sortOrder:number;
-    label:string;
+    code: string;
+    sortOrder: number;
+    label: string;
 }
 
 // 프로그램 신청내역 조회
@@ -363,8 +348,8 @@ export type reservationHistoryProps = {
     startDate: string;
     createdAt: string;
     updatedAt: string;
-    programId?:number;
-    reservationId?:number;
+    programId?: number;
+    reservationId?: number;
     thumbnail?: string;
     station?: string;
     title?: string;
@@ -404,12 +389,12 @@ export type reservationHiddenInfoProps = {
 // 결제 내역 
 export type paymentHistoryProps = {
     id: number;
-    status:string;
+    status: string;
     orderId: string;
     totalAmount: number;
-    label:string;
+    label: string;
     reservation: reservationHistoryProps;
-    method:string;
+    method: string;
 }
 
 // 공지사항 목록
@@ -436,12 +421,12 @@ export type addReviewBodyProps = {
 
 // 약관 동의 항목
 export type AgreementProps = {
-    code:string;
-    name:string;
-    content:string;
-    required:boolean;
-    version:string;
-    sortOrder:number;
+    code: string;
+    name: string;
+    content: string;
+    required: boolean;
+    version: string;
+    sortOrder: number;
 };
 
 // 회원가입
@@ -449,7 +434,7 @@ export type registerProps = {
     email: string;
     password: string;
     locale: string;
-    consents : {
+    consents: {
         type: string;
         agreed: boolean;
     }[]
@@ -458,4 +443,11 @@ export type registerProps = {
 export type sortOptionProps = {
     key: string;
     label: string;
+}
+
+// 배너
+export type bannerProps = {
+    id: number;
+    clickCnt: number;
+    image: imageProps;
 }

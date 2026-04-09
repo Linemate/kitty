@@ -88,7 +88,7 @@ const ExperiencePageContent = () => {
                 rangeFilters = `startDate:${startStr}~${endStr}`;
             }
 
-            const res = await getPrograms(category || undefined, page, size, rangeFilters, sort, filter || undefined);
+            const res = await getPrograms(page, size, rangeFilters, sort, filter || undefined);
             const data = res.data;
             const list = data.list || [];
 

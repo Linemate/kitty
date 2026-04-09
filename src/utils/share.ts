@@ -1,8 +1,9 @@
 import { programProps } from '@/types/types';
 
 // 공유하기
-export const shareProgram = async (str: string, program:programProps, completedShare:any, failedShare:any) => {
-    const url = 'https://www.linemate.kr/program/' + program.id;
+export const shareProgram = async (str: string, program: programProps, completedShare: any, failedShare: any, customDesc?: string) => {
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.linemate.kr';
+    const url = baseUrl + '/program/' + program.id;
     try {
         if (str === 'kakao') {
             const win: any = window as any;
@@ -14,7 +15,7 @@ export const shareProgram = async (str: string, program:programProps, completedS
                         objectType: 'feed',
                         content: {
                             title: program.title,
-                            description: program.title,
+                            description: customDesc || program.title,
                             imageUrl: program.thumbnail,
                             link: {
                                 mobileWebUrl: url,
@@ -23,11 +24,11 @@ export const shareProgram = async (str: string, program:programProps, completedS
                         },
                         buttons: [
                             {
-                            title: '라인메이트에서 보기', 
-                            link: {
-                                mobileWebUrl: url,
-                                webUrl: url
-                            },
+                                title: '라인메이트에서 보기',
+                                link: {
+                                    mobileWebUrl: url,
+                                    webUrl: url
+                                },
                             },
                         ],
                     });

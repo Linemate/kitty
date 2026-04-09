@@ -9,8 +9,8 @@ import 'styles/home.scss';
 import { TextButtonWithIcon } from 'components/common/Button';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
-import { getCategories, getCollectionDetails, getCollections, refreshToken } from 'api';
-import { categoryProps, collectionsProps, programSummaryProps } from 'types/types';
+import { getBanners, getCategories, getCollectionDetails, getCollections, refreshToken } from 'api';
+import { bannerProps, categoryProps, collectionsProps, programSummaryProps } from 'types/types';
 import SimpleProgram from 'components/Program/SimpleProgram';
 import useMobile from 'hooks/useMobile';
 import { clearDuplicateCookies } from 'utils/clearDuplicateCookies';
@@ -18,6 +18,8 @@ import { parseCookies } from 'nookies';
 import { useAuthStore } from 'utils/stores';
 
 const Main = () => {
+    // 배너
+    const [banners, setBanners] = useState<bannerProps[] | null>(null);
     // 카테고리
     const [categories, setCategories] = useState<categoryProps[]>([]);
     const [list, setList] = useState<collectionsProps[]>([]);
@@ -28,12 +30,18 @@ const Main = () => {
     const clearToken = useAuthStore.getState().clearToken;
     const isMobile = useMobile();
     const router = useRouter();
-    const viewMorePage = () => {
-        router.push(`/more`);
-    };
     const viewCollectionPage = (collectionId: number) => {
         router.push(`/collection/${collectionId}`);
     };
+
+    // 메인화면 배너 전체조회
+    const loadBanners = useCallback(async () => {
+        try {
+            const data = await getBanners();
+            const list = data.data;
+            setBanners(list);
+        } catch (err) { console.log(err) }
+    }, []);
 
     // 카테고리 조회
     const loadAllCategories = useCallback(async () => {
@@ -99,6 +107,10 @@ const Main = () => {
     }, []);
 
     useEffect(() => {
+        loadBanners();
+    }, [loadBanners]);
+
+    useEffect(() => {
         loadAllCollections();
     }, [loadAllCollections]);
 
@@ -112,13 +124,7 @@ const Main = () => {
                 {/* Header */}
                 <Header title={'라인메이트 메인'} isLogin={isLogin} />
                 {/* Key visual */}
-                <KeyVisual>
-                    <div className="txt_area">
-                        <div className="title">DON’T BE A TRAVELER, BE A LOCAL</div>
-                        <p>Let’s share experience together in Linemate</p>
-                        <TextButtonWithIcon classnames="right more" type="text" onclick={viewMorePage} text={'See More'} />
-                    </div>
-                </KeyVisual>
+                <KeyVisual banners={banners} />
 
                 {/* Contents */}
                 <div className="contents">

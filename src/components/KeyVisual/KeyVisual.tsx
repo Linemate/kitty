@@ -1,25 +1,50 @@
-'use client'
-import React, { ReactElement } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import React, { useState } from 'react';
 import 'styles/keyVisual.scss'
-import { TextButtonWithIcon } from 'components/common/Button';
 import { useRouter } from 'next/navigation';
-import { keyVisualProps } from 'types/types';
+import { bannerProps } from '@/types/types';
 
-const KeyVisual = (props:keyVisualProps) => {
+interface KeyVisualProps {
+    banners: bannerProps[] | null;
+}
+
+const KeyVisual = ({ banners }: KeyVisualProps) => {
     const router = useRouter();
-    const viewMorePage = () => {
-        router.push('');
-    }
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: false,
+        swipe: true,
+        afterChange: (current: number) => setCurrentSlide(current),
+    };
+
     return (
         <div className='key_visual_wrapper'>
-            {
-                props.onlyBg ? 
-                <img src={props.src} alt='key visual' /> : <div className='bg'>
-                    <div className='inner'>
-                        {props.children}
+            {banners && banners.length > 0 ? (
+                <div className="slider_container">
+                    <Slider {...settings}>
+                        {banners.map((banner) => (
+                            <div key={banner.id} onClick={() => router.push('')} className="bg slide_bg">
+                                <img src={banner.image?.url || ''} alt={`banner ${banner.id}`} />
+                            </div>
+                        ))}
+                    </Slider>
+                    <div className="pagination">
+                        {currentSlide + 1} / {banners.length}
                     </div>
                 </div>
-            }
+            ) : (
+                <div className='bg'></div>
+            )}
         </div>
     );
 };

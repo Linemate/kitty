@@ -122,13 +122,10 @@ export const getCategories = async () => {
 };
 
 // 프로그램 전체
-export const getPrograms = async (category?: string, pageNum?: number, size?: number, rangeFilters?: string, sort?: string, filter?: string) => {
+export const getPrograms = async (pageNum?: number, size?: number, rangeFilters?: string, sort?: string, filter?: string) => {
     let url = `/programs`;
     const params: string[] = [];
 
-    if (category) {
-        params.push(`category=${category}`);
-    }
     if (pageNum !== undefined) {
         params.push(`page=${pageNum}`);
     }
@@ -387,3 +384,9 @@ export const getLanguages = async () => {
     const res = await commonApi.get(`/languages`);
     return res.data;
 };
+
+// 메인화면 배너 전체조회
+export const getBanners = async () => {
+    const res = await publicApi.get(`/advertisement/banners`);
+    return res.data;
+}

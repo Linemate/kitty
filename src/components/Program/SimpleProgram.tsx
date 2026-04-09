@@ -3,7 +3,7 @@ import ModalPortal from 'components/Portal/ModalPortal';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { bannerProps, popupProps, programSummaryWrapProps } from 'types/types';
+import { popupProps, programSummaryWrapProps } from 'types/types';
 import 'styles/program.scss';
 import { postProgramLike } from 'api';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
