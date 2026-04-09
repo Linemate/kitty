@@ -173,8 +173,6 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     // 추천 프로그램
     const [recommendPrograms, setRecommendPrograms] = useState<programProps[]>([]);
 
-    // 스크롤 Y값
-    const [sctop, setSctop] = useState<number>(0);
     const [isFixedBottom, setIsFixedBottom] = useState<boolean>(false);
     const [htmlBody, setHtmlBody] = useState<string>('');
 
@@ -477,7 +475,6 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         // scroll
         const handleScroll = () => {
             const scrollY = window.scrollY;
-            setSctop(scrollY);
             if (btnReservationRef.current) {
                 const btnReservation = btnReservationRef.current.getBoundingClientRect();
                 setIsFixedBottom(btnReservation.y + btnReservation.height < 0);
@@ -520,20 +517,28 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     }, []);
 
     useEffect(() => {
-        if (program.htmlFilePath !== '') {
-            fetch(program.htmlFilePath)
-                .then((res) => res.text())
-                .then((html) => {
-                    // body 내용만 추출
-                    const bodyContent = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] || '';
-                    setHtmlBody(bodyContent);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setHtmlBody('');
-                });
+        const path = program.htmlFilePath;
+        if (!path) {
+            setHtmlBody('');
+            return;
         }
-    }, [program]);
+        let cancelled = false;
+        fetch(path)
+            .then((res) => res.text())
+            .then((html) => {
+                if (cancelled) return;
+                const bodyContent = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] || '';
+                setHtmlBody(bodyContent);
+            })
+            .catch((err) => {
+                if (cancelled) return;
+                console.log(err);
+                setHtmlBody('');
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, [program.htmlFilePath]);
 
     if (error) {
         return (
