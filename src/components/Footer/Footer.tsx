@@ -57,16 +57,14 @@ const Footer = () => {
                     <div className="logo">LINEMATE</div>
                     <div className="txt">
                         <div className="top">
-                            <div className="row">상호명 : 라인메이트</div>
-                            <div className="row">대표자명 : 장원준</div>
-                            <div className="row">사업자등록번호 : 596-42-00909</div>
-                            <div className="row">사업장 주소 : 서울특별시 마포구 신촌로2안길 12 건물내부 지하1층</div>
-                            <div className='row'>유선번호 : 0507-1357-6997</div>
-                            <div className="row">통신판매업신고번호 : 2025-서울마포-0484</div>
+                            <div className="row">CEO | Won jun Jang</div>
+                            <div className="row">Business Registration Number | 596-42-00909</div>
+                            <div className="row">ADDRESS | B02, B1F, 12, Sinchon-ro 2an-gil, Mapo-gu, Seoul, Korea</div>
+                            <div className="row">Mail-order Business Report Number | 2025-서울마포-0484</div>
                         </div>
                         <div className="bottom">
-                            <a href="https://policy.linemate.kr/service.html#tos" target='_blank'>이용약관</a>
-                            <a href="https://policy.linemate.kr/service.html#privacy" target='_blank'>개인정보 처리방침</a>
+                            <a href="https://policy.linemate.kr/service.html#tos" target='_blank'>Terms of Service</a>
+                            <a href="https://policy.linemate.kr/service.html#privacy" target='_blank'>Privacy Policy</a>
                         </div>
                     </div>
                 </div>

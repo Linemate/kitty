@@ -39,29 +39,26 @@ const MypageHeader = ({ buddyInfo }: { buddyInfo: buddyProfileProps | null }) =>
                                 buddyInfo ?
                                     <>
                                         <h3 className="user_name">{buddyInfo.name}</h3>
-                                        <div className="join_date">{formatDate(buddyInfo.createdAt)} JOIN</div>
+                                        <div className="edit_profile" onClick={handleEditProfile}>Edit Profile</div>
                                     </>
                                     :
                                     ''
                             }
                         </div>
-                        {
-                            isMobile ? <><Button type={'text'} classnames={'wide border lightgray'} text={'프로필 수정'} onclick={handleEditProfile} /></> : ''
-                        }
-                        <div className="btns_area">
-                            <ul>
-                                <li>
-                                    <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('all')} text={'My Events'} />
-                                </li>
-                                <li>
-                                    <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />
-                                </li>
-                                <li>
-                                    <TextButtonWithIcon type="text" classnames="top review" onclick={() => viewPage('review')} text={'Review'} />
-                                </li>
-                            </ul>
-                        </div>
                     </div>
+                </div>
+                <div className="btns_area">
+                    <ul>
+                        <li>
+                            <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('all')} text={'My Events'} />
+                        </li>
+                        <li>
+                            <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />
+                        </li>
+                        <li>
+                            <TextButtonWithIcon type="text" classnames="top review" onclick={() => viewPage('review')} text={'Review'} />
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
