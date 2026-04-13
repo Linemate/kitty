@@ -120,13 +120,13 @@ const LoginContent = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="gray500">Forgot Password?</div>
+                            {/* <div className="gray500">Forgot Password?</div> */}
                             <div className="btn_area">
                                 <Button type="text" onclick={handleLogin} classnames="bg_blue wide radius_8" text={'Login'} />
                             </div>
-                            <div className='btn_area'>
+                            {/* <div className='btn_area'>
                                 <Button type="text" onclick={handleChangeMode} classnames="underlined gray" text={'Log in as a host'} />
-                            </div>
+                            </div> */}
                             <div className='join_area'>
                                 <div className='gray400'>Don&apos;t have an account?<span className='link' onClick={() => router.push('/account/register')}>Register</span></div>
                             </div>

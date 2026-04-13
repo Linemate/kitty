@@ -1,3 +1,4 @@
+'use client';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -24,6 +25,8 @@ const KeyVisual = ({ banners }: KeyVisualProps) => {
         autoplaySpeed: 3000,
         arrows: false,
         swipe: true,
+        pauseOnHover: false,
+        pauseOnFocus: false,
         afterChange: (current: number) => setCurrentSlide(current),
     };
 
