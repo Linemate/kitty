@@ -235,20 +235,41 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
 
             let dateText = '';
             if (selectedTime.reservationDate) {
-                const date = new Date(selectedTime.reservationDate);
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
+                // Ensure timezone-safe parsing by manually splitting
+                const dateStrParts = selectedTime.reservationDate.split('T')[0].split('-');
+                const year = dateStrParts[0];
+                const month = dateStrParts[1];
+                const day = dateStrParts[2];
+                const dateObj = new Date(Number(year), Number(month) - 1, Number(day));
                 const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-                const dayName = dayNames[date.getDay()];
+                const dayName = dayNames[dateObj.getDay()];
 
                 let ampm = '';
+                let startFormatted = '';
+
+                const extractTime = (t: string) => {
+                    let str = t;
+                    if (str.includes('T')) str = str.split('T')[1];
+                    else if (str.includes(' ')) str = str.split(' ')[1];
+                    return str;
+                };
+
                 if (selectedTime.startDate) {
-                    const [hour] = selectedTime.startDate.split(':');
-                    ampm = Number(hour) >= 12 ? '오후' : '오전';
+                    const [hour, minute] = extractTime(selectedTime.startDate).split(':');
+                    const h = Number(hour);
+                    ampm = h >= 12 ? '오후' : '오전';
+                    const displayHour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+                    startFormatted = `${String(displayHour).padStart(2, '0')}:${minute}`;
                 }
-                const startFormatted = selectedTime.startDate ? selectedTime.startDate.substring(0, 5) : '';
-                const endFormatted = selectedTime.endDate ? `~${selectedTime.endDate.substring(0, 5)}` : '';
+
+                let endFormatted = '';
+                if (selectedTime.endDate) {
+                    const [hour, minute] = extractTime(selectedTime.endDate).split(':');
+                    const h = Number(hour);
+                    // Usually if start is afternoon and end is afternoon, we just show ~05:00
+                    const displayHour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+                    endFormatted = `~${String(displayHour).padStart(2, '0')}:${minute}`;
+                }
 
                 dateText = `${year}.${month}.${day}(${dayName}) ${ampm} ${startFormatted}${endFormatted}`.trim();
             }
@@ -258,7 +279,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
             console.log(err);
             alert((err as any).response?.data?.message || '오류가 발생했습니다.');
         }
-    }, [programId, program.price, router, selectedTime.id]);
+    }, [programId, program.price, router, selectedTime]);
 
     const chooseTime = (time: scheduleProps) => {
         setSelectedTime(time);
@@ -730,11 +751,6 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                                 {selectedTime && selectedTime.reservationDate ? formatReservationDate(selectedTime.reservationDate) : ''}
                                             </div>
                                         </div>
-                                    </div>
-                                )}
-                                {isMobile && (
-                                    <div className='program_date'>
-                                        {selectedTime && selectedTime.reservationDate ? formatReservationDate(selectedTime.reservationDate) : ''}
                                     </div>
                                 )}
                                 <div className="btn_area">

@@ -1,6 +1,5 @@
 'use client';
 import { getProgramDetailsWithToken, requestPayments, getCustomForm } from 'api';
-import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -22,7 +21,11 @@ const BeforePayment = () => {
     const [readyToPay, setReadyToPay] = useState<boolean>(false);
 
     // check icon
-    const [isChecked, setIsChecked] = useState<boolean>(false);
+    const [isChecked, setIsChecked] = useState<boolean>(true); // default to true since "위 내용을 확인했습니다" is usually checked or requires check, but since we add form we might want it true or keep false
+
+    // custom form answers
+    const [formAnswers, setFormAnswers] = useState<Record<string, string>>({});
+    const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
     const { id } = useParams();
     const searchParams = useSearchParams();
@@ -48,7 +51,7 @@ const BeforePayment = () => {
             setCustomFormData(customRes.data);
 
             if (!customRes.data || (Array.isArray(customRes.data) && customRes.data.length === 0)) {
-                setIsChecked(true);
+                setIsChecked(true); // Auto check if no custom form, though it's typically user click. We'll leave it as isChecked logic
             } else {
                 setIsChecked(false);
             }
@@ -65,8 +68,8 @@ const BeforePayment = () => {
     }, [loadData]);
 
     const handlePayment = async () => {
-        if (!isChecked) {
-            alert('확인사항에 동의해주세요.');
+        if (!isFormValid) {
+            alert('필수 입력값을 올바르게 입력해주세요.');
             return;
         }
         try {
@@ -93,17 +96,46 @@ const BeforePayment = () => {
         setReadyToPay(false);
     };
 
-    const isBtnActive = isChecked;
+    const handleCustomFormChange = (id: string, value: string, field: any) => {
+        setFormAnswers(prev => ({ ...prev, [id]: value }));
+        if (field.validationRule && value) {
+            try {
+                const regex = new RegExp(field.validationRule);
+                if (!regex.test(value)) {
+                    setFormErrors(prev => ({ ...prev, [id]: '입력 형식이 올바르지 않습니다.' }));
+                } else {
+                    setFormErrors(prev => { const newErr = { ...prev }; delete newErr[id]; return newErr; });
+                }
+            } catch (e) {
+                setFormErrors(prev => { const newErr = { ...prev }; delete newErr[id]; return newErr; });
+            }
+        } else {
+            setFormErrors(prev => { const newErr = { ...prev }; delete newErr[id]; return newErr; });
+        }
+    };
+
+    const isFormValid = React.useMemo(() => {
+        if (!customFormData || !Array.isArray(customFormData)) return true;
+        return customFormData.every((field: any) => {
+            const val = formAnswers[field.id];
+            if (field.isRequired && (!val || val.trim() === '')) return false;
+            if (formErrors[field.id]) return false;
+            return true;
+        });
+    }, [customFormData, formAnswers, formErrors]);
+
+    // isBtnActive checks just form validity since agreement check has been decoupled
+    const isBtnActive = isFormValid;
 
     return (
         <div className="reservation_details before">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
-                <Header title={'결제 전 확인사항'} isDepth={true} isLogin={userInfo !== null} />
+                <Header title={'모임 신청'} isDepth={true} isLogin={userInfo !== null} />
                 {
                     loading ? <div className="contents"><div className="section">로딩 중...</div></div> :
                         program ?
                             <div className="contents">
-                                <div className="section">
+                                <div className="section program_info">
                                     <div className="sub_title">모임 정보</div>
                                     <div className="desc">
                                         <ProgramInMypage
@@ -128,21 +160,67 @@ const BeforePayment = () => {
                                     </div>
                                 </div>
 
-                                {customFormData && (!Array.isArray(customFormData) || customFormData.length > 0) && (
+                                {customFormData && Array.isArray(customFormData) && customFormData.length > 0 && (
                                     <div className="section">
-                                        <div className="sub_title">커스텀 폼 확인사항</div>
-                                        <div className="desc">
-                                            <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px', fontSize: '14px', whiteSpace: 'pre-wrap' }}>
-                                                {typeof customFormData === 'string' ? customFormData : JSON.stringify(customFormData, null, 2)}
-                                            </div>
+                                        <div className="desc custom_form_area">
+                                            {customFormData.map((field: any) => (
+                                                <div key={field.id} className="field_item">
+                                                    <div className="field_title">
+                                                        {field.isRequired && <span className="bold required">(필수)</span>}
+                                                        {field.fieldLabel}
+                                                    </div>
+                                                    {field.fieldType?.toLowerCase() === 'textarea' ? (
+                                                        <textarea
+                                                            placeholder={field.placeholder}
+                                                            maxLength={1000}
+                                                            className="field_textarea"
+                                                            value={formAnswers[field.id] || ''}
+                                                            onChange={(e) => handleCustomFormChange(field.id, e.target.value, field)}
+                                                        />
+                                                    ) : field.fieldType?.toLowerCase() === 'select' ? (
+                                                        <select
+                                                            className="field_select"
+                                                            value={formAnswers[field.id] || ''}
+                                                            onChange={(e) => handleCustomFormChange(field.id, e.target.value, field)}
+                                                        >
+                                                            <option value="" disabled>선택해주세요</option>
+                                                            {Array.isArray(field.options) && field.options.map((opt: any, idx: number) => {
+                                                                const val = typeof opt === 'object' ? opt.value : opt;
+                                                                const label = typeof opt === 'object' ? opt.label || opt.value : opt;
+                                                                return <option key={idx} value={val}>{label}</option>;
+                                                            })}
+                                                        </select>
+                                                    ) : (
+                                                        <input
+                                                            type="text"
+                                                            placeholder={field.placeholder}
+                                                            maxLength={1000}
+                                                            className="field_input"
+                                                            value={formAnswers[field.id] || ''}
+                                                            onChange={(e) => handleCustomFormChange(field.id, e.target.value, field)}
+                                                        />
+                                                    )}
+                                                    <div className="error_and_count">
+                                                        <div className="error_msg">
+                                                            {formErrors[field.id] && formErrors[field.id]}
+                                                        </div>
+                                                        {field.fieldType?.toLowerCase() !== 'select' && (
+                                                            <div className="char_count">
+                                                                ({(formAnswers[field.id] || '').length}/1000)
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 )}
 
                                 <div className="section price_wrap">
+                                    <div className="sub_title">결제 정보</div>
                                     <div className="calculate_price">
                                         <div className="row">
-                                            <div className="cate">결제 금액</div>
+                                            <div className="cate">상품 금액</div>
                                             <div className="price">{program.currency} {program.price?.toLocaleString()}</div>
                                         </div>
                                         <div className="row total border_top" style={{ marginTop: '16px', paddingTop: '16px' }}>
@@ -169,7 +247,7 @@ const BeforePayment = () => {
                                     <div className="section check_wrap">
                                         위 내용을 확인했으며, 이에 동의합니다.
                                     </div>
-                                    <Button type="text" onclick={handlePayment} classnames={`wide radius_8 ${isBtnActive ? 'bg_blue' : 'bg_gray'}`} text={'결제하기'} />
+                                    <Button type="text" onclick={handlePayment} classnames={`wide radius_8 ${isBtnActive ? 'bg_blue' : 'bg_gray'}`} isDisabled={!isBtnActive} text={'Register for Event'} />
                                 </div>
                             </div>
                             :

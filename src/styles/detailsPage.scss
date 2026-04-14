@@ -37,6 +37,10 @@
             .section {
                 padding-bottom: 24px;
 
+                &.program_info {
+                    padding-bottom: 0;
+                }
+
                 .sub_title {
                     font-family: 'Pretendard';
                     font-size: 14px;
@@ -139,6 +143,56 @@
                     }
                 }
 
+                .custom_form_area {
+                    .field_item {
+                        margin-bottom: 16px;
+
+                        .field_title {
+                            margin-bottom: 8px;
+                            font-size: 14px;
+                            font-weight: 500;
+
+                            .required {
+                                color: #ff6b00;
+                                margin-right: 4px;
+                            }
+                        }
+
+                        .field_input,
+                        .field_select,
+                        .field_textarea {
+                            width: 100%;
+                            padding: 12px;
+                            box-sizing: border-box;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            font-family: inherit;
+                        }
+
+                        .field_textarea {
+                            resize: vertical;
+                            min-height: 100px;
+                        }
+
+                        .error_and_count {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-start;
+                            margin-top: 4px;
+
+                            .error_msg {
+                                color: #ff4d4f;
+                                font-size: 12px;
+                            }
+
+                            .char_count {
+                                font-size: 12px;
+                                color: #999;
+                            }
+                        }
+                    }
+                }
+
                 &.price_wrap {
                     .calculate_price {
                         .row {
@@ -214,8 +268,23 @@
                 }
 
                 &.check_wrap {
-                    line-height: 24px;
-                    padding-bottom: 32px;
+                    text-align: center;
+
+                    .ico.checkbox {
+                        margin-right: 8px;
+                        display: inline-block;
+                        width: 24px;
+                        height: 24px;
+                        background-size: cover;
+
+                        &.checked {
+                            background: url('/assets/images/icon/ico_check_checked.png') no-repeat center;
+                        }
+
+                        &.default {
+                            background: url('/assets/images/icon/ico_check_default.png') no-repeat center;
+                        }
+                    }
 
                     .ico.check {
                         font-size: 13px;
@@ -310,9 +379,9 @@
             left: 0;
             right: 0;
             bottom: 0;
+            background-color: #fff;
 
             .check_wrap {
-                background-color: #fff;
                 padding: 16px 0;
                 font-size: 13px;
                 line-height: 20px;
