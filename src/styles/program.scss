@@ -488,6 +488,7 @@
         border-radius:8px;
         background-color:#fff;
         .info_of_program_title {
+            box-sizing: border-box;
             padding:16px 0;               
             display:flex;
             flex-direction: row;
@@ -573,9 +574,12 @@
                 }
             }
             .info_of_program_title {
+                width:100%;
                 padding:16px 20px;
             }
             .info_of_program_content {
+                width:100%;
+                box-sizing: border-box;
                 padding:0 20px;
             }
         }

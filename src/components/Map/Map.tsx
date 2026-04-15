@@ -1,33 +1,48 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Script from "next/script";
-
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
 const Map = ({xcoordinate, ycoordinate } : {xcoordinate :number, ycoordinate:number}) => {
   const [isLoaded, setIsLoaded] = useState(false);
-    useEffect(() => {
-      if (xcoordinate !== 0 && ycoordinate !== 0 && !isLoaded) {
-        setIsLoaded(true);
-        const initMap = () => {
-          const mapOptions = {
-            center: new naver.maps.LatLng(ycoordinate, xcoordinate),
-            zoom: 18,
-            scrollWheel: false
-          };
-    
-          new naver.maps.Map('map', mapOptions);
-        };
-        if (window.naver && window.naver.maps) {
-          initMap();
-        } else {
-          if (!isLoaded) {
-            const mapScript = document.createElement('script');
-            mapScript.onload = () => initMap();
-            mapScript.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_ID}`;
-            document.head.appendChild(mapScript);
-          }
-        }
+  useEffect(() => {
+    if (xcoordinate === 0 || ycoordinate === 0) return;
+
+    const initMap = () => {
+      const container = document.getElementById('map');
+      if (!container || !window.kakao || !window.kakao.maps) return;
+
+      const mapOptions = {
+        center: new window.kakao.maps.LatLng(ycoordinate, xcoordinate),
+        level: 3 //지도의 레벨(확대, 축소 정도)
+      };
+
+      new window.kakao.maps.Map(container, mapOptions);
+    };
+
+    if (window.kakao && window.kakao.maps) {
+      window.kakao.maps.load(() => initMap());
+    } else {
+      const scriptId = 'kakao-map-script';
+      let mapScript = document.getElementById(scriptId) as HTMLScriptElement;
+      
+      if (!mapScript) {
+        mapScript = document.createElement('script');
+        mapScript.id = scriptId;
+        // autoload=false is required when dynamically adding script
+        mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=8c165b4c60cea49d4eb2376f677fd27d&autoload=false`;
+        document.head.appendChild(mapScript);
       }
-    }, [xcoordinate, ycoordinate, isLoaded]);
+      
+      mapScript.addEventListener('load', () => {
+        if (window.kakao && window.kakao.maps) {
+          window.kakao.maps.load(() => initMap());
+        }
+      });
+    }
+  }, [xcoordinate, ycoordinate]);
     return (
         <div>
             <div id="map" style={{width:'100%', height:'200px'}}></div>

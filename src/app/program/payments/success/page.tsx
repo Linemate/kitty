@@ -73,59 +73,61 @@ const PaymentsSuccessContent = () => {
         <>
             <div className="payment">
                 <div className={`wrapper success ${isMobile ? 'mobile' : ''}`}>
-                    {/* header */}
-                    <Header title={''} isDepth={false} isMobileDesc={false} isLogin={userInfo !== null} />
+                    <div className="content_area">
+                        {/* header */}
+                        <Header title={''} isDepth={false} isMobileDesc={false} isLogin={userInfo !== null} />
 
-                    {loading ? (
-                        <PaymentLoading />
-                    ) : (
-                        <>
-                            <div className="img_area">
-                                <div className="ico success"></div>
-                            </div>
-                            <div className="title">
-                                <h2>신청 완료</h2>
-                            </div>
+                        {loading ? (
+                            <PaymentLoading />
+                        ) : (
+                            <>
+                                <div className="img_area">
+                                    <div className="ico success"></div>
+                                </div>
+                                <div className="title">
+                                    <h2>신청 완료</h2>
+                                </div>
 
-                            {paymentData && (
-                                <div className="payment_info_area">
-                                    <h3>신청 정보</h3>
-                                    <ProgramInMypage reservation={{
-                                        programId: programData?.id || Number(searchParams.get('programId') || 0),
-                                        title: programData?.title || paymentData.orderName,
-                                        thumbnail: programData?.thumbnail,
-                                        station: programData?.station,
-                                        price: paymentData.totalAmount,
-                                        currency: paymentData.currency || programData?.currency,
-                                        createdAt: paymentData.approvedAt || paymentData.requestedAt,
-                                    } as any} type="simple" />
+                                {paymentData && (
+                                    <div className="payment_info_area">
+                                        <h3>신청 정보</h3>
+                                        <ProgramInMypage reservation={{
+                                            programId: programData?.id || Number(searchParams.get('programId') || 0),
+                                            title: programData?.title || paymentData.orderName,
+                                            thumbnail: programData?.thumbnail,
+                                            station: programData?.station,
+                                            price: paymentData.totalAmount,
+                                            currency: paymentData.currency || programData?.currency,
+                                            createdAt: paymentData.approvedAt || paymentData.requestedAt,
+                                        } as any} type="simple" />
 
-                                    <div className="details">
-                                        <div className='row'>
-                                            <span>결제 일시</span>
-                                            <span>{(paymentData.approvedAt || paymentData.requestedAt || '').replace('T', ' ').substring(0, 16)}</span>
-                                        </div>
-                                        <div className='row'>
-                                            <span>결제 수단</span>
-                                            <span>{paymentData.method === 'CARD' ? '신용카드' : paymentData.method}</span>
-                                        </div>
-                                        <div className='row'>
-                                            <span>결제 금액</span>
-                                            <span>{paymentData.currency} {paymentData.totalAmount?.toLocaleString()}</span>
+                                        <div className="details">
+                                            <div className='row'>
+                                                <span>결제 일시</span>
+                                                <span>{(paymentData.approvedAt || paymentData.requestedAt || '').replace('T', ' ').substring(0, 16)}</span>
+                                            </div>
+                                            <div className='row'>
+                                                <span>결제 수단</span>
+                                                <span>{paymentData.method === 'CARD' ? '신용카드' : paymentData.method}</span>
+                                            </div>
+                                            <div className='row'>
+                                                <span>결제 금액</span>
+                                                <span>{paymentData.currency} {paymentData.totalAmount?.toLocaleString()}</span>
+                                            </div>
                                         </div>
                                     </div>
+                                )}
+                                <div className='btns_area'>
+                                    <div className="first">
+                                        <BottomButton style={'bg_blue'} text="홈으로 돌아가기" href="/" />
+                                    </div>
+                                    <div className="last">
+                                        <BottomButton style={'lightgray border'} text="마이 페이지로 이동" href="/mypage" />
+                                    </div>
                                 </div>
-                            )}
-                            <div className='btn_area'>
-                                <div>
-                                    <BottomButton style={'bg_blue'} text="홈으로 돌아가기" href="/" />
-                                </div>
-                                <div className="last">
-                                    <BottomButton style={'lightgray border'} text="마이 페이지로 이동" href="/mypage" />
-                                </div>
-                            </div>
-                        </>
-                    )}
+                            </>
+                        )}
+                    </div>
                     {/* Footer */}
                     <Footer />
                 </div>

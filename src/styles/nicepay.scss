@@ -164,9 +164,12 @@
 
         // 결제 성공 화면
         &.success {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            .content_area {
+                min-height: 100vh;
+                min-height: 100dvh;
+                display: flex;
+                flex-direction: column;
+            }
 
             .title {
                 margin-bottom: 24px;
@@ -241,6 +244,10 @@
                 }
             }
 
+            .btns_area {
+                margin-top: auto;
+            }
+
             .btn_area {
                 margin-top: auto;
                 padding-bottom: 32px;
@@ -261,14 +268,23 @@
             }
 
             &.success {
-                .btn_area {
-                    &:first-child {
-                        padding-bottom: 16px;
+                height: auto;
+
+                .content_area {
+                    min-height: 100vh;
+                    min-height: 100dvh;
+                }
+                .first {
+                    .btn_area {
+                        padding-bottom:0;
                     }
                 }
 
                 .last {
-                    padding-bottom: 7px;
+                    margin-bottom:30px;
+                    .btn_area {
+                        padding-bottom:0;
+                    }
                 }
             }
         }
