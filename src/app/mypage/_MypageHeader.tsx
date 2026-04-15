@@ -45,21 +45,42 @@ const MypageHeader = ({ buddyInfo }: { buddyInfo: buddyProfileProps | null }) =>
                                     ''
                             }
                         </div>
+                        {
+                            isMobile ?
+                            '' : 
+                            
+                                <div className="btns_area">
+                                    <ul>
+                                        <li>
+                                            <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('all')} text={'My Events'} />
+                                        </li>
+                                        <li>
+                                            <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />
+                                        </li>
+                                        <li>
+                                            <TextButtonWithIcon type="text" classnames="top review" onclick={() => viewPage('review')} text={'Review'} />
+                                        </li>
+                                    </ul>
+                                </div>
+                        }
                     </div>
                 </div>
-                <div className="btns_area">
-                    <ul>
-                        <li>
-                            <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('all')} text={'My Events'} />
-                        </li>
-                        <li>
-                            <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />
-                        </li>
-                        <li>
-                            <TextButtonWithIcon type="text" classnames="top review" onclick={() => viewPage('review')} text={'Review'} />
-                        </li>
-                    </ul>
-                </div>
+                {
+                    isMobile ? 
+                    <div className="btns_area">
+                        <ul>
+                            <li>
+                                <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('all')} text={'My Events'} />
+                            </li>
+                            <li>
+                                <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />
+                            </li>
+                            <li>
+                                <TextButtonWithIcon type="text" classnames="top review" onclick={() => viewPage('review')} text={'Review'} />
+                            </li>
+                        </ul>
+                    </div> : ''
+                }
             </div>
         </div>
     );

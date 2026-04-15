@@ -40,6 +40,7 @@ const InfoOfProgram = (props: infoOfProgramProps) => {
                         <>
                             <div className='info_of_program_content_item'>                            
                                 {/* <Map /> */}
+                                {/* <Map xcoordinate={program.xcoordinate} ycoordinate={program.ycoordinate} /> */}
                             </div>
                             <div className='info_of_program_content_item location'>
                                 <div className='info_of_program_content_item_title'>모임 장소</div>
