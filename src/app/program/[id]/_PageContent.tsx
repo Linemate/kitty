@@ -659,7 +659,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                             {/* 지도 영역 */}
                                             <div className="map_area">
                                                 <div className="map">
-                                                    <Map xcoordinate={program.xcoordinate} ycoordinate={program.ycoordinate} />
+                                                    <Map xcoordinate={program.xcoordinate} ycoordinate={program.ycoordinate} isPoint={false} />
                                                 </div>
                                                 <div className="ico location gray">{program.station}</div>
                                                 <p>자세한 위치는 예약 확정 시 마이페이지에서 확인 가능해요:)</p>

@@ -72,7 +72,7 @@ const PaymentsSuccessContent = () => {
     return (
         <>
             <div className="payment">
-                <div className={`wrapper success ${isMobile ? 'mobile' : ''}`}>
+                <div className={`wrapper ${loading ? 'progress' : 'success'} ${isMobile ? 'mobile' : ''}`}>
                     <div className="content_area">
                         {/* header */}
                         <Header title={''} isDepth={false} isMobileDesc={false} isLogin={userInfo !== null} />
