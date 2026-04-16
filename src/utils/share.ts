@@ -1,9 +1,38 @@
 import { programProps } from '@/types/types';
 
+export const updateMetaTags = (program: programProps, url: string, customDesc?: string) => {
+    if (typeof document !== 'undefined') {
+        const metaTags = [
+            { property: 'og:title', content: `${program.title} | 라인메이트` },
+            { property: 'og:description', content: customDesc || program.title },
+            { property: 'og:image', content: program.thumbnail },
+            { property: 'og:url', content: url },
+        ];
+
+        metaTags.forEach((tag) => {
+            let element = document.querySelector(`meta[property="${tag.property}"]`);
+            if (!element) {
+                element = document.createElement('meta');
+                element.setAttribute('property', tag.property);
+                document.head.appendChild(element);
+            }
+            element.setAttribute('content', tag.content || '');
+        });
+
+        if (program.title) {
+            document.title = `${program.title} | LINEMATE`;
+        }
+    }
+};
+
 // 공유하기
 export const shareProgram = async (str: string, program: programProps, completedShare: any, failedShare: any, customDesc?: string) => {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.linemate.kr';
     const url = baseUrl + '/program/' + program.id;
+
+    // meta tag og 적용
+    updateMetaTags(program, url, customDesc);
+
     try {
         if (str === 'kakao') {
             console.log(url)
