@@ -26,7 +26,7 @@ import SimpleProgram from 'components/Program/SimpleProgram';
 import Popup from 'components/Portal/Popup';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import DetailContent from './_DetailContent';
-import { shareProgram } from '@/utils/share';
+import { shareProgram, updateMetaTags } from '@/utils/share';
 
 const tabsData = [
     {
@@ -286,7 +286,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         handleModalCalendar(false);
     };
 
-    const getShareDescription = () => {
+    const getShareDescription = useCallback(() => {
         let loc = program.station || '';
         if (loc.split(' ').length > 2) {
             loc = loc.split(' ').slice(0, 2).join(' ');
@@ -301,7 +301,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
             dateStr = `, ${month}월 ${date}일(${day})`;
         }
         return `${loc}${dateStr}`;
-    };
+    }, [program, selectedDate, availableDates]);
 
     // 공유하기
     const viewSharePopup = () => {
@@ -463,6 +463,14 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         },
         [handleChangeDate, programId]
     );
+
+    useEffect(() => {
+        if (program && program.id !== 0) {
+            const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.linemate.kr';
+            const url = baseUrl + '/program/' + program.id;
+            updateMetaTags(program, url, getShareDescription());
+        }
+    }, [program, selectedDate, availableDates, getShareDescription]);
 
     // SSR 실패 시 클라이언트에서 프로그램 상세 로드
     useEffect(() => {

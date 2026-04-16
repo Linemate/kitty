@@ -1,9 +1,42 @@
 // /app/program/[id]/page.tsx (서버 컴포넌트)
 import { getProgramDetailsServer } from 'api/server';
 import PageContent from './_PageContent';
+import { Metadata } from 'next';
 import { programProps } from 'types/types';
 
-const ProgramPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const program: programProps = await getProgramDetailsServer(id);
+    const title = program?.title ? `${program.title} | LINEMATE` : 'LINEMATE';
+    const description = program?.title || 'LINEMATE';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.linemate.kr';
+    const url = `${siteUrl.replace(/\/$/, '')}/program/${id}`;
+    const image = program?.thumbnail || (program?.images && program.images.length > 0 ? program.images[0].url : '');
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        url,
+        images: image ? [{ url: image }] : undefined,
+        type: 'website',
+      },
+    };
+  } catch (err) {
+    return {
+      title: 'LINEMATE',
+    };
+  }
+}
+
+const ProgramPage = async ({ params }: Props) => {
   const { id } = await params;
   let program: programProps | null = null;
   let error: string | null = null;
