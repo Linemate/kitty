@@ -6,6 +6,7 @@ export const shareProgram = async (str: string, program: programProps, completed
     const url = baseUrl + '/program/' + program.id;
     try {
         if (str === 'kakao') {
+            console.log(url)
             const win: any = window as any;
             const { initKakao } = await import('utils/kakao');
             const initialized = await initKakao();
@@ -18,16 +19,16 @@ export const shareProgram = async (str: string, program: programProps, completed
                             description: customDesc || program.title,
                             imageUrl: program.thumbnail,
                             link: {
-                                mobileWebUrl: url,
-                                webUrl: url,
+                                mobileWebUrl: 'https://www.linemate.kr/program/' + program.id,
+                                webUrl: 'https://www.linemate.kr/program/' + program.id,
                             },
                         },
                         buttons: [
                             {
                                 title: '라인메이트에서 보기',
                                 link: {
-                                    mobileWebUrl: url,
-                                    webUrl: url
+                                    mobileWebUrl: 'https://www.linemate.kr/program/' + program.id,
+                                    webUrl: 'https://www.linemate.kr/program/' + program.id
                                 },
                             },
                         ],
