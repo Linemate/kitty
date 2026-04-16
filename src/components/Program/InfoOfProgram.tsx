@@ -17,7 +17,6 @@ const InfoOfProgram = (props: infoOfProgramProps) => {
                 const res = await getReservationHiddenInfo(programId, reservationId);
                 const data = res.data;
                 setInfoOfProgram(data);
-                console.log(res);
             } catch (error) {
                 console.log(error);
             }
@@ -40,7 +39,7 @@ const InfoOfProgram = (props: infoOfProgramProps) => {
                         <>
                             <div className='info_of_program_content_item'>                            
                                 {/* <Map /> */}
-                                {/* <Map xcoordinate={program.xcoordinate} ycoordinate={program.ycoordinate} /> */}
+                                <Map xcoordinate={infoOfProgram.xcoordinate} ycoordinate={infoOfProgram.ycoordinate} isPoint={true}/>
                             </div>
                             <div className='info_of_program_content_item location'>
                                 <div className='info_of_program_content_item_title'>모임 장소</div>
@@ -48,12 +47,16 @@ const InfoOfProgram = (props: infoOfProgramProps) => {
                                     <div className='info_of_program_content_item_content_title location gray ico'>{infoOfProgram?.address}</div>
                                 </div>
                             </div>
-                            <div className='info_of_program_content_item notice'>
-                                <div className='info_of_program_content_item_title'>공지사항</div>
-                                <div className='info_of_program_content_item_content'>
-                                    공지사항 내용블라블라
+                            {
+                                infoOfProgram.notice ? 
+                                <div className='info_of_program_content_item notice'>
+                                    <div className='info_of_program_content_item_title'>공지사항</div>
+                                    <div className='info_of_program_content_item_content'>
+                                        {infoOfProgram.notice}
+                                    </div>
                                 </div>
-                            </div>
+                             : ''
+                            }
                             <div className='info_of_program_content_item inquiry'>
                                 <div className='info_of_program_content_item_title'>
                                     <div className='ico listen'>메이트에게 문의하기</div>

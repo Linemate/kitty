@@ -119,9 +119,13 @@
   src: url('/assets/fonts/Montserrat-Black.woff') format('woff');
   font-weight: 900;
 }
-*, html, body, div, p , input, button, a, span, header, footer, aside {margin:0; padding:0;}
+*, html, body, div, p, input, button, a, span, header, footer, aside {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
-  box-sizing:border-box;
+  box-sizing: border-box;
 }
 body, h1, h2, h3, h4, h5, h6, input, textarea, div, span, i, section, article, aside, p, header, nav, footer, button {
   font-family:'Pretendard';

@@ -3,7 +3,7 @@ export const initKakao = (): Promise<boolean> => {
     return new Promise((resolve) => {
         if (typeof window === 'undefined') return resolve(false);
         const win: any = window as any;
-        const key = process.env.NEXT_PUBLIC_KAKAO_JS_KEY || process.env.NEXT_PUBLIC_KAKAO_KEY;
+        const key = '8c165b4c60cea49d4eb2376f677fd27d';
         if (!key) {
             resolve(false);
             return;

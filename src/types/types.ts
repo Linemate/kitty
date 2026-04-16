@@ -384,6 +384,9 @@ export type infoOfProgramProps = {
 export type reservationHiddenInfoProps = {
     id: number;
     address: string;
+    notice: string | null;
+    xcoordinate: number;
+    ycoordinate: number;
 }
 
 // 결제 내역 

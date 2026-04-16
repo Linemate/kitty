@@ -1,12 +1,11 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 declare global {
   interface Window {
     kakao: any;
   }
 }
-const Map = ({xcoordinate, ycoordinate } : {xcoordinate :number, ycoordinate:number}) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+const Map = ({xcoordinate, ycoordinate, isPoint } : {xcoordinate :number, ycoordinate:number, isPoint:boolean}) => {
   useEffect(() => {
     if (xcoordinate === 0 || ycoordinate === 0) return;
 
@@ -19,7 +18,28 @@ const Map = ({xcoordinate, ycoordinate } : {xcoordinate :number, ycoordinate:num
         level: 3 //지도의 레벨(확대, 축소 정도)
       };
 
-      new window.kakao.maps.Map(container, mapOptions);
+      const map = new window.kakao.maps.Map(container, mapOptions);
+      if (isPoint) {
+        var markerPosition  = new window.kakao.maps.LatLng(ycoordinate, xcoordinate); 
+        var marker = new window.kakao.maps.Marker({
+          position: markerPosition
+        });
+        marker.setMap(map);
+      } else {
+        var circle = new window.kakao.maps.Circle({
+          center : new window.kakao.maps.LatLng(ycoordinate, xcoordinate),  // 원의 중심좌표입니다 
+          radius: 100, // 미터 단위의 반지름입니다 
+          strokeWeight: 0, // 선의 두께입니다 
+          strokeColor: '#fff', // 선의 색깔입니다
+          strokeOpacity: 0, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+          strokeStyle: 'solid', // 선의 스타일 입니다
+          fillColor: '#CFE7FF', // 채우기 색깔입니다
+          fillOpacity: 0.7  // 채우기 불투명도 입니다   
+        }); 
+
+        // 지도에 원을 표시합니다 
+        circle.setMap(map);
+      }
     };
 
     if (window.kakao && window.kakao.maps) {
