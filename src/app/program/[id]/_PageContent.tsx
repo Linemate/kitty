@@ -464,14 +464,6 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         [handleChangeDate, programId]
     );
 
-    useEffect(() => {
-        if (program && program.id !== 0) {
-            const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.linemate.kr';
-            const url = baseUrl + '/program/' + program.id;
-            updateMetaTags(program, url, getShareDescription());
-        }
-    }, [program, selectedDate, availableDates, getShareDescription]);
-
     // SSR 실패 시 클라이언트에서 프로그램 상세 로드
     useEffect(() => {
         if (!initialProgram) {
