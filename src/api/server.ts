@@ -40,3 +40,25 @@ export const getProgramDetailsServer = async (id: string) => {
 	return json.data;
 };
 
+export const getProgramSchedulesServer = async (id: string, date: string) => {
+	const host = (process.env.NEXT_PUBLIC_API_HOST || '').replace(/\/$/, '');
+	if (!host) {
+		throw new Error('NEXT_PUBLIC_API_HOST is not set');
+	}
+
+	const res = await fetch(`${host}/api/v1/programs/${id}/reservation/schedules?date=${date}`, {
+		method: 'GET',
+		cache: 'no-store',
+		headers: {
+			country: 'KR',
+		},
+	});
+
+	const json = (await res.json().catch(() => null)) as any;
+	if (!res.ok || !json?.status) {
+		return null;
+	}
+
+	return json.data;
+};
+
