@@ -121,14 +121,17 @@ const RegisterContent = () => {
             alert('이메일 형식이 올바르지 않습니다.');
             return;
         }
+
         try {
             await postEmailSendCode(values.email);
             setIsCodeSent(true);
             setTimeLeft(300);
             setIsCodeVerified(false);
             alert('인증번호가 발송되었습니다.');
-        } catch (err) {
-            alert('인증번호 발송에 실패했습니다.');
+        } catch (err: any) {
+            console.error(err);
+            const errorMessage = err.response?.data?.message || '인증번호 발송에 실패했습니다.';
+            alert(errorMessage);
             setIsCodeSent(false);
         }
     };
