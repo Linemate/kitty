@@ -209,7 +209,10 @@ const RegisterContent = () => {
 
     return (
         <div className="register">
+        {
+            isMobile &&
             <Header title="" isDepth={true} isMobileDesc={false} isLogin={false} />
+        }
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className="contents">
                     {!isMobile && <div className={`img_area ${language}`}></div>}
