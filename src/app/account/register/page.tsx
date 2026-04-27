@@ -30,6 +30,8 @@ const RegisterContent = () => {
     const [timeLeft, setTimeLeft] = useState(300);
     const [isCodeVerified, setIsCodeVerified] = useState(false);
     const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [passwordConfirmError, setPasswordConfirmError] = useState('');
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -63,12 +65,54 @@ const RegisterContent = () => {
 
     const [languages, setLanguages] = useState<string[]>([]);
 
+    const validatePassword = (password: string) => {
+        if (!password) return '';
+        const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+        if (!passwordRegex.test(password)) {
+            return 'At least 8 characters, including numbers and special characters.';
+        }
+        return '';
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setValues((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setValues((prev) => {
+            const newValues = {
+                ...prev,
+                [name]: value,
+            };
+
+            // Validation logic
+            if (name === 'password') {
+                const error = validatePassword(value);
+                setPasswordError(error);
+                
+                // If confirm is already filled, check matching and complexity
+                if (newValues.passwordConfirm) {
+                    const confirmComplexityError = validatePassword(newValues.passwordConfirm);
+                    if (confirmComplexityError) {
+                        setPasswordConfirmError(confirmComplexityError);
+                    } else if (value !== newValues.passwordConfirm) {
+                        setPasswordConfirmError('Passwords do not match.');
+                    } else {
+                        setPasswordConfirmError('');
+                    }
+                }
+            }
+
+            if (name === 'passwordConfirm') {
+                const complexityError = validatePassword(value);
+                if (complexityError) {
+                    setPasswordConfirmError(complexityError);
+                } else if (value && value !== newValues.password) {
+                    setPasswordConfirmError('Passwords do not match.');
+                } else {
+                    setPasswordConfirmError('');
+                }
+            }
+
+            return newValues;
+        });
     };
 
     useEffect(() => {
@@ -166,6 +210,14 @@ const RegisterContent = () => {
         }
         if (values.password !== values.passwordConfirm) {
             alert('Passwords do not match.');
+            return;
+        }
+        if (passwordError) {
+            alert(passwordError);
+            return;
+        }
+        if (passwordConfirmError) {
+            alert(passwordConfirmError);
             return;
         }
 
@@ -288,6 +340,7 @@ const RegisterContent = () => {
                                         placeholder="Enter password"
                                         classnames=""
                                     />
+                                    {passwordError && <div className="msg" style={{ color: 'red' }}>{passwordError}</div>}
                                 </div>
 
                                 <div className="field">
@@ -299,6 +352,7 @@ const RegisterContent = () => {
                                         placeholder="Re-enter password"
                                         classnames=""
                                     />
+                                    {passwordConfirmError && <div className="msg" style={{ color: 'red' }}>{passwordConfirmError}</div>}
                                 </div>
 
                                 <div className="field">
