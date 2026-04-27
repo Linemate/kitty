@@ -298,7 +298,7 @@ const RegisterContent = () => {
                                             onclick={isCheckable && !isCodeVerified ? handleSendCode : () => { }}
                                             classnames={`${isCheckable ? isCodeSent ? 'border lightgray' : 'blue border' : 'bg_gray'} radius_8`}
                                             isDisabled={isCodeVerified && isCodeSent}
-                                            text={isCodeVerified ? 'Verified' : isCodeSent ? 'Resend' : 'Request Verification'}
+                                            text={isCodeVerified ? 'Verified' : isCodeSent ? 'Resend' : 'Send Code'}
                                         />
                                     </div>
                                     <div className={`msg ${emailError ? 'red' : ''}`}>
@@ -356,7 +356,7 @@ const RegisterContent = () => {
                                 </div>
 
                                 <div className="field">
-                                    <label>locale</label>
+                                    <label>Nationality</label>
                                     <select
                                         name="locale"
                                         value={values.locale}
