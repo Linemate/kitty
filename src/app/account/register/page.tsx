@@ -290,7 +290,7 @@ const RegisterContent = () => {
                                                 value={values.email}
                                                 handleChange={handleChange}
                                                 placeholder="Enter your email"
-                                                classnames=""
+                                                classnames={emailError ? 'red' : ''}
                                             />
                                         </div>
                                         <Button
