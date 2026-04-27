@@ -12,6 +12,7 @@ import { parseCookies } from 'nookies';
 import { getBuddyDetails, refreshToken } from 'api';
 import { buddyProfileProps } from 'types/types';
 import Toast from 'components/common/Toast';
+import { t } from "utils/i18n";
 
 const MyPage = () => {
   const router = useRouter();
@@ -41,12 +42,12 @@ const MyPage = () => {
         const data = res.data;
         setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
       } else {
-        alert('로그인이 필요해요.');
+        alert(t("로그인이 필요해요."));
         router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
       }
     } catch (err: any) {
       if (err?.status === 401) {
-        alert('로그인이 필요해요.');
+        alert(t("로그인이 필요해요."));
         router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
       }
     }
@@ -104,7 +105,7 @@ const MyPage = () => {
           </div>
           <Footer />
           {
-            from === 'cancel' && isToast && <Toast message="모임 신청이 취소되었습니다." type="success" duration={3000} />
+            from === 'cancel' && isToast && <Toast message={t("모임 신청이 취소되었습니다.")} type="success" duration={3000} />
           }
         </>
       ) : null}

@@ -6,6 +6,7 @@ import 'styles/review.scss';
 import { addReviewProps, popupProps } from 'types/types';
 import { Button } from '../common/Button';
 import PopupPortal, { initPopup } from '../Portal/PopupPortal';
+import { t } from "utils/i18n";
 
 const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => {
     const [reviewData, setReviewData] = useState<addReviewProps>({reviewId: id, title: '', content: '', score:0});
@@ -47,40 +48,40 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
             if (res && res.code === 200) {
                 setPopup({
                     show: true,
-                    children: '리뷰가 등록되었습니다.',
+                    children: t("리뷰가 등록되었습니다."),
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
                     },
-                    noText: '확인', 
+                    noText: t("확인"), 
                 });
             } else {
                 setPopup({
                     show: true,
-                    children: '리뷰 등록에 실패했습니다.',
+                    children: t("리뷰 등록에 실패했습니다."),
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
                     },
-                    noText: '확인',
+                    noText: t("확인"),
                 });
             }
         } catch(err) {
             console.log(err);
             setPopup({
                 show: true,
-                children: '리뷰 등록에 실패했습니다.',
+                children: t("리뷰 등록에 실패했습니다."),
                 type: 'alert',
                 closePortal: () => {
                     setPopup(initPopup);
                 },
-                noText: '확인',
+                noText: t("확인"),
             });
         }
     }
     return (
         <>
-            <ModalPortal type='review' title={'리뷰 작성하기'} closePortal={closePortal}>
+            <ModalPortal type='review' title={t("리뷰 작성하기")} closePortal={closePortal}>
                 <div className='add_review'>
                     <div className='review_score'>
                         {/* 별점 컴포넌트 추후 구현 예정 */}
@@ -96,7 +97,7 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                     </div>
                     <div className='review_text_area'>     
                         <textarea
-                            placeholder='리뷰 내용을 입력해주세요.'
+                            placeholder={t("리뷰 내용을 입력해주세요.")}
                             onChange={handleInput}
                             value={reviewData.content}
                             maxLength={MAX_LENGTH}
@@ -104,7 +105,7 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                         <div className='review_char_count'>{reviewData.content.length}/{MAX_LENGTH}</div>
                     </div>
                     <div className='review_btn_area'>
-                        <Button type="text" classnames={`in_modal ${reviewData.content.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleSubmit()} text="등록하기" />
+                        <Button type="text" classnames={`in_modal ${reviewData.content.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleSubmit()} text={t("등록하기")} />
                     </div>
                 </div>
             </ModalPortal>

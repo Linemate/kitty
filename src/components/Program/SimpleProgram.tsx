@@ -9,6 +9,7 @@ import { postProgramLike } from 'api';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import { useAuthStore } from 'utils/stores';
 import Popup from 'components/Portal/Popup';
+import { t } from "utils/i18n";
 
 const SimpleProgram = (props: programSummaryWrapProps) => {
     const { program } = props;
@@ -25,12 +26,12 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
             setPopup({
                 show: true,
                 type: 'login',
-                children: <div>로그인 후 이용해주세요.</div>,
+                children: <div>{t("로그인 후 이용해주세요.")}</div>,
                 closePortal: () => {
                     setPopup(initPopup);
                     router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id)}`);
                 },
-                noText: '확인',
+                noText: t("확인"),
             });
         }
     };
@@ -72,7 +73,7 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
             </div>
             {popup.show && (
                 <Popup>
-                    <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : '취소'} yesText={'삭제'} yesFunction={popup.yesFunction}>
+                    <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : t("취소")} yesText={t("삭제")} yesFunction={popup.yesFunction}>
                         {popup.children}
                     </PopupPortal>
                 </Popup>

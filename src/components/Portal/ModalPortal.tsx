@@ -5,6 +5,7 @@ import 'styles/modal.scss';
 import { Button } from 'components/common/Button';
 import { modalProps } from 'types/types';
 import useMobile from 'hooks/useMobile';
+import { t } from "utils/i18n";
 
 const ModalPortal = (props:modalProps) => {
     const isMobile = useMobile();
@@ -22,7 +23,7 @@ const ModalPortal = (props:modalProps) => {
                         <div className='title'>
                             {title}
                         </div>
-                        <Button type="img" classnames='close big' onclick={closePortal} text={'닫기'}  />
+                        <Button type="img" classnames='close big' onclick={closePortal} text={t("닫기")}  />
                     </div>
                     <div className='modal_body'>
                         {children}

@@ -2,12 +2,14 @@
 import { getReservationHistory, getReservationHistoryCount } from 'api';
 import { Button, TextButtonWithIcon } from 'components/common/Button';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
+import InfoOfProgram from 'components/Program/InfoOfProgram';
 import AddReview from 'components/Review/_Add';
 import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { reservationHistoryProps } from 'types/types';
+import { t } from "utils/i18n";
 
 const MypageContents = () => {
     const [reservationHistoryCount, setReservationHistoryCount] = useState({
@@ -16,7 +18,8 @@ const MypageContents = () => {
     });
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [tab, setTab] = useState('UPCOMING');
-    const [modal, setModal] = useState({open:false, programId:0});
+    const [modal, setModal] = useState({ open: false, programId: 0 });
+    const [isInfoOfProgram, setIsInfoOfProgram] = useState({ open: false, programId: 0, reservationId: 0 });
     const isMobile = useMobile();
     const router = useRouter();
 
@@ -59,26 +62,28 @@ const MypageContents = () => {
     };
 
     // 취소
-    const cancelProgram = (program:reservationHistoryProps) => {
+    const cancelProgram = (program: reservationHistoryProps) => {
         router.push(`/cancel/${program.programId}?reservationId=${program.reservationId}&price=${program.price}&currency=${program.currency}`)
     };
 
     // 위치 확인하기
-    const checkLocation = (id: string) => {};
+    const checkLocation = (program: reservationHistoryProps) => {
+        setIsInfoOfProgram({ open: true, programId: program.programId!, reservationId: program.reservationId! });
+    };
 
     // 리뷰 남기러 가기
     const leaveReview = (id: number) => {
         setModal({
-          open:true,
-          programId: id
+            open: true,
+            programId: id
         });
     };
 
     // 문의하기 닫기
     const closeModal = () => {
         setModal({
-          open:false,
-          programId:0
+            open: false,
+            programId: 0
         });
     }
 
@@ -114,51 +119,58 @@ const MypageContents = () => {
                 <div className="list">
                     {
                         reservationHistory.length === 0 ?
-                        <>
-                        {/* 모임 리스트가 비었을 때 */}
-                        <div className="nothing">
-                            <div className="bg">
-                                <div className="notice">
-                                    <p className="first_line">No meetings applied yet.</p>
-                                    <p>Explore Line Mate&apos;s meetings now!</p>
+                            <>
+                                {/* 모임 리스트가 비었을 때 */}
+                                <div className="nothing">
+                                    <div className="bg">
+                                        <div className="notice">
+                                            <p className="first_line">No meetings applied yet.</p>
+                                            <p>Explore Line Mate&apos;s meetings now!</p>
+                                        </div>
+                                        <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
+                                    </div>
                                 </div>
-                                <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
-                            </div>
-                        </div>
 
-                        </>
-                        :
-                        <>
-                            {
-                                reservationHistory.map((el:reservationHistoryProps, index:number) =>
-                                    <React.Fragment key={`${el.programId}-${el.reservationId}`}>
-                                        <ProgramInMypage reservation={el}>
-                                            {
-                                                el.label === '참여예정' ?
-                                                <Button type="text" classnames={`border lightgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
-                                                :
-                                                <>
-                                                    {
-                                                    el.label === '참여완료' ?
-                                                    <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!)} text="Leave Review" />
-                                                    :
-                                                    el.label === '취소요청' ?
-                                                    <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
-                                                    :
-                                                    ''
-                                                    }
-                                                </>
-                                            }
-                                        </ProgramInMypage>
-                                    </React.Fragment>
-                                )
-                            }
-                        </>
+                            </>
+                            :
+                            <>
+                                {
+                                    reservationHistory.map((el: reservationHistoryProps, index: number) =>
+                                        <React.Fragment key={`${el.programId}-${el.reservationId}`}>
+                                            <ProgramInMypage reservation={el}>
+                                                {
+                                                    el.label === "참여예정" ?
+                                                        <>
+                                                            <Button type="text" classnames={`border lightgray programs cancel`} onclick={() => cancelProgram(el)} text="Cancel" />
+
+                                                            <Button type='text' classnames={`border blue programs check_location`} onclick={() => checkLocation(el)} text='Check Location' />
+                                                        </>
+                                                        :
+                                                        <>
+                                                            {
+                                                                el.label === "참여완료" ?
+                                                                    <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!)} text="Leave Review" />
+                                                                    :
+                                                                    el.label === "취소요청" ?
+                                                                        <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
+                                                                        :
+                                                                        ''
+                                                            }
+                                                        </>
+                                                }
+                                            </ProgramInMypage>
+                                        </React.Fragment>
+                                    )
+                                }
+                            </>
                     }
 
                     {
                         // 문의하기
                         modal.open && <AddReview id={modal.programId || 0} closePortal={closeModal} />
+                    }
+                    {
+                        isInfoOfProgram.open && <InfoOfProgram handleClose={() => setIsInfoOfProgram({ ...isInfoOfProgram, open: false })} programId={isInfoOfProgram.programId} reservationId={isInfoOfProgram.reservationId} />
                     }
                     {/* Waiting */}
                     {/* <ProgramInMypage id={1} name={'MAKE A TRADITIONAL FOOD WITH KOREAN FRIENDS'} status={'waiting'} applyDate={'02.12(Mon)'} date={'2024.02.12(Mon) 1:00 PM '} location={'Gangnam Station'}>

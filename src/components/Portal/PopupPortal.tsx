@@ -4,6 +4,7 @@ import 'styles/modal.scss';
 import { Button } from 'components/common/Button';
 import Popup from './Popup';
 import { popupProps } from 'types/types';
+import { t } from "utils/i18n";
 
 export const initPopup = {
     show: false,
@@ -42,10 +43,10 @@ const PopupPortal = (props:popupProps) => {
                         {children}
                     </div>
                     <div className='popup_footer'>
-                        <div className='btn' onClick={handleClose}>{noText ? noText : '취소'}</div>
+                        <div className='btn' onClick={handleClose}>{noText ? noText : t("취소")}</div>
                         {
                             type === 'confirm' &&
-                                <div className='btn confirm' onClick={handleConfirm}>{yesText ? yesText : '확인'}</div>
+                                <div className='btn confirm' onClick={handleConfirm}>{yesText ? yesText : t("확인")}</div>
                         }
                     </div>
                 </div>

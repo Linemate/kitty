@@ -29,6 +29,7 @@ const RegisterContent = () => {
     const [code, setCode] = useState('');
     const [timeLeft, setTimeLeft] = useState(300);
     const [isCodeVerified, setIsCodeVerified] = useState(false);
+    const [emailError, setEmailError] = useState('');
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -113,12 +114,13 @@ const RegisterContent = () => {
     };
 
     const handleSendCode = async () => {
+        setEmailError('');
         if (!values.email) {
-            alert('이메일을 입력해주세요.');
+            setEmailError('Please enter your email.');
             return;
         }
         if (!values.email.includes('@')) {
-            alert('이메일 형식이 올바르지 않습니다.');
+            setEmailError('Invalid email format.');
             return;
         }
 
@@ -127,11 +129,11 @@ const RegisterContent = () => {
             setIsCodeSent(true);
             setTimeLeft(300);
             setIsCodeVerified(false);
-            alert('인증번호가 발송되었습니다.');
+            alert('Verification code has been sent.');
         } catch (err: any) {
             console.error(err);
-            const errorMessage = err.response?.data?.message || '인증번호 발송에 실패했습니다.';
-            alert(errorMessage);
+            const errorMessage = err.response?.data?.message || 'Failed to send verification code.';
+            setEmailError(errorMessage);
             setIsCodeSent(false);
         }
     };
@@ -141,7 +143,7 @@ const RegisterContent = () => {
             return;
         }
         if (timeLeft === 0) {
-            alert('인증 시간이 만료되었습니다. 다시 요청해주세요.');
+            alert('Verification time has expired. Please request again.');
             return;
         }
         try {
@@ -149,9 +151,9 @@ const RegisterContent = () => {
             setIsCodeVerified(true);
             setIsEmailChecked(true);
             setIsCheckable(true);
-            alert('인증이 완료되었습니다.');
+            alert('Verification complete.');
         } catch (err) {
-            alert('인증번호가 올바르지 않거나 오류가 발생했습니다.');
+            alert('The verification code is incorrect or an error occurred.');
             setIsCodeVerified(false);
             setIsEmailChecked(false);
         }
@@ -159,11 +161,11 @@ const RegisterContent = () => {
 
     const handleRegister = async () => {
         if (!values.email || !values.password || !values.locale) {
-            alert('필수 정보를 모두 입력해주세요.');
+            alert('Please enter all required information.');
             return;
         }
         if (values.password !== values.passwordConfirm) {
-            alert('비밀번호가 일치하지 않습니다.');
+            alert('Passwords do not match.');
             return;
         }
 
@@ -172,7 +174,7 @@ const RegisterContent = () => {
         const allRequiredChecked = requiredIds.every(id => checkedList.includes(id));
 
         if (!allRequiredChecked) {
-            alert('필수 약관에 동의해주세요.');
+            alert('Please agree to the required terms and conditions.');
             return;
         }
 
@@ -193,7 +195,7 @@ const RegisterContent = () => {
             router.push(`/account/register/complete?name=${encodeURIComponent(returnedName)}`);
         } catch (err) {
             console.error('Registration failed:', err);
-            alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+            alert('Registration failed. Please try again.');
         }
     };
 
@@ -203,6 +205,7 @@ const RegisterContent = () => {
         setIsCodeVerified(false);
         setIsCodeSent(false);
         setCode('');
+        setEmailError('');
         if (values.email.length > 0) {
             setIsCheckable(true);
         } else {
@@ -243,11 +246,11 @@ const RegisterContent = () => {
                                             onclick={isCheckable && !isCodeVerified ? handleSendCode : () => { }}
                                             classnames={`${isCheckable ? isCodeSent ? 'border lightgray' : 'blue border' : 'bg_gray'} radius_8`}
                                             isDisabled={isCodeVerified && isCodeSent}
-                                            text={isCodeVerified ? '인증 완료' : isCodeSent ? '인증 재요청' : '인증 요청'}
+                                            text={isCodeVerified ? 'Verified' : isCodeSent ? 'Resend' : 'Request Verification'}
                                         />
                                     </div>
-                                    <div className='msg'>
-                                        모임 관련 안내가 이 메일 주소로 전송됩니다.
+                                    <div className="msg" style={{ color: emailError ? 'red' : undefined }}>
+                                        {emailError || 'Notifications regarding meetings will be sent to this email address.'}
                                     </div>
                                     <div className="input_row second">
                                         <div className={`input_area ${isCodeVerified ? 'checked' : ''}`}>
@@ -256,7 +259,7 @@ const RegisterContent = () => {
                                                 name="code"
                                                 value={code}
                                                 handleChange={handleCodeChange}
-                                                placeholder="인증 번호 입력"
+                                                placeholder="Enter verification code"
                                                 classnames=""
                                             />
                                             {isCodeSent && !isCodeVerified && (
@@ -270,7 +273,7 @@ const RegisterContent = () => {
                                             onclick={!isCodeVerified && code.length > 0 ? handleVerifyCode : () => { }}
                                             classnames={`${!isCodeVerified && code.length > 0 ? 'bg_blue' : 'bg_gray'} radius_8`}
                                             isDisabled={isCodeVerified}
-                                            text="인증하기"
+                                            text="Verify"
                                         />
                                     </div>
                                 </div>
@@ -342,7 +345,7 @@ const RegisterContent = () => {
                                                 <span>
                                                     {item.name}
                                                     <span>
-                                                        {item.required ? "(필수)" : "(선택)"}
+                                                        {item.required ? "(Required)" : "(Optional)"}
                                                     </span>
                                                 </span>
                                             </div>

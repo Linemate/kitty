@@ -11,6 +11,7 @@ import { useAuthStore } from 'utils/stores';
 
 import 'styles/home.scss';
 import 'styles/experiencePage.scss';
+import { t } from "utils/i18n";
 
 const CollectionDetailsPage = () => {
     const params = useParams();
@@ -73,7 +74,7 @@ const CollectionDetailsPage = () => {
             setPageNum(returnedPage);
 
         } catch (err) {
-            console.error('컬렉션 조회 실패:', err);
+            console.error(t("컬렉션 조회 실패:"), err);
         } finally {
             loadingRef.current = false;
             setLoading(false);
@@ -115,7 +116,7 @@ const CollectionDetailsPage = () => {
                     {/* 프로그램 리스트 */}
                     <div className="section programs_list">
                         {initialLoading ? (
-                            <div className="loading_area"><p>로딩 중...</p></div>
+                            <div className="loading_area"><p>{t("로딩 중...")}</p></div>
                         ) : programs.length > 0 ? (
                             <div className={`programs_grid ${isMobile ? 'mobile' : ''}`}>
                                 {programs.map((program) => (
@@ -123,12 +124,12 @@ const CollectionDetailsPage = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="no_programs"><p>등록된 프로그램이 없습니다.</p></div>
+                            <div className="no_programs"><p>{t("등록된 프로그램이 없습니다.")}</p></div>
                         )}
 
                         {hasMore && (
                             <div ref={observerTarget} className="observer_target">
-                                {loading && <div className="loading_area"><p>리스트를 불러오는 중입니다...</p></div>}
+                                {loading && <div className="loading_area"><p>{t("리스트를 불러오는 중입니다...")}</p></div>}
                             </div>
                         )}
                     </div>

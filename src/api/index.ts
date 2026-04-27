@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps, registerProps } from 'types/types';
 import { getCookie, deleteCookie } from 'utils/cookiesFunction';
+import { t } from "utils/i18n";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`;
 
@@ -41,7 +42,7 @@ if (typeof window !== 'undefined') {
                     const token = JSON.parse(user).token;
                     config.headers.Authorization = `Bearer ${token}`;
                 } catch (err) {
-                    console.error('토큰 파싱 실패:', err);
+                    console.error(t("토큰 파싱 실패:"), err);
                 }
             }
             return config;

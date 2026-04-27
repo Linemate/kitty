@@ -10,6 +10,10 @@ import MypageSideMenu from '../_MypageSideMenu';
 import Footer from 'components/Footer/Footer';
 import { Button } from 'components/common/Button';
 import Paging from 'components/common/Paging';
+import ModalPortal from 'components/Portal/ModalPortal';
+import InfoOfProgram from 'components/Program/InfoOfProgram';
+import AddReview from 'components/Review/_Add';
+import { t } from "utils/i18n";
 
 const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
@@ -46,6 +50,34 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
         router.push('/');
     };
 
+    const [isInfoOfProgram, setIsInfoOfProgram] = useState({ open: false, programId: 0, reservationId: 0 });
+
+    const checkLocation = (el:reservationHistoryProps) => {
+        setIsInfoOfProgram({ open: true, programId: el.programId!, reservationId: el.reservationId! });
+    }
+
+    // 취소
+    const cancelProgram = (el:reservationHistoryProps) => {
+        router.push(`/cancel/${el.programId}?reservationId=${el.reservationId}&price=${0}`)
+    }
+
+    const [modal, setModal] = useState({ open: false, programId: 0 });
+
+    // 리뷰 남기기
+    const leaveReview = (id:number) => {
+        setModal({
+            open: true,
+            programId: id
+        });
+    }
+
+    const closeModal = () => {
+        setModal({
+            open: false,
+            programId: 0
+        });
+    }
+
     useEffect(() => {
         loadReservationHistory();
     }, [loadReservationHistory, tab])
@@ -79,9 +111,29 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
                                     <>
                                     {
                                         reservationHistory.map((el:reservationHistoryProps, index:number) => (
-                                            <ProgramInMypage key={index} reservation={el} />
+                                            <ProgramInMypage key={index} reservation={el}>
+                                                {
+                                                    el.label === "참여예정" ?
+                                                        <>
+                                                            <Button type="text" classnames={`border lightgray programs cancel`} onclick={() => cancelProgram(el)} text="Cancel" />
+                                                            <Button type='text' classnames={`border blue programs check_location`} onclick={() => checkLocation(el)} text='Check Location' />
+                                                        </>
+                                                        :
+                                                        <>
+                                                            {
+                                                                el.label === "참여완료" ?
+                                                                    <Button type="text" classnames={`border blue review`} onclick={() => leaveReview(el.programId!)} text="Leave Review" />
+                                                                    :
+                                                                    el.label === "취소요청" ?
+                                                                        <Button type="text" classnames={`bg_darkgray programs cancel`} onclick={() => cancelProgram(el)} text="Cancel" />
+                                                                        :
+                                                                        ''
+                                                            }
+                                                        </>
+                                                }
+                                            </ProgramInMypage>
                                         ))
-                                        }
+                                    }
                                     </>
                                 }
                             </div>
@@ -92,6 +144,18 @@ const MyAllReservationsPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null})
             </div>
             {/* Footer */}
             <Footer />
+            {
+                isInfoOfProgram.open && (
+                    <InfoOfProgram 
+                        handleClose={() => setIsInfoOfProgram({ ...isInfoOfProgram, open: false })} 
+                        programId={isInfoOfProgram.programId} 
+                        reservationId={isInfoOfProgram.reservationId} 
+                    />
+                )
+            }
+            {
+                modal.open && <AddReview id={modal.programId || 0} closePortal={closeModal} />
+            }
         </div>
     );
 };

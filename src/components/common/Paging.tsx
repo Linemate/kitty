@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from './Button';
+import { t } from "utils/i18n";
 
 const Paging = ({totalPages, page, changePage}: {totalPages: number, page: number, changePage: (num: number) => void}) => {
     // paging
@@ -30,7 +31,7 @@ const Paging = ({totalPages, page, changePage}: {totalPages: number, page: numbe
         <div className='paging'>
             <ul>
                 <li className={`${page === 0 ? 'disabled' : ''}`}>
-                    <Button type='img' classnames='prev' onclick={() => viewPrev()} text='이전' />
+                    <Button type='img' classnames='prev' onclick={() => viewPrev()} text={t("이전")} />
                 </li>
                 {
                     Array.from({length: end - start}, (_, i) => {
@@ -41,7 +42,7 @@ const Paging = ({totalPages, page, changePage}: {totalPages: number, page: numbe
                     })
                 }
                 <li className={`${page === totalPages || page === totalPages - 1 ? 'disabled' : ''}`}>
-                    <Button type='img' classnames='next' onclick={() => viewNext()} text='다음' />
+                    <Button type='img' classnames='next' onclick={() => viewNext()} text={t("다음")} />
                 </li>
             </ul>
         </div>

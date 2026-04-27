@@ -8,6 +8,7 @@ import { getBuddyDetails, refreshToken } from 'api';
 import { useRouter } from 'next/navigation';
 import ReviewMobile from './_MobileVersion';
 import ReviewPC from './_PCVersion';
+import { t } from "utils/i18n";
 
 export default function ReviewPage() {
     const router = useRouter();
@@ -27,12 +28,12 @@ export default function ReviewPage() {
             const data = res.data;
             setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
         } else {
-            alert('로그인이 필요해요.');
+            alert(t("로그인이 필요해요."));
             router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
         }
         } catch (err: any) {
             if (err?.status === 401) {
-                alert('로그인이 필요해요.');
+                alert(t("로그인이 필요해요."));
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
             }
         }

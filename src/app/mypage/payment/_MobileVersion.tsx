@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
 import MyHistoryTab from './_Tab';
 import Paging from 'components/common/Paging';
+import { t } from "utils/i18n";
 
 const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [paymentHistory, setPaymentHistory] = useState<paymentHistoryProps[]>([]);
@@ -34,7 +35,7 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
             if (err && typeof err === 'object' && 'status' in err && 
                 err.status === 401) {
                 console.log(err)
-                alert('로그인이 필요해요.');
+                alert(t("로그인이 필요해요."));
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
             }
             return;
@@ -69,7 +70,7 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
             <div className={`wrapper mobile`}>
                 <div className='intro'></div>
                 {/* Header */}
-                <Header title={'결제 내역'} isDepth={true} isLogin={userInfo !== null} />
+                <Header title={t("결제 내역")} isDepth={true} isLogin={userInfo !== null} />
                 <div className='contents'>
                     <div className='contents_inner'>
                         <MyHistoryTab tab={tab} changeTab={changeTab} />
@@ -80,7 +81,7 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
                                     <>
                                         {/* 결제 내역이 비었을 때 */}
                                         <div className="nothing">
-                                            <div className='ico payment'><p>결제 내역이 없습니다.</p></div>
+                                            <div className='ico payment'><p>{t("결제 내역이 없습니다.")}</p></div>
                                         </div>
                                     </>
                                     :
@@ -89,10 +90,10 @@ const MyPaymentHistoryMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nul
                                             paymentHistory.map((el:paymentHistoryProps, index:number) => 
                                                 <ProgramInMypage key={index} label={el.label} reservation={el.reservation} type='payment'>
                                                     {
-                                                        el.reservation.label === '취소완료' ?
-                                                        <Button type="text" classnames={`border lightgray cancel wide`} onclick={() => viewDetails(el.id, el.reservation.reservationId!)} text="취소 상세" />
+                                                        el.reservation.label === "취소완료" ?
+                                                        <Button type="text" classnames={`border lightgray cancel wide`} onclick={() => viewDetails(el.id, el.reservation.reservationId!)} text={t("취소 상세")} />
                                                         :
-                                                        <Button type="text" classnames={`border lightgray cancel wide`} onclick={() =>  viewDetails(el.id, el.reservation.reservationId!)} text="결제 상세" />
+                                                        <Button type="text" classnames={`border lightgray cancel wide`} onclick={() =>  viewDetails(el.id, el.reservation.reservationId!)} text={t("결제 상세")} />
                                                     }
                                                 </ProgramInMypage>
                                             )

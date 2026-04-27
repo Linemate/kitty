@@ -7,6 +7,7 @@ import { buddyProfileProps, noticeProps, } from 'types/types';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'utils/stores';
 import Paging from 'components/common/Paging';
+import { t } from "utils/i18n";
 
 const NoticeMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [noticeList, setNoticeList] = useState<noticeProps[]>([]);
@@ -42,7 +43,7 @@ const NoticeMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
             if (err && typeof err === 'object' && 'status' in err && 
                 err.status === 401) {
                 console.log(err)
-                alert('로그인이 필요해요.');
+                alert(t("로그인이 필요해요."));
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
             }
             return;
@@ -59,7 +60,7 @@ const NoticeMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
             <div className={`wrapper mobile`}>
                 <div className='intro'></div>
                 {/* Header */}
-                <Header title={'공지사항'} isDepth={true} isLogin={userInfo !== null} />
+                <Header title={t("공지사항")} isDepth={true} isLogin={userInfo !== null} />
                 <div className='contents'>
                     <div className='contents_inner'>
                         <div className='contents_area'>
@@ -72,8 +73,7 @@ const NoticeMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                             <>
                                                 <div className="nothing">
                                                     <p className='nothing_text'>
-                                                        공지사항이 없습니다. 
-                                                    </p>
+                                                        {t("공지사항이 없습니다.")}</p>
                                                 </div>
                                             </>
                                             :

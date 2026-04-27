@@ -8,6 +8,7 @@ import { parseCookies } from 'nookies';
 import { getBuddyDetails, refreshToken } from 'api';
 import { useAuthStore } from 'utils/stores';
 import { useRouter } from 'next/navigation';
+import { t } from "utils/i18n";
 
 export default function MyAllReservations() {
     const router = useRouter();
@@ -27,12 +28,12 @@ export default function MyAllReservations() {
             const data = res.data;
             setUserInfo({ ...userInfo, token:data.token, refreshToken:data.refreshToken });
         } else {
-            alert('로그인이 필요해요.');
+            alert(t("로그인이 필요해요."));
             router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
         }
         } catch (err: any) {
         if (err?.status === 401) {
-            alert('로그인이 필요해요.');
+            alert(t("로그인이 필요해요."));
             router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage')}`);
         }
         }

@@ -8,6 +8,7 @@ import { Button } from 'components/common/Button';
 import { getLogin } from 'api';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
+import { t } from "utils/i18n";
 
 const initValues = {
     email: '',
@@ -61,10 +62,10 @@ const LoginContent = () => {
                     router.push('/');
                 }
             } else {
-                alert('계정을 다시 확인해주세요.');
+                alert(t("계정을 다시 확인해주세요."));
             }
         } catch (err) {
-            alert('계정을 다시 확인해주세요.');
+            alert(t("계정을 다시 확인해주세요."));
         }
     }, [redirectUrl, router, setUserInfo, values, viewPage]);
 

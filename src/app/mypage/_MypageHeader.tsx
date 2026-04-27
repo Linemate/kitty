@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { buddyProfileProps } from 'types/types';
 import { formatDate } from 'utils/formatDate';
 import { useAuthStore } from 'utils/stores';
+import { t } from "utils/i18n";
 
 const MypageHeader = ({ buddyInfo }: { buddyInfo: buddyProfileProps | null }) => {
     const router = useRouter();
@@ -18,12 +19,12 @@ const MypageHeader = ({ buddyInfo }: { buddyInfo: buddyProfileProps | null }) =>
     // 프로필 수정
     const handleEditProfile = () => {
         // router.push('/mypage/profile');
-        alert('준비 중입니다.');
+        alert(t("준비 중입니다."));
     }
     return (
         <div>
             {/* Header */}
-            <Header title={'라인메이트 메인'} isLogin={userInfo !== null} />
+            <Header title={t("라인메이트 메인")} isLogin={userInfo !== null} />
             <div className="my_info">
                 <div className="my_info_inner">
                     <div className="img_area">

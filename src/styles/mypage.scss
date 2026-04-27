@@ -516,7 +516,7 @@
 
         .wrapper {
             min-height: 100vh;
-            background-color: var(--color-neutral-800);
+            background-color: var(--color-neutral-700);
 
             .contents {
                 .contents_inner {
@@ -536,14 +536,12 @@
                         flex-direction: column;
 
                         .contents_area {
-                            padding: 0 16px;
+                            padding: 0;
                         }
                     }
                 }
 
                 .tab_area {
-                    padding-top: 24px;
-
                     .tab {
                         ul {
                             li {
@@ -562,6 +560,12 @@
 
                         .programs {
                             padding-top: 16px;
+                        }
+
+                        .btn {
+                            &.programs {
+                                padding: 10px 0;
+                            }
                         }
                     }
                 }

@@ -1,3 +1,5 @@
+import { t } from "utils/i18n";
+
 export const navData = [
     {
         navName : 'Experience',
@@ -11,22 +13,22 @@ export const navData = [
 export const categoryData = [
     {
         enName : 'PARTIES',
-        krName : '파티',
+        krName : t("파티"),
         value: 'parties'
     },
     {
         enName : 'TOUR/ACTIVITIES',
-        krName : '투어/액티비티',
+        krName : t("투어/액티비티"),
         value: 'tour'
     },
     {
         enName : 'CULTURE',
-        krName : '소개팅',
+        krName : t("소개팅"),
         value: 'culture'
     },
     {
         enName : 'ONEDAY',
-        krName : '원데이클래스',
+        krName : t("원데이클래스"),
         value : 'oneday'
     }
 ]

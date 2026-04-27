@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         const targetDate = new Date(new Date(firstSchedule.reservationDate).getTime() + 9 * 60 * 60 * 1000);
         const m = targetDate.getUTCMonth() + 1;
         const d = targetDate.getUTCDate();
-        const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         const day = dayNames[targetDate.getUTCDay()];
         dateStr = `${m}월 ${d}일(${day})`;
       }
@@ -83,8 +83,8 @@ const ProgramPage = async ({ params }: Props) => {
     const data = await getProgramDetailsServer(id);
     program = data;
   } catch (err) {
-    console.error('프로그램 상세 데이터 로드 실패:', err);
-    error = '프로그램 정보를 불러올 수 없습니다.';
+    console.error("Failed to load program detail data:", err);
+    error = "Cannot load program information.";
   }
 
   return <PageContent initialProgram={program} programId={id} error={error} />;

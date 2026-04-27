@@ -15,6 +15,7 @@ import Review from 'components/Review/Review';
 import 'styles/mate.scss';
 import Footer from 'components/Footer/Footer';
 import { useAuthStore } from 'utils/stores';
+import { t } from "utils/i18n";
 
 const reviews = [
     {
@@ -80,7 +81,7 @@ const MateDetails = () => {
         <>
             <div className="wrapper">
                 {/* Header & Key visual */}
-                <Header title={'라인메이트 메인'} isLogin={userInfo !== null} />
+                <Header title={t("라인메이트 메인")} isLogin={userInfo !== null} />
                 {/* Key visual */}
                 {/* <Mate isSummary={false} mateName={'Rabbbbbit'} introduce={"Let’s share experience together in Linemate Let’s share experience together in LinemateLet’s share experience together in LinemateLet’inemateLet"} /> */}
 

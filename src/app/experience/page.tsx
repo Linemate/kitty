@@ -14,6 +14,7 @@ import ReactDatePicker from 'react-datepicker';
 import { Button } from '@/components/common/Button';
 import ModalPortal from 'components/Portal/ModalPortal';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { t } from "utils/i18n";
 
 const ExperiencePageContent = () => {
     const router = useRouter();
@@ -39,11 +40,11 @@ const ExperiencePageContent = () => {
     const [isSortOpen, setIsSortOpen] = useState<boolean>(false);
 
     const sortOptions = [
-        { key: 'latest', label: '최신순' },
-        { key: 'popular', label: '인기순' },
-        { key: 'deadline', label: '마감 임박순' },
-        { key: 'price_high', label: '가격 높은순' },
-        { key: 'price_low', label: '가격 낮은순' },
+        { key: 'latest', label: t("최신순") },
+        { key: 'popular', label: t("인기순") },
+        { key: 'deadline', label: t("마감 임박순") },
+        { key: 'price_high', label: t("가격 높은순") },
+        { key: 'price_low', label: t("가격 낮은순") },
     ];
 
     const observerTarget = useRef<HTMLDivElement>(null);
@@ -60,7 +61,7 @@ const ExperiencePageContent = () => {
             const data = await getCategories();
             setCategories(data.data);
         } catch (err) {
-            console.error('카테고리 조회 실패:', err);
+            console.error(t("카테고리 조회 실패:"), err);
         }
     }, []);
 
@@ -101,7 +102,7 @@ const ExperiencePageContent = () => {
             setHasMore(data.page < data.totalPages - 1);
             setPageNum(data.page);
         } catch (err) {
-            console.error('프로그램 조회 실패:', err);
+            console.error(t("프로그램 조회 실패:"), err);
         } finally {
             loadingRef.current = false;
             setLoading(false);
@@ -257,10 +258,9 @@ const ExperiencePageContent = () => {
                                         <div className='datepicker_area'>
                                             <div className={`modal ${isCalendarModal ? 'on' : ''}`}>
                                                 <div className="header">
-                                                    <div className="title">날짜 선택</div>
+                                                    <div className="title">{t("날짜 선택")}</div>
                                                     <button type="button" className="btn img close big" onClick={handleModalCalendar}>
-                                                        닫기
-                                                    </button>                         </div>
+                                                        {t("닫기")}</button>                         </div>
                                                 <div className="calendar_wrap">
                                                     <div className="calendar_area">
                                                         <div className="calendar">  <ReactDatePicker onChange={handleChangeCalendar} startDate={startDate} endDate={endDate} selectsRange={true} inline />
@@ -291,7 +291,7 @@ const ExperiencePageContent = () => {
                                     <Button type="text" classnames={`ico border lightgray arrow`} onclick={() => setIsSortOpen(true)} text={`정렬`} />
                                 )}
                                 {isSortOpen && (
-                                    <ModalPortal title="정렬" type="sorting" closePortal={() => setIsSortOpen(false)}>
+                                    <ModalPortal title={t("정렬")} type="sorting" closePortal={() => setIsSortOpen(false)}>
                                         <div className='select_wrap'>
                                             <div className="select_options">
                                                 <ul>
@@ -316,7 +316,7 @@ const ExperiencePageContent = () => {
                     {/* 프로그램 리스트 */}
                     <div className="section programs_list">
                         {initialLoading ? (
-                            <div className="loading_area"><p>로딩 중...</p></div>
+                            <div className="loading_area"><p>{t("로딩 중...")}</p></div>
                         ) : programs.length > 0 ? (
                             <div className={`programs_grid ${isMobile ? 'mobile' : ''}`}>
                                 {programs.map((program) => (
@@ -324,12 +324,12 @@ const ExperiencePageContent = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="no_programs"><p>등록된 프로그램이 없습니다.</p></div>
+                            <div className="no_programs"><p>{t("등록된 프로그램이 없습니다.")}</p></div>
                         )}
 
                         {hasMore && (
                             <div ref={observerTarget} className="observer_target">
-                                {loading && <div className="loading_area"><p>로딩 중...</p></div>}
+                                {loading && <div className="loading_area"><p>{t("로딩 중...")}</p></div>}
                             </div>
                         )}
                     </div>
