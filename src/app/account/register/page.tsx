@@ -86,7 +86,7 @@ const RegisterContent = () => {
             if (name === 'password') {
                 const error = validatePassword(value);
                 setPasswordError(error);
-                
+
                 // If confirm is already filled, check matching and complexity
                 if (newValues.passwordConfirm) {
                     const confirmComplexityError = validatePassword(newValues.passwordConfirm);
@@ -267,10 +267,10 @@ const RegisterContent = () => {
 
     return (
         <div className="register">
-        {
-            isMobile &&
-            <Header title="" isDepth={true} isMobileDesc={false} isLogin={false} />
-        }
+            {
+                isMobile &&
+                <Header title="" isDepth={true} isMobileDesc={false} isLogin={false} />
+            }
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className="contents">
                     {!isMobile && <div className={`img_area ${language}`}></div>}
@@ -301,7 +301,7 @@ const RegisterContent = () => {
                                             text={isCodeVerified ? 'Verified' : isCodeSent ? 'Resend' : 'Request Verification'}
                                         />
                                     </div>
-                                    <div className="msg" style={{ color: emailError ? 'red' : undefined }}>
+                                    <div className={`msg ${emailError ? 'red' : ''}`}>
                                         {emailError || 'Notifications regarding meetings will be sent to this email address.'}
                                     </div>
                                     <div className="input_row second">
@@ -338,9 +338,9 @@ const RegisterContent = () => {
                                         value={values.password}
                                         handleChange={handleChange}
                                         placeholder="Enter password"
-                                        classnames=""
+                                        classnames={passwordError ? 'red' : ''}
                                     />
-                                    {passwordError && <div className="msg" style={{ color: 'red' }}>{passwordError}</div>}
+                                    {passwordError && <div className="msg red">{passwordError}</div>}
                                 </div>
 
                                 <div className="field">
@@ -350,9 +350,9 @@ const RegisterContent = () => {
                                         value={values.passwordConfirm}
                                         handleChange={handleChange}
                                         placeholder="Re-enter password"
-                                        classnames=""
+                                        classnames={passwordConfirmError ? 'red' : ''}
                                     />
-                                    {passwordConfirmError && <div className="msg" style={{ color: 'red' }}>{passwordConfirmError}</div>}
+                                    {passwordConfirmError && <div className="msg red">{passwordConfirmError}</div>}
                                 </div>
 
                                 <div className="field">

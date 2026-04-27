@@ -162,6 +162,14 @@
                             font-size: 13px;
                             line-height: 18px;
                             margin-top: 8px;
+
+                            &.red {
+                                color: var(--color-red);
+                            }
+                        }
+
+                        input.red {
+                            border-color: var(--color-red);
                         }
                     }
                 }
