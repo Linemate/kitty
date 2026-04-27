@@ -10,6 +10,7 @@ import { useAuthStore } from 'utils/stores';
 import useMobile from 'hooks/useMobile';
 import WidgetCheckout from 'components/common/WidgetCheckout';
 import { Button } from '@/components/common/Button';
+import { t } from "utils/i18n";
 
 const BeforePayment = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -69,7 +70,7 @@ const BeforePayment = () => {
 
     const handlePayment = async () => {
         if (!isFormValid) {
-            alert('필수 입력값을 올바르게 입력해주세요.');
+            alert(t("필수 입력값을 올바르게 입력해주세요."));
             return;
         }
         try {
@@ -88,7 +89,7 @@ const BeforePayment = () => {
             }
         } catch (err: any) {
             console.error(err);
-            alert(err.response?.data?.message || '결제 요청 중 오류가 발생했습니다.');
+            alert(err.response?.data?.message || t("결제 요청 중 오류가 발생했습니다."));
         }
     };
 
@@ -102,7 +103,7 @@ const BeforePayment = () => {
             try {
                 const regex = new RegExp(field.validationRule);
                 if (!regex.test(value)) {
-                    setFormErrors(prev => ({ ...prev, [id]: '입력 형식이 올바르지 않습니다.' }));
+                    setFormErrors(prev => ({ ...prev, [id]: t("입력 형식이 올바르지 않습니다.") }));
                 } else {
                     setFormErrors(prev => { const newErr = { ...prev }; delete newErr[id]; return newErr; });
                 }
@@ -130,13 +131,13 @@ const BeforePayment = () => {
     return (
         <div className="reservation_details before">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
-                <Header title={'모임 신청'} isDepth={true} isLogin={userInfo !== null} />
+                <Header title={t("모임 신청")} isDepth={true} isLogin={userInfo !== null} />
                 {
-                    loading ? <div className="contents"><div className="section">로딩 중...</div></div> :
+                    loading ? <div className="contents"><div className="section">{t("로딩 중...")}</div></div> :
                         program ?
                             <div className="contents">
                                 <div className="section program_info">
-                                    <div className="sub_title">모임 정보</div>
+                                    <div className="sub_title">{t("모임 정보")}</div>
                                     <div className="desc">
                                         <ProgramInMypage
                                             reservation={{
@@ -166,8 +167,8 @@ const BeforePayment = () => {
                                             {customFormData.map((field: any) => (
                                                 <div key={field.id} className="field_item">
                                                     <div className="field_title">
-                                                        {field.isRequired && <span className="bold required">(필수)</span>}
-                                                        {field.fieldLabel}
+                                                        {field.isRequired && <span className="bold required">{t("(필수)")}</span>}
+                                                        {t(field.fieldLabel)}
                                                     </div>
                                                     {field.fieldType?.toLowerCase() === 'textarea' ? (
                                                         <textarea
@@ -183,11 +184,11 @@ const BeforePayment = () => {
                                                             value={formAnswers[field.id] || ''}
                                                             onChange={(e) => handleCustomFormChange(field.id, e.target.value, field)}
                                                         >
-                                                            <option value="" disabled>선택해주세요</option>
+                                                            <option value="" disabled>{t("선택해주세요")}</option>
                                                             {Array.isArray(field.options) && field.options.map((opt: any, idx: number) => {
                                                                 const val = typeof opt === 'object' ? opt.value : opt;
                                                                 const label = typeof opt === 'object' ? opt.label || opt.value : opt;
-                                                                return <option key={idx} value={val}>{label}</option>;
+                                                                return <option key={idx} value={val}>{t(label)}</option>;
                                                             })}
                                                         </select>
                                                     ) : (
@@ -217,41 +218,40 @@ const BeforePayment = () => {
                                 )}
 
                                 <div className="section price_wrap">
-                                    <div className="sub_title">결제 정보</div>
+                                    <div className="sub_title">{t("결제 정보")}</div>
                                     <div className="calculate_price">
                                         <div className="row">
-                                            <div className="cate">상품 금액</div>
+                                            <div className="cate">{t("상품 금액")}</div>
                                             <div className="price">{program.currency} {program.price?.toLocaleString()}</div>
                                         </div>
                                         <div className="row total border_top" style={{ marginTop: '16px', paddingTop: '16px' }}>
-                                            <div className="cate">총 결제 금액</div>
+                                            <div className="cate">{t("총 결제 금액")}</div>
                                             <div className="price">{program.currency} {program.price?.toLocaleString()}</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="section refund_wrap">
-                                    <div className="sub_title">환불 규정 안내</div>
+                                    <div className="sub_title">{t("환불 규정 안내")}</div>
                                     <div className="dots">
                                         <ul>
-                                            <li>결제 후 30분 경과 전 : 전액 환불</li>
-                                            <li>참여 확정 모임의 진행일 기준 4일 전까지 : 전액 환불</li>
-                                            <li>참여 확정 모임의 진행일 기준 3일 전부터 : 환불 불가</li>
-                                            <li>모임 진행 당일에 신청한 경우 : 환불 불가 </li>
+                                            <li>{t("결제 후 30분 경과 전 : 전액 환불")}</li>
+                                            <li>{t("참여 확정 모임의 진행일 기준 4일 전까지 : 전액 환불")}</li>
+                                            <li>{t("참여 확정 모임의 진행일 기준 3일 전부터 : 환불 불가")}</li>
+                                            <li>{t("모임 진행 당일에 신청한 경우 : 환불 불가")}</li>
                                         </ul>
                                     </div>
-                                    <div className="ico info">결제 승인 취소는 영업일 기준 3~5일 소요될 수 있어요. </div>
+                                    <div className="ico info">{t("결제 승인 취소는 영업일 기준 3~5일 소요될 수 있어요.")}</div>
                                 </div>
 
                                 <div className='bottom'>
                                     <div className="section check_wrap">
-                                        위 내용을 확인했으며, 이에 동의합니다.
-                                    </div>
+                                        {t("위 내용을 확인했으며, 이에 동의합니다.")}</div>
                                     <Button type="text" onclick={handlePayment} classnames={`wide radius_8 ${isBtnActive ? 'bg_blue' : 'bg_gray'}`} isDisabled={!isBtnActive} text={'Register for Event'} />
                                 </div>
                             </div>
                             :
-                            <div className="contents"><div className="section">프로그램 정보를 불러오지 못했습니다.</div></div>
+                            <div className="contents"><div className="section">{t("프로그램 정보를 불러오지 못했습니다.")}</div></div>
                 }
             </div>
 

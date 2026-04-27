@@ -7,6 +7,7 @@ import { parseCookies } from 'nookies';
 import React, { useRef, useState } from 'react';
 import { useAuthStore } from 'utils/stores';
 import { initPopup } from 'components/Portal/PopupPortal';
+import { t } from "utils/i18n";
 
 const AddQna = ({ id, setPopup, onSuccess, closePortal }: { id: string, setPopup: Function, onSuccess: Function, closePortal: Function }) => {
     const [isSecret, setIsSecret] = useState<boolean>(false);
@@ -27,7 +28,7 @@ const AddQna = ({ id, setPopup, onSuccess, closePortal }: { id: string, setPopup
                 const data = res.data;
                 setUserInfo({ ...userInfo, token: data.token, refreshToken: data.refreshToken });
             } else {
-                alert('로그인이 필요해요.');
+                alert(t("로그인이 필요해요."));
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + id)}`);
                 return;
             }
@@ -43,13 +44,13 @@ const AddQna = ({ id, setPopup, onSuccess, closePortal }: { id: string, setPopup
             if (res.code === 200) {
                 setPopup({
                     show: true,
-                    children: '문의가 등록되었습니다.',
+                    children: t("문의가 등록되었습니다."),
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
                         onSuccess();
                     },
-                    noText: '확인',
+                    noText: t("확인"),
                 });
             } else if (res.code === 401) {
                 await refreshTokenFn();
@@ -57,12 +58,12 @@ const AddQna = ({ id, setPopup, onSuccess, closePortal }: { id: string, setPopup
             } else {
                 setPopup({
                     show: true,
-                    children: '문의 등록에 실패했습니다.',
+                    children: t("문의 등록에 실패했습니다."),
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
                     },
-                    noText: '확인',
+                    noText: t("확인"),
                 });
             }
             closePortal();
@@ -71,12 +72,12 @@ const AddQna = ({ id, setPopup, onSuccess, closePortal }: { id: string, setPopup
             console.log(err);
             setPopup({
                 show: true,
-                children: '문의 등록에 실패했습니다.',
+                children: t("문의 등록에 실패했습니다."),
                 type: 'alert',
                 closePortal: () => {
                     setPopup(initPopup);
                 },
-                noText: '확인',
+                noText: t("확인"),
             });
         }
     };
@@ -97,11 +98,11 @@ const AddQna = ({ id, setPopup, onSuccess, closePortal }: { id: string, setPopup
     };
     return (
         <>
-            <ModalPortal type='qna' title={'문의 작성하기'} closePortal={closePortal}>
+            <ModalPortal type='qna' title={t("문의 작성하기")} closePortal={closePortal}>
                 <div>
                     <div className="input_area">
                         <div ref={inputRef} className={`input_textbox`} contentEditable onInput={handleInput}></div>
-                        {qnaContent.trim().length === 0 && <span className="placeholder">문의 내용을 입력해주세요.</span>}
+                        {qnaContent.trim().length === 0 && <span className="placeholder">{t("문의 내용을 입력해주세요.")}</span>}
                     </div>
                     <div className="input_checkbox">
                         <label>

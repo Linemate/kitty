@@ -1,7 +1,8 @@
 .review_area {
     .only_my {
-        display:none;
+        display: none;
     }
+
     .no_review {
         font-family: 'Pretendard';
         font-weight: 500;
@@ -13,29 +14,35 @@
         border-radius: 8px;
         text-align: center;
     }
+
     .review_item {
         display: flex;
         flex-direction: row;
         margin-bottom: 48px;
+
         .txt {
             flex: 1;
             min-width: 0; // allow flex child to shrink for ellipsis inside
+
             .review_header {
                 padding-bottom: 0;
                 margin-bottom: 8px;
-                display:flex;
+                display: flex;
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
+
                 .left {
-                    display:flex;
+                    display: flex;
                     flex-direction: row;
                     align-items: center;
                     flex: 1 1 auto;
                     min-width: 0; // allow title to truncate
-                    padding-right:16px;
+                    padding-right: 16px;
                 }
-                .username, .title {
+
+                .username,
+                .title {
                     font-family: 'Pretendard';
                     font-weight: 600;
                     font-size: 14px;
@@ -43,12 +50,14 @@
                     vertical-align: middle;
                     position: relative;
                     padding-right: 16px;
+
                     &.title {
                         min-width: 0;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
                     }
+
                     &::before {
                         content: '';
                         display: block;
@@ -60,34 +69,40 @@
                         top: 2px;
                     }
                 }
+
                 .right {
-                    display:flex;
+                    display: flex;
                     flex-direction: row;
                     justify-content: flex-end;
                     align-items: center;
                     flex: 0 0 auto; // keep right width stable
+
                     &.only_my {
-                        display:none;
+                        display: none;
                     }
+
                     .btn_edit {
-                        position:relative;
-                        padding-right:16px;
+                        position: relative;
+                        padding-right: 16px;
+
                         &::before {
-                            content:'';
-                            display:block;
-                            width:1px;
-                            height:16px;
+                            content: '';
+                            display: block;
+                            width: 1px;
+                            height: 16px;
                             background-color: var(--color-neutral-600);
-                            position:absolute;
-                            right:8px;
-                            top:2px;
+                            position: absolute;
+                            right: 8px;
+                            top: 2px;
                         }
                     }
                 }
+
                 .date {
                     flex: 0 0 auto; // prevent date from shrinking
                 }
             }
+
             .date {
                 font-family: 'Pretendard';
                 font-weight: 400;
@@ -96,17 +111,20 @@
                 color: var(--color-neutral-400);
                 vertical-align: middle;
             }
+
             .review_body {
                 width: 100%;
                 box-sizing: border-box;
                 padding: 20px;
                 border-radius: 16px;
                 background-color: var(--color-neutral-800);
+
                 .contents {
                     font-size: 16px;
                     line-height: 24px;
                     margin-bottom: 12px;
                 }
+
                 .program {
                     font-family: 'Montserrat';
                     font-weight: 700;
@@ -115,6 +133,7 @@
             }
         }
     }
+
     .btn.more {
         font-family: 'Pretendard';
         font-weight: 700;
@@ -123,61 +142,73 @@
         padding: 16px;
         text-align: center;
     }
-    
+
     &.mobile {
         .review_item {
             .star {
                 width: 60px;
-                height: 48px;
+                height: 64px;
                 background-size: 48px 48px;
                 padding-bottom: 16px;
                 margin-right: 12px;
+
                 &::before {
                     width: 60px;
                     height: 12px;
                 }
             }
+
             .txt {
                 .review_header {
                     .title {
                         line-height: 22px;
+
                         &::before {
-                            display:none;
+                            display: none;
                         }
                     }
                 }
+
                 .review_body {
                     padding: 12px 16px;
+
                     .contents {
                         font-size: 14px;
                         line-height: 22px;
                     }
                 }
+
                 // 내가 쓴 리뷰조회일 때만 날짜, 편집, 삭제 버튼 표시
                 .review_footer {
-                    display:flex;
+                    display: flex;
                     flex-direction: row;
                     justify-content: space-between;
                     align-items: center;
-                    margin-top:8px;
+                    margin-top: 8px;
+
                     .date {
                         line-height: 20px;
                     }
+
                     .btns {
-                        display:flex;
+                        display: flex;
                         flex-direction: row;
                         justify-content: flex-end;
                         align-items: center;
-                        .btn_edit, .btn_delete {
+
+                        .btn_edit,
+                        .btn_delete {
                             font-size: 13px;
                             line-height: 20px;
                             font-family: 'Pretendard';
                             font-weight: 600;
-                            color:var(--color-neutral-500);
+                            color: var(--color-neutral-500);
                         }
+
                         .btn_edit {
-                            position:relative;
+                            position: relative;
                             padding-right: 16px;
+
                             &::before {
                                 content: '';
                                 display: block;
@@ -193,8 +224,9 @@
                 }
             }
         }
+
         .only_pc {
-            display:none;
+            display: none;
         }
     }
 }
@@ -209,6 +241,7 @@
     background-position: center top;
     margin-right: 24px;
     position: relative;
+
     &::before {
         content: '';
         display: block;
@@ -221,53 +254,70 @@
         left: 0;
         bottom: 0;
     }
+
     &.img_0 {
         background-image: url('/assets/images/icon/ico_review0.png');
+
         &::before {
             background-image: url('/assets/images/icon/ico_review0_star.png');
         }
     }
+
     &.img_1 {
         background-image: url('/assets/images/icon/ico_review1.png');
+
         &::before {
             background-image: url('/assets/images/icon/ico_review1_star.png');
         }
     }
+
     &.img_2 {
         background-image: url('/assets/images/icon/ico_review2.png');
+
         &::before {
             background-image: url('/assets/images/icon/ico_review2_star.png');
         }
     }
+
     &.img_3 {
         background-image: url('/assets/images/icon/ico_review3.png');
+
         &::before {
             background-image: url('/assets/images/icon/ico_review3_star.png');
         }
     }
+
     &.img_4 {
         background-image: url('/assets/images/icon/ico_review4.png');
+
         &::before {
             background-image: url('/assets/images/icon/ico_review4_star.png');
         }
     }
+
     &.img_5 {
         background-image: url('/assets/images/icon/ico_review5.png');
+
         &::before {
             background-image: url('/assets/images/icon/ico_review5_star.png');
         }
     }
 }
+
 // 리뷰 작성하기 / 편집하기
 .add_review {
     .review_score {
-        margin-bottom:24px;
-        display:flex;
+        margin-bottom: 24px;
+        display: flex;
         flex-direction: column;
         justify-content: center;
-        text-align:center;
+        text-align: center;
+
         .star {
-            &::before {display:none}
+            &::before {
+                display: none
+            }
+
             width:64px;
             height:64px;
             text-align:center;
@@ -275,66 +325,76 @@
             padding-bottom:0px;
             background-size:64px;
         }
+
         .score_area {
-            height:32px;
+            height: 32px;
         }
+
         .one_star {
-            display:inline-block;
-            width:32px;
-            height:32px;
-            background-image:url('/assets/images/btn/btn_star_border.png');
-            background-repeat:no-repeat;
-            background-size:32px 32px;
-            cursor:pointer;
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background-image: url('/assets/images/btn/btn_star_border.png');
+            background-repeat: no-repeat;
+            background-size: 32px 32px;
+            cursor: pointer;
+
             &.on {
-                background-image:url('/assets/images/btn/btn_star_bg.png');
+                background-image: url('/assets/images/btn/btn_star_bg.png');
             }
         }
     }
+
     .review_text_area {
         textarea {
-            width:100%;
-            height:135px;
+            width: 100%;
+            height: 135px;
             box-sizing: border-box;
-            border:1px solid #ddd;
-            border-radius:8px;
-            padding:16px;
-            margin-bottom:8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 8px;
+
             &:focus {
-                outline:1px solid var(--color-primary-400);
+                outline: 1px solid var(--color-primary-400);
             }
         }
+
         .review_char_count {
-            color:var(--color-neutral-400);
-            font-size:12px;
-            line-height:20px;
-            font-family:'Pretendard';
-            margin-bottom:16px;
+            color: var(--color-neutral-400);
+            font-size: 12px;
+            line-height: 20px;
+            font-family: 'Pretendard';
+            margin-bottom: 16px;
         }
     }
 }
+
 // 마이페이지 내 리뷰 조회 페이지 스타일
 .mypage {
     .review_area {
         .only_my {
-            display:block;
+            display: block;
         }
+
         .review_item {
             .txt {
                 .review_header {
                     .right {
                         &.only_my {
-                            display:block;
+                            display: block;
                         }
                     }
                 }
             }
         }
-    }    
+    }
+
     .review_area {
         .review_footer {
-            display:none;
+            display: none;
         }
+
         &.mobile {
             .review_item {
                 .txt {
@@ -345,22 +405,26 @@
                             flex: auto;
                             min-width: 0;
                             overflow: hidden;
-                            padding-right:0;
+                            padding-right: 0;
+
                             .title {
-                                width:100%;
-                                display:block;
-                                padding-right:0;
+                                width: 100%;
+                                display: block;
+                                padding-right: 0;
+
                                 &::before {
-                                    display:none;
+                                    display: none;
                                 }
                             }
+
                             .date {
-                                display:none;
+                                display: none;
                             }
                         }
+
                         .right {
                             &.only_pc {
-                                display:none;
+                                display: none;
                             }
                         }
                     }

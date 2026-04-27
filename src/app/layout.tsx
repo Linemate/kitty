@@ -13,10 +13,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
     return {
         title: 'LINEMATE',
-        description: '라인메이트 입니다.',
+        description: "This is Linemate.",
         openGraph: {
             title: 'LINEMATE',
-            description: '라인메이트 입니다.',
+            description: "This is Linemate.",
             url: 'https://www.linemate.kr',
             type: 'website',
             images: [

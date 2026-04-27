@@ -8,6 +8,7 @@ import MypageSideMenu from '../_MypageSideMenu';
 import Footer from 'components/Footer/Footer';
 import Title from 'components/Title/Title';
 import Paging from 'components/common/Paging';
+import { t } from "utils/i18n";
 
 const NoticePC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [noticeList, setNoticeList] = useState<noticeProps[]>([]);
@@ -41,7 +42,7 @@ const NoticePC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
             if (err && typeof err === 'object' && 'status' in err && 
                 err.status === 401) {
                 console.log(err)
-                alert('로그인이 필요해요.');
+                alert(t("로그인이 필요해요."));
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
             }
             setIsLoaded(true);
@@ -64,7 +65,7 @@ const NoticePC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                         <div className='contents_area'>
                             <div className='intro'>
                                 <div>
-                                    <Title title={'공지사항'} />
+                                    <Title title={t("공지사항")} />
                                 </div>
                             </div>
                             {
@@ -76,8 +77,7 @@ const NoticePC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
                                             <>
                                                 <div className="nothing">
                                                     <p className='nothing_text'>
-                                                        공지사항이 없습니다.
-                                                    </p>
+                                                        {t("공지사항이 없습니다.")}</p>
                                                 </div>
                                             </>
                                             :

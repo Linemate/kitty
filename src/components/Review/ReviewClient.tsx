@@ -11,6 +11,7 @@ import { initPopup } from '../Portal/PopupPortal';
 import PopupPortal from '../Portal/PopupPortal';
 import EditReview from './_Edit';
 import { useRouter } from 'next/navigation';
+import { t } from "utils/i18n";
 
 interface ReviewClientProps {
   id?: number;
@@ -128,7 +129,7 @@ const ReviewClient = ({
       setTotalPages(data.totalPages);
       setPage(data.page);
     } catch (err) {
-      console.error('리뷰 조회 실패:', err);
+      console.error(t("리뷰 조회 실패:"), err);
     } finally {
       setLoading(false);
     }
@@ -154,7 +155,7 @@ const ReviewClient = ({
   const handleDelete = useCallback(async (reviewId: number, programId: number) => {
     setDeleteConfirmPopup({
       show: true,
-      children: '작성한 리뷰를 삭제하시겠습니까?',
+      children: t("작성한 리뷰를 삭제하시겠습니까?"),
       type: 'confirm',
       yesFunction: async () => {
         try {
@@ -163,45 +164,45 @@ const ReviewClient = ({
             setDeleteConfirmPopup(initPopup);
             setPopup({
               show: true,
-              children: '리뷰가 삭제되었습니다.',
+              children: t("리뷰가 삭제되었습니다."),
               type: 'alert',
               closePortal: () => {
                 setPopup(initPopup);
                 loadProgramReviews(page);
               },
-              noText: '확인',
+              noText: t("확인"),
             });
           } else {
             setDeleteConfirmPopup(initPopup);
             setPopup({
               show: true,
-              children: '리뷰 삭제에 실패했습니다.',
+              children: t("리뷰 삭제에 실패했습니다."),
               type: 'alert',
               closePortal: () => {
                 setPopup(initPopup);
               },
-              noText: '확인',
+              noText: t("확인"),
             });
           }
         } catch (err) {
-          console.error('리뷰 삭제 실패:', err);
+          console.error(t("리뷰 삭제 실패:"), err);
           setDeleteConfirmPopup(initPopup);
           setPopup({
             show: true,
-            children: '리뷰 삭제에 실패했습니다.',
+            children: t("리뷰 삭제에 실패했습니다."),
             type: 'alert',
             closePortal: () => {
               setPopup(initPopup);
             },
-            noText: '확인',
+            noText: t("확인"),
           });
         }
       },
-      yesText: '확인',
+      yesText: t("확인"),
       closePortal: () => {
         setDeleteConfirmPopup(initPopup);
       },
-      noText: '취소',
+      noText: t("취소"),
     });
   }, [page, loadProgramReviews]);
 
@@ -219,7 +220,7 @@ const ReviewClient = ({
     <>
       <div className={`review_area ${isMobile ? 'mobile' : ''}`}>
         {loading ? (
-          <div className="no_review">로딩 중...</div>
+          <div className="no_review">{t("로딩 중...")}</div>
         ) : reviews.length > 0 ? (
           reviews.map((el: reviewItemProps) => (
             <ReviewItem
@@ -233,7 +234,7 @@ const ReviewClient = ({
             />
           ))
         ) : (
-          <div className="no_review">등록된 후기가 없습니다.</div>
+          <div className="no_review">{t("등록된 후기가 없습니다.")}</div>
         )}
 
         <Paging 

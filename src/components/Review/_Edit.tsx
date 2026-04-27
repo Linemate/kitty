@@ -7,6 +7,7 @@ import { addReviewProps, popupProps } from 'types/types';
 import { Button } from '../common/Button';
 import PopupPortal, { initPopup } from '../Portal/PopupPortal';
 import { useRouter } from 'next/navigation';
+import { t } from "utils/i18n";
 
 const EditReview = ({reviewId, programId, content, score, closePortal, onSuccess} : {reviewId:number, programId:number, content:string, score:number, closePortal:() => void, onSuccess: () => void}) => {
     const [reviewData, setReviewData] = useState<addReviewProps>({reviewId, title:'', content, score});
@@ -45,42 +46,42 @@ const EditReview = ({reviewId, programId, content, score, closePortal, onSuccess
             if (res && res.code === 200) {
                 setPopup({
                     show: true,
-                    children: '리뷰가 수정되었습니다.',
+                    children: t("리뷰가 수정되었습니다."),
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
                         closePortal();
                         onSuccess();
                     },
-                    noText: '확인',
+                    noText: t("확인"),
                 });
             } else {
                 setPopup({
                     show: true,
-                    children: '리뷰 수정에 실패했습니다.',
+                    children: t("리뷰 수정에 실패했습니다."),
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
                     },
-                    noText: '확인',
+                    noText: t("확인"),
                 });
             }
         } catch (err) {
             console.log(err);
             setPopup({
                 show: true,
-                children: '리뷰 수정에 실패했습니다.',
+                children: t("리뷰 수정에 실패했습니다."),
                 type: 'alert',
                 closePortal: () => {
                     setPopup(initPopup);
                 },
-                noText: '확인',
+                noText: t("확인"),
             });
         }
     }, [reviewData.content, reviewData.score, programId, closePortal, router]);
     return (
         <>
-            <ModalPortal type='review' title={'리뷰 편집하기'} closePortal={closePortal}>
+            <ModalPortal type='review' title={t("리뷰 편집하기")} closePortal={closePortal}>
                 <div className='add_review'>
                     <div className='review_score'>
                         {/* 별점 컴포넌트 추후 구현 예정 */}
@@ -96,7 +97,7 @@ const EditReview = ({reviewId, programId, content, score, closePortal, onSuccess
                     </div>
                     <div className='review_text_area'>     
                         <textarea
-                            placeholder='리뷰 내용을 수정해주세요.'
+                            placeholder={t("리뷰 내용을 수정해주세요.")}
                             onChange={handleInput}
                             value={reviewData.content}
                             maxLength={MAX_LENGTH}
@@ -104,7 +105,7 @@ const EditReview = ({reviewId, programId, content, score, closePortal, onSuccess
                         <div className='review_char_count'>{reviewData.content.length}/{MAX_LENGTH}</div>
                     </div>
                     <div className='review_btn_area'>
-                        <Button type="text" classnames={`in_modal ${reviewData.content.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleEdit()} text="등록하기" />
+                        <Button type="text" classnames={`in_modal ${reviewData.content.trim().length === 0 ? 'disabled' : 'bg_blue'} wide`} onclick={() => handleEdit()} text={t("등록하기")} />
                     </div>
                 </div>
             </ModalPortal>

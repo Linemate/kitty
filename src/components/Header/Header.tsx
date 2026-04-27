@@ -9,6 +9,7 @@ import { headerProps } from 'types/types';
 import { useAuthStore, useLanguage } from 'utils/stores';
 import Menu from 'components/common/Menu';
 import { getCookie } from 'utils/cookiesFunction';
+import { t } from "utils/i18n";
 
 const Header = (props: headerProps) => {
     const { title, isDepth, isMobileDesc, btns, isLogin } = props;
@@ -52,7 +53,7 @@ const Header = (props: headerProps) => {
             {(isMobile && isMobileDesc) || isDepth ? (
                 <div className={`header_inner depth`}>
                     <div className='header_left'>
-                        <Button type={'img'} classnames={'back'} text={'뒤로가기'} onclick={handleBack} />
+                        <Button type={'img'} classnames={'back'} text={t("뒤로가기")} onclick={handleBack} />
                         <div className="header_title">{title}</div>
                     </div>
                     {
@@ -71,9 +72,9 @@ const Header = (props: headerProps) => {
                     <div className="header_right">
                         {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
                         <div style={{ display: 'none' }}>
-                            <Button type={'img'} classnames={'like'} text={'찜한 목록으로'} onclick={viewLikeList} />
+                            <Button type={'img'} classnames={'like'} text={t("찜한 목록으로")} onclick={viewLikeList} />
                         </div>
-                        {isMobile ? <Button type={'img'} classnames={'menu'} text={'메뉴'} onclick={handleOpenMenu} /> : isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={viewLoginPage} />}
+                        {isMobile ? <Button type={'img'} classnames={'menu'} text={t("메뉴")} onclick={handleOpenMenu} /> : isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={t("로그인")} onclick={viewLoginPage} />}
                         {isOpen ? <Menu closeMenu={handleCloseMenu} /> : ''}
                     </div>
                 </div>

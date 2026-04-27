@@ -5,6 +5,7 @@ import 'styles/menu.scss';
 import Link from 'next/link';
 import { useAuthStore } from 'utils/stores';
 import { getCookie } from 'utils/cookiesFunction';
+import { t } from "utils/i18n";
 
 const Menu = ({ closeMenu }: { closeMenu: () => void }) => {
     const router = useRouter();
@@ -22,7 +23,7 @@ const Menu = ({ closeMenu }: { closeMenu: () => void }) => {
                 <div className="menu_header_left">
                     <Button text="Close" classnames="close img" type="button" onclick={closeMenu} />
                 </div>
-                {isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={'로그인'} onclick={handleLogin} />}
+                {isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={t("로그인")} onclick={handleLogin} />}
             </div>
             <div className="menu_body">
                 <div className="menu_body_item">

@@ -1,4 +1,5 @@
 import { programProps } from '@/types/types';
+import { t } from "utils/i18n";
 
 export const updateMetaTags = (program: programProps, url: string, customDesc?: string) => {
     if (typeof document !== 'undefined') {
@@ -54,7 +55,7 @@ export const shareProgram = async (str: string, program: programProps, completed
                         },
                         buttons: [
                             {
-                                title: '라인메이트에서 보기',
+                                title: t("라인메이트에서 보기"),
                                 link: {
                                     mobileWebUrl: 'https://www.linemate.kr/program/' + program.id,
                                     webUrl: 'https://www.linemate.kr/program/' + program.id

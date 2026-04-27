@@ -27,22 +27,23 @@ import Popup from 'components/Portal/Popup';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import DetailContent from './_DetailContent';
 import { shareProgram, updateMetaTags } from '@/utils/share';
+import { t } from "utils/i18n";
 
 const tabsData = [
     {
         id: 0,
         name: 'Introduce',
-        krName: '소개',
+        krName: t("소개"),
     },
     {
         id: 1,
         name: 'Place',
-        krName: '장소',
+        krName: t("장소"),
     },
     {
         id: 2,
         name: 'Review',
-        krName: '후기',
+        krName: t("후기"),
     },
     {
         id: 3,
@@ -222,14 +223,14 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
 
             // 비로그인
             if (!user) {
-                alert('로그인이 필요해요.');
+                alert(t("로그인이 필요해요."));
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
                 return;
             }
 
             // 시간 미선택
             if (selectedTime.id === 0) {
-                alert('시간을 선택해주세요.');
+                alert(t("시간을 선택해주세요."));
                 return;
             }
 
@@ -241,7 +242,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                 const month = dateStrParts[1];
                 const day = dateStrParts[2];
                 const dateObj = new Date(Number(year), Number(month) - 1, Number(day));
-                const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+                const dayNames = [t("일"), t("월"), t("화"), t("수"), t("목"), t("금"), t("토")];
                 const dayName = dayNames[dateObj.getDay()];
 
                 let ampm = '';
@@ -257,7 +258,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                 if (selectedTime.startDate) {
                     const [hour, minute] = extractTime(selectedTime.startDate).split(':');
                     const h = Number(hour);
-                    ampm = h >= 12 ? '오후' : '오전';
+                    ampm = h >= 12 ? t("오후") : t("오전");
                     const displayHour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
                     startFormatted = `${String(displayHour).padStart(2, '0')}:${minute}`;
                 }
@@ -277,7 +278,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
             router.push(`/program/payments/before/${programId}?scheduleId=${selectedTime.id}&dateText=${encodeURIComponent(dateText)}`);
         } catch (err) {
             console.log(err);
-            alert((err as any).response?.data?.message || '오류가 발생했습니다.');
+            alert((err as any).response?.data?.message || t("오류가 발생했습니다."));
         }
     }, [programId, program.price, router, selectedTime]);
 
@@ -296,7 +297,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
         if (targetDate) {
             const month = targetDate.getMonth() + 1;
             const date = targetDate.getDate();
-            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayNames = [t("일"), t("월"), t("화"), t("수"), t("목"), t("금"), t("토")];
             const day = dayNames[targetDate.getDay()];
             dateStr = `, ${month}월 ${date}일(${day})`;
         }
@@ -317,13 +318,13 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const completedShare = () => {
         setPopup({
             show: true,
-            children: '링크가 복사되었습니다.',
+            children: t("링크가 복사되었습니다."),
             type: 'alert',
             closePortal: () => {
                 setPopup(initPopup);
                 closeSharePopup();
             },
-            noText: '확인',
+            noText: t("확인"),
         });
     };
 
@@ -331,10 +332,10 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     const failedShare = () => {
         setPopup({
             show: true,
-            children: '공유에 실패했습니다.',
+            children: t("공유에 실패했습니다."),
             type: 'alert',
             closePortal: () => setPopup(initPopup),
-            noText: '확인',
+            noText: t("확인"),
         });
     };
 
@@ -351,12 +352,12 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
             setPopup({
                 show: true,
                 type: 'login',
-                children: <div>로그인 후 이용해주세요.</div>,
+                children: <div>{t("로그인 후 이용해주세요.")}</div>,
                 closePortal: () => {
                     setPopup(initPopup);
                     router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + programId)}`);
                 },
-                noText: '확인',
+                noText: t("확인"),
             });
         }
     };
@@ -371,7 +372,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                         {program.likes}
                     </div>
                 </div>
-                <Button type={'img'} classnames={'share'} text={'공유하기'} onclick={viewSharePopup} />
+                <Button type={'img'} classnames={'share'} text={t("공유하기")} onclick={viewSharePopup} />
             </div>
         );
     };
@@ -473,7 +474,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                     setProgram(res?.data || initProgram);
                     handleChangeMonth(today);
                 } catch (err) {
-                    console.log('클라이언트 프로그램 상세 로드 실패:', err);
+                    console.log(t("클라이언트 프로그램 상세 로드 실패:"), err);
                 }
             })();
         }
@@ -599,10 +600,9 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                     )}
                                     <div className={`${isMobile ? 'modal' : 'in_page'} ${isCalendarModal ? 'on' : ''}`}>
                                         <div className="header">
-                                            <div className="title">방문 일정</div>
+                                            <div className="title">{t("방문 일정")}</div>
                                             <button type="button" className="btn img close big" onClick={() => handleModalCalendar(false)}>
-                                                닫기
-                                            </button>
+                                                {t("닫기")}</button>
                                         </div>
                                         <div className="calendar_wrap">
                                             <div className="calendar_area">
@@ -662,7 +662,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                                     <Map xcoordinate={program.xcoordinate} ycoordinate={program.ycoordinate} isPoint={false} />
                                                 </div>
                                                 <div className="ico location gray">{program.station}</div>
-                                                <p>자세한 위치는 예약 확정 시 마이페이지에서 확인 가능해요:)</p>
+                                                <p>{t("자세한 위치는 예약 확정 시 마이페이지에서 확인 가능해요:)")}</p>
                                                 {
                                                     // 주차공간 여부
                                                     program.isParking ? (
@@ -679,10 +679,10 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
                                         <div className="title">Refund Regulation</div>
                                         <div className="contents">
                                             <ul className="dots">
-                                                <li>결제 후 30분 경과 전 : 전액 환불</li>
-                                                <li>참여 확정 모임의 진행일 기준 4일 전까지 : 전액 환불</li>
-                                                <li>참여 확정 모임의 진행일 기준 3일 전부터 : 환불 불가</li>
-                                                <li>모임 진행 당일에 신청한 경우 : 환불 불가 </li>
+                                                <li>{t("결제 후 30분 경과 전 : 전액 환불")}</li>
+                                                <li>{t("참여 확정 모임의 진행일 기준 4일 전까지 : 전액 환불")}</li>
+                                                <li>{t("참여 확정 모임의 진행일 기준 3일 전부터 : 환불 불가")}</li>
+                                                <li>{t("모임 진행 당일에 신청한 경우 : 환불 불가")}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -791,7 +791,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
             )}
             {popup.show && (
                 <Popup>
-                    <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : '취소'} yesText={'삭제'} yesFunction={popup.yesFunction}>
+                    <PopupPortal type={popup.type} closePortal={popup.closePortal} noText={popup.noText ? popup.noText : t("취소")} yesText={t("삭제")} yesFunction={popup.yesFunction}>
                         {popup.children}
                     </PopupPortal>
                 </Popup>

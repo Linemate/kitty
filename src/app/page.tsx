@@ -16,6 +16,7 @@ import useMobile from 'hooks/useMobile';
 import { clearDuplicateCookies } from 'utils/clearDuplicateCookies';
 import { parseCookies } from 'nookies';
 import { useAuthStore } from 'utils/stores';
+import { t } from "utils/i18n";
 
 const Main = () => {
     // 배너
@@ -98,10 +99,10 @@ const Main = () => {
                     // 재시도 횟수 증가
                     await loadAllCollections(retryCount + 1, maxRetries);
                 } catch (refreshError) {
-                    console.error('토큰 갱신 실패:', refreshError);
+                    console.error(t("토큰 갱신 실패:"), refreshError);
                 }
             } else {
-                console.error('프로그램 로드 실패:', err);
+                console.error(t("프로그램 로드 실패:"), err);
             }
         }
     }, []);
@@ -122,7 +123,7 @@ const Main = () => {
         <div className="home">
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 {/* Header */}
-                <Header title={'라인메이트 메인'} isLogin={isLogin} />
+                <Header title={t("라인메이트 메인")} isLogin={isLogin} />
                 {/* Key visual */}
                 <KeyVisual banners={banners} />
 

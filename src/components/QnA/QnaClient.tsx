@@ -12,6 +12,7 @@ import { useAuthStore, useLanguage } from 'utils/stores';
 import { useRouter } from 'next/navigation';
 import Paging from 'components/common/Paging';
 import AddQna from './_Add';
+import { t } from "utils/i18n";
 
 interface QnaClientProps {
   id?: string;
@@ -41,9 +42,9 @@ const QnaItem = (props: qnaProps & {
       <div className="qna_header">
         <div className="left">
           {answer && answer.id ? (
-            <span className="is_reply no_reply">답변완료</span>
+            <span className="is_reply no_reply">{t("답변완료")}</span>
           ) : (
-            <span className="is_reply reply">미답변</span>
+            <span className="is_reply reply">{t("미답변")}</span>
           )}
           <span className="username">{isMy ? title : buddy?.name || ''}</span>
           <span className="date">
@@ -131,7 +132,7 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
       setTotalPages(data.totalPages);
       setPage(data.page);
     } catch (err) {
-      console.error('Q&A 조회 실패:', err);
+      console.error(t("Q&A 조회 실패:"), err);
     } finally {
       setLoading(false);
     }
@@ -150,19 +151,19 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
       if (!programIdNum || isNaN(programIdNum)) {
         setPopup({
           show: true,
-          children: '프로그램 ID가 없습니다.',
+          children: t("프로그램 ID가 없습니다."),
           type: 'alert',
           closePortal: () => {
             setPopup(initPopup);
           },
-          noText: '확인',
+          noText: t("확인"),
         });
         return;
       }
 
       setPopup({
         show: true,
-        children: '작성한 문의를 삭제하시겠습니까?',
+        children: t("작성한 문의를 삭제하시겠습니까?"),
         type: 'confirm',
         yesFunction: async () => {
           try {
@@ -170,40 +171,40 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
             if (res && res.code === 200) {
               setPopup({
                 show: true,
-                children: '문의가 삭제되었습니다.',
+                children: t("문의가 삭제되었습니다."),
                 type: 'alert',
                 closePortal: () => {
                   setPopup(initPopup);
                   loadInquiries(page);
                 },
-                noText: '확인',
+                noText: t("확인"),
               });
             } else {
               setPopup({
                 show: true,
-                children: '문의 삭제에 실패했습니다.',
+                children: t("문의 삭제에 실패했습니다."),
                 type: 'alert',
                 closePortal: () => {
                   setPopup(initPopup);
                 },
-                noText: '확인',
+                noText: t("확인"),
               });
             }
           } catch (err) {
-            console.error('문의 삭제 실패:', err);
+            console.error(t("문의 삭제 실패:"), err);
             setPopup({
               show: true,
-              children: '문의 삭제에 실패했습니다.',
+              children: t("문의 삭제에 실패했습니다."),
               type: 'alert',
               closePortal: () => {
                 setPopup(initPopup);
               },
-              noText: '확인',
+              noText: t("확인"),
             });
           }
         },
-        yesText: '확인',
-        noText: '취소',
+        yesText: t("확인"),
+        noText: t("취소"),
         closePortal: () => {
           setPopup(initPopup);
         },
@@ -216,7 +217,7 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
     if (userInfo) {
       setModal(true);
     } else {
-      alert('로그인 후 이용해주세요.');
+      alert(t("로그인 후 이용해주세요."));
       router.push(
         `/account/login?redirect=${encodeURIComponent(
           window.location.origin + '/program/' + id
@@ -256,7 +257,7 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
       {/* 목록 */}
       <div className="qna_list">
         {loading ? (
-          <div className="no_qna">로딩 중...</div>
+          <div className="no_qna">{t("로딩 중...")}</div>
         ) : qnas.length > 0 ? (
           qnas.map((el: qnaItemProps) => (
             <QnaItem
@@ -270,7 +271,7 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
             />
           ))
         ) : (
-          <div className="no_qna">등록된 문의가 없습니다.</div>
+          <div className="no_qna">{t("등록된 문의가 없습니다.")}</div>
         )}
       </div>
 
@@ -291,8 +292,8 @@ const QnaClient = ({ id, isMy, size }: QnaClientProps) => {
         <PopupPortal
           type={popup.type}
           closePortal={popup.closePortal}
-          noText={popup.noText ? popup.noText : '취소'}
-          yesText={popup.yesText ? popup.yesText : '확인'}
+          noText={popup.noText ? popup.noText : t("취소")}
+          yesText={popup.yesText ? popup.yesText : t("확인")}
           yesFunction={popup.yesFunction}
         >
           {popup.children}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { t } from "utils/i18n";
 
 const PaymentLoading = () => {
     return (
@@ -7,10 +8,10 @@ const PaymentLoading = () => {
                 <div className="ico progress"></div>
             </div>
             <div className="title">
-                <h2>결제 진행 중입니다.</h2>
+                <h2>{t("결제 진행 중입니다.")}</h2>
             </div>
             <div className="desc_area">
-                <p>잠시만 기다려주세요!</p>
+                <p>{t("잠시만 기다려주세요!")}</p>
             </div>
         </>
     );

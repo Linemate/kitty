@@ -6,6 +6,7 @@ import 'styles/registerComplete.scss';
 import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
+import { t } from "utils/i18n";
 
 const CompleteContent = () => {
     const router = useRouter();
@@ -23,20 +24,18 @@ const CompleteContent = () => {
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className="contents">
                     <div className="img_area">
-                        이미지
-                    </div>
-                    <div className="title">가입이 완료되었습니다!</div>
+                        {t("이미지")}</div>
+                    <div className="title">{t("가입이 완료되었습니다!")}</div>
                     <div className="desc">
-                        <span className='name'>{name}</span>님,<br />
-                        LINEMATE 가입을 환영합니다.
-                    </div>
+                        <span className='name'>{name}</span>{t("님,")}<br />
+                        {t("LINEMATE 가입을 환영합니다.")}</div>
 
                     <div className="btn_area">
                         <Button
                             type="text"
                             onclick={handleLogin}
                             classnames="bg_blue wide radius_8"
-                            text="로그인"
+                            text={t("로그인")}
                         />
                     </div>
                 </div>

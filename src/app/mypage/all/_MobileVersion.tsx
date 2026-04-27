@@ -2,6 +2,8 @@
 import { getReservationHistory } from 'api';
 import Header from 'components/Header/Header';
 import ModalPortal from 'components/Portal/ModalPortal';
+import InfoOfProgram from 'components/Program/InfoOfProgram';
+import AddReview from 'components/Review/_Add';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import { Button } from 'components/common/Button';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -11,10 +13,10 @@ import { useRouter } from 'next/navigation';
 import MyPageTab from './_Tab';
 import { useAuthStore } from 'utils/stores';
 import Paging from 'components/common/Paging';
+import { t } from "utils/i18n";
 
-const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
+const MyAllReservationsMobile = ({ buddyInfo }: { buddyInfo: buddyProfileProps | null }) => {
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
-    const [isModal, setIsModal] = useState<boolean>(false);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [tab, setTab] = useState('UPCOMING');
@@ -35,10 +37,10 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
         } catch (err) {
             console.log(err);
         }
-    }, [tab, page])  
-    
+    }, [tab, page])
+
     // 탭 변경
-    const changeTab = (tabText:string) => {
+    const changeTab = (tabText: string) => {
         setTab(tabText.toUpperCase());
     }
 
@@ -48,34 +50,37 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
     };
 
     // 취소
-    const cancelProgram = (id:number, reservationId:number) => {
+    const cancelProgram = (id: number, reservationId: number) => {
         router.push(`/cancel/${id}?reservationId=${reservationId}&price=${0}`)
     }
 
-    // 위치 확인
-    const checkLocation = (id:string) => {
-        setIsModal(true);
-    }
+    const [modal, setModal] = useState({ open: false, programId: 0 });
 
     // 리뷰 남기기
-    const leaveReview = (id:string) => {
-        
+    const leaveReview = (id: number) => {
+        setModal({
+            open: true,
+            programId: id
+        });
     }
 
-    // 취소 정보 확인하기
-    const viewCancelDetail = (id:string) => {
-        
+    const closeModal = () => {
+        setModal({
+            open: false,
+            programId: 0
+        });
     }
 
-    const changePage = (num:number) => {
+    const [isInfoOfProgram, setIsInfoOfProgram] = useState({ open: false, programId: 0, reservationId: 0 });
+
+    const checkLocation = (el:reservationHistoryProps) => {
+        setIsInfoOfProgram({ open: true, programId: el.programId!, reservationId: el.reservationId! });
+    }
+
+    const changePage = (num: number) => {
         setPage(num);
     }
 
-    // 모달 제거
-    const closePortal = () => {
-        setIsModal(false);
-    }
-    
     useEffect(() => {
         loadReservationHistory();
     }, [loadReservationHistory, tab, page])
@@ -96,40 +101,43 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
                         <div className='contents_area'>
                             <div className='programs'>
                                 {
-                                    reservationHistory.length === 0 ? 
-                                    <>
-                                        {/* 모임 리스트가 비었을 때 */}
-                                        <div className="nothing">
-                                            <div className="bg">
-                                                <div className="notice">
-                                                    <p className="first_line">No meetings applied yet.</p>
-                                                    <p>Explore Line Mate&apos;s meetings now!</p>
+                                    reservationHistory.length === 0 ?
+                                        <>
+                                            {/* 모임 리스트가 비었을 때 */}
+                                            <div className="nothing">
+                                                <div className="bg">
+                                                    <div className="notice">
+                                                        <p className="first_line">No meetings applied yet.</p>
+                                                        <p>Explore Line Mate&apos;s meetings now!</p>
+                                                    </div>
+                                                    <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
                                                 </div>
-                                                <Button type="text" classnames={`border lightgray around fit`} onclick={viewProgramsPage} text="Explore Meetings" />
                                             </div>
-                                        </div>
-                                    </>
-                                    :
-                                    <>
-                                        {
-                                            reservationHistory.map((el:reservationHistoryProps, index:number) => 
-                                                <ProgramInMypage key={index} reservation={el}>
-                                                    {
-                                                        el.label === '참여예정' ?
-                                                        <Button type="text" classnames={`border lightgray programs cancel wide`} onclick={() => cancelProgram(el.programId!, el.reservationId!)} text="Cancel" />
-                                                        :
-                                                        <>
-                                                            {
-                                                                el.label === '참여완료'?
-                                                                <Button type="text" classnames={`border blue review wide`} onclick={() => leaveReview('3')} text="Leave Review" />
-                                                                :''
-                                                            }
-                                                        </>
-                                                    }
-                                                </ProgramInMypage>
-                                            )
-                                        }
-                                    </>
+                                        </>
+                                        :
+                                        <>
+                                            {
+                                                reservationHistory.map((el: reservationHistoryProps, index: number) =>
+                                                    <ProgramInMypage key={index} reservation={el}>
+                                                        {
+                                                            el.label === "참여예정" ?
+                                                                <>
+                                                                    <Button type="text" classnames={`border lightgray programs cancel wide`} onclick={() => cancelProgram(el.programId!, el.reservationId!)} text="Cancel" />
+                                                                    <Button type='text' classnames={`border blue programs check_location wide`} onclick={() => checkLocation(el)} text='Check Location' />
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    {
+                                                                        el.label === "참여완료" ?
+                                                                            <Button type="text" classnames={`border blue review wide`} onclick={() => leaveReview(el.programId!)} text="Leave Review" />
+                                                                            : ''
+                                                                    }
+                                                                </>
+                                                        }
+                                                    </ProgramInMypage>
+                                                )
+                                            }
+                                        </>
                                 }
                             </div>
                             {
@@ -140,15 +148,19 @@ const MyAllReservationsMobile = ({buddyInfo}: {buddyInfo: buddyProfileProps | nu
 
                     </div>
                 </div>
-                {
-                    isModal &&
-                    <ModalPortal title='모임 안내' type='program_intro' closePortal={closePortal}>
-                        <div>
-                            ddd
-                        </div>
-                    </ModalPortal>
-                }
             </div>
+            {
+                isInfoOfProgram.open && (
+                    <InfoOfProgram 
+                        handleClose={() => setIsInfoOfProgram({ ...isInfoOfProgram, open: false })} 
+                        programId={isInfoOfProgram.programId} 
+                        reservationId={isInfoOfProgram.reservationId} 
+                    />
+                )
+            }
+            {
+                modal.open && <AddReview id={modal.programId || 0} closePortal={closeModal} />
+            }
         </div>
     );
 };

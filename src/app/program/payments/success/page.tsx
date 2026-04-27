@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { confirmPayments, getProgramDetailsWithToken } from 'api';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import PaymentLoading from 'components/common/PaymentLoading';
+import { t } from "utils/i18n";
 
 const PaymentsSuccessContent = () => {
     const isMobile = useMobile();
@@ -85,12 +86,12 @@ const PaymentsSuccessContent = () => {
                                     <div className="ico success"></div>
                                 </div>
                                 <div className="title">
-                                    <h2>신청 완료</h2>
+                                    <h2>{t("신청 완료")}</h2>
                                 </div>
 
                                 {paymentData && (
                                     <div className="payment_info_area">
-                                        <h3>신청 정보</h3>
+                                        <h3>{t("신청 정보")}</h3>
                                         <ProgramInMypage reservation={{
                                             programId: programData?.id || Number(searchParams.get('programId') || 0),
                                             title: programData?.title || paymentData.orderName,
@@ -103,15 +104,15 @@ const PaymentsSuccessContent = () => {
 
                                         <div className="details">
                                             <div className='row'>
-                                                <span>결제 일시</span>
+                                                <span>{t("결제 일시")}</span>
                                                 <span>{(paymentData.approvedAt || paymentData.requestedAt || '').replace('T', ' ').substring(0, 16)}</span>
                                             </div>
                                             <div className='row'>
-                                                <span>결제 수단</span>
-                                                <span>{paymentData.method === 'CARD' ? '신용카드' : paymentData.method}</span>
+                                                <span>{t("결제 수단")}</span>
+                                                <span>{paymentData.method === 'CARD' ? t("신용카드") : paymentData.method}</span>
                                             </div>
                                             <div className='row'>
-                                                <span>결제 금액</span>
+                                                <span>{t("결제 금액")}</span>
                                                 <span>{paymentData.currency} {paymentData.totalAmount?.toLocaleString()}</span>
                                             </div>
                                         </div>
@@ -119,10 +120,10 @@ const PaymentsSuccessContent = () => {
                                 )}
                                 <div className='btns_area'>
                                     <div className="first">
-                                        <BottomButton style={'bg_blue'} text="홈으로 돌아가기" href="/" />
+                                        <BottomButton style={'bg_blue'} text={t("홈으로 돌아가기")} href="/" />
                                     </div>
                                     <div className="last">
-                                        <BottomButton style={'lightgray border'} text="마이 페이지로 이동" href="/mypage" />
+                                        <BottomButton style={'lightgray border'} text={t("마이 페이지로 이동")} href="/mypage" />
                                     </div>
                                 </div>
                             </>

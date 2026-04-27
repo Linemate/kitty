@@ -12,8 +12,9 @@ const AvailableTimes = (props: AvailableTimesProps) => {
 
     return (
         <div className={`choose_time ${isMobile ? 'mobile' : ''} ${isBox ? 'box' : ''}`}>
-            <div className="btn_time_wrap">
-                {times.map((el: scheduleProps) => {
+            {times && times.length > 0 && (
+                <div className="btn_time_wrap">
+                    {times.map((el: scheduleProps) => {
                     const formatTime = (isoString?: string) => {
                         if (!isoString) return '';
                         // ISO 8601 문자열을 Date 객체로 변환 시 로컬 타임셋 오프셋 방지를 위해 KST(+9) 더하기 (기존 로직 동일 적용)
@@ -50,7 +51,8 @@ const AvailableTimes = (props: AvailableTimesProps) => {
                         </div>
                     );
                 })}
-            </div>
+                </div>
+            )}
             {isBox && (
                 <div className="notice">
                     <div className="desc">The specifics may vary depending on the visit schedule.</div>

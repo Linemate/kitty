@@ -5,6 +5,7 @@ import 'styles/nicepay.scss';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
+import { t } from "utils/i18n";
 
 const PaymentsFailContent = () => {
     const isMobile = useMobile();
@@ -17,12 +18,12 @@ const PaymentsFailContent = () => {
                     <div className="ico fail"></div>
                 </div>
                 <div className="title">
-                    <h2>결제 실패</h2>
+                    <h2>{t("결제 실패")}</h2>
                 </div>
                 <div className="desc_area">
-                    <p>결제 실패하였습니다. 다시 시도해주세요.</p>
+                    <p>{t("결제 실패하였습니다. 다시 시도해주세요.")}</p>
                 </div>
-                <BottomButton style={'border lightgray'} text="홈으로 돌아가기" href="/" />
+                <BottomButton style={'border lightgray'} text={t("홈으로 돌아가기")} href="/" />
 
                 {/* Footer */}
                 <Footer />

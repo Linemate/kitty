@@ -7,7 +7,7 @@ import useBodyLock from 'hooks/useBodyLock';
 import { Button } from './Button';
 import { useAuthStore } from 'utils/stores';
 import { getNicePayCallback } from 'api';
-
+import { t } from "utils/i18n";
 
 const WidgetCheckout = (props: confirmPaymentProps) => {
     const { responsePayment, program, scheduleId, closeWidget } = props;
@@ -23,11 +23,11 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
         script.src = 'https://pay.nicepay.co.kr/v1/js/';
         script.async = true;
         script.onload = () => {
-            console.log('나이스페이 SDK 로드 완료:', (window as any).AUTHNICE);
+            console.log(t("나이스페이 SDK 로드 완료:"), (window as any).AUTHNICE);
             setReady(true); // SDK 로드 완료 시 버튼 활성화
         };
         script.onerror = () => {
-            console.error('나이스페이 SDK 로드 실패');
+            console.error(t("나이스페이 SDK 로드 실패"));
             setReady(false);
         };
         document.head.appendChild(script);
@@ -40,7 +40,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
     // 컴포넌트 마운트 시 결제창 호출
     useEffect(() => {
         if (ready && typeof window !== 'undefined' && typeof (window as any).AUTHNICE.requestPay === 'function') {
-            console.log('=== 나이스페이먼츠 결제 요청 ===');
+            console.log(t("=== 나이스페이먼츠 결제 요청 ==="));
             console.log('orderId:', responsePayment.orderId);
             console.log('amount:', responsePayment.amount);
             (window as any).AUTHNICE.requestPay({
@@ -51,11 +51,11 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
                 goodsName: program.title,
                 returnUrl: `${window.location.origin}/api/nice/redirect?programId=${program.id}`,
                 cancelUrl: `${window.location.origin}/program/payments/fail?program=${program.id}`,
-                buyerName: userInfo?.name || '고객',
+                buyerName: userInfo?.name || t("고객"),
                 buyerEmail: userInfo?.email || '',
                 mallReserved: `test=true&timestamp=${Date.now()}`,
                 fnError: (result: any) => {
-                    console.error('나이스페이 에러:', result);
+                    console.error(t("나이스페이 에러:"), result);
                     alert(`결제 실패: ${result.resultMsg}`);
                 },
             },
@@ -66,7 +66,7 @@ const WidgetCheckout = (props: confirmPaymentProps) => {
 
 
                     } else {
-                        console.log('결제 인증 실패: ' + response.resultMsg, true, response);
+                        console.log(t("결제 인증 실패:") + response.resultMsg, true, response);
                     }
                 });
         }

@@ -11,6 +11,7 @@ import { Button } from 'components/common/Button';
 import MyHistoryTab from './_Tab';
 import Title from 'components/Title/Title';
 import Paging from 'components/common/Paging';
+import { t } from "utils/i18n";
 
 const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) => {
     const [paymentHistory, setPaymentHistory] = useState<paymentHistoryProps[]>([]);
@@ -40,7 +41,7 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
             if (err && typeof err === 'object' && 'status' in err && 
                 err.status === 401) {
                 console.log(err)
-                alert('로그인이 필요해요.');
+                alert(t("로그인이 필요해요."));
                 router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/mypage/payment')}`);
             }
             return;
@@ -75,7 +76,7 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
                         <div className='contents_area'>
                             <div className='intro'>
                                 <div>
-                                    <Title title={'결제 내역'} />
+                                    <Title title={t("결제 내역")} />
                                 </div>
                             </div>
                             <MyHistoryTab tab={tab} changeTab={changeTab} />
@@ -98,10 +99,10 @@ const MyPaymentHistoryPC = ({buddyInfo}: {buddyInfo: buddyProfileProps | null}) 
                                         paymentHistory.map((el:paymentHistoryProps, index:number) => (
                                             <ProgramInMypage key={index} label={el.label} reservation={el.reservation} type='payment'>
                                                 {
-                                                    el.reservation.label === '취소완료' ?
-                                                    <Button type="text" classnames={`border lightgray cancel`} onclick={() => viewDetails(el.id, el.reservation.reservationId!)} text="취소 상세" />
+                                                    el.reservation.label === "취소완료" ?
+                                                    <Button type="text" classnames={`border lightgray cancel`} onclick={() => viewDetails(el.id, el.reservation.reservationId!)} text={t("취소 상세")} />
                                                     :
-                                                    <Button type="text" classnames={`border lightgray cancel`} onclick={() =>  viewDetails(el.id, el.reservation.reservationId!)} text="결제 상세" />
+                                                    <Button type="text" classnames={`border lightgray cancel`} onclick={() =>  viewDetails(el.id, el.reservation.reservationId!)} text={t("결제 상세")} />
                                                 }
                                             </ProgramInMypage>
                                         ))
