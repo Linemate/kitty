@@ -403,7 +403,18 @@ const RegisterContent = () => {
                                                     </span>
                                                 </span>
                                             </div>
-                                            <span className='btn_show_details'>Show Details</span>
+                                            {(item.code === 'PRIVACY_POLICY' || item.code === 'TERMS_OF_SERVICE') && (
+                                                <span 
+                                                    className='btn_show_details' 
+                                                    onClick={() => {
+                                                        if (item.code === 'PRIVACY_POLICY') {
+                                                            window.open('https://policy.linemate.kr/service.html#privacy', '_blank');
+                                                        } else if (item.code === 'TERMS_OF_SERVICE') {
+                                                            window.open('https://policy.linemate.kr/service.html#tos', '_blank');
+                                                        }
+                                                    }}
+                                                >Show Details</span>
+                                            )}
                                         </div>
                                     ))
                                 ) : (

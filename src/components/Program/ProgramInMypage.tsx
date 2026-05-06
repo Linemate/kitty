@@ -41,10 +41,15 @@ export const initPaymentHistory = {
 
 const ProgramInMypage = (props: programInMypageProps) => {
     const { label, reservation, type, children } = props;
-    const { programId, reservationId, label: reservationLabel, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency } = reservation;
+    const { programId, reservationId, label: reservationLabel, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency, cancelDetailMessage } = reservation;
     const isMobile = useMobile();
     return (
         <div className={`item ${isMobile ? 'mobile' : ''}`}>
+            {cancelDetailMessage !== "" && (
+                <div className='cancel_detail_msg'>
+                    The event was canceled by the host.
+                </div>
+            )}
             {
                 type === 'payment' &&
                 <div className='payment_status_area'>

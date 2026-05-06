@@ -343,6 +343,8 @@ export type cancelReasonProps = {
 // 프로그램 신청내역 조회
 export type reservationHistoryProps = {
     label: string;
+    labelTag?: string;
+    cancelDetailMessage?: string;
     paymentsStatus: string;
     reservationStatus: string;
     startDate: string;
@@ -355,6 +357,7 @@ export type reservationHistoryProps = {
     title?: string;
     price?: number;
     currency?: string;
+    hasUnreadNotice?: boolean;
 }
 
 // 버디 상세 조회
@@ -452,5 +455,7 @@ export type sortOptionProps = {
 export type bannerProps = {
     id: number;
     clickCnt: number;
+    title?: string;
+    subTitle?: string;
     image: imageProps;
 }

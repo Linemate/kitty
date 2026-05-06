@@ -4,6 +4,12 @@
 
     &.mobile {
         .slider_container {
+            &.single {
+                .key_visual_text {
+                    bottom: auto;
+                    top: 24px;
+                }
+            }
             .key_visual_text {
                 left: 24px;
                 bottom: 16px;
