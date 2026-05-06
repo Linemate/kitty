@@ -37,10 +37,12 @@ if (typeof window !== 'undefined') {
     privateApi.interceptors.request.use(
         (config) => {
             const user = getCookie('USERINFO');
-            if (user) {
+            if (user && user !== 'null') {
                 try {
-                    const token = JSON.parse(user).token;
-                    config.headers.Authorization = `Bearer ${token}`;
+                    const parsedUser = JSON.parse(user);
+                    if (parsedUser && parsedUser.token) {
+                        config.headers.Authorization = `Bearer ${parsedUser.token}`;
+                    }
                 } catch (err) {
                     console.error(t("토큰 파싱 실패:"), err);
                 }

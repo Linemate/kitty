@@ -314,6 +314,20 @@
     box-shadow: 0px 0px 8px 0px #55555514;
     box-shadow: 0px 0px 24px 0px #C2C2C214;
 
+    .cancel_detail_msg {
+        padding: 8px 16px 8px 44px;
+        background-image: url('/assets/images/icon/ico_error.png');
+        background-position: 16px 8px;
+        background-size: 20px;
+        background-color: #F349491A;
+        background-repeat: no-repeat;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 20px;
+        margin-bottom: 12px;
+    }
+
     .payment_status_area {
         padding-bottom: 12px;
         margin-bottom: 12px;

@@ -37,10 +37,10 @@ const KeyVisual = ({ banners }: KeyVisualProps) => {
     return (
         <div className={`key_visual_wrapper ${isMobile ? 'mobile' : ''}`}>
             {banners && banners.length > 0 ? (
-                <div className="slider_container">
+                <div className={`slider_container ${isSingle ? 'single' : ''}`}>
                     <div className="key_visual_text">
-                        <h2>DON’T BE A TRAVELER, BE A LOCAL</h2>
-                        <p>Let’s share experience together in Linemate❤️</p>
+                        <h2>{banners[currentSlide]?.title || "DON’T BE A TRAVELER, BE A LOCAL"}</h2>
+                        <p>{banners[currentSlide]?.subTitle || "Let’s share experience together in Linemate❤️"}</p>
                     </div>
                     <Slider {...settings}>
                         {banners.map((banner) => (
