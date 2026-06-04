@@ -70,11 +70,18 @@ const LoginContent = () => {
     }, [redirectUrl, router, setUserInfo, values, viewPage]);
 
     useEffect(() => {
+        if (userInfo?.token) {
+            if (redirectUrl) {
+                viewPage();
+            } else {
+                router.push('/');
+            }
+        }
         // clearDuplicateCookies();
         return () => {
             setValues(initValues);
         };
-    }, []);
+    }, [userInfo, redirectUrl, router, viewPage]);
 
     return (
         <div className="login">

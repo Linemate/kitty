@@ -88,6 +88,43 @@
                     margin-bottom: 24px;
                 }
 
+                .social_login_area {
+                    display: flex;
+                    justify-content: center;
+                    gap: 16px;
+                    margin-bottom: 24px;
+
+                    .btn_social {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 50%;
+                        border: 1px solid var(--color-neutral-700);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        background-color: #fff;
+                        transition: all 0.2s ease;
+                        padding: 0;
+                        overflow: hidden;
+
+                        &.facebook {
+                            border: none;
+                        }
+
+                        &:hover {
+                            border-color: var(--color-neutral-400);
+                            background-color: var(--color-neutral-800);
+                        }
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                    }
+                }
+
                 .mate_mode {
                     color: var(--color-neutral-200);
                     font-weight: 500;
@@ -112,31 +149,29 @@
 
                 .horizon {
                     width: 380px;
-                    position: relative;
-                    text-align: center;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     margin-top: 24px;
                     margin-bottom: 24px;
+                    font-size: 14px;
+                    color: var(--color-neutral-300);
+                    line-height: 20px;
 
-                    &::before {
+                    &::before,
+                    &::after {
                         content: '';
-                        width: 100%;
+                        flex: 1;
                         height: 1px;
                         background-color: var(--color-neutral-600);
-                        display: block;
-                        position: absolute;
-                        top: 10px;
-                        left: 0;
-                        z-index: 0;
                     }
 
-                    .or {
-                        display: inline-block;
-                        padding: 0 16px;
-                        line-height: 20px;
-                        margin: 0 auto;
-                        background-color: #fff;
-                        position: relative;
-                        z-index: 1;
+                    &::before {
+                        margin-right: 16px;
+                    }
+
+                    &::after {
+                        margin-left: 16px;
                     }
                 }
             }

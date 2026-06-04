@@ -8,7 +8,7 @@ import ModalPortal from 'components/Portal/ModalPortal';
 import useMobile from 'hooks/useMobile';
 import { popupProps, programCompProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
-import { postProgramLike } from 'api';
+import { putProgramLike, deleteProgramLike } from 'api';
 import Popup from 'components/Portal/Popup';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import { shareProgram } from '@/utils/share';
@@ -27,7 +27,11 @@ const Program = (props: programCompProps) => {
 
     const sendLike = async () => {
         if (isLogin) {
-            await postProgramLike(program.id);
+            if (liked) {
+                await deleteProgramLike(program.id);
+            } else {
+                await putProgramLike(program.id);
+            }
             setLiked(!liked);
         } else {
             setPopup({
@@ -36,7 +40,7 @@ const Program = (props: programCompProps) => {
                 children: <div>{t("로그인 후 이용해주세요.")}</div>,
                 closePortal: () => {
                     setPopup(initPopup);
-                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id)}`);
+                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id + '?pendingLike=true')}`);
                 },
                 noText: t("확인"),
             });
@@ -80,7 +84,21 @@ const Program = (props: programCompProps) => {
     }
     return (
         <div className={`program_comp ${isMobile ? 'mobile' : ''} ${isDetails ? 'details' : 'element'}`}>
-            <div className="img_area" onClick={viewDetails} style={{ backgroundImage: `url(${program.thumbnail})` }}></div>
+            <div className="img_area" onClick={viewDetails} style={{ backgroundImage: `url(${program.thumbnail})` }}>
+                {!isDetails && (
+                    <button
+                        className="favorite_area"
+                        onClick={(e) => { e.stopPropagation(); sendLike(); }}
+                        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                    >
+                        <img
+                            src={liked ? '/assets/images/btn/btn_heart_filled.png' : '/assets/images/btn/btn_heart.png'}
+                            alt="찜하기"
+                            style={{ width: 32, height: 32, display: 'block' }}
+                        />
+                    </button>
+                )}
+            </div>
             <div className="desc_area">
                 <div className="txt_area">
                     <h4 onClick={viewDetails}>{program.title}</h4>

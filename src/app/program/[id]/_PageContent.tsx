@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Program from 'components/Program/Program';
 import Mate from 'components/Mate/Mate';
 import ReactDatePicker from 'react-datepicker';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import 'styles/programPage.scss';
 import Review from 'components/Review/Review';
 import SlideWrap from 'components/SlideWrap/SlideWrap';
@@ -17,7 +17,7 @@ import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import ModalPortal from 'components/Portal/ModalPortal';
 import AvailableTimes from 'components/Program/AvailableTimes';
-import { getProgramSchedules, postProgramLike, requestPayments, getProgramDetailsWithToken } from 'api';
+import { getProgramSchedules, putProgramLike, deleteProgramLike, requestPayments, getProgramDetailsWithToken } from 'api';
 import { popupProps, programProps, programSummaryProps, responsePaymentProps, scheduleProps } from 'types/types';
 import { useAuthStore } from 'utils/stores';
 import WidgetCheckout from 'components/common/WidgetCheckout';
@@ -189,6 +189,23 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
 
     // router
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    // pendingLike: 비로그인 → 로그인 후 돌아왔을 때 자동 좋아요
+    useEffect(() => {
+        if (!userInfo?.token || !program.id) return;
+        const pending = searchParams.get('pendingLike');
+        if (pending === 'true' && !program.isLike) {
+            putProgramLike(program.id).then(() => {
+                setProgram(prev => ({ ...prev, isLike: true, likes: prev.likes + 1 }));
+                // URL에서 pendingLike 파라미터 제거
+                const params = new URLSearchParams(window.location.search);
+                params.delete('pendingLike');
+                const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                window.history.replaceState(null, '', newUrl);
+            }).catch(() => {});
+        }
+    }, [userInfo, program.id, searchParams]);
 
     // 결제
     const [responsePayment, setResponsePayment] = useState<responsePaymentProps | null>(null);
@@ -342,7 +359,7 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     // 프로그램 좋아요
     const sendLike = async () => {
         if (userInfo && userInfo.token) {
-            await postProgramLike(program.id);
+            await putProgramLike(program.id);
             setProgram(prev => ({
                 ...prev,
                 isLike: !prev.isLike,
@@ -365,13 +382,20 @@ const PageContent = ({ initialProgram, programId, error }: PageContentProps) => 
     // header에 들어갈 버튼들
     const btns = () => {
         return (
-            <div className="btn_wrap">
-                {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
-                <div style={{ display: 'none' }}>
-                    <div onClick={sendLike} className={`ico heart ${program.isLike && userInfo && userInfo.token ? 'red' : 'gray_line'}`}>
+            <div className="btn_wrap" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <button
+                    onClick={sendLike}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, padding: 0 }}
+                >
+                    <img
+                        src={program.isLike && userInfo?.token ? '/assets/images/btn/btn_heart_filled.png' : '/assets/images/btn/btn_heart.png'}
+                        alt="찜하기"
+                        style={{ width: 24, height: 24, display: 'block' }}
+                    />
+                    <span style={{ fontSize: 13, color: 'var(--color-neutral-300)', lineHeight: '20px' }}>
                         {program.likes}
-                    </div>
-                </div>
+                    </span>
+                </button>
                 <Button type={'img'} classnames={'share'} text={t("공유하기")} onclick={viewSharePopup} />
             </div>
         );

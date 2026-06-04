@@ -702,6 +702,13 @@
         &.mobile {
             padding-top: 56px;
 
+            .header_area {
+                .header_right {
+                    button {
+                        margin-left: 8px;
+                    }
+                }
+            }
             .program_comp {
                 &.details {
                     .img_area {

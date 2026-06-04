@@ -1,9 +1,9 @@
 'use client';
 
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import 'styles/registerPage.scss';
-import { useLanguage } from 'utils/stores';
+import { useAuthStore, useLanguage } from 'utils/stores';
 import Input from 'components/Input/Input';
 import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
@@ -20,6 +20,10 @@ interface RegisterValues {
 
 const RegisterContent = () => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const provider = searchParams.get('provider');
+    const token = searchParams.get('token');
+    const redirectUrl = searchParams.get('redirect') || '';
     const isMobile = useMobile();
     const language = useLanguage((state) => state.language);
 
@@ -204,7 +208,23 @@ const RegisterContent = () => {
     };
 
     const handleRegister = async () => {
-        if (!values.email || !values.password || !values.locale) {
+        // Check required agreements
+        const requiredIds = agreementList.filter(item => item.required).map(item => item.sortOrder);
+        const allRequiredChecked = requiredIds.every(id => checkedList.includes(id));
+
+        if (!allRequiredChecked) {
+            alert('Please agree to the required terms and conditions.');
+            return;
+        }
+
+        const consents = agreementList.map(agreement => ({
+            type: agreement.code,
+            agreed: checkedList.includes(agreement.sortOrder)
+        }));
+
+
+
+        if (!values.email || !values.password) {
             alert('Please enter all required information.');
             return;
         }
@@ -221,21 +241,7 @@ const RegisterContent = () => {
             return;
         }
 
-        // Check required agreements
-        const requiredIds = agreementList.filter(item => item.required).map(item => item.sortOrder);
-        const allRequiredChecked = requiredIds.every(id => checkedList.includes(id));
-
-        if (!allRequiredChecked) {
-            alert('Please agree to the required terms and conditions.');
-            return;
-        }
-
         try {
-            const consents = agreementList.map(agreement => ({
-                type: agreement.code,
-                agreed: checkedList.includes(agreement.sortOrder)
-            }));
-
             const payload = {
                 email: values.email,
                 password: values.password,
@@ -243,8 +249,13 @@ const RegisterContent = () => {
                 consents: consents
             };
             const res = await postRegister(payload);
-            const returnedName = res?.data?.name || res?.name || '';
-            router.push(`/account/register/complete?name=${encodeURIComponent(returnedName)}`);
+            
+            // 회원가입 성공 시 바로 리다이렉트 또는 홈으로 이동
+            if (redirectUrl) {
+                window.location.href = decodeURIComponent(redirectUrl);
+            } else {
+                router.push('/');
+            }
         } catch (err) {
             console.error('Registration failed:', err);
             alert('Registration failed. Please try again.');
@@ -280,80 +291,84 @@ const RegisterContent = () => {
                             <h3 className="title">Join Us</h3>
 
                             <div className="form_area">
-                                <div className="field">
-                                    <label>Email ID</label>
-                                    <div className="input_row">
-                                        <div className="input_area">
+                                {!provider && (
+                                    <>
+                                        <div className="field">
+                                            <label>Email ID</label>
+                                            <div className="input_row">
+                                                <div className="input_area">
+                                                    <Input
+                                                        type="text"
+                                                        name="email"
+                                                        value={values.email}
+                                                        handleChange={handleChange}
+                                                        placeholder="Enter your email"
+                                                        classnames={emailError ? 'red' : ''}
+                                                    />
+                                                </div>
+                                                <Button
+                                                    type="text"
+                                                    onclick={isCheckable && !isCodeVerified ? handleSendCode : () => { }}
+                                                    classnames={`${isCheckable ? isCodeSent ? 'border lightgray' : 'blue border' : 'bg_gray'} radius_8`}
+                                                    isDisabled={isCodeVerified && isCodeSent}
+                                                    text={isCodeVerified ? 'Verified' : isCodeSent ? 'Resend' : 'Send Code'}
+                                                />
+                                            </div>
+                                            <div className={`msg ${emailError ? 'red' : ''}`}>
+                                                {emailError || 'Notifications regarding meetings will be sent to this email address.'}
+                                            </div>
+                                            <div className="input_row second">
+                                                <div className={`input_area ${isCodeVerified ? 'checked' : ''}`}>
+                                                    <Input
+                                                        type="text"
+                                                        name="code"
+                                                        value={code}
+                                                        handleChange={handleCodeChange}
+                                                        placeholder="Enter verification code"
+                                                        classnames=""
+                                                    />
+                                                    {isCodeSent && !isCodeVerified && (
+                                                        <span className='timer'>
+                                                            {formatTime(timeLeft)}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <Button
+                                                    type="text"
+                                                    onclick={!isCodeVerified && code.length > 0 ? handleVerifyCode : () => { }}
+                                                    classnames={`${!isCodeVerified && code.length > 0 ? 'bg_blue' : 'bg_gray'} radius_8`}
+                                                    isDisabled={isCodeVerified}
+                                                    text="Verify"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="field">
+                                            <label>Password</label>
                                             <Input
-                                                type="text"
-                                                name="email"
-                                                value={values.email}
+                                                type="password"
+                                                name="password"
+                                                value={values.password}
                                                 handleChange={handleChange}
-                                                placeholder="Enter your email"
-                                                classnames={emailError ? 'red' : ''}
+                                                placeholder="Enter password"
+                                                classnames={passwordError ? 'red' : ''}
                                             />
+                                            {passwordError && <div className="msg red">{passwordError}</div>}
                                         </div>
-                                        <Button
-                                            type="text"
-                                            onclick={isCheckable && !isCodeVerified ? handleSendCode : () => { }}
-                                            classnames={`${isCheckable ? isCodeSent ? 'border lightgray' : 'blue border' : 'bg_gray'} radius_8`}
-                                            isDisabled={isCodeVerified && isCodeSent}
-                                            text={isCodeVerified ? 'Verified' : isCodeSent ? 'Resend' : 'Send Code'}
-                                        />
-                                    </div>
-                                    <div className={`msg ${emailError ? 'red' : ''}`}>
-                                        {emailError || 'Notifications regarding meetings will be sent to this email address.'}
-                                    </div>
-                                    <div className="input_row second">
-                                        <div className={`input_area ${isCodeVerified ? 'checked' : ''}`}>
+
+                                        <div className="field">
                                             <Input
-                                                type="text"
-                                                name="code"
-                                                value={code}
-                                                handleChange={handleCodeChange}
-                                                placeholder="Enter verification code"
-                                                classnames=""
+                                                type="password"
+                                                name="passwordConfirm"
+                                                value={values.passwordConfirm}
+                                                handleChange={handleChange}
+                                                placeholder="Re-enter password"
+                                                classnames={passwordConfirmError ? 'red' : ''}
                                             />
-                                            {isCodeSent && !isCodeVerified && (
-                                                <span className='timer'>
-                                                    {formatTime(timeLeft)}
-                                                </span>
-                                            )}
+                                            {passwordConfirmError && <div className="msg red">{passwordConfirmError}</div>}
                                         </div>
-                                        <Button
-                                            type="text"
-                                            onclick={!isCodeVerified && code.length > 0 ? handleVerifyCode : () => { }}
-                                            classnames={`${!isCodeVerified && code.length > 0 ? 'bg_blue' : 'bg_gray'} radius_8`}
-                                            isDisabled={isCodeVerified}
-                                            text="Verify"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="field">
-                                    <label>Password</label>
-                                    <Input
-                                        type="password"
-                                        name="password"
-                                        value={values.password}
-                                        handleChange={handleChange}
-                                        placeholder="Enter password"
-                                        classnames={passwordError ? 'red' : ''}
-                                    />
-                                    {passwordError && <div className="msg red">{passwordError}</div>}
-                                </div>
-
-                                <div className="field">
-                                    <Input
-                                        type="password"
-                                        name="passwordConfirm"
-                                        value={values.passwordConfirm}
-                                        handleChange={handleChange}
-                                        placeholder="Re-enter password"
-                                        classnames={passwordConfirmError ? 'red' : ''}
-                                    />
-                                    {passwordConfirmError && <div className="msg red">{passwordConfirmError}</div>}
-                                </div>
+                                    </>
+                                )}
 
                                 <div className="field">
                                     <label>Nationality</label>
@@ -362,6 +377,7 @@ const RegisterContent = () => {
                                         value={values.locale}
                                         onChange={handleChange}
                                     >
+                                        <option value="">Select nationality</option>
                                         {languages.map((language) => (
                                             <option key={language} value={language}>
                                                 {language}
@@ -404,8 +420,8 @@ const RegisterContent = () => {
                                                 </span>
                                             </div>
                                             {(item.code === 'PRIVACY_POLICY' || item.code === 'TERMS_OF_SERVICE') && (
-                                                <span 
-                                                    className='btn_show_details' 
+                                                <span
+                                                    className='btn_show_details'
                                                     onClick={() => {
                                                         if (item.code === 'PRIVACY_POLICY') {
                                                             window.open('https://policy.linemate.kr/service.html#privacy', '_blank');

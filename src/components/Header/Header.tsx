@@ -30,7 +30,7 @@ const Header = (props: headerProps) => {
     };
     // like 페이지로
     const viewLikeList = () => {
-        router.push('/like/list');
+        router.push('/mypage/likes');
     };
     // 로그인 화면으로
     const viewLoginPage = () => {
@@ -70,10 +70,7 @@ const Header = (props: headerProps) => {
                         <Nav />
                     </div>
                     <div className="header_right">
-                        {/* 2차 배포 오픈을 위해 찜 기능 임시 숨김 */}
-                        <div style={{ display: 'none' }}>
-                            <Button type={'img'} classnames={'like'} text={t("찜한 목록으로")} onclick={viewLikeList} />
-                        </div>
+                        <Button type={'img'} classnames={'like'} text={t("찜한 목록으로")} onclick={viewLikeList} />
                         {isMobile ? <Button type={'img'} classnames={'menu'} text={t("메뉴")} onclick={handleOpenMenu} /> : isLogin || getCookie('USERINFO') ? <span className="logined" onClick={viewMypage}>Hi Buddy!</span> : <Button type={'img'} classnames={'login'} text={t("로그인")} onclick={viewLoginPage} />}
                         {isOpen ? <Menu closeMenu={handleCloseMenu} /> : ''}
                     </div>

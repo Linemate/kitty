@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { popupProps, programSummaryWrapProps } from 'types/types';
 import 'styles/program.scss';
-import { postProgramLike } from 'api';
+import { putProgramLike } from 'api';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import { useAuthStore } from 'utils/stores';
 import Popup from 'components/Portal/Popup';
@@ -20,7 +20,7 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
     const isLogin = useAuthStore.getState().userInfo?.token;
     const sendLike = async () => {
         if (isLogin) {
-            await postProgramLike(program.id);
+            await putProgramLike(program.id);
             setLiked(!liked);
         } else {
             setPopup({
@@ -29,7 +29,7 @@ const SimpleProgram = (props: programSummaryWrapProps) => {
                 children: <div>{t("로그인 후 이용해주세요.")}</div>,
                 closePortal: () => {
                     setPopup(initPopup);
-                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id)}`);
+                    router.push(`/account/login?redirect=${encodeURIComponent(window.location.origin + '/program/' + program.id + '?pendingLike=true')}`);
                 },
                 noText: t("확인"),
             });

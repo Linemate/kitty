@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps, registerProps } from 'types/types';
+import { addReviewBodyProps, addReviewProps, buddyProfileProps, cancelProps, inquiryProps, loginProps, paymentsConfirmProps, paymentsProps, registerProps, socialRegisterProps } from 'types/types';
 import { getCookie, deleteCookie } from 'utils/cookiesFunction';
 import { t } from "utils/i18n";
 
@@ -226,6 +226,15 @@ export const postRegister = async (values: registerProps) => {
     return res.data;
 };
 
+// 소셜 회원가입 완료 (추가 정보 입력)
+export const postRegisterSocialComplete = async (signupToken: string, consents: any[]) => {
+    const res = await publicApi.post(`/account/sign-up/social/complete`, {
+        signupToken,
+        consents
+    });
+    return res.data;
+};
+
 // 로그인
 export const getLogin = async (values: loginProps) => {
     const res = await publicApi.post(`/account/sign-in`, values);
@@ -269,8 +278,20 @@ export const deleteInquiry = async (id: number, inquiryId: number) => {
 };
 
 // 프로그램 좋아요
-export const postProgramLike = async (id: number) => {
-    const res = await privateApi.put(`/programs/like/${id}`);
+export const putProgramLike = async (id: number) => {
+    const res = await privateApi.put(`/programs/${id}/likes`);
+    return res.data;
+};
+
+// 프로그램 좋아요 취소
+export const deleteProgramLike = async (id: number) => {
+    const res = await privateApi.delete(`/programs/${id}/likes`);
+    return res.data;
+};
+
+// 찜한 프로그램 목록
+export const getLikedPrograms = async () => {
+    const res = await privateApi.get(`/programs/likes`);
     return res.data;
 };
 

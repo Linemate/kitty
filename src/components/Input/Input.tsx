@@ -4,12 +4,12 @@ import { inputProps } from 'types/types';
 import 'styles/input.scss';
 
 const Input = (props:inputProps) => {
-    const {type, value, name, handleChange, placeholder, classnames, onKeyDown} = props;
+    const {type, value, name, handleChange, placeholder, classnames, onKeyDown, disabled} = props;
     // 텍스트 on
     const [isOn, setIsOn] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const handleClick = () => {
-        if (inputRef.current) {
+        if (inputRef.current && !disabled) {
             inputRef.current.focus();
             setIsOn(true);
         }
@@ -21,8 +21,8 @@ const Input = (props:inputProps) => {
         }
     }
     return (
-        <div className='input_wrap' onClick={handleClick}>
-            <input type={type} name={name} className={classnames} onChange={handleChange} value={value} ref={inputRef} onBlur={handleBlur} autoComplete="off" onKeyDown={onKeyDown} />
+        <div className={`input_wrap ${disabled ? 'disabled' : ''}`} onClick={handleClick}>
+            <input type={type} name={name} className={classnames} onChange={handleChange} value={value} ref={inputRef} onBlur={handleBlur} autoComplete="off" onKeyDown={onKeyDown} disabled={disabled} />
             {
                 !isOn && placeholder !== '' 
                 && value.trim() === '' &&
