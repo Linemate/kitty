@@ -70,12 +70,45 @@ const LoginContent = () => {
         }
     }, [redirectUrl, router, setUserInfo, values, viewPage]);
 
+    const handleGoogleLogin = useCallback(() => {
+        const client_id = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+        if (!client_id) {
+            alert(t('구글 로그인 설정이 구성되지 않았습니다.'));
+            return;
+        }
+        const redirect_uri = `${window.location.origin}/api/auth/callback/google`;
+        const scope = 'openid email profile';
+        const state = redirectUrl ? encodeURIComponent(redirectUrl) : '';
+        const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code&scope=${encodeURIComponent(scope)}${state ? `&state=${state}` : ''}`;
+        window.location.href = url;
+    }, [redirectUrl]);
+
+    const handleFacebookLogin = useCallback(() => {
+        const client_id = process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID;
+        if (!client_id) {
+            alert(t('페이스북 로그인 설정이 구성되지 않았습니다.'));
+            return;
+        }
+        const redirect_uri = `${window.location.origin}/api/auth/callback/facebook`;
+        const scope = 'email,public_profile';
+        const state = redirectUrl ? encodeURIComponent(redirectUrl) : '';
+        const url = `https://www.facebook.com/v12.0/dialog/oauth?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code&scope=${encodeURIComponent(scope)}${state ? `&state=${state}` : ''}`;
+        window.location.href = url;
+    }, [redirectUrl]);
+
     useEffect(() => {
+        if (userInfo?.token) {
+            if (redirectUrl) {
+                viewPage();
+            } else {
+                router.push('/');
+            }
+        }
         // clearDuplicateCookies();
         return () => {
             setValues(initValues);
         };
-    }, []);
+    }, [userInfo, redirectUrl, router, viewPage]);
 
     return (
         <div className="login">
@@ -131,6 +164,17 @@ const LoginContent = () => {
                             </div>
                             <div className='join_area'>
                                 <div className='gray400'>Don&apos;t have an account?<span className='link' onClick={() => router.push('/account/register')}>Register</span></div>
+                            </div>
+                            <div className="horizon">
+                                {t('또는')}
+                            </div>
+                            <div className="social_login_area">
+                                <button type="button" className="btn_social facebook" onClick={handleFacebookLogin}>
+                                    <img src="/assets/images/icon/ico_facebook.png" alt="Facebook" />
+                                </button>
+                                <button type="button" className="btn_social google" onClick={handleGoogleLogin}>
+                                    <img src="/assets/images/icon/ico_google.png" alt="Google" />
+                                </button>
                             </div>
                         </div>
                     </div>

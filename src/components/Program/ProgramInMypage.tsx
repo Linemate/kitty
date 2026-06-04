@@ -41,11 +41,12 @@ export const initPaymentHistory = {
 
 const ProgramInMypage = (props: programInMypageProps) => {
     const { label, reservation, type, children } = props;
-    const { programId, reservationId, label: reservationLabel, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency, cancelDetailMessage } = reservation;
+    const { programId, reservationId, label: reservationLabel, startDate, createdAt, updatedAt, thumbnail, station, title, price, currency, cancelDetailMessage, paymentsStatus } = reservation;
     const isMobile = useMobile();
+    const isPaymentActive = paymentsStatus === 'COMPLETED' || paymentsStatus === 'WAITING';
     return (
         <div className={`item ${isMobile ? 'mobile' : ''}`}>
-            {cancelDetailMessage !== "" && (
+            {cancelDetailMessage !== "" && !isPaymentActive && (
                 <div className='cancel_detail_msg'>
                     The event was canceled by the host.
                 </div>

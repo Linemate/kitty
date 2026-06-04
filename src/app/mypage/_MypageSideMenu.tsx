@@ -7,10 +7,10 @@ import { useAuthStore } from 'utils/stores';
 
 const MypageSideMenu = () => {
     const isMobile = useMobile();
-    const setUserInfo = useAuthStore.getState().setUserInfo;
+    const clearToken = useAuthStore.getState().clearToken;
     const router = useRouter();
     const logout = () => {
-        setUserInfo(null);
+        clearToken();
         router.push('/');
     }
     return (

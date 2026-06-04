@@ -5,7 +5,7 @@ import { buttonProps } from 'types/types';
 export const Button = (props:buttonProps) => {
     return (
         <>
-            <button type="button" className={`btn ${props.type} ${props.classnames}`} onClick={() => props.onclick()} disabled={props.isDisabled}>{props.text}</button>
+            <button type="button" className={`btn ${props.type} ${props.classnames}`} onClick={(e) => props.onclick(e)} disabled={props.isDisabled}>{props.text}</button>
         </>
     );
 };
@@ -14,7 +14,7 @@ export const Button = (props:buttonProps) => {
 export const TextButtonWithIcon = (props:buttonProps) => {
     return (
         <>
-            <button type="button" className={`btn text ico ${props.classnames}`} onClick={() => props.onclick()}>{props.text}</button>
+            <button type="button" className={`btn text ico ${props.classnames}`} onClick={(e) => props.onclick(e)}>{props.text}</button>
         </>
     )
 }

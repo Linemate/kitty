@@ -7,15 +7,23 @@ import { Button } from 'components/common/Button';
 import useMobile from 'hooks/useMobile';
 import Header from 'components/Header/Header';
 import { t } from "utils/i18n";
+import { useAuthStore } from 'utils/stores';
 
 const CompleteContent = () => {
     const router = useRouter();
     const isMobile = useMobile();
     const searchParams = useSearchParams();
     const name = searchParams.get('name') || 'Guest';
+    const redirectUrl = searchParams.get('redirect') || '';
+    const isLogin = useAuthStore((state) => !!state.userInfo?.token);
 
     const handleLogin = () => {
-        router.push('/account/login');
+        if (isLogin) {
+            const target = redirectUrl ? decodeURIComponent(redirectUrl) : '/';
+            router.push(target);
+        } else {
+            router.push('/account/login');
+        }
     };
 
     return (
@@ -35,7 +43,7 @@ const CompleteContent = () => {
                             type="text"
                             onclick={handleLogin}
                             classnames="bg_blue wide radius_8"
-                            text={t("로그인")}
+                            text={isLogin ? t("홈으로") : t("로그인")}
                         />
                     </div>
                 </div>

@@ -1,0 +1,135 @@
+2026-05-20T12:08:07.704Z - Callback initiated
+{
+  "code": "4/0AeoWuM-LOKIY8thSUrGkeYROfL8PxxADSW1Ut76ez2EwQk-tA5Q3warhHNcTZLuf_fuf_Q",
+  "query": {
+    "iss": "https://accounts.google.com",
+    "code": "4/0AeoWuM-LOKIY8thSUrGkeYROfL8PxxADSW1Ut76ez2EwQk-tA5Q3warhHNcTZLuf_fuf_Q",
+    "scope": "email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid",
+    "authuser": "0",
+    "prompt": "none"
+  }
+}
+
+2026-05-20T12:08:08.488Z - Token response received
+{
+  "access_token_present": true,
+  "id_token_present": true,
+  "scopes": "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid"
+}
+
+2026-05-20T12:08:08.489Z - Calling backend sign-in API
+{
+  "url": "https://puppy.linemate.kr/api/v1/account/sign-in/google",
+  "tokenLength": 1114,
+  "tokenPrefix": "eyJhbGciOiJSUzI"
+}
+
+2026-05-20T12:08:08.571Z - Backend sign-in FAILED
+{
+  "status": 500,
+  "data": {
+    "status": false,
+    "code": 500,
+    "message": "Internal server error",
+    "data": null
+  },
+  "message": "Request failed with status code 500"
+}
+
+2026-05-20T12:13:10.558Z - Callback initiated
+{
+  "code": "4/0AeoWuM-PW6RkW8BFFyXOObCimfWM5dFicMkgnyBY_X9hEOnPU-WE2oWmH0AdUAqlk-LUCA",
+  "query": {
+    "iss": "https://accounts.google.com",
+    "code": "4/0AeoWuM-PW6RkW8BFFyXOObCimfWM5dFicMkgnyBY_X9hEOnPU-WE2oWmH0AdUAqlk-LUCA",
+    "scope": "email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid",
+    "authuser": "0",
+    "prompt": "none"
+  }
+}
+
+2026-05-20T12:13:10.969Z - Token response received
+{
+  "access_token_present": true,
+  "id_token_present": true,
+  "scopes": "https://www.googleapis.com/auth/userinfo.email openid https://www.googleapis.com/auth/userinfo.profile"
+}
+
+2026-05-20T12:13:10.969Z - Running backend API variation tests
+{}
+
+2026-05-20T12:13:10.971Z - Testing variation: 1. POST with Bearer idToken
+{
+  "url": "https://puppy.linemate.kr/api/v1/account/sign-in/google",
+  "body": null,
+  "headers": [
+    "Authorization",
+    "country"
+  ]
+}
+
+2026-05-20T12:13:11.064Z - FAILED for variation: 1. POST with Bearer idToken
+{
+  "status": 500,
+  "data": {
+    "status": false,
+    "code": 500,
+    "message": "Internal server error",
+    "data": null
+  },
+  "message": "Request failed with status code 500"
+}
+
+2026-05-20T12:13:11.064Z - Testing variation: 2. POST with Bearer accessToken
+{
+  "url": "https://puppy.linemate.kr/api/v1/account/sign-in/google",
+  "body": null,
+  "headers": [
+    "Authorization",
+    "country"
+  ]
+}
+
+2026-05-20T12:13:11.081Z - FAILED for variation: 2. POST with Bearer accessToken
+{
+  "status": 500,
+  "data": {
+    "status": false,
+    "code": 500,
+    "message": "Internal server error",
+    "data": null
+  },
+  "message": "Request failed with status code 500"
+}
+
+2026-05-20T12:13:11.081Z - Testing variation: 3. POST with raw idToken in Auth header
+{
+  "url": "https://puppy.linemate.kr/api/v1/account/sign-in/google",
+  "body": null,
+  "headers": [
+    "Authorization",
+    "country"
+  ]
+}
+
+2026-05-20T12:13:11.100Z - FAILED for variation: 3. POST with raw idToken in Auth header
+{
+  "status": 404,
+  "data": {
+    "status": false,
+    "code": 404,
+    "message": "Not found",
+    "data": null
+  },
+  "message": "Request failed with status code 404"
+}
+
+2026-05-20T12:13:11.101Z - Potential NEW USER redirection triggered by variation: 3. POST with raw idToken in Auth header
+{}
+
+2026-05-20T12:13:11.102Z - Redirecting to registration page (New User)
+{
+  "provider": "google",
+  "finalTokenLength": 1114
+}
+

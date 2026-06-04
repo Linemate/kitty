@@ -188,6 +188,7 @@ export type inputProps = {
     placeholder?: string;
     classnames?: string;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    disabled?: boolean;
 };
 
 export type loginProps = {
@@ -458,4 +459,10 @@ export type bannerProps = {
     title?: string;
     subTitle?: string;
     image: imageProps;
+}
+
+// 소셜 회원가입
+export type socialRegisterProps = {
+    token: string;
+    country: string;
 }

@@ -268,23 +268,7 @@
                 }
 
                 &.check_wrap {
-                    text-align: center;
-
-                    .ico.checkbox {
-                        margin-right: 8px;
-                        display: inline-block;
-                        width: 24px;
-                        height: 24px;
-                        background-size: cover;
-
-                        &.checked {
-                            background: url('/assets/images/icon/ico_check_checked.png') no-repeat center;
-                        }
-
-                        &.default {
-                            background: url('/assets/images/icon/ico_check_default.png') no-repeat center;
-                        }
-                    }
+                    text-align: left;
 
                     .ico.check {
                         font-size: 13px;
@@ -299,6 +283,7 @@
                 padding: 12px 0;
                 line-height: 22px;
                 border-radius: 8px;
+                text-align: center;
             }
         }
 
