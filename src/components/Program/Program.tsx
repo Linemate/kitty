@@ -85,6 +85,11 @@ const Program = (props: programCompProps) => {
     return (
         <div className={`program_comp ${isMobile ? 'mobile' : ''} ${isDetails ? 'details' : 'element'}`}>
             <div className="img_area" onClick={viewDetails} style={{ backgroundImage: `url(${program.thumbnail})` }}>
+                {isDetails && program.category?.title && (
+                    <div className="category_badge">
+                        {program.category.title}
+                    </div>
+                )}
                 {!isDetails && (
                     <button
                         className="favorite_area"

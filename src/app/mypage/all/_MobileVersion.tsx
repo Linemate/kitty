@@ -1,9 +1,10 @@
 'use client'
-import { getReservationHistory } from 'api';
+import { getReservationHistory, getMyReviewList } from 'api';
 import Header from 'components/Header/Header';
 import ModalPortal from 'components/Portal/ModalPortal';
 import InfoOfProgram from 'components/Program/InfoOfProgram';
 import AddReview from 'components/Review/_Add';
+import EditReview from 'components/Review/_Edit';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import { Button } from 'components/common/Button';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -54,21 +55,57 @@ const MyAllReservationsMobile = ({ buddyInfo }: { buddyInfo: buddyProfileProps |
         router.push(`/cancel/${id}?reservationId=${reservationId}&price=${0}`)
     }
 
-    const [modal, setModal] = useState({ open: false, programId: 0 });
+    const [modal, setModal] = useState({ open: false, programId: 0, isEdit: false, content: '', score: 0, reviewId: 0 });
 
     // 리뷰 남기기
     const leaveReview = (id: number) => {
         setModal({
             open: true,
-            programId: id
+            programId: id,
+            isEdit: false,
+            content: '',
+            score: 0,
+            reviewId: 0
         });
     }
+
+    // 리뷰 수정하기
+    const openEditReview = async (id: number) => {
+        try {
+            const res = await getMyReviewList(0, 100);
+            const list = res.data.list;
+            const review = list.find((el: any) => el.programId === id);
+            if (review) {
+                setModal({ 
+                    open: true, 
+                    programId: id, 
+                    isEdit: true, 
+                    content: review.content, 
+                    score: review.score, 
+                    reviewId: review.id 
+                });
+            } else {
+                alert(t("리뷰 정보를 찾을 수 없습니다."));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     const closeModal = () => {
         setModal({
             open: false,
-            programId: 0
+            programId: 0,
+            isEdit: false,
+            content: '',
+            score: 0,
+            reviewId: 0
         });
+    }
+
+    const handleReviewSuccess = () => {
+        loadReservationHistory();
+        closeModal();
     }
 
     const [isInfoOfProgram, setIsInfoOfProgram] = useState({ open: false, programId: 0, reservationId: 0 });
@@ -120,19 +157,25 @@ const MyAllReservationsMobile = ({ buddyInfo }: { buddyInfo: buddyProfileProps |
                                                 reservationHistory.map((el: reservationHistoryProps, index: number) =>
                                                     <ProgramInMypage key={index} reservation={el}>
                                                         {
-                                                            el.label === "참여예정" ?
+                                                            tab === 'UPCOMING' ?
                                                                 <>
                                                                     <Button type="text" classnames={`border lightgray programs cancel wide`} onclick={() => cancelProgram(el.programId!, el.reservationId!)} text="Cancel" />
                                                                     <Button type='text' classnames={`border blue programs check_location wide`} onclick={() => checkLocation(el)} text='Check Location' />
                                                                 </>
                                                                 :
-                                                                <>
-                                                                    {
-                                                                        el.label === "참여완료" ?
+                                                                tab === 'COMPLETED' ?
+                                                                    <>
+                                                                        {el.hasReviewed ? (
+                                                                            <Button type="text" classnames={`border blue review wide`} onclick={() => openEditReview(el.programId!)} text="Edit Review" />
+                                                                        ) : (
                                                                             <Button type="text" classnames={`border blue review wide`} onclick={() => leaveReview(el.programId!)} text="Leave Review" />
-                                                                            : ''
-                                                                    }
-                                                                </>
+                                                                        )}
+                                                                    </>
+                                                                    :
+                                                                    el.label === "취소요청" ?
+                                                                        <Button type="text" classnames={`bg_darkgray programs cancel wide`} onclick={() => cancelProgram(el.programId!, el.reservationId!)} text="Cancel" />
+                                                                        :
+                                                                        null
                                                         }
                                                     </ProgramInMypage>
                                                 )
@@ -159,7 +202,12 @@ const MyAllReservationsMobile = ({ buddyInfo }: { buddyInfo: buddyProfileProps |
                 )
             }
             {
-                modal.open && <AddReview id={modal.programId || 0} closePortal={closeModal} />
+                // 문의하기
+                modal.open && (modal.isEdit ? (
+                    <EditReview reviewId={modal.reviewId} programId={modal.programId} content={modal.content} score={modal.score} closePortal={closeModal} onSuccess={handleReviewSuccess} />
+                ) : (
+                    <AddReview id={modal.programId || 0} closePortal={closeModal} onSuccess={handleReviewSuccess} />
+                ))
             }
         </div>
     );

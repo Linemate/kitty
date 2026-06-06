@@ -19,18 +19,18 @@ interface ReviewClientProps {
   size: number;
 }
 
-const ReviewItem = ({ 
-  isMy, 
-  title, 
-  name, 
-  score, 
-  content, 
-  id, 
-  programId, 
-  createdAt, 
-  handleDelete, 
-  openModal 
-}: reviewItemProps & { 
+const ReviewItem = ({
+  isMy,
+  title,
+  name,
+  score,
+  content,
+  id,
+  programId,
+  createdAt,
+  handleDelete,
+  openModal
+}: reviewItemProps & {
   openModal?: (id: number, programId: number, content: string, score: number) => void
   handleDelete?: (id: number, programId: number) => void
 }) => {
@@ -47,17 +47,17 @@ const ReviewItem = ({
           </div>
           {handleDelete && (
             <div className='right only_pc only_my'>
-              <Button 
-                classnames={'lightgray btn_edit'} 
-                type={'text'} 
+              <Button
+                classnames={'lightgray btn_edit'}
+                type={'text'}
                 text='Edit'
-                onclick={() => openModal?.(id, programId, content, score)} 
+                onclick={() => openModal?.(id, programId, content, score)}
               />
-              <Button 
-                classnames={'lightgray btn_delete'} 
-                type={'text'} 
+              <Button
+                classnames={'lightgray btn_delete'}
+                type={'text'}
                 text='Delete'
-                onclick={() => handleDelete(id, programId)} 
+                onclick={() => handleDelete(id, programId)}
               />
             </div>
           )}
@@ -69,17 +69,17 @@ const ReviewItem = ({
           <div className='review_footer only_my'>
             <div className="date">{createdAt.split(' ')[0]}</div>
             <div className="btns">
-              <Button 
-                classnames={'lightgray btn_edit'} 
-                type={'text'} 
+              <Button
+                classnames={'lightgray btn_edit'}
+                type={'text'}
                 text='Edit'
-                onclick={() => openModal?.(id, programId, content, score)} 
+                onclick={() => openModal?.(id, programId, content, score)}
               />
-              <Button 
-                classnames={'lightgray btn_delete'} 
-                type={'text'} 
+              <Button
+                classnames={'lightgray btn_delete'}
+                type={'text'}
                 text='Delete'
-                onclick={() => handleDelete(id, programId)} 
+                onclick={() => handleDelete(id, programId)}
               />
             </div>
           </div>
@@ -89,9 +89,9 @@ const ReviewItem = ({
   );
 };
 
-const ReviewClient = ({ 
-  id, 
-  isMy, 
+const ReviewClient = ({
+  id,
+  isMy,
   size = 10
 }: ReviewClientProps) => {
   const [reviews, setReviews] = useState<reviewItemProps[]>([]);
@@ -121,8 +121,8 @@ const ReviewClient = ({
   const loadProgramReviews = useCallback(async (pageNum: number) => {
     try {
       setLoading(true);
-      const res = isMy 
-        ? await getMyReviewList(pageNum, size) 
+      const res = isMy
+        ? await getMyReviewList(pageNum, size)
         : await getProgramReview(id?.toString() || '0', size, pageNum);
       const data = res.data;
       setReviews(data.list);
@@ -142,12 +142,12 @@ const ReviewClient = ({
 
   // 리뷰 편집 창 열기
   const openModal = useCallback((reviewId: number, programId: number, content: string, score: number) => {
-    setModal({ 
-      show: true, 
-      reviewId, 
-      programId, 
-      content, 
-      score 
+    setModal({
+      show: true,
+      reviewId,
+      programId,
+      content,
+      score
     });
   }, []);
 
@@ -237,20 +237,20 @@ const ReviewClient = ({
           <div className="no_review">{t("등록된 후기가 없습니다.")}</div>
         )}
 
-        <Paging 
-          totalPages={totalPages} 
-          page={page} 
-          changePage={handlePageChange} 
+        <Paging
+          totalPages={totalPages}
+          page={page}
+          changePage={handlePageChange}
         />
 
         {modal.show && (
-          <EditReview 
-            onSuccess={onSuccess} 
-            reviewId={modal.reviewId} 
-            content={modal.content} 
-            score={modal.score} 
-            closePortal={() => setModal(initModal)} 
-            programId={modal.programId} 
+          <EditReview
+            onSuccess={onSuccess}
+            reviewId={modal.reviewId}
+            content={modal.content}
+            score={modal.score}
+            closePortal={() => setModal(initModal)}
+            programId={modal.programId}
           />
         )}
 

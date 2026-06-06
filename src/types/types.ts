@@ -23,6 +23,7 @@ export type imagesProps = {
 
 export type programSummaryWrapProps = {
     program: programSummaryProps;
+    isLiked?: boolean;
 };
 
 export type programSummaryProps = {
@@ -153,7 +154,7 @@ export type programInMypageProps = {
     label?: string;
     reservation: reservationHistoryProps;
     type?: string;
-    children?: ReactElement;
+    children?: ReactNode;
 };
 
 export type reviewItemProps = {
@@ -359,6 +360,7 @@ export type reservationHistoryProps = {
     price?: number;
     currency?: string;
     hasUnreadNotice?: boolean;
+    hasReviewed?: boolean;
 }
 
 // 버디 상세 조회

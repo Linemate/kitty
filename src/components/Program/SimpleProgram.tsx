@@ -5,23 +5,39 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { popupProps, programSummaryWrapProps } from 'types/types';
 import 'styles/program.scss';
-import { putProgramLike } from 'api';
+import { putProgramLike, deleteProgramLike } from 'api';
 import PopupPortal, { initPopup } from 'components/Portal/PopupPortal';
 import { useAuthStore } from 'utils/stores';
 import Popup from 'components/Portal/Popup';
 import { t } from "utils/i18n";
 
 const SimpleProgram = (props: programSummaryWrapProps) => {
-    const { program } = props;
-    const [liked, setLiked] = useState<boolean>(false);
+    const { program, isLiked } = props;
+    const [liked, setLiked] = useState<boolean>(isLiked || false);
     const isMobile = useMobile();
     const router = useRouter();
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const isLogin = useAuthStore.getState().userInfo?.token;
     const sendLike = async () => {
         if (isLogin) {
-            await putProgramLike(program.id);
-            setLiked(!liked);
+            try {
+                if (liked) {
+                    await deleteProgramLike(program.id);
+                } else {
+                    await putProgramLike(program.id);
+                }
+                setLiked(!liked);
+            } catch (error: any) {
+                console.error("Failed to toggle like:", error);
+                const errorMsg = error?.response?.data?.message || error?.message || t("오류가 발생했습니다. 다시 시도해주세요.");
+                setPopup({
+                    show: true,
+                    type: 'alert',
+                    children: <div>{errorMsg}</div>,
+                    closePortal: () => setPopup(initPopup),
+                    noText: t("확인"),
+                });
+            }
         } else {
             setPopup({
                 show: true,

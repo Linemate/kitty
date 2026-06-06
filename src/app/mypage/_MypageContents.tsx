@@ -1,9 +1,10 @@
 'use client'
-import { getReservationHistory, getReservationHistoryCount } from 'api';
+import { getReservationHistory, getReservationHistoryCount, getMyReviewList } from 'api';
 import { Button, TextButtonWithIcon } from 'components/common/Button';
 import ProgramInMypage from 'components/Program/ProgramInMypage';
 import InfoOfProgram from 'components/Program/InfoOfProgram';
 import AddReview from 'components/Review/_Add';
+import EditReview from 'components/Review/_Edit';
 import Title from 'components/Title/Title';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
@@ -18,7 +19,7 @@ const MypageContents = () => {
     });
     const [reservationHistory, setReservationHistory] = useState<reservationHistoryProps[]>([]);
     const [tab, setTab] = useState('UPCOMING');
-    const [modal, setModal] = useState({ open: false, programId: 0 });
+    const [modal, setModal] = useState({ open: false, programId: 0, isEdit: false, content: '', score: 0, reviewId: 0 });
     const [isInfoOfProgram, setIsInfoOfProgram] = useState({ open: false, programId: 0, reservationId: 0 });
     const isMobile = useMobile();
     const router = useRouter();
@@ -75,16 +76,52 @@ const MypageContents = () => {
     const leaveReview = (id: number) => {
         setModal({
             open: true,
-            programId: id
+            programId: id,
+            isEdit: false,
+            content: '',
+            score: 0,
+            reviewId: 0
         });
+    };
+
+    // 리뷰 수정하러 가기
+    const openEditReview = async (id: number) => {
+        try {
+            const res = await getMyReviewList(0, 100);
+            const list = res.data.list;
+            const review = list.find((el: any) => el.programId === id);
+            if (review) {
+                setModal({ 
+                    open: true, 
+                    programId: id, 
+                    isEdit: true, 
+                    content: review.content, 
+                    score: review.score, 
+                    reviewId: review.id 
+                });
+            } else {
+                alert(t("리뷰 정보를 찾을 수 없습니다."));
+            }
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     // 문의하기 닫기
     const closeModal = () => {
         setModal({
             open: false,
-            programId: 0
+            programId: 0,
+            isEdit: false,
+            content: '',
+            score: 0,
+            reviewId: 0
         });
+    }
+
+    const handleReviewSuccess = () => {
+        loadReservationHistory();
+        closeModal();
     }
 
     useEffect(() => {
@@ -139,24 +176,26 @@ const MypageContents = () => {
                                         <React.Fragment key={`${el.programId}-${el.reservationId}`}>
                                             <ProgramInMypage reservation={el}>
                                                 {
-                                                    el.label === "참여예정" ?
+                                                    tab === 'UPCOMING' ?
                                                         <>
                                                             <Button type="text" classnames={`border lightgray programs cancel`} onclick={() => cancelProgram(el)} text="Cancel" />
 
                                                             <Button type='text' classnames={`border blue programs check_location`} onclick={() => checkLocation(el)} text='Check Location' />
                                                         </>
                                                         :
-                                                        <>
-                                                            {
-                                                                el.label === "참여완료" ?
+                                                        tab === 'COMPLETED' ?
+                                                            <>
+                                                                {el.hasReviewed ? (
+                                                                    <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => openEditReview(el.programId!)} text="Edit Review" />
+                                                                ) : (
                                                                     <Button type="text" classnames={`border blue review ${isMobile ? 'wide' : ''}`} onclick={() => leaveReview(el.programId!)} text="Leave Review" />
-                                                                    :
-                                                                    el.label === "취소요청" ?
-                                                                        <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
-                                                                        :
-                                                                        ''
-                                                            }
-                                                        </>
+                                                                )}
+                                                            </>
+                                                            :
+                                                            el.label === "취소요청" ?
+                                                                <Button type="text" classnames={`bg_darkgray programs cancel ${isMobile ? 'wide' : ''}`} onclick={() => cancelProgram(el)} text="Cancel" />
+                                                                :
+                                                                null
                                                 }
                                             </ProgramInMypage>
                                         </React.Fragment>
@@ -167,7 +206,11 @@ const MypageContents = () => {
 
                     {
                         // 문의하기
-                        modal.open && <AddReview id={modal.programId || 0} closePortal={closeModal} />
+                        modal.open && (modal.isEdit ? (
+                            <EditReview reviewId={modal.reviewId} programId={modal.programId} content={modal.content} score={modal.score} closePortal={closeModal} onSuccess={handleReviewSuccess} />
+                        ) : (
+                            <AddReview id={modal.programId || 0} closePortal={closeModal} onSuccess={handleReviewSuccess} />
+                        ))
                     }
                     {
                         isInfoOfProgram.open && <InfoOfProgram handleClose={() => setIsInfoOfProgram({ ...isInfoOfProgram, open: false })} programId={isInfoOfProgram.programId} reservationId={isInfoOfProgram.reservationId} />

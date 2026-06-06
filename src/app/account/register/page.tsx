@@ -249,7 +249,7 @@ const RegisterContent = () => {
                 consents: consents
             };
             const res = await postRegister(payload);
-            
+
             // 회원가입 성공 시 바로 리다이렉트 또는 홈으로 이동
             if (redirectUrl) {
                 window.location.href = decodeURIComponent(redirectUrl);
@@ -285,7 +285,7 @@ const RegisterContent = () => {
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className="contents">
                     {!isMobile && <div className={`img_area ${language}`}></div>}
-                    <div className="text_area">
+                    <div className="contents_wrap">
                         <div className="main">
                             <h2 className="logo">Linemate</h2>
                             <h3 className="title">Join Us</h3>
@@ -371,7 +371,7 @@ const RegisterContent = () => {
                                 )}
 
                                 <div className="field">
-                                    <label>Nationality</label>
+                                    <label>Nationality(Optional)</label>
                                     <select
                                         name="locale"
                                         value={values.locale}

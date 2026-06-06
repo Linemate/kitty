@@ -23,7 +23,7 @@ const SocialRegisterContent = () => {
     const signupToken = searchParams.get('signupToken');
     const emailParam = searchParams.get('email') || '';
     const redirectUrl = searchParams.get('redirect') || '';
-    
+
     const isMobile = useMobile();
     const language = useLanguage((state) => state.language);
 
@@ -110,7 +110,7 @@ const SocialRegisterContent = () => {
                     const setUserInfo = useAuthStore.getState().setUserInfo;
                     setUserInfo(userData);
                 }
-                
+
                 // 회원가입 완료 시 바로 리다이렉트 또는 홈으로 이동
                 if (redirectUrl) {
                     window.location.href = decodeURIComponent(redirectUrl);
@@ -144,7 +144,7 @@ const SocialRegisterContent = () => {
             <div className={`wrapper ${isMobile ? 'mobile' : ''}`}>
                 <div className="contents">
                     {!isMobile && <div className={`img_area ${language}`}></div>}
-                    <div className="text_area">
+                    <div className="contents_wrap">
                         <div className="main">
                             <h2 className="logo">Linemate</h2>
                             <h3 className="title">회원가입 완료하기</h3>
@@ -158,7 +158,7 @@ const SocialRegisterContent = () => {
                                                 type="text"
                                                 name="email"
                                                 value={values.email}
-                                                handleChange={() => {}}
+                                                handleChange={() => { }}
                                                 placeholder=""
                                                 classnames="bg_gray"
                                                 disabled={true}
@@ -168,7 +168,7 @@ const SocialRegisterContent = () => {
                                 </div>
 
                                 <div className="field">
-                                    <label>Nationality</label>
+                                    <label>Nationality(Optional)</label>
                                     <select
                                         name="locale"
                                         value={values.locale}

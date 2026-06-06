@@ -290,8 +290,8 @@ export const deleteProgramLike = async (id: number) => {
 };
 
 // 찜한 프로그램 목록
-export const getLikedPrograms = async () => {
-    const res = await privateApi.get(`/programs/likes`);
+export const getLikedPrograms = async (pageNum: number, size: number = 10, sort: string = 'id,desc') => {
+    const res = await privateApi.get(`/programs/likes/my?page=${pageNum}&size=${size}&sort=${encodeURIComponent(sort)}`);
     return res.data;
 };
 
@@ -375,7 +375,7 @@ export const getNoticeDetails = async (id: number) => {
 
 // 내가 쓴 리뷰들 조회
 export const getMyReviewList = async (pageNum: number, size: number) => {
-    const res = await privateApi.get(`/programs/reviews/my?page=${pageNum}&size=${size}&sort=id%2Cdesc`);
+    const res = await privateApi.get(`/programs/reviews/my?page=${pageNum}&size=${size}&sort=id%2Casc`);
     return res.data;
 };
 

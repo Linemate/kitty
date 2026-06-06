@@ -8,7 +8,7 @@ import { Button } from '../common/Button';
 import PopupPortal, { initPopup } from '../Portal/PopupPortal';
 import { t } from "utils/i18n";
 
-const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => {
+const AddReview = ({id, closePortal, onSuccess} : {id:number, closePortal:() => void; onSuccess?: () => void;}) => {
     const [reviewData, setReviewData] = useState<addReviewProps>({reviewId: id, title: '', content: '', score:0});
     const [popup, setPopup] = useState<popupProps>(initPopup);
     const MAX_LENGTH = 500;
@@ -52,6 +52,11 @@ const AddReview = ({id, closePortal} : {id:number, closePortal:() => void;}) => 
                     type: 'alert',
                     closePortal: () => {
                         setPopup(initPopup);
+                        if (onSuccess) {
+                            onSuccess();
+                        } else {
+                            closePortal();
+                        }
                     },
                     noText: t("확인"), 
                 });

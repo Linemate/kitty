@@ -370,6 +370,7 @@
                         align-items: center;
                         border-radius: 50px;
                         margin-right: 16px;
+                        margin-bottom: 0;
 
                         img {
                             width: 48px;
@@ -404,6 +405,9 @@
                     width: 100%;
                     padding-top: 24px;
                     padding-bottom: 32px;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                    box-sizing: border-box;
                     position: relative;
 
                     &::after {
@@ -501,6 +505,25 @@
                                     font-size: 14px;
                                     line-height: 22px;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.likes {
+        .wrapper {
+            .contents {
+                .contents_inner {
+                    .contents_area {
+                        .intro {
+                            margin-bottom: 0;
+                            padding-bottom: 0;
+
+                            &::after {
+                                display: none;
                             }
                         }
                     }

@@ -30,7 +30,7 @@ const Header = (props: headerProps) => {
     };
     // like 페이지로
     const viewLikeList = () => {
-        router.push('/mypage/likes');
+        router.push('/mypage/likes?from=header');
     };
     // 로그인 화면으로
     const viewLoginPage = () => {

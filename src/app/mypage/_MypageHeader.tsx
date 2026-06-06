@@ -1,5 +1,6 @@
 'use client'
-import { Button, TextButtonWithIcon } from 'components/common/Button';
+import { Button } from 'components/common/Button';
+import MypageBtns from './_MypageBtns';
 import Header from 'components/Header/Header';
 import useMobile from 'hooks/useMobile';
 import { useRouter } from 'next/navigation';
@@ -12,10 +13,7 @@ const MypageHeader = ({ buddyInfo }: { buddyInfo: buddyProfileProps | null }) =>
     const router = useRouter();
     const isMobile = useMobile();
     const userInfo = useAuthStore.getState().userInfo;
-    // 페이지 이동
-    const viewPage = (pageName: string) => {
-        router.push(`/mypage/${pageName}`);
-    };
+
     // 프로필 수정
     const handleEditProfile = () => {
         // router.push('/mypage/profile');
@@ -48,39 +46,15 @@ const MypageHeader = ({ buddyInfo }: { buddyInfo: buddyProfileProps | null }) =>
                         </div>
                         {
                             isMobile ?
-                            '' : 
-                            
-                                <div className="btns_area">
-                                    <ul>
-                                        <li>
-                                            <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('all')} text={'My Events'} />
-                                        </li>
-                                        <li>
-                                            <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />
-                                        </li>
-                                        <li>
-                                            <TextButtonWithIcon type="text" classnames="top review" onclick={() => viewPage('review')} text={'Review'} />
-                                        </li>
-                                    </ul>
-                                </div>
+                                '' :
+
+                                <MypageBtns />
                         }
                     </div>
                 </div>
                 {
-                    isMobile ? 
-                    <div className="btns_area">
-                        <ul>
-                            <li>
-                                <TextButtonWithIcon type="text" classnames="top reservations" onclick={() => viewPage('all')} text={'My Events'} />
-                            </li>
-                            <li>
-                                <TextButtonWithIcon type="text" classnames="top qna" onclick={() => viewPage('qna')} text={'Q&A'} />
-                            </li>
-                            <li>
-                                <TextButtonWithIcon type="text" classnames="top review" onclick={() => viewPage('review')} text={'Review'} />
-                            </li>
-                        </ul>
-                    </div> : ''
+                    isMobile ?
+                        <MypageBtns /> : ''
                 }
             </div>
         </div>
