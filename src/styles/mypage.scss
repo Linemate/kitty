@@ -46,7 +46,7 @@
                     .user_desc_area {
                         display: flex;
                         flex-direction: row;
-                        align-items: center;
+                        align-items: flex-start;
                         margin-bottom: 30px;
 
                         .user_name {
